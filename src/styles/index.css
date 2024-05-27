@@ -1,0 +1,101 @@
+*,
+*::before,
+::after {
+  word-wrap: break-word;
+}
+
+.slick-slider .slick-next:before,
+.slick-slider .slick-prev:before {
+  font-size: 40px;
+}
+
+.chakra-ui-light .slick-slider .slick-next:before,
+.chakra-ui-light .slick-slider .slick-prev:before {
+  color: black;
+}
+
+.slick-slider .slick-next,
+.slick-slider .slick-prev {
+  width: 40px;
+  height: 40px;
+}
+
+.slick-slider .slick-list {
+  margin: 10px;
+}
+
+.chakra-ui-dark .slick-slider .slick-dots li.slick-active button:before {
+  color: white;
+  opacity: 1;
+  border-color: rgba(220, 220, 220, 0.5);
+}
+
+.slick-slider .slick-dots li button:before {
+  font-size: 12px;
+}
+
+.chakra-ui-dark .slick-slider .slick-dots li button:before {
+  color: white;
+  border-color: rgba(220, 220, 220, 0.5);
+}
+
+.chakra-ui-dark .ant-upload {
+  color: white;
+  border-color: rgba(220, 220, 220, 0.5);
+}
+
+.chakra-ui-dark .ant-select,
+.chakra-ui-dark .ant-select .ant-select-selector {
+  background: none;
+  border-color: rgba(220, 220, 220, 0.5);
+}
+
+.chakra-ui-dark .ant-select-selection-placeholder,
+.chakra-ui-dark .ant-select-arrow,
+.chakra-ui-dark .ant-select-selection-search-input,
+.chakra-ui-dark .ant-select-item,
+.chakra-ui-dark .ant-select-selection-item-content,
+.chakra-ui-dark .ant-select-selection-item-remove,
+.chakra-ui-dark .ant-select-selector .ant-select-selection-search,
+.chakra-ui-dark .ant-select-selection-item {
+  color: white;
+  border-color: rgba(220, 220, 220, 0.5);
+}
+
+.chakra-ui-dark .ant-select-disabled .ant-select-selection-placeholder,
+.chakra-ui-dark .ant-select-disabled .ant-select-arrow {
+  color: rgb(126, 126, 126);
+  border-color: rgba(220, 220, 220, 0.5);
+}
+
+.chakra-ui-dark .ant-select-dropdown {
+  background: #2D3748;
+  padding: 10px 5px;
+  border-color: rgba(220, 220, 220, 0.5);
+}
+
+p {
+  font-size: 18px;
+}
+
+.ant-float-btn-group {
+  inset-inline-end: 20px;
+  inset-block-end: 30px;
+}
+
+.ant-float-btn-body {
+  background: url('image0.svg') center;
+  background-size: cover;
+}
+
+.css-1keet2t {
+  background-color: #ebd651 !important;
+}
+
+.css-161pkch option:first-child {
+  display: none !important;
+}
+
+.css-178jmfv option:first-child {
+  display: none !important;
+}
