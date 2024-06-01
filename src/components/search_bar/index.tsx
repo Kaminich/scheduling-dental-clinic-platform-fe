@@ -1,4 +1,4 @@
-import { Divider, Input, InputGroup, InputRightAddon, InputRightElement, Select, Text } from "@chakra-ui/react"
+import { Divider, Input, InputGroup, InputRightAddon, Select, Text } from "@chakra-ui/react"
 import { FaSearch } from "react-icons/fa"
 
 const SearchBar = () => {

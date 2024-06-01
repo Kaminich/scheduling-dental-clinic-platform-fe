@@ -19,8 +19,11 @@ const AppointmentModal = ({ isOpen, onClose, dentalData, dentistData, locationDa
     const [address, setAddress] = useState<string>('');
     const [gender, setGender] = useState<string>('');
     const [location, setLocation] = useState<string>('');
+    const [service, setService] = useState<string>('');
+    const [date, setDate] = useState<Date | string>('');
     const [dentist, setDentist] = useState<string>('');
     const [isPersonal, setIsPersonal] = useState<boolean>(true);
+    const [time, setTime] = useState<string>('');
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered size={'xl'}>
@@ -125,32 +128,69 @@ const AppointmentModal = ({ isOpen, onClose, dentalData, dentistData, locationDa
                             </FormControl>
                             <FormControl id="date" flex={1}>
                                 <FormLabel ml={1}>Date</FormLabel>
-                                <Input type="date" min={today} />
+                                <Input
+                                    type="date"
+                                    min={today}
+                                    onChange={(e) => setDate(e.target.value)}
+                                />
                             </FormControl>
                         </HStack>
-                        <FormControl id="location">
-                            <FormLabel ml={1}>Location</FormLabel>
-                            {locationData === '' ? (
+                        <HStack>
+                            <FormControl id="location" flex={2}>
+                                <FormLabel ml={1}>Location</FormLabel>
+                                {locationData === '' ? (
+                                    <Select
+                                        name="location"
+                                        onChange={(e) => setLocation(e.target.value)}
+                                        placeholder={'Select location'}
+                                    >
+                                        <option value="1">
+                                            HCM
+                                        </option>
+                                        <option value="2">
+                                            HN
+                                        </option>
+                                    </Select>
+                                ) : (
+                                    <Input value={locationData.name} readOnly />
+                                )}
+                            </FormControl>
+                            <FormControl id="service" flex={1}>
+                                <FormLabel ml={1}>Service</FormLabel>
                                 <Select
-                                    name="location"
-                                    onChange={(e) => setLocation(e.target.value)}
-                                    placeholder={'Select location'}
+                                    name="service"
+                                    onChange={(e) => setService(e.target.value)}
+                                    placeholder={'Select service'}
                                 >
                                     <option value="1">
-                                        HCM
+                                        Service 1
                                     </option>
                                     <option value="2">
-                                        HN
+                                        Service 2
                                     </option>
                                 </Select>
-                            ) : (
-                                <Input value={locationData.name} readOnly />
-                            )}
-                        </FormControl>
+                            </FormControl>
+                        </HStack>
                         <HStack>
-                            <FormControl id="dentist">
+                            <FormControl id="time" flex={1}>
+                                <FormLabel ml={1}>Time</FormLabel>
+                                <Select
+                                    name="time"
+                                    value={time}
+                                    onChange={(e) => setTime(e.target.value)}
+                                    placeholder={'Select time'}
+                                >
+                                    <option value="1" style={{ padding: '10px' }}>
+                                        Morning
+                                    </option>
+                                    <option value="2">
+                                        Afternoon
+                                    </option>
+                                </Select>
+                            </FormControl>
+                            <FormControl id="dentist" flex={1.5}>
                                 <FormLabel ml={1}>Dentist</FormLabel>
-                                {(location === '' && locationData === '') ? (
+                                {((location === '' || service === '' || date === '') && locationData === '') ? (
                                     <Tooltip label={'You must select location to choose'}>
                                         <Select
                                             name="dentist"
@@ -186,20 +226,6 @@ const AppointmentModal = ({ isOpen, onClose, dentalData, dentistData, locationDa
                                         )}
                                     </>
                                 )}
-                            </FormControl>
-                            <FormControl id="time">
-                                <FormLabel ml={1}>Time</FormLabel>
-                                <Select
-                                    name="time"
-                                    placeholder={'Select time'}
-                                >
-                                    <option value="1" style={{ padding: '10px' }}>
-                                        Morning
-                                    </option>
-                                    <option value="2">
-                                        Afternoon
-                                    </option>
-                                </Select>
                             </FormControl>
                         </HStack>
                     </Stack>

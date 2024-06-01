@@ -15,7 +15,7 @@ const DentalBranch = () => {
             </SimpleGrid>
             <Box position='relative' py={7} my={5}>
                 <Divider borderColor={'black'} w={'full'} />
-                <Link to={'/dental'}>
+                <Link to={'/dentals'}>
                     <AbsoluteCenter
                         bg={'twitter.500'}
                         _hover={{ bg: 'twitter.600' }}

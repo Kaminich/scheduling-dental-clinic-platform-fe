@@ -1,11 +1,14 @@
-import { Avatar, Button, Card, CardBody, CardFooter, Container, Divider, Flex, HStack, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Progress, Stack, Text, Textarea } from "@chakra-ui/react"
+import { Avatar, Button, Card, CardBody, CardFooter, Flex, HStack, Heading, Stack, Text, Textarea } from "@chakra-ui/react"
 import { Rate } from "antd"
 import { FaPencil } from "react-icons/fa6";
 import { useState } from "react";
 import { Color, Shadow } from "../../../../styles/styles";
 
+interface Prop {
+    type: string;
+}
 
-const FeedbackForm = () => {
+const FeedbackForm = ({ type }: Prop) => {
     const [showFeedback, setShowFeedback] = useState<boolean>(false);
     const [feedback, setFeedback] = useState<string>('');
     const [rating, setRating] = useState<number | undefined>(undefined);
@@ -51,7 +54,7 @@ const FeedbackForm = () => {
                 justify={'center'}
                 shadow={Shadow.cardShadow}
             >
-                {showFeedback ? (
+                {showFeedback || type === 'review' ? (
                     <>
                         <Heading
                             textAlign={'center'}
@@ -94,21 +97,25 @@ const FeedbackForm = () => {
                                 </Stack>
                             </Stack>
                         </CardBody>
-                        <CardFooter justify={'flex-end'} gap={4}>
-                            <Button
-                                colorScheme="blue"
-                                variant={'outline'}
-                                onClick={() => { setShowFeedback(false) }}
-                            >
-                                Close
-                            </Button>
-                            <Button
-                                colorScheme="blue"
-                                onClick={handlePost}
-                            >
-                                Post
-                            </Button>
-                        </CardFooter>
+                        {type === 'dental' ? (
+                            <CardFooter justify={'flex-end'} gap={4}>
+                                <Button
+                                    colorScheme="blue"
+                                    variant={'outline'}
+                                    onClick={() => { setShowFeedback(false) }}
+                                >
+                                    Close
+                                </Button>
+                                <Button
+                                    colorScheme="blue"
+                                    onClick={handlePost}
+                                >
+                                    Post
+                                </Button>
+                            </CardFooter>
+                        ) : (
+                            <></>
+                        )}
                     </>
                 ) : (
                     <Button

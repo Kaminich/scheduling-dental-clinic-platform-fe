@@ -47,7 +47,7 @@ const SignUpPage = () => {
                         Sign up to F-Dental
                     </Heading>
                     <HStack>
-                        <FormControl id="username" flex={2}>
+                        <FormControl id="username" flex={2} isRequired>
                             <FormLabel pl={1}>Username</FormLabel>
                             <Input
                                 type="text"
@@ -56,7 +56,7 @@ const SignUpPage = () => {
                                 required
                             />
                         </FormControl>
-                        <FormControl id="gender" flex={1}>
+                        <FormControl id="gender" flex={1} isRequired>
                             <FormLabel pl={1}>Gender</FormLabel>
                             <Select
                                 name="gender"
@@ -74,7 +74,7 @@ const SignUpPage = () => {
                         </FormControl>
                     </HStack>
                     <HStack>
-                        <FormControl id="fullname" flex={2}>
+                        <FormControl id="fullname" flex={2} isRequired>
                             <FormLabel pl={1}>Fullname</FormLabel>
                             <Input
                                 type="text"
@@ -83,7 +83,7 @@ const SignUpPage = () => {
                                 required
                             />
                         </FormControl>
-                        <FormControl id="dob" flex={1}>
+                        <FormControl id="dob" flex={1} isRequired>
                             <FormLabel pl={1}>Date of Birth</FormLabel>
                             <Input
                                 type="date"
@@ -94,7 +94,7 @@ const SignUpPage = () => {
                         </FormControl>
                     </HStack>
                     <HStack>
-                        <FormControl id="email" flex={1.7}>
+                        <FormControl id="email" flex={1.7} isRequired>
                             <FormLabel pl={1}>Email</FormLabel>
                             <Input
                                 type="email"
@@ -103,7 +103,7 @@ const SignUpPage = () => {
                                 required
                             />
                         </FormControl>
-                        <FormControl id="phone" flex={1}>
+                        <FormControl id="phone" flex={1} isRequired>
                             <FormLabel pl={1}>Phone number</FormLabel>
                             <Input
                                 type="tel"
@@ -113,7 +113,7 @@ const SignUpPage = () => {
                             />
                         </FormControl>
                     </HStack>
-                    <FormControl id="address" flex={2}>
+                    <FormControl id="address" flex={2} isRequired>
                         <FormLabel pl={1}>Address</FormLabel>
                         <Input
                             type="text"
@@ -122,7 +122,7 @@ const SignUpPage = () => {
                             required
                         />
                     </FormControl>
-                    <FormControl id="password">
+                    <FormControl id="password" isRequired>
                         <FormLabel pl={1}>Password</FormLabel>
                         <InputGroup>
                             <Input
@@ -136,7 +136,7 @@ const SignUpPage = () => {
                             </InputRightElement>
                         </InputGroup>
                     </FormControl>
-                    <FormControl id="confirm-password">
+                    <FormControl id="confirm-password" isRequired>
                         <FormLabel pl={1}>Confirm Password</FormLabel>
                         <InputGroup>
                             <Input

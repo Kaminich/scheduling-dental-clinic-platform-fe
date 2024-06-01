@@ -1,4 +1,4 @@
-import { Container, Flex, HStack, Heading, Image, ListItem, Stack, Text, UnorderedList } from "@chakra-ui/react"
+import { Flex, HStack, Heading, Image, ListItem, Stack, Text, UnorderedList } from "@chakra-ui/react"
 import { Color } from "../../styles/styles"
 
 const AboutPage = () => {
