@@ -8,6 +8,14 @@ import DentalPage from "../pages/Dental";
 import DentistPage from "../pages/Dentist";
 import DentalDetailPage from "../pages/DentalDetail";
 import DentistDetailPage from "../pages/DentistDetail";
+import BlogDetailPage from "../pages/BlogDetail";
+import BlogPage from "../pages/Blog";
+import PartnerRegisterPage from "../pages/PartnerRegister";
+import ProfilePage from "../pages/Profile";
+import UpdateProfilePage from "../pages/UpdateProfile";
+import Appointment from "../pages/Appointment";
+import RatingFeedbackPage from "../pages/RatingFeedback";
+import ServicePage from "../pages/Service";
 
 type NonIndexRoute = {
     path: string;
@@ -37,10 +45,18 @@ const routes = [
             { path: "", element: <HomePage /> },
             { path: "home", element: <HomePage /> },
             { path: "about", element: <AboutPage /> },
-            { path: "dental", element: <DentalPage /> },
+            { path: "dentals", element: <DentalPage /> },
             { path: "dental-detail", element: <DentalDetailPage /> },
-            { path: "dentist", element: <DentistPage /> },
+            { path: "dentists", element: <DentistPage /> },
             { path: "dentist-detail", element: <DentistDetailPage /> },
+            { path: "services", element: <ServicePage /> },
+            { path: "blogs", element: <BlogPage /> },
+            { path: "blog-detail", element: <BlogDetailPage /> },
+            { path: "partner-register", element: <PartnerRegisterPage /> },
+            { path: "profile", element: <ProfilePage /> },
+            { path: "update-profile/:type", element: <UpdateProfilePage /> },
+            { path: "appointment", element: <Appointment /> },
+            { path: "rating-feedback", element: <RatingFeedbackPage /> },
         ],
     }
 ];

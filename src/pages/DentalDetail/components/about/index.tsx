@@ -1,6 +1,6 @@
 import { Card, HStack, Stack, Text } from "@chakra-ui/react"
 import { Color, Shadow } from "../../../../styles/styles"
-import NewsItem from "../../../../components/news_item"
+import BlogsItem from "../../../../components/blogs_item"
 import WorkingHours from "../working_hours"
 import DentalDetailBranch from "../branch"
 import { Pagination } from "antd"
@@ -75,9 +75,9 @@ const DentalAbout = () => {
                     News
                 </Text>
                 <Stack gap={6} align={'center'}>
-                    <NewsItem />
-                    <NewsItem />
-                    <NewsItem />
+                    <BlogsItem />
+                    <BlogsItem />
+                    <BlogsItem />
                     <Pagination
                         defaultPageSize={3}
                         current={page}

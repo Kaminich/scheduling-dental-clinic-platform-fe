@@ -1,6 +1,5 @@
-import { Avatar, Box, Button, Card, CardBody, CardFooter, Divider, Flex, Heading, Image, ListItem, Stack, Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs, Text, UnorderedList, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, Card, CardBody, CardFooter, Flex, Image, ListItem, Stack, Text, UnorderedList, useDisclosure } from "@chakra-ui/react"
 import AppointmentModal from "../../components/modal/appointment"
-import RatingAndFeedback from "../../components/rating_feedback";
 import { Color, Shadow } from "../../styles/styles";
 import CustomCarousel from "../../components/carousel";
 

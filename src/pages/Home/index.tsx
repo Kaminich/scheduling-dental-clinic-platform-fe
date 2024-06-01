@@ -5,7 +5,7 @@ import CustomCarousel from '../../components/carousel';
 import DentalBranch from './components/dental_branch';
 import MedicalTeam from './components/medical_team';
 import { Color } from '../../styles/styles';
-import NewsItem from '../../components/news_item';
+import BlogsItem from '../../components/blogs_item';
 
 const HomePage = () => {
     return (
@@ -153,12 +153,12 @@ const HomePage = () => {
                     textAlign={'center'}
                     mb={6}
                 >
-                    Highlight News
+                    Highlight Blogs
                 </Heading>
                 <SimpleGrid columns={3} spacingX={7} spacingY={8}>
-                    <NewsItem />
-                    <NewsItem />
-                    <NewsItem />
+                    <BlogsItem />
+                    <BlogsItem />
+                    <BlogsItem />
                 </SimpleGrid>
             </Stack>
         </>

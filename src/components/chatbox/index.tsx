@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Card, Flex, HStack, Stack, Text, Textarea } from '@chakra-ui/react';
 import { ConfigProvider, FloatButton } from 'antd';
 import { useEffect, useRef, useState } from 'react';
-import { FaArrowDown, FaMessage, FaPaperPlane, FaXmark } from 'react-icons/fa6';
+import { FaArrowDown, FaPaperPlane, FaXmark } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
 
 interface MessageProps {

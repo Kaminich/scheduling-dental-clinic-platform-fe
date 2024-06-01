@@ -4,7 +4,7 @@ import { FaLocationDot } from "react-icons/fa6"
 import { useState } from "react";
 import FeedbackModal from "../modal/feedback";
 import AppointmentModal from "../modal/appointment";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Color } from "../../styles/styles";
 
 const DentalItem = () => {
@@ -104,7 +104,7 @@ const DentalItem = () => {
                     </Button>
                 </CardFooter>
             </Card>
-            <FeedbackModal isOpen={isOpenFeedback} onClose={onCloseFeedback} />
+            <FeedbackModal isOpen={isOpenFeedback} onClose={onCloseFeedback} type="ratingfeedback" />
             <AppointmentModal
                 isOpen={isOpenAppointment}
                 onClose={onCloseAppointment}

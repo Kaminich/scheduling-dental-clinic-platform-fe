@@ -1,4 +1,4 @@
-import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, InputGroup, InputRightElement, Stack, Text, useToast } from "@chakra-ui/react"
+import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, InputGroup, InputRightElement, Stack, Text } from "@chakra-ui/react"
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Logo from "../../components/logo";
@@ -8,7 +8,6 @@ import { GoogleLogin } from "@react-oauth/google";
 const LoginPage = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const toast = useToast();
     const [showPass, setShowPass] = useState<boolean>(false);
 
     const responseMessage = (response: any) => {
@@ -71,7 +70,7 @@ const LoginPage = () => {
                         </HStack>
                         <HStack gap={2} justify={'center'}>
                             <Text align={"center"}>
-                                Don't have account?{" "}
+                                Don't have account?
                             </Text>
                             <Text style={{ color: "#00d4d8" }}>
                                 <Link to={'/signup'}>

@@ -1,8 +1,14 @@
-import { Avatar, Divider, HStack, Stack, Text } from "@chakra-ui/react"
+import { Avatar, HStack, Stack, Text } from "@chakra-ui/react"
 import { Rate } from "antd"
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Color } from "../../../../styles/styles";
 
-const FeedbackItem = () => {
+interface Prop {
+    type: string,
+}
+
+const FeedbackItem = ({ type }: Prop) => {
     const [showFullText, setShowFullText] = useState<boolean>(false);
 
     const toggleShowFullText = () => {
@@ -13,7 +19,14 @@ const FeedbackItem = () => {
         <Stack gap={4} mb={3}>
             <HStack gap={4}>
                 <Avatar size={'md'} name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
-                <Text>Segun Adebayo</Text>
+                <Stack gap={0}>
+                    <Text fontWeight={'medium'}>Segun Adebayo</Text>
+                    {type === 'personal' && (
+                        <Link to={'/dental-detail'}>
+                            <Text fontSize={16} color={'blue'} _hover={{ color: Color.hoverBlue }}>F-Dental</Text>
+                        </Link>
+                    )}
+                </Stack>
             </HStack>
             <Rate disabled allowHalf defaultValue={5} style={{ fontSize: '15px' }} />
             <Stack gap={0}>

@@ -6,7 +6,7 @@ const Logo = () => {
     return (
         <Flex align={'center'} cursor={'pointer'} onClick={() => navigate('/')}>
             <Image
-                src="./image0.svg"
+                src="/image0.svg"
                 objectFit="contain"
                 height="80px"
                 width="80px"

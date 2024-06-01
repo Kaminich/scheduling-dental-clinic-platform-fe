@@ -1,4 +1,4 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Card, Flex, ListItem, Text, UnorderedList } from "@chakra-ui/react"
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Card, Flex, ListItem, UnorderedList } from "@chakra-ui/react"
 import { Shadow } from "../../../../styles/styles"
 import { FaLocationDot } from "react-icons/fa6"
 

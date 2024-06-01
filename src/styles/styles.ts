@@ -4,6 +4,7 @@ export const Color = {
     blue_100: '#f1f7ff',
     greenBlue: '#1fa4ab',
     hoverBlue: '#144a91',
+    hoverGreenBlue: '#1fa4abc7',
 };
 
 export const Border = {

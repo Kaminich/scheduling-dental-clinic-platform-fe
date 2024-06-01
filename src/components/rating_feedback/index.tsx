@@ -81,15 +81,15 @@ const RatingAndFeedback = ({ isModal }: Prop) => {
                         Feedback posts
                     </Text>
                     <Card py={4} px={8} mb={4} pt={6} shadow={Shadow.cardShadow}>
-                        <FeedbackItem />
+                        <FeedbackItem type="dental" />
                     </Card>
                     <Card py={4} px={8} mb={4} pt={6} shadow={Shadow.cardShadow}>
-                        <FeedbackItem />
+                        <FeedbackItem type="dental" />
                     </Card>
                 </Stack>
                 {!isModal && (
                     <Stack flex={1}>
-                        <FeedbackForm />
+                        <FeedbackForm type="dental" />
                     </Stack>
                 )}
             </HStack>
