@@ -1,10 +1,9 @@
 export default interface Customer {
-    id: string;
-    fullname: string,
+    id: number;
+    fullName: string,
     email: string,
-    phone_number: number;
+    phoneNumber: string;
     dob: Date;
-    food_name: string;
     avatar: string;
-    status: string;
+    status: boolean;
 }
