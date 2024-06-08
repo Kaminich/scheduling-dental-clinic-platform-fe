@@ -43,7 +43,6 @@ const LoginPage = () => {
                 localStorage.setItem('access_token', response.data.token);
                 const responseRole = await apiClient.getAuthen();
                 console.log(responseRole.data.role);
-
                 setIsAuthenticated(true);
                 if (responseRole.data.role === 'CUSTOMER') {
                     navigate('/');

@@ -8,11 +8,11 @@ import { formatDate } from "../../utils/formatDate";
 const ProfilePage = () => {
     const [userData, setUserData] = useState<Customer>(CustomerInit);
 
-    const { data, refetch } = useUserProfile();
+    const { data } = useUserProfile();
 
     useEffect(() => {
         data && setUserData(data);
-    }, [refetch]);
+    }, [data]);
 
     return (
         <HStack gap={20} justify={'space-between'} align={'flex-start'} w={'7xl'} m={'auto'} my={10}>

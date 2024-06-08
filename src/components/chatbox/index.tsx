@@ -3,6 +3,7 @@ import { ConfigProvider, FloatButton } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { FaArrowDown, FaPaperPlane, FaXmark } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
+import { useAuth } from '../../hooks/useAuth';
 
 interface MessageProps {
     text: string;
@@ -38,13 +39,13 @@ const ChatBox = () => {
     const [messages, setMessages] = useState<MessageProps[]>([
         { text: "How can I help you?", isUser: false }
     ]);
-    const [isLogin, setIsLogin] = useState<boolean>(false);
     const [inputText, setInputText] = useState<string>("");
     const [showScrollButton, setShowScrollButton] = useState<boolean>(false);
     const [focus, setFocus] = useState<boolean>(false);
     const chatBoxRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
         scrollToBottom();
@@ -147,7 +148,7 @@ const ChatBox = () => {
                             <FaXmark />
                         </Button>
                     </Card>
-                    {isLogin ? (
+                    {isAuthenticated ? (
                         <>
                             <Box
                                 ref={chatBoxRef}
