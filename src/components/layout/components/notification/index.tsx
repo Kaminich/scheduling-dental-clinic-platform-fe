@@ -6,7 +6,8 @@ const Notification = () => {
         <Menu autoSelect={false}>
             <MenuButton>
                 <Button
-                    colorScheme="gray"
+                    bg={'#dedede'}
+                    _hover={{ bg: '#dedede' }}
                     borderRadius={'full'}
                     px={2}
                     py={5}

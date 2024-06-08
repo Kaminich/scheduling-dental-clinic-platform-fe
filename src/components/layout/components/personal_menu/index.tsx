@@ -2,12 +2,24 @@ import { Avatar, Button, Card, Divider, Flex, Heading, Menu, MenuButton, MenuIte
 import { useState } from "react";
 import { FaArrowLeft, FaCalendarCheck, FaChevronRight, FaDoorOpen, FaGear, FaGlobe, FaStar, FaUserGear, FaUserPen } from "react-icons/fa6";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../../../hooks/useAuth";
 
-const PersonalMenu = () => {
+interface Prop {
+    type: string
+}
+
+const PersonalMenu = ({ type }: Prop) => {
     const [subMenu, setSubMenu] = useState<boolean>(false);
     const [isVN, setIsVN] = useState<boolean>(false);
+    const { setIsAuthenticated } = useAuth();
 
     const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('access_token');
+        setIsAuthenticated(false);
+        navigate('/');
+    }
 
     return (
         <Menu autoSelect={false}>
@@ -66,6 +78,53 @@ const PersonalMenu = () => {
                                 <FaChevronRight />
                             </Button>
                         </Button>
+                        {type === 'CUSTOMER' && (
+                            <>
+                                <MenuItem
+                                    maxW={'95%'}
+                                    borderRadius={10}
+                                    p={3}
+                                    mx={2}
+                                    fontSize={17}
+                                    fontWeight={600}
+                                    onClick={() => navigate('/appointment')}
+                                >
+                                    <Button
+                                        px={3}
+                                        borderRadius={'full'}
+                                        mr={3}
+                                        bg={'#dedede'}
+                                        _hover={{ bg: '#dedede' }}
+                                    >
+                                        <FaCalendarCheck />
+                                    </Button>
+                                    Appointment
+                                </MenuItem>
+                                <MenuItem
+                                    maxW={'95%'}
+                                    borderRadius={10}
+                                    p={3}
+                                    mx={2}
+                                    fontSize={17}
+                                    fontWeight={600}
+                                    onClick={() => navigate('/rating-feedback')}
+                                >
+                                    <Button
+                                        px={3}
+                                        borderRadius={'full'}
+                                        mr={3}
+                                        bg={'#dedede'}
+                                        _hover={{ bg: '#dedede' }}
+                                    >
+                                        <FaStar />
+                                    </Button>
+                                    Rating and Feedback
+                                </MenuItem>
+                            </>
+                        )}
+                        {type === 'ADMIN' && (
+                            <></>
+                        )}
                         <MenuItem
                             maxW={'95%'}
                             borderRadius={10}
@@ -73,46 +132,7 @@ const PersonalMenu = () => {
                             mx={2}
                             fontSize={17}
                             fontWeight={600}
-                            onClick={() => navigate('/appointment')}
-                        >
-                            <Button
-                                px={3}
-                                borderRadius={'full'}
-                                mr={3}
-                                bg={'#dedede'}
-                                _hover={{ bg: '#dedede' }}
-                            >
-                                <FaCalendarCheck />
-                            </Button>
-                            Appointment
-                        </MenuItem>
-                        <MenuItem
-                            maxW={'95%'}
-                            borderRadius={10}
-                            p={3}
-                            mx={2}
-                            fontSize={17}
-                            fontWeight={600}
-                            onClick={() => navigate('/rating-feedback')}
-                        >
-                            <Button
-                                px={3}
-                                borderRadius={'full'}
-                                mr={3}
-                                bg={'#dedede'}
-                                _hover={{ bg: '#dedede' }}
-                            >
-                                <FaStar />
-                            </Button>
-                            Rating and Feedback
-                        </MenuItem>
-                        <MenuItem
-                            maxW={'95%'}
-                            borderRadius={10}
-                            p={3}
-                            mx={2}
-                            fontSize={17}
-                            fontWeight={600}
+                            onClick={handleLogout}
                         >
                             <Button
                                 px={3}

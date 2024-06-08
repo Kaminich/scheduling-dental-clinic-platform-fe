@@ -11,11 +11,11 @@ export default interface Blogs {
     title: string,
     context: string,
     thumbnail: string,
-    publishDate: Date,
+    publishDate: string,
     status: Status,
     createBy: string,
-    createDate: Date,
+    createDate: string,
     lastModifiedBy: string,
-    lastModifiedDate: Date,
+    lastModifiedDate: string,
     branchId: Branch["id"]
 }

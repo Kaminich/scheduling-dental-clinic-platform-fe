@@ -1,10 +1,8 @@
 import { Flex, Heading, Image, Stack, Text } from "@chakra-ui/react"
-import { useNavigate } from "react-router"
 
 const Logo = () => {
-    const navigate = useNavigate();
     return (
-        <Flex align={'center'} cursor={'pointer'} onClick={() => navigate('/')}>
+        <Flex align={'center'} cursor={'pointer'}>
             <Image
                 src="/image0.svg"
                 objectFit="contain"

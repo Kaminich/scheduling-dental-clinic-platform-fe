@@ -20,8 +20,8 @@ export default interface WorkingHours {
     id: string,
     dayInWeek: DayInWeek,
     shift: Shift,
-    openingTime: Date,
-    closingTime: Date,
+    openingTime: string,
+    closingTime: string,
     status: boolean,
     branchId: Branch['id']
 }

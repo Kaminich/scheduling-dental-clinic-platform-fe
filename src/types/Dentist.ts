@@ -12,7 +12,7 @@ export default interface Dentist {
     email: string,
     password: string,
     phoneNumber: string;
-    dob: Date;
+    dob: string;
     description: string,
     specialty: string,
     experience: string,

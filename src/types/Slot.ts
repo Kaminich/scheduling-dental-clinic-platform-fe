@@ -3,13 +3,13 @@ import Branch from "./Branch";
 export default interface Slot {
     id: string,
     slotNo: number,
-    startTime: Date,
-    endTime: Date,
-    slotDate: Date,
+    startTime: string,
+    endTime: string,
+    slotDate: string,
     createBy: string,
-    createDate: Date,
+    createDate: string,
     lastModifiedBy: string,
-    lastModifiedDate: Date,
+    lastModifiedDate: string,
     status: boolean,
     brandId: Branch['id']
 }

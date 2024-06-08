@@ -8,8 +8,8 @@ export default interface TreatmentOutcome {
     prescription: string,
     recommendations: string,
     createBy: string,
-    createDate: Date,
-    followUpDate: Date,
+    createDate: string,
+    followUpDate: string,
     customerId: Customer["id"],
     appointmentId: Appointment["id"]
 }

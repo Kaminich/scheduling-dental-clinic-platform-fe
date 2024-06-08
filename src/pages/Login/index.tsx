@@ -1,14 +1,66 @@
-import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, InputGroup, InputRightElement, Stack, Text } from "@chakra-ui/react"
+import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, InputGroup, InputRightElement, Stack, Text, useToast } from "@chakra-ui/react"
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Logo from "../../components/logo";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
+import ApiClient from "../../services/apiClient";
+import { useAuth } from "../../hooks/useAuth";
 
 const LoginPage = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [showPass, setShowPass] = useState<boolean>(false);
+    const toast = useToast();
+    const navigate = useNavigate();
+
+    const { setIsAuthenticated } = useAuth();
+
+    const api = new ApiClient<any>('/auth/login');
+    const apiClient = new ApiClient<any>('/auth/user-information');
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const data = {
+            usernameOrEmail: username,
+            password,
+        };
+
+        try {
+            const response = await api.postUnauthen(data);
+            console.log(response.data);
+
+            if (response.data.success === false) {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                });
+            } else {
+                localStorage.setItem('access_token', response.data.token);
+                const responseRole = await apiClient.getAuthen();
+                console.log(responseRole.data.role);
+
+                setIsAuthenticated(true);
+                if (responseRole.data.role === 'CUSTOMER') {
+                    navigate('/');
+                }
+            }
+        } catch (error) {
+            console.log(error);
+
+            toast({
+                title: "Error",
+                description: "An error occurred. Please try again.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        }
+    };
 
     const responseMessage = (response: any) => {
         console.log(response);
@@ -21,7 +73,9 @@ const LoginPage = () => {
         <HStack maxW={'full'} maxH={'100%'}>
             <Box flex={1}>
                 <Box pos={'fixed'} top={5} left={3}>
-                    <Logo />
+                    <Link to={'/'}>
+                        <Logo />
+                    </Link>
                 </Box>
                 <Stack maxW={'md'} gap={5} m={'auto'}>
                     <Heading fontSize={"2xl"} textAlign={'center'} mb={10}>Login to F-Dental</Heading>
@@ -50,6 +104,7 @@ const LoginPage = () => {
                         <Button
                             colorScheme={"blue"}
                             variant={"solid"}
+                            onClick={handleLogin}
                         >
                             Sign in
                         </Button>

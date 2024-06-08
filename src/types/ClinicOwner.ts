@@ -12,7 +12,7 @@ export default interface ClinicOwner {
     email: string,
     password: string,
     phoneNumber: string;
-    dob: Date;
+    dob: string;
     avatar: string;
     status: Status;
     clinicId: Clinic['id']

@@ -1,14 +1,14 @@
 import { Box, Button, HStack, Text } from "@chakra-ui/react";
-import { useState } from "react";
 import Logo from "../../../logo";
 import { Link, useNavigate } from "react-router-dom";
 import { googleLogout } from "@react-oauth/google";
 import Notification from "../notification";
 import PersonalMenu from "../personal_menu";
+import { useAuth } from "../../../../hooks/useAuth";
 
 const Navbar = () => {
-    const [isLogin, setIsLogin] = useState(false);
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
 
     const onSignout = () => {
         googleLogout();
@@ -28,7 +28,9 @@ const Navbar = () => {
                 maxW={'7xl'}
                 m={'auto'}
             >
-                <Logo />
+                <Link to={'/'}>
+                    <Logo />
+                </Link>
                 <HStack gap={10}>
                     <Text>
                         <Link to={'/'}>
@@ -66,10 +68,10 @@ const Navbar = () => {
                         </Link>
                     </Text>
                 </HStack>
-                {isLogin ? (
+                {isAuthenticated ? (
                     <HStack>
                         <Notification />
-                        <PersonalMenu />
+                        <PersonalMenu type="CUSTOMER" />
                     </HStack>
                 ) : (
                     <HStack gap={5}>
@@ -90,7 +92,7 @@ const Navbar = () => {
                             py={'1.5rem'}
                             colorScheme="twitter"
                             fontSize={18}
-                            onClick={() => setIsLogin(true)}
+                            onClick={() => navigate('login')}
                         >
                             Login
                         </Button>
