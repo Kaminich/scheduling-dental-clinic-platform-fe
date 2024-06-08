@@ -8,7 +8,10 @@ export interface FetchResponse<T> {
 }
 
 const axiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_SERVER_URL + '/api/menu',
+    baseURL: import.meta.env.VITE_SERVER_URL + '/api/v1',
+    headers: {
+        'Content-Type': 'application/json',
+    },
 });
 
 axios.interceptors.response.use(async (res: any) => {
@@ -27,44 +30,76 @@ class ApiClient<T> {
     constructor(endpoint: string) {
         this.endpoint = endpoint;
     }
-    getAll = (config?: AxiosRequestConfig) => {
-        return axiosInstance
-            .post<FetchResponse<T>>(this.endpoint, {}, config)
-            .then((res) => res.data);
+
+    setAuthHeader = (config?: AxiosRequestConfig) => {
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            return {
+                ...config,
+                headers: {
+                    ...config?.headers,
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+        }
+        return config;
     };
 
-    get = (id: number | string, config?: AxiosRequestConfig) => {
-        return axiosInstance
-            .post<T>(this.endpoint + '/' + id, {}, config)
-            .then((res) => res.data);
-    };
-
-    create = (data: T, config?: AxiosRequestConfig) => {
+    postUnauthen = (data: T, config?: AxiosRequestConfig) => {
         return axiosInstance
             .post<T>(this.endpoint, data, config)
-            .then((res) => res.data);
-    };
-    createWithFile = (data: T) => {
+            .then((res) => res.data)
+    }
+    // getAll = (config?: AxiosRequestConfig) => {
+    //     return axiosInstance
+    //         .post<FetchResponse<T>>(this.endpoint, {}, config)
+    //         .then((res) => res.data);
+    // };
+
+    getUnauthen = (config?: AxiosRequestConfig) => {
         return axiosInstance
-            .post<T>(this.endpoint, data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
+            .get<T>(this.endpoint, config)
             .then((res) => res.data);
     };
 
-    update = (id: number | string, data: T, config?: AxiosRequestConfig) => {
+    postAuthen = (data: T, config?: AxiosRequestConfig) => {
         return axiosInstance
-            .put<T>(this.endpoint + '/' + id, data, config)
-            .then((res) => res.data);
-    };
+            .post<T>(this.endpoint, data, this.setAuthHeader(config))
+            .then((res) => res.data)
+    }
 
-    delete = (id: number | string, config?: AxiosRequestConfig) => {
+    getAuthen = (config?: AxiosRequestConfig) => {
         return axiosInstance
-            .delete<T>(this.endpoint + '/' + id, config)
-            .then((res) => res.data);
-    };
+            .get<T>(this.endpoint, this.setAuthHeader(config))
+            .then((res) => res.data)
+    }
+
+    // create = (data: T, config?: AxiosRequestConfig) => {
+    //     return axiosInstance
+    //         .post<T>(this.endpoint, data, config)
+    //         .then((res) => res.data);
+    // };
+    // createWithFile = (data: T) => {
+    //     return axiosInstance
+    //         .post<T>(this.endpoint, data, {
+    //             headers: {
+    //                 'Content-Type': 'multipart/form-data',
+    //             },
+    //         })
+    //         .then((res) => res.data);
+    // };
+
+    // update = (id: number | string, data: T, config?: AxiosRequestConfig) => {
+    //     return axiosInstance
+    //         .put<T>(this.endpoint + '/' + id, data, config)
+    //         .then((res) => res.data);
+    // };
+
+    // delete = (id: number | string, config?: AxiosRequestConfig) => {
+    //     return axiosInstance
+    //         .delete<T>(this.endpoint + '/' + id, config)
+    //         .then((res) => res.data);
+    // };
 }
 
 export default ApiClient;

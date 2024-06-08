@@ -11,8 +11,8 @@ export default interface Clinic {
     logo: URL,
     totalRating: number,
     createBy: string,
-    createDate: Date,
+    createDate: string,
     lastModifiedBy: string,
-    lastModifiedDate: Date,
+    lastModifiedDate: string,
     clinicOwnerId: ClinicOwner["id"]
 }

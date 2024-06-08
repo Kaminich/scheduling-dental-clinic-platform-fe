@@ -5,8 +5,8 @@ export default interface Category {
     name: string,
     status: boolean,
     createBy: string,
-    createDate: Date,
+    createDate: string,
     lastModifiedBy: string,
-    lastModifiedDate: Date,
+    lastModifiedDate: string,
     clinicId: Clinic["id"]
 }

@@ -1,7 +1,7 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import LoginPage from "../pages/Login";
 import SignUpPage from "../pages/SignUp";
-import Layout from "../components/layout";
+import Layout from "../components/layout/customer";
 import HomePage from "../pages/Home";
 import AboutPage from "../pages/About";
 import DentalPage from "../pages/Dental";
@@ -16,6 +16,10 @@ import UpdateProfilePage from "../pages/UpdateProfile";
 import Appointment from "../pages/Appointment";
 import RatingFeedbackPage from "../pages/RatingFeedback";
 import ServicePage from "../pages/Service";
+import AdminLayout from "../components/layout/admin";
+import NotFoundPage from "../pages/NotFound";
+import Dashboard from "../pages/Dashboard";
+import AccountSettings from "../pages/AccountSettings";
 
 type NonIndexRoute = {
     path: string;
@@ -31,6 +35,10 @@ type IndexRoute = {
 
 const routes = [
     {
+        path: '*',
+        element: <NotFoundPage />,
+    },
+    {
         path: "/login",
         element: <LoginPage />,
     },
@@ -42,8 +50,7 @@ const routes = [
         path: "/",
         element: <Layout />,
         children: [
-            { path: "", element: <HomePage /> },
-            { path: "home", element: <HomePage /> },
+            { index: true, element: <HomePage /> },
             { path: "about", element: <AboutPage /> },
             { path: "dentals", element: <DentalPage /> },
             { path: "dental-detail", element: <DentalDetailPage /> },
@@ -57,6 +64,17 @@ const routes = [
             { path: "update-profile/:type", element: <UpdateProfilePage /> },
             { path: "appointment", element: <Appointment /> },
             { path: "rating-feedback", element: <RatingFeedbackPage /> },
+        ],
+    },
+    {
+        path: "/admin",
+        element: <AdminLayout />,
+        children: [
+            { index: true, element: <Navigate to={'dashboard'} /> },
+            { path: "dashboard", element: <Dashboard /> },
+            { path: "accounts", element: <AccountSettings /> },
+            { path: "profile", element: <ProfilePage /> },
+            { path: "update-profile/:type", element: <UpdateProfilePage /> },
         ],
     }
 ];

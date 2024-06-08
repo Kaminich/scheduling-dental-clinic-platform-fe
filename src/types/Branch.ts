@@ -15,8 +15,8 @@ export default interface Branch {
     totalRating: number,
     status: Status,
     createBy: string,
-    createDate: Date,
+    createDate: string,
     lastModifiedBy: string,
-    lastModifiedDate: Date,
+    lastModifiedDate: string,
     clinicId: Clinic["id"]
 }

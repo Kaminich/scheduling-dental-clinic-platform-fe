@@ -1,10 +1,10 @@
 import { Stack } from "@chakra-ui/react"
-import Navbar from "./components/navbar"
+import Navbar from "../components/navbar"
 import { Outlet } from "react-router-dom"
-import Footer from "./components/footer"
+import Footer from "../components/footer"
 import { useLocation } from "react-router-dom"
 import { useEffect } from "react"
-import ChatBox from '../../components/chatbox';
+import ChatBox from '../../../components/chatbox';
 
 const Layout = () => {
     const { pathname } = useLocation();

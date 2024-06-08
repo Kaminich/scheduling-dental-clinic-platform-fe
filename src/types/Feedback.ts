@@ -6,7 +6,7 @@ export default interface Feedback {
     comment: string,
     rating: number,
     status: boolean,
-    createDateTime: Date,
+    createDateTime: string,
     branchClinicId: Branch["id"]
     userId: Customer['id']
 }

@@ -16,9 +16,9 @@ export default interface Service {
     type: string,
     status: Status
     createBy: string,
-    createDate: Date,
+    createDate: string,
     lastModifiedBy: string,
-    lastModifiedDate: Date,
+    lastModifiedDate: string,
     categoryId: Category["id"],
     clinicId: Clinic["id"],
 }

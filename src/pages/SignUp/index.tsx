@@ -5,10 +5,11 @@ import Logo from "../../components/logo";
 import { Link } from "react-router-dom";
 import { today } from "../../components/modal/appointment";
 import { GoogleLogin } from "@react-oauth/google";
+import ApiClient from "../../services/apiClient";
 
 const SignUpPage = () => {
     const [username, setUsername] = useState<string>('');
-    const [fullname, setFullname] = useState<string>('');
+    const [fullName, setFullName] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [dob, setDob] = useState<Date | string>('');
     const [gender, setGender] = useState<string>('');
@@ -24,6 +25,65 @@ const SignUpPage = () => {
         console.log(response);
     };
 
+    const api = new ApiClient<any>('/auth/register');
+
+    const handleSignUp = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (password !== confirmPassword) {
+            toast({
+                title: "Error",
+                description: "Passwords do not match.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+            return;
+        }
+
+        const data = {
+            username,
+            fullName,
+            password,
+            dob,
+            gender,
+            phone,
+            email,
+            address
+        };
+
+        try {
+            const response = await api.postUnauthen(data);
+            console.log(response);
+
+            if (response.success) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                });
+            }
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: "An error occurred. Please try again.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        }
+    };
+
     return (
         <HStack maxW={'full'} minH={'100vh'}>
             <HStack flex={1} h={'full'}>
@@ -36,7 +96,9 @@ const SignUpPage = () => {
             </HStack>
             <Box flex={1}>
                 <Box pos={'fixed'} top={1}>
-                    <Logo />
+                    <Link to={'/'}>
+                        <Logo />
+                    </Link>
                 </Box>
                 <Stack maxW={'md'} gap={1} m={'auto'} mt={8}>
                     <Heading
@@ -64,22 +126,25 @@ const SignUpPage = () => {
                                 onChange={(e) => setGender(e.target.value)}
                                 placeholder={'Select gender'}
                             >
-                                <option value="1">
+                                <option value="Male">
                                     Male
                                 </option>
-                                <option value="2">
+                                <option value="Female">
                                     Female
+                                </option>
+                                <option value="Other">
+                                    Other
                                 </option>
                             </Select>
                         </FormControl>
                     </HStack>
                     <HStack>
-                        <FormControl id="fullname" flex={2} isRequired>
-                            <FormLabel pl={1}>Fullname</FormLabel>
+                        <FormControl id="fullName" flex={2} isRequired>
+                            <FormLabel pl={1}>FullName</FormLabel>
                             <Input
                                 type="text"
-                                value={fullname}
-                                onChange={(e) => setFullname(e.target.value)}
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
                                 required
                             />
                         </FormControl>
@@ -140,7 +205,7 @@ const SignUpPage = () => {
                         <FormLabel pl={1}>Confirm Password</FormLabel>
                         <InputGroup>
                             <Input
-                                type={showPass ? 'text' : 'password'}
+                                type={showConfirmPass ? 'text' : 'password'}
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
@@ -154,8 +219,9 @@ const SignUpPage = () => {
                         <Button
                             colorScheme={"blue"}
                             variant={"solid"}
+                            onClick={handleSignUp}
                         >
-                            Sign in
+                            Sign up
                         </Button>
                         <Box position='relative'>
                             <Divider borderColor={'black'} />

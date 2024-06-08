@@ -15,7 +15,7 @@ export default interface Appointment {
     customerName: string,
     customerAddress: string,
     customerPhoneNumber: string,
-    customerDOB: Date,
+    customerDOB: string,
     customerAge: number,
     customerEmail: string,
     location: string,

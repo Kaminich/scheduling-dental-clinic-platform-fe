@@ -1,7 +1,18 @@
 import { Avatar, Box, Card, CardBody, Heading, Text, Stack, HStack, Divider } from "@chakra-ui/react";
 import { Shadow } from "../../styles/styles";
+import { useEffect, useState } from "react";
+import Customer, { CustomerInit } from "../../types/Customer";
+import useUserProfile from "../../hooks/useUserProfile";
+import { formatDate } from "../../utils/formatDate";
 
 const ProfilePage = () => {
+    const [userData, setUserData] = useState<Customer>(CustomerInit);
+
+    const { data, refetch } = useUserProfile();
+
+    useEffect(() => {
+        data && setUserData(data);
+    }, [refetch]);
 
     return (
         <HStack gap={20} justify={'space-between'} align={'flex-start'} w={'7xl'} m={'auto'} my={10}>
@@ -29,39 +40,39 @@ const ProfilePage = () => {
             <Stack align='center' flex={2} gap={10}>
                 <Card w={'full'} shadow={Shadow.cardShadow}>
                     <CardBody w='100%'>
-                        <HStack justify={'space-between'}>
-                            <Text>Username: </Text>
-                            <Text color={'gray'}>data</Text>
+                        <HStack gap={5}>
+                            <Text minW={36}>Username: </Text>
+                            <Text color={'gray'}>{userData.username}</Text>
                         </HStack>
                         <Divider my={4} />
-                        <HStack justify={'space-between'}>
-                            <Text>Full Name: </Text>
-                            <Text color={'gray'}>data</Text>
+                        <HStack gap={5}>
+                            <Text minW={36}>Full Name: </Text>
+                            <Text color={'gray'}>{userData.fullName}</Text>
                         </HStack>
                         <Divider my={4} />
-                        <HStack justify={'space-between'}>
-                            <Text>Gender: </Text>
-                            <Text color={'gray'}>data</Text>
+                        <HStack gap={5}>
+                            <Text minW={36}>Gender: </Text>
+                            <Text color={'gray'}>{userData.gender}</Text>
                         </HStack>
                         <Divider my={4} />
-                        <HStack justify={'space-between'}>
-                            <Text>Date of Birth: </Text>
-                            <Text color={'gray'}>data</Text>
+                        <HStack gap={5}>
+                            <Text minW={36}>Date of Birth: </Text>
+                            <Text color={'gray'}>{formatDate(userData.dob)}</Text>
                         </HStack>
                         <Divider my={4} />
-                        <HStack justify={'space-between'}>
-                            <Text>Phone Number: </Text>
-                            <Text color={'gray'}>data</Text>
+                        <HStack gap={5}>
+                            <Text minW={36}>Phone Number: </Text>
+                            <Text color={'gray'}>{userData.phone}</Text>
                         </HStack>
                         <Divider my={4} />
-                        <HStack justify={'space-between'}>
-                            <Text>Address: </Text>
-                            <Text color={'gray'}>data</Text>
+                        <HStack gap={5}>
+                            <Text minW={36}>Email: </Text>
+                            <Text color={'gray'}>{userData.email}</Text>
                         </HStack>
                         <Divider my={4} />
-                        <HStack justify={'space-between'}>
-                            <Text>Email: </Text>
-                            <Text color={'gray'}>data</Text>
+                        <HStack gap={5}>
+                            <Text minW={36}>Address: </Text>
+                            <Text color={'gray'}>{userData.address}</Text>
                         </HStack>
                     </CardBody>
                 </Card>

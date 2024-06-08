@@ -12,7 +12,7 @@ export default interface ClinicStaff {
     email: string,
     password: string,
     phoneNumber: string;
-    dob: Date;
+    dob: string;
     avatar: string;
     status: Status;
     branchId: Branch['id']
