@@ -46,6 +46,8 @@ const LoginPage = () => {
                 setIsAuthenticated(true);
                 if (responseRole.data.role === 'CUSTOMER') {
                     navigate('/');
+                } else if (responseRole.data.role === 'ADMIN') {
+                    navigate('/admin');
                 }
             }
         } catch (error) {

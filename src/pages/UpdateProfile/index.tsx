@@ -1,9 +1,12 @@
 import { Button, Card, CardBody, FormControl, FormLabel, HStack, Image, Input, InputGroup, InputRightElement, Select, Stack } from "@chakra-ui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { today } from "../../components/modal/appointment";
 import { Shadow } from "../../styles/styles";
 import { FaEye, FaEyeSlash, FaPen } from "react-icons/fa6";
 import { useParams } from "react-router";
+import useUserProfile from "../../hooks/useUserProfile";
+import Customer, { CustomerInit } from "../../types/Customer";
+import { formatDate } from "../../utils/formatDate";
 
 const UpdateProfilePage = () => {
     const [fullname, setFullname] = useState<string>('');
@@ -20,6 +23,9 @@ const UpdateProfilePage = () => {
     const [currentPass, setCurrentPass] = useState<string>('');
     const [newPass, setNewPass] = useState<string>('');
     const [confirmPass, setConfirmPass] = useState<string>('');
+    const [userData, setUserData] = useState<Customer>(CustomerInit);
+
+    const { data } = useUserProfile();
 
     const param = useParams();
 
@@ -37,6 +43,15 @@ const UpdateProfilePage = () => {
             setAvatarData(selectedFile);
         }
     }
+
+    useEffect(() => {
+        if (data) {
+            setUserData(data);
+        }
+    }, [data])
+
+    console.log(userData);
+
 
     return (
         <>
@@ -90,23 +105,28 @@ const UpdateProfilePage = () => {
                                             <FormLabel ml={1}>Full Name</FormLabel>
                                             <Input
                                                 type="text"
-                                                value={fullname}
+                                                defaultValue={userData.fullName}
+                                                value={fullname === '' ? userData.fullName : fullname}
                                                 onChange={(e) => setFullname(e.target.value)}
-                                                placeholder={'Nguyen Van A'}
+                                                placeholder={'Enter full name'}
                                             />
                                         </FormControl>
                                         <FormControl id="gender" flex={1.5}>
                                             <FormLabel ml={1}>Gender</FormLabel>
                                             <Select
                                                 name="gender"
+                                                defaultValue={userData.gender}
                                                 onChange={(e) => setGender(e.target.value)}
-                                                placeholder={'Male'}
+                                                placeholder={'Select gender'}
                                             >
-                                                <option value="1">
+                                                <option value="Male">
                                                     Male
                                                 </option>
-                                                <option value="2">
+                                                <option value="Female">
                                                     Female
+                                                </option>
+                                                <option value="Other">
+                                                    Other
                                                 </option>
                                             </Select>
                                         </FormControl>
@@ -117,7 +137,7 @@ const UpdateProfilePage = () => {
                                             <Input
                                                 type="date"
                                                 max={today}
-                                                defaultValue={today}
+                                                defaultValue={formatDate(userData.dob)}
                                                 onChange={(e) => setDob(e.target.value)}
                                             />
                                         </FormControl>
@@ -125,9 +145,10 @@ const UpdateProfilePage = () => {
                                             <FormLabel ml={1} pl={1}>Phone number</FormLabel>
                                             <Input
                                                 type="tel"
+                                                defaultValue={userData.phone}
                                                 value={phone}
                                                 onChange={(e) => setPhone(e.target.value)}
-                                                placeholder="0912345678"
+                                                placeholder="Enter phone"
                                             />
                                         </FormControl>
                                     </HStack>
@@ -135,18 +156,20 @@ const UpdateProfilePage = () => {
                                         <FormLabel ml={1}>Email</FormLabel>
                                         <Input
                                             type="email"
+                                            defaultValue={userData.email}
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            placeholder="nguyenvana@gmail.com"
+                                            placeholder="Enter email"
                                         />
                                     </FormControl>
                                     <FormControl id="address" flex={2}>
                                         <FormLabel ml={1}>Address</FormLabel>
                                         <Input
                                             type="text"
+                                            defaultValue={userData.address}
                                             value={address}
                                             onChange={(e) => setAddress(e.target.value)}
-                                            placeholder="12 nguyen van a, ward 12, district 12"
+                                            placeholder="Enter address"
                                         />
                                     </FormControl>
                                 </Stack>
