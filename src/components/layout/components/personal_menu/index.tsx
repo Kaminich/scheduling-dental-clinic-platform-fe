@@ -210,13 +210,14 @@ const PersonalMenu = ({ type }: Prop) => {
                             fontWeight={600}
                             justifyContent={'space-between'}
                         >
-                            <Flex align={'center'}>
+                            <Flex align={'center'} cursor={'default'}>
                                 <Button
                                     px={3}
                                     borderRadius={'full'}
                                     mr={3}
                                     bg={'#dedede'}
                                     _hover={{ bg: '#dedede' }}
+                                    cursor={'default'}
                                 >
                                     <FaGlobe />
                                 </Button>
