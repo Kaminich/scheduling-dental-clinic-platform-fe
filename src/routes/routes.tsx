@@ -20,6 +20,8 @@ import AdminLayout from "../components/layout/admin";
 import NotFoundPage from "../pages/NotFound";
 import Dashboard from "../pages/Dashboard";
 import AccountSettings from "../pages/AccountSettings";
+import ApproveDentalClinicPage from "../pages/DentalClinicSettings/ApproveDentalClinic";
+import ManageDentalClinicPage from "../pages/DentalClinicSettings/ManageDentalClinic";
 
 type NonIndexRoute = {
     path: string;
@@ -75,6 +77,8 @@ const routes = [
             { path: "accounts", element: <AccountSettings /> },
             { path: "profile", element: <ProfilePage /> },
             { path: "update-profile/:type", element: <UpdateProfilePage /> },
+            { path: "dental-setting/approve-dental", element: <ApproveDentalClinicPage /> },
+            { path: "dental-setting/manage-dental", element: <ManageDentalClinicPage /> },
         ],
     }
 ];
