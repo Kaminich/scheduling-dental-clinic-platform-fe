@@ -2,6 +2,7 @@ import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
 import RatingAndFeedback from "../../rating_feedback";
 import FeedbackForm from "../../rating_feedback/components/feedback_form";
 import { useState } from "react";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface Props {
     isOpen: boolean;
@@ -11,6 +12,8 @@ interface Props {
 
 const FeedbackModal = ({ isOpen, onClose, type }: Props) => {
     const [modalType, setModalType] = useState<string>(type);
+    const { isAuthenticated } = useAuth();
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered size={'2xl'}>
             <ModalOverlay />
@@ -37,7 +40,7 @@ const FeedbackModal = ({ isOpen, onClose, type }: Props) => {
                     </Button>
                     {modalType === 'review' ? (
                         <>
-                            <Button colorScheme="blue">Post</Button>
+                            <Button colorScheme="blue" display={isAuthenticated ? 'block' : 'none'}>Post</Button>
                         </>
                     ) : (
                         <>

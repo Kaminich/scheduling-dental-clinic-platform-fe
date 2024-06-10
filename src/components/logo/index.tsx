@@ -9,7 +9,7 @@ const Logo = () => {
                 height="80px"
                 width="80px"
             />
-            <Stack gap={0}>
+            <Stack gap={0} userSelect={'none'}>
                 <Heading fontSize={'1.5rem'} mb={'-8px'}>F-Dental</Heading>
                 <Text fontSize={'16px'} letterSpacing={4} fontWeight={700}>Platform</Text>
             </Stack>

@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { RiRotateLockFill } from "react-icons/ri";
 
-const AccountSettings = () => {
+const ManageDentalClinicPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
 
@@ -15,7 +15,7 @@ const AccountSettings = () => {
                 <Input
                     ref={ref}
                     borderRadius={20}
-                    placeholder="Search username..."
+                    placeholder="Search dental..."
                     variant="filled"
                     border='1px solid gainsboro'
                     onChange={(e) => {
@@ -97,10 +97,8 @@ const AccountSettings = () => {
                     </Tbody>
                 </Table>
             </TableContainer>
-
-
         </Stack>
     )
 }
 
-export default AccountSettings;
+export default ManageDentalClinicPage;

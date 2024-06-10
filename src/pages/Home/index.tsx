@@ -24,7 +24,7 @@ const HomePage = () => {
                     textAlign={'center'}
                     mb={6}
                 >
-                    4 Yes point at F-Dental
+                    4 Yes points at F-Dental
                 </Heading>
                 <SimpleGrid columns={4} spacingX={7} spacingY={8}>
                     <Card maxW='sm' bgColor={Color.blue_100}>

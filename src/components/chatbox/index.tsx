@@ -130,7 +130,7 @@ const ChatBox = () => {
                             <Avatar
                                 name='F-Dental'
                                 size={'sm'}
-                                src='./image0.svg'
+                                src='/image0.svg'
                                 bg={'white'}
                             />
                             <Text>F-Dental</Text>

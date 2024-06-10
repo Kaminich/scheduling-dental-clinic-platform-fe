@@ -46,12 +46,12 @@ const items: MenuItem[] = [
         , <FaHouseMedical />,
         [
             getItem(
-                <Link to={'/menu/create'} style={{ fontSize: '17px' }}>Approve Dental Clinic</Link>
+                <Link to={'dental-setting/approve-dental'} style={{ fontSize: '17px' }}>Approve Dental Clinic</Link>
                 , '3'
                 , <FaHouseMedicalCircleCheck />
             ),
             getItem(
-                <Link to={'/menu/manage'} style={{ fontSize: '17px' }}>Manage Dental Clinic</Link>
+                <Link to={'dental-setting/manage-dental'} style={{ fontSize: '17px' }}>Manage Dental Clinic</Link>
 
                 , '4'
                 , <FaPenToSquare />
@@ -59,25 +59,25 @@ const items: MenuItem[] = [
             getItem(
                 <Link to={'/menu/manage'} style={{ fontSize: '17px' }}>Approve Dentist</Link>
 
-                , '4'
+                , '5'
                 , <FaUserDoctor />
             ),
             getItem(
                 <Link to={'/menu/manage'} style={{ fontSize: '17px' }}>Approve Clinic Staff</Link>
 
-                , '4'
+                , '6'
                 , <FaUserNurse />
             ),
         ]
     ),
     getItem(
         <Text fontSize='17px'>Feedback Settings</Text>
-        , 'sub2'
+        , '7'
         , <FaCommentMedical />,
     ),
     getItem(
         <Text fontSize='17px'>Blog Settings</Text>
-        , 'sub2'
+        , '8'
         , <FaNewspaper />,
     ),
 ];

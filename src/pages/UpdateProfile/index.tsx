@@ -1,13 +1,15 @@
 import { Button, Card, CardBody, FormControl, FormLabel, HStack, Image, Input, InputGroup, InputRightElement, Select, Stack } from "@chakra-ui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { today } from "../../components/modal/appointment";
 import { Shadow } from "../../styles/styles";
 import { FaEye, FaEyeSlash, FaPen } from "react-icons/fa6";
 import { useParams } from "react-router";
+import useUserProfile from "../../hooks/useUserProfile";
+import Customer, { CustomerInit } from "../../types/Customer";
 
 const UpdateProfilePage = () => {
     const [fullname, setFullname] = useState<string>('');
-    const [dob, setDob] = useState<Date | string>('');
+    const [dob, setDob] = useState<string>('');
     const [phone, setPhone] = useState<number | string>('');
     const [email, setEmail] = useState<string>('');
     const [address, setAddress] = useState<string>('');
@@ -20,6 +22,9 @@ const UpdateProfilePage = () => {
     const [currentPass, setCurrentPass] = useState<string>('');
     const [newPass, setNewPass] = useState<string>('');
     const [confirmPass, setConfirmPass] = useState<string>('');
+    const [userData, setUserData] = useState<Customer>(CustomerInit);
+
+    const { data } = useUserProfile();
 
     const param = useParams();
 
@@ -37,6 +42,25 @@ const UpdateProfilePage = () => {
             setAvatarData(selectedFile);
         }
     }
+
+    const handleResetAllChanges = () => {
+        setFullname(userData.fullName);
+        setGender(userData.gender);
+        setDob(userData.dob);
+        setPhone(userData.phone);
+        setEmail(userData.email);
+        setAddress(userData.address);
+    }
+
+    useEffect(() => {
+        if (data) {
+            setUserData(data);
+        }
+    }, [data])
+
+    useEffect(() => {
+        handleResetAllChanges();
+    }, [userData])
 
     return (
         <>
@@ -92,32 +116,36 @@ const UpdateProfilePage = () => {
                                                 type="text"
                                                 value={fullname}
                                                 onChange={(e) => setFullname(e.target.value)}
-                                                placeholder={'Nguyen Van A'}
+                                                placeholder={'Enter full name'}
                                             />
                                         </FormControl>
                                         <FormControl id="gender" flex={1.5}>
                                             <FormLabel ml={1}>Gender</FormLabel>
                                             <Select
                                                 name="gender"
+                                                value={gender}
                                                 onChange={(e) => setGender(e.target.value)}
-                                                placeholder={'Male'}
+                                                placeholder={'Select gender'}
                                             >
-                                                <option value="1">
+                                                <option value="Male">
                                                     Male
                                                 </option>
-                                                <option value="2">
+                                                <option value="Female">
                                                     Female
+                                                </option>
+                                                <option value="Other">
+                                                    Other
                                                 </option>
                                             </Select>
                                         </FormControl>
                                     </HStack>
                                     <HStack>
-                                        <FormControl id="dob" flex={1} isRequired>
+                                        <FormControl id="dob" flex={1}>
                                             <FormLabel pl={1}>Date of Birth</FormLabel>
                                             <Input
                                                 type="date"
                                                 max={today}
-                                                defaultValue={today}
+                                                value={dob}
                                                 onChange={(e) => setDob(e.target.value)}
                                             />
                                         </FormControl>
@@ -127,7 +155,7 @@ const UpdateProfilePage = () => {
                                                 type="tel"
                                                 value={phone}
                                                 onChange={(e) => setPhone(e.target.value)}
-                                                placeholder="0912345678"
+                                                placeholder="Enter phone"
                                             />
                                         </FormControl>
                                     </HStack>
@@ -137,7 +165,7 @@ const UpdateProfilePage = () => {
                                             type="email"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            placeholder="nguyenvana@gmail.com"
+                                            placeholder="Enter email"
                                         />
                                     </FormControl>
                                     <FormControl id="address" flex={2}>
@@ -146,14 +174,14 @@ const UpdateProfilePage = () => {
                                             type="text"
                                             value={address}
                                             onChange={(e) => setAddress(e.target.value)}
-                                            placeholder="12 nguyen van a, ward 12, district 12"
+                                            placeholder="Enter address"
                                         />
                                     </FormControl>
                                 </Stack>
                             </CardBody>
                         </Card>
                         <HStack gap={6} mt={6} w={'sm'} ml={'auto'}>
-                            <Button flex={1}>
+                            <Button flex={1} onClick={handleResetAllChanges}>
                                 Reset all changes
                             </Button>
                             <Button
@@ -219,14 +247,14 @@ const UpdateProfilePage = () => {
                         <Button
                             flex={1}
                         >
-                            Reset changes
+                            Reset change
                         </Button>
                         <Button
                             colorScheme={"blue"}
                             variant={"solid"}
                             flex={1}
                         >
-                            Save changes
+                            Save change
                         </Button>
                     </HStack>
                 </Stack>

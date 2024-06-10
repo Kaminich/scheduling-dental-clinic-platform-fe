@@ -2,7 +2,7 @@ import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, H
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Logo from "../../components/logo";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { today } from "../../components/modal/appointment";
 import { GoogleLogin } from "@react-oauth/google";
 import ApiClient from "../../services/apiClient";
@@ -20,6 +20,8 @@ const SignUpPage = () => {
     const toast = useToast();
     const [showPass, setShowPass] = useState<boolean>(false);
     const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
+
+    const navigate = useNavigate();
 
     const responseMessage = (response: any) => {
         console.log(response);
@@ -64,6 +66,7 @@ const SignUpPage = () => {
                     duration: 5000,
                     isClosable: true,
                 });
+                navigate('/login');
             } else {
                 toast({
                     title: "Error",

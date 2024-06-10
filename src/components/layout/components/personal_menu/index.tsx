@@ -3,6 +3,7 @@ import { useState } from "react";
 import { FaArrowLeft, FaCalendarCheck, FaChevronRight, FaDoorOpen, FaGear, FaGlobe, FaStar, FaUserGear, FaUserPen } from "react-icons/fa6";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../../../hooks/useAuth";
+import useUserProfile from "../../../../hooks/useUserProfile";
 
 interface Prop {
     type: string
@@ -11,9 +12,10 @@ interface Prop {
 const PersonalMenu = ({ type }: Prop) => {
     const [subMenu, setSubMenu] = useState<boolean>(false);
     const [isVN, setIsVN] = useState<boolean>(false);
-    const { setIsAuthenticated } = useAuth();
 
+    const { data } = useUserProfile();
     const navigate = useNavigate();
+    const { setIsAuthenticated } = useAuth();
 
     const handleLogout = () => {
         localStorage.removeItem('access_token');
@@ -24,15 +26,15 @@ const PersonalMenu = ({ type }: Prop) => {
     return (
         <Menu autoSelect={false}>
             <MenuButton onClick={() => setSubMenu(false)}>
-                <Avatar size={'md'} name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
+                <Avatar size={'md'} name={''} src='https://bit.ly/sage-adebayo' />
             </MenuButton>
             <MenuList minW={'sm'}>
                 {!subMenu ? (
                     <Stack gap={0}>
                         <Card maxW={'full'} p={5} m={4} mt={2} borderTop={'0.5px solid #f0f0f0'}>
                             <Flex gap={4} align={'center'}>
-                                <Avatar size={'sm'} name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
-                                <Text fontWeight={600}>Segun Adebayo</Text>
+                                <Avatar size={'sm'} name={''} src='https://bit.ly/sage-adebayo' />
+                                <Text fontWeight={600}>{''}</Text>
                             </Flex>
                             <Divider my={3} />
                             <MenuItem
@@ -210,13 +212,14 @@ const PersonalMenu = ({ type }: Prop) => {
                             fontWeight={600}
                             justifyContent={'space-between'}
                         >
-                            <Flex align={'center'}>
+                            <Flex align={'center'} cursor={'default'}>
                                 <Button
                                     px={3}
                                     borderRadius={'full'}
                                     mr={3}
                                     bg={'#dedede'}
                                     _hover={{ bg: '#dedede' }}
+                                    cursor={'default'}
                                 >
                                     <FaGlobe />
                                 </Button>
