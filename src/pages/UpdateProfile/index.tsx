@@ -6,6 +6,7 @@ import { FaEye, FaEyeSlash, FaPen } from "react-icons/fa6";
 import { useParams } from "react-router";
 import useUserProfile from "../../hooks/useUserProfile";
 import Customer, { CustomerInit } from "../../types/Customer";
+import { changeTitle } from "../../utils/changeTabTitle";
 
 const UpdateProfilePage = () => {
     const [fullname, setFullname] = useState<string>('');
@@ -53,6 +54,14 @@ const UpdateProfilePage = () => {
     }
 
     useEffect(() => {
+        if (param.type === 'profile') {
+            changeTitle('Update Profile');
+        } else {
+            changeTitle('Update Password')
+        }
+    }, []);
+
+    useEffect(() => {
         if (data) {
             setUserData(data);
         }
@@ -65,7 +74,7 @@ const UpdateProfilePage = () => {
     return (
         <>
             {param.type === 'profile' ? (
-                <HStack w={'6xl'} m={'auto'} my={10} gap={56} align={'flex-start'}>
+                <HStack w={'6xl'} m={'auto'} gap={56} align={'flex-start'}>
                     <Card
                         flex={1}
                         align='center'
@@ -195,7 +204,7 @@ const UpdateProfilePage = () => {
                     </Stack>
                 </HStack>
             ) : (
-                <Stack align='center' w={'md'} m={'auto'} my={10}>
+                <Stack align='center' w={'md'} m={'auto'}>
                     <Card justify='center' shadow={Shadow.cardShadow} w={'full'}>
                         <CardBody py={10}>
                             <Stack gap={6}>

@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { FaBowlFood, FaBreadSlice, FaCartShopping, FaUser } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { changeTitle } from "../../utils/changeTabTitle";
 
 const Dashboard = () => {
     const navigate = useNavigate();
-
 
     const [overallData, setOverallData] = useState<any>({
         user_count: 0,
@@ -63,77 +63,8 @@ const Dashboard = () => {
     ]
 
     useEffect(() => {
-        setLoading(true);
-
-        axios
-            .get(
-                `${import.meta.env.VITE_SERVER_URL
-                }/api/admin/overall_statistic`,
-                {
-                    headers: {
-                        Authorization:
-                            "Bearer " +
-                            localStorage.getItem(
-                                "access_token"
-                            ),
-                    },
-                }
-            )
-            .then(({ data }) => {
-                setOverallData({
-                    user_count: data.data[0].user_count,
-                    menu_count: data.data[0].menu_count,
-                    order_count: data.data[0].order_count,
-                    food_count: data.data[0].food_count
-                })
-                setLoading(false)
-            })
-            .catch((error) => {
-                console.log(error)
-                setLoading(false);
-            });
-
-        axios
-            .get(
-                `${import.meta.env.VITE_SERVER_URL
-                }/api/admin/order_statistic`,
-                {
-                    headers: {
-                        Authorization:
-                            "Bearer " +
-                            localStorage.getItem(
-                                "access_token"
-                            ),
-                    },
-                }
-            )
-            .then(({ data }) => {
-                console.log(data.data[0]);
-                setOrderData([
-                    {
-                        "name": "Active",
-                        "color": "green",
-                        "value": data.data[0].active_order_count
-                    },
-                    {
-                        "name": "Closed",
-                        "color": "red",
-                        "value": data.data[0].closed_order_count
-                    },
-                    {
-                        "name": "Expired",
-                        "color": "gray",
-                        "value": data.data[0].expired_order_count
-                    },
-                ])
-                setLoading(false)
-            })
-            .catch((error) => {
-                console.log(error)
-                setLoading(false);
-            });
-
-    }, [])
+        changeTitle('Dashboard');
+    }, []);
 
     return (
 

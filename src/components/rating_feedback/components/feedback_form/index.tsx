@@ -77,8 +77,8 @@ const FeedbackForm = ({ type }: Prop) => {
                             {isAuthenticated ? (
                                 <>
                                     <HStack gap={4} align={'flex-start'} mb={6}>
-                                        <Avatar size={'md'} name={data.fullName} src='https://bit.ly/sage-adebayo' />
-                                        <Text fontWeight={500}>{data.fullName}</Text>
+                                        <Avatar size={'md'} name={data?.fullName} src='https://bit.ly/sage-adebayo' />
+                                        <Text fontWeight={500}>{data?.fullName}</Text>
                                     </HStack>
                                     <Stack align={'center'} gap={8}>
                                         <Stack>

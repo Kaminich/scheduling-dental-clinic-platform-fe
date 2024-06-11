@@ -1,8 +1,14 @@
 import { Card, CardBody, Heading, Text, Stack, Button } from "@chakra-ui/react";
 import { Color } from "../../styles/styles";
 import { Link } from "react-router-dom";
+import { changeTitle } from "../../utils/changeTabTitle";
+import { useEffect } from "react";
 
 const NotFoundPage = () => {
+
+    useEffect(() => {
+        changeTitle('404 Error');
+    }, []);
 
     return (
         <Stack align={'center'} justify={'center'} h={'100vh'} bg={Color.blue_100}>

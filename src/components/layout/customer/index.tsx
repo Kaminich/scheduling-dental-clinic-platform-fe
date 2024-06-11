@@ -16,7 +16,7 @@ const Layout = () => {
     return (
         <>
             <Navbar />
-            <Stack mt={'96px'}>
+            <Stack mt={'96px'} minH={'calc(100vh - 96px - 220.8px)'}>
                 <Outlet />
             </Stack>
             <ChatBox />

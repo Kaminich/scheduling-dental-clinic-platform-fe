@@ -22,6 +22,7 @@ import Dashboard from "../pages/Dashboard";
 import AccountSettings from "../pages/AccountSettings";
 import ApproveDentalClinicPage from "../pages/DentalClinicSettings/ApproveDentalClinic";
 import ManageDentalClinicPage from "../pages/DentalClinicSettings/ManageDentalClinic";
+import SystemLayout from "../components/layout/system";
 
 type NonIndexRoute = {
     path: string;
@@ -49,6 +50,20 @@ const routes = [
         element: <SignUpPage />,
     },
     {
+        path: "/profile",
+        element: <SystemLayout />,
+        children: [
+            { index: true, element: <ProfilePage /> },
+        ],
+    },
+    {
+        path: "/update-profile/:type",
+        element: <SystemLayout />,
+        children: [
+            { index: true, element: <UpdateProfilePage /> },
+        ],
+    },
+    {
         path: "/",
         element: <Layout />,
         children: [
@@ -62,8 +77,6 @@ const routes = [
             { path: "blogs", element: <BlogPage /> },
             { path: "blog-detail", element: <BlogDetailPage /> },
             { path: "partner-register", element: <PartnerRegisterPage /> },
-            { path: "profile", element: <ProfilePage /> },
-            { path: "update-profile/:type", element: <UpdateProfilePage /> },
             { path: "appointment", element: <Appointment /> },
             { path: "rating-feedback", element: <RatingFeedbackPage /> },
         ],
@@ -75,8 +88,17 @@ const routes = [
             { index: true, element: <Navigate to={'dashboard'} /> },
             { path: "dashboard", element: <Dashboard /> },
             { path: "accounts", element: <AccountSettings /> },
-            { path: "profile", element: <ProfilePage /> },
-            { path: "update-profile/:type", element: <UpdateProfilePage /> },
+            { path: "dental-setting/approve-dental", element: <ApproveDentalClinicPage /> },
+            { path: "dental-setting/manage-dental", element: <ManageDentalClinicPage /> },
+        ],
+    },
+    {
+        path: "/clinic-owner",
+        element: <AdminLayout />,
+        children: [
+            { index: true, element: <Navigate to={'dashboard'} /> },
+            { path: "dashboard", element: <Dashboard /> },
+            { path: "accounts", element: <AccountSettings /> },
             { path: "dental-setting/approve-dental", element: <ApproveDentalClinicPage /> },
             { path: "dental-setting/manage-dental", element: <ManageDentalClinicPage /> },
         ],

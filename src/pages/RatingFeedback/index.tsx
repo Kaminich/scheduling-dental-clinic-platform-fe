@@ -1,8 +1,14 @@
 import { Card, HStack, Stack, Text } from "@chakra-ui/react"
 import { Color, Shadow } from "../../styles/styles";
 import FeedbackItem from "../../components/rating_feedback/components/feedback_item";
+import { useEffect } from "react";
+import { changeTitle } from "../../utils/changeTabTitle";
 
 const RatingFeedbackPage = () => {
+
+    useEffect(() => {
+        changeTitle('Rating and Feedback');
+    }, []);
 
     return (
         <>

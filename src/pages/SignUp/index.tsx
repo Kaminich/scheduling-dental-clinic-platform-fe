@@ -1,11 +1,12 @@
 import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, InputGroup, InputRightElement, Select, Stack, Text, useToast } from "@chakra-ui/react"
-import { useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Logo from "../../components/logo";
 import { Link, useNavigate } from "react-router-dom";
 import { today } from "../../components/modal/appointment";
 import { GoogleLogin } from "@react-oauth/google";
 import ApiClient from "../../services/apiClient";
+import { changeTitle } from "../../utils/changeTabTitle";
 
 const SignUpPage = () => {
     const [username, setUsername] = useState<string>('');
@@ -29,7 +30,7 @@ const SignUpPage = () => {
 
     const api = new ApiClient<any>('/auth/register');
 
-    const handleSignUp = async (e: React.FormEvent) => {
+    const handleSignUp = async (e: FormEvent) => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
@@ -37,7 +38,7 @@ const SignUpPage = () => {
                 title: "Error",
                 description: "Passwords do not match.",
                 status: "error",
-                duration: 5000,
+                duration: 2500,
                 isClosable: true,
             });
             return;
@@ -63,7 +64,7 @@ const SignUpPage = () => {
                     title: "Success",
                     description: response.message,
                     status: "success",
-                    duration: 5000,
+                    duration: 2500,
                     isClosable: true,
                 });
                 navigate('/login');
@@ -72,7 +73,7 @@ const SignUpPage = () => {
                     title: "Error",
                     description: response.message,
                     status: "error",
-                    duration: 5000,
+                    duration: 2500,
                     isClosable: true,
                 });
             }
@@ -81,11 +82,15 @@ const SignUpPage = () => {
                 title: "Error",
                 description: "An error occurred. Please try again.",
                 status: "error",
-                duration: 5000,
+                duration: 2500,
                 isClosable: true,
             });
         }
     };
+
+    useEffect(() => {
+        changeTitle('Sign Up');
+    }, []);
 
     return (
         <HStack maxW={'full'} minH={'100vh'}>

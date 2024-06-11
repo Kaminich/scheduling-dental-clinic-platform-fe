@@ -20,6 +20,8 @@ axios.interceptors.response.use(async (res: any) => {
         window.localStorage.removeItem("username")
         window.localStorage.removeItem("access_token")
         window.location.replace('http://localhost:5173');
+        console.log('Refresh Token please');
+
     } else {
         return res;
     }
@@ -50,11 +52,6 @@ class ApiClient<T> {
             .post<T>(this.endpoint, data, config)
             .then((res) => res.data)
     }
-    // getAll = (config?: AxiosRequestConfig) => {
-    //     return axiosInstance
-    //         .post<FetchResponse<T>>(this.endpoint, {}, config)
-    //         .then((res) => res.data);
-    // };
 
     getUnauthen = (config?: AxiosRequestConfig) => {
         return axiosInstance
@@ -62,44 +59,35 @@ class ApiClient<T> {
             .then((res) => res.data);
     };
 
-    postAuthen = (data: T, config?: AxiosRequestConfig) => {
-        return axiosInstance
-            .post<T>(this.endpoint, data, this.setAuthHeader(config))
-            .then((res) => res.data)
-    }
-
     getAuthen = (config?: AxiosRequestConfig) => {
         return axiosInstance
             .get<T>(this.endpoint, this.setAuthHeader(config))
             .then((res) => res.data)
     }
 
-    // create = (data: T, config?: AxiosRequestConfig) => {
-    //     return axiosInstance
-    //         .post<T>(this.endpoint, data, config)
-    //         .then((res) => res.data);
-    // };
-    // createWithFile = (data: T) => {
-    //     return axiosInstance
-    //         .post<T>(this.endpoint, data, {
-    //             headers: {
-    //                 'Content-Type': 'multipart/form-data',
-    //             },
-    //         })
-    //         .then((res) => res.data);
-    // };
+    getDetail = (id: number, config?: AxiosRequestConfig) => {
+        return axiosInstance
+            .delete<T>(this.endpoint + '/' + id, this.setAuthHeader(config))
+            .then((res) => res.data)
+    }
 
-    // update = (id: number | string, data: T, config?: AxiosRequestConfig) => {
-    //     return axiosInstance
-    //         .put<T>(this.endpoint + '/' + id, data, config)
-    //         .then((res) => res.data);
-    // };
+    create = (data: T, config?: AxiosRequestConfig) => {
+        return axiosInstance
+            .post<T>(this.endpoint, data, this.setAuthHeader(config))
+            .then((res) => res.data)
+    }
 
-    // delete = (id: number | string, config?: AxiosRequestConfig) => {
-    //     return axiosInstance
-    //         .delete<T>(this.endpoint + '/' + id, config)
-    //         .then((res) => res.data);
-    // };
+    update = (data: T, config?: AxiosRequestConfig) => {
+        return axiosInstance
+            .put<T>(this.endpoint, data, this.setAuthHeader(config))
+            .then((res) => res.data)
+    }
+
+    delete = (id: number, config?: AxiosRequestConfig) => {
+        return axiosInstance
+            .delete<T>(this.endpoint + '/' + id, this.setAuthHeader(config))
+            .then((res) => res.data)
+    }
 }
 
 export default ApiClient;

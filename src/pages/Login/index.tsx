@@ -1,11 +1,13 @@
 import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, InputGroup, InputRightElement, Stack, Text, useToast } from "@chakra-ui/react"
-import { useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Logo from "../../components/logo";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import ApiClient from "../../services/apiClient";
 import { useAuth } from "../../hooks/useAuth";
+import { changeTitle } from "../../utils/changeTabTitle";
+import { AxiosError } from "axios";
 
 const LoginPage = () => {
     const [username, setUsername] = useState<string>("");
@@ -19,7 +21,7 @@ const LoginPage = () => {
     const api = new ApiClient<any>('/auth/login');
     const apiClient = new ApiClient<any>('/auth/user-information');
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleLogin = async (e: FormEvent) => {
         e.preventDefault();
 
         const data = {
@@ -36,7 +38,7 @@ const LoginPage = () => {
                     title: "Error",
                     description: response.message,
                     status: "error",
-                    duration: 5000,
+                    duration: 2500,
                     isClosable: true,
                 });
             } else {
@@ -53,13 +55,15 @@ const LoginPage = () => {
         } catch (error) {
             console.log(error);
 
-            toast({
-                title: "Error",
-                description: "An error occurred. Please try again.",
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-            });
+            if (error instanceof AxiosError) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    isClosable: true,
+                });
+            }
         }
     };
 
@@ -69,6 +73,10 @@ const LoginPage = () => {
     const errorMessage = (error: any) => {
         console.log(error);
     };
+
+    useEffect(() => {
+        changeTitle('Login');
+    }, []);
 
     return (
         <HStack maxW={'full'} maxH={'100%'}>

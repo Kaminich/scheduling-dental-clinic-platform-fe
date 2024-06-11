@@ -1,7 +1,14 @@
 import { SimpleGrid } from "@chakra-ui/react"
 import DentalItem from "../../components/dental_item"
+import { useEffect } from "react";
+import { changeTitle } from "../../utils/changeTabTitle";
 
 const DentalPage = () => {
+
+    useEffect(() => {
+        changeTitle('Dental Clinic');
+    }, []);
+
     return (
         <SimpleGrid
             columns={3}

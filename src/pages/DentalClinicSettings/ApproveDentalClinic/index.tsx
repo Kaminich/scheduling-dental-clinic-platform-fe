@@ -1,12 +1,17 @@
 import { Button, Card, CardBody, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Text } from "@chakra-ui/react";
 import { FaCheck, FaX } from "react-icons/fa6";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { Shadow } from "../../../styles/styles";
+import { changeTitle } from "../../../utils/changeTabTitle";
 
 const ApproveDentalClinicPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
+
+    useEffect(() => {
+        changeTitle('Approve Dental Clinic');
+    }, []);
 
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>

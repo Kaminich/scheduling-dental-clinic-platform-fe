@@ -1,6 +1,6 @@
 import ClinicOwner from "./ClinicOwner";
 
-export default interface Clinic {
+export default interface Clinic extends ClinicOwner {
     id: number,
     clinicName: string,
     address: string,

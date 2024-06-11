@@ -1,6 +1,7 @@
 import { Button, Card, CardBody, Divider, FormControl, FormLabel, HStack, Heading, Input, Stack, Text } from "@chakra-ui/react"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Color, Shadow } from "../../styles/styles";
+import { changeTitle } from "../../utils/changeTabTitle";
 
 const PartnerRegisterPage = () => {
     const [dentalName, setDentalName] = useState<string>('');
@@ -8,6 +9,10 @@ const PartnerRegisterPage = () => {
     const [phone, setPhone] = useState<number | string>('');
     const [email, setEmail] = useState<string>('');
     const [address, setAddress] = useState<string>('');
+
+    useEffect(() => {
+        changeTitle('Partner Registration');
+    }, []);
 
     return (
         <>

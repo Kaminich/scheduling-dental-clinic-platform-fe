@@ -1,9 +1,10 @@
 import { Button, Card, CardBody, FormControl, FormLabel, HStack, Input, Select, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useDisclosure } from "@chakra-ui/react"
 import { Color, Shadow } from "../../styles/styles"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppointmentModal, { today } from "../../components/modal/appointment";
 import { FaPenToSquare, FaTrashCan } from "react-icons/fa6";
 import FeedbackModal from "../../components/modal/feedback";
+import { changeTitle } from "../../utils/changeTabTitle";
 
 const Appointment = () => {
     const [fullname, setFullname] = useState<string>('');
@@ -21,6 +22,10 @@ const Appointment = () => {
 
     const { isOpen: isOpenAppointment, onOpen: onOpenAppointment, onClose: onCloseAppointment } = useDisclosure();
     const { isOpen: isOpenFeedback, onOpen: onOpenFeedback, onClose: onCloseFeedback } = useDisclosure();
+
+    useEffect(() => {
+        changeTitle('Appointment');
+    }, []);
 
     return (
         <Stack w={'6xl'} m={'auto'} mb={10}>

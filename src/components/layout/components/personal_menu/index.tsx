@@ -1,6 +1,6 @@
 import { Avatar, Button, Card, Divider, Flex, Heading, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
-import { FaArrowLeft, FaCalendarCheck, FaChevronRight, FaDoorOpen, FaGear, FaGlobe, FaStar, FaUserGear, FaUserPen } from "react-icons/fa6";
+import { FaArrowLeft, FaCalendarCheck, FaChevronRight, FaDoorOpen, FaGear, FaGlobe, FaLaptopMedical, FaStar, FaUserGear, FaUserPen } from "react-icons/fa6";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../../../hooks/useAuth";
 import useUserProfile from "../../../../hooks/useUserProfile";
@@ -26,26 +26,34 @@ const PersonalMenu = ({ type }: Prop) => {
     return (
         <Menu autoSelect={false}>
             <MenuButton onClick={() => setSubMenu(false)}>
-                <Avatar size={'md'} name={''} src='https://bit.ly/sage-adebayo' />
+                <Avatar size={'md'} name={data?.fullName || data?.username} src='https://bit.ly/sage-adebayo' />
             </MenuButton>
             <MenuList minW={'sm'}>
                 {!subMenu ? (
                     <Stack gap={0}>
                         <Card maxW={'full'} p={5} m={4} mt={2} borderTop={'0.5px solid #f0f0f0'}>
                             <Flex gap={4} align={'center'}>
-                                <Avatar size={'sm'} name={''} src='https://bit.ly/sage-adebayo' />
-                                <Text fontWeight={600}>{''}</Text>
+                                <Avatar size={'sm'} name={data?.fullName || data?.username} src='https://bit.ly/sage-adebayo' />
+                                {data?.role === 'CUSTOMER' ? (
+                                    <Text fontWeight={600}>{data?.fullName}</Text>
+                                ) : (
+                                    <Text fontWeight={600} textAlign={'center'} flex={1}>{`Welcome back, ${data?.username}`}</Text>
+                                )}
                             </Flex>
-                            <Divider my={3} />
-                            <MenuItem
-                                p={0}
-                                _hover={{ bg: 'none' }}
-                                onClick={() => navigate('/profile')}
-                            >
-                                <Button w={'full'}>
-                                    View personal information
-                                </Button>
-                            </MenuItem>
+                            {data?.role === 'CUSTOMER' && (
+                                <>
+                                    <Divider my={3} />
+                                    <MenuItem
+                                        p={0}
+                                        _hover={{ bg: 'none' }}
+                                        onClick={() => navigate('/profile')}
+                                    >
+                                        <Button w={'full'}>
+                                            View personal information
+                                        </Button>
+                                    </MenuItem>
+                                </>
+                            )}
                         </Card>
                         <Button
                             maxW={'95%'}
@@ -118,6 +126,26 @@ const PersonalMenu = ({ type }: Prop) => {
                                         bg={'#dedede'}
                                         _hover={{ bg: '#dedede' }}
                                     >
+                                        <FaLaptopMedical />
+                                    </Button>
+                                    Medical Record
+                                </MenuItem>
+                                <MenuItem
+                                    maxW={'95%'}
+                                    borderRadius={10}
+                                    p={3}
+                                    mx={2}
+                                    fontSize={17}
+                                    fontWeight={600}
+                                    onClick={() => navigate('/rating-feedback')}
+                                >
+                                    <Button
+                                        px={3}
+                                        borderRadius={'full'}
+                                        mr={3}
+                                        bg={'#dedede'}
+                                        _hover={{ bg: '#dedede' }}
+                                    >
                                         <FaStar />
                                     </Button>
                                     Rating and Feedback
@@ -163,26 +191,28 @@ const PersonalMenu = ({ type }: Prop) => {
                             </Button>
                             <Heading mt={-1} fontSize={24} textAlign={'center'}>Settings</Heading>
                         </Flex>
-                        <MenuItem
-                            maxW={'95%'}
-                            borderRadius={10}
-                            p={3}
-                            mx={2}
-                            fontSize={17}
-                            fontWeight={600}
-                            onClick={() => navigate('/update-profile/profile')}
-                        >
-                            <Button
-                                px={3}
-                                borderRadius={'full'}
-                                mr={3}
-                                bg={'#dedede'}
-                                _hover={{ bg: '#dedede' }}
+                        {data?.role !== 'ADMIN' && (
+                            <MenuItem
+                                maxW={'95%'}
+                                borderRadius={10}
+                                p={3}
+                                mx={2}
+                                fontSize={17}
+                                fontWeight={600}
+                                onClick={() => navigate('/update-profile/profile')}
                             >
-                                <FaUserPen />
-                            </Button>
-                            Update Profile
-                        </MenuItem>
+                                <Button
+                                    px={3}
+                                    borderRadius={'full'}
+                                    mr={3}
+                                    bg={'#dedede'}
+                                    _hover={{ bg: '#dedede' }}
+                                >
+                                    <FaUserPen />
+                                </Button>
+                                Update Profile
+                            </MenuItem>
+                        )}
                         <MenuItem
                             maxW={'95%'}
                             borderRadius={10}

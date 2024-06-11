@@ -1,12 +1,17 @@
 import { Button, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-import { FaTrashCan } from "react-icons/fa6";
-import { useRef, useState } from "react";
+import { FaChevronRight, FaTrashCan } from "react-icons/fa6";
+import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { RiRotateLockFill } from "react-icons/ri";
+import { changeTitle } from "../../../utils/changeTabTitle";
 
 const ManageDentalClinicPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
+
+    useEffect(() => {
+        changeTitle('Manage Dental Clinic');
+    }, []);
 
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
@@ -49,6 +54,7 @@ const ManageDentalClinicPage = () => {
                             <Th textAlign='center'>
                                 Address
                             </Th>
+                            <Th textAlign='center'></Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -90,6 +96,31 @@ const ManageDentalClinicPage = () => {
 
                                 >
                                     <FaTrashCan />
+                                </Button>
+                            </Td>
+                            <Td textAlign='center' gap={4}>
+                                <Button
+                                    borderRadius='full'
+                                    px={3}
+                                    colorScheme="blue"
+                                    variant='ghost'
+
+                                >
+                                    <RiRotateLockFill />
+                                </Button>
+                                <Button
+                                    borderRadius='full'
+                                    px={3}
+                                    colorScheme="red"
+                                    variant='ghost'
+
+                                >
+                                    <FaTrashCan />
+                                </Button>
+                            </Td>
+                            <Td textAlign='center' gap={4}>
+                                <Button px={3} variant={'ghost'}>
+                                    <FaChevronRight />
                                 </Button>
                             </Td>
                         </Tr>

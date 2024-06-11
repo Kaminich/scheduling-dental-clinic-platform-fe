@@ -6,9 +6,10 @@ import {
 import type { MenuProps } from 'antd';
 import { ConfigProvider, Menu } from 'antd';
 import { Button, Box, HStack, Stack, Text } from '@chakra-ui/react';
-import { FaChartSimple, FaCommentMedical, FaHouseMedical, FaHouseMedicalCircleCheck, FaNewspaper, FaPenToSquare, FaUserDoctor, FaUserGear, FaUserNurse } from 'react-icons/fa6';
+import { FaChartSimple, FaCommentMedical, FaHouseMedical, FaHouseMedicalCircleCheck, FaNewspaper, FaPenToSquare, FaTooth, FaUserDoctor, FaUserGear, FaUserNurse } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { Color } from '../../../../styles/styles';
+import useUserProfile from '../../../../hooks/useUserProfile';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -28,7 +29,7 @@ function getItem(
     } as MenuItem;
 }
 
-const items: MenuItem[] = [
+const adminMenuItems: MenuItem[] = [
     getItem(
         <Link to={'dashboard'} style={{ fontSize: '17px' }}>Dashboard</Link>
         , '1'
@@ -82,6 +83,40 @@ const items: MenuItem[] = [
     ),
 ];
 
+const clinicOwnerMenuItems: MenuItem[] = [
+    getItem(
+        <Link to={'dashboard'} style={{ fontSize: '17px' }}>Dashboard</Link>
+        , '1'
+        , <FaChartSimple />
+    ),
+    getItem(
+        <Link to={'accounts'} style={{ fontSize: '17px' }}>Dental Clinic Settings</Link>
+        , '2'
+        , <FaUserGear />
+    ),
+
+    getItem(
+        <Text fontSize='17px'>Dental Clinic Settings</Text>
+        , '3'
+        , <FaHouseMedical />,
+    ),
+    getItem(
+        <Text fontSize='17px'>Dentists Settings</Text>
+        , '4'
+        , <FaUserDoctor />,
+    ),
+    getItem(
+        <Text fontSize='17px'>Services Settings</Text>
+        , '5'
+        , <FaTooth />,
+    ),
+    getItem(
+        <Text fontSize='17px'>Blogs Settings</Text>
+        , '6'
+        , <FaNewspaper />,
+    ),
+];
+
 interface SideBarProps {
     collapsed: boolean;
     toggleCollapsed: () => void;
@@ -89,6 +124,7 @@ interface SideBarProps {
 
 const SideBar = ({ collapsed, toggleCollapsed }: SideBarProps) => {
 
+    const { data } = useUserProfile();
     const windowHeight = window.innerHeight;
 
     return (
@@ -119,7 +155,8 @@ const SideBar = ({ collapsed, toggleCollapsed }: SideBarProps) => {
                         defaultSelectedKeys={['1']}
                         mode="inline"
                         inlineCollapsed={collapsed}
-                        items={items}
+                        // items={data?.role === 'ADMIN' ? adminMenuItems : clinicOwnerMenuItems}
+                        items={adminMenuItems}
                         style={{
                             border: 'none',
                             height: `calc(${windowHeight}px - 152px)`,
