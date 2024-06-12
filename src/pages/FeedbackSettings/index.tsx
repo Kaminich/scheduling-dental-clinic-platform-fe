@@ -1,18 +1,16 @@
-import { Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
-import { FaChevronRight } from "react-icons/fa6";
+import { Button, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import { FaTrashCan } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
-import { changeTitle } from "../../../utils/changeTabTitle";
-import { useNavigate } from "react-router";
+import { changeTitle } from "../../utils/changeTabTitle";
+import { RiRotateLockFill } from "react-icons/ri";
 
-const ManageDentalClinicPage = () => {
+const FeedbackSettingPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
-    const [more, setMore] = useState<boolean>(false);
-    const navigate = useNavigate();
 
     useEffect(() => {
-        changeTitle('Manage Dental Clinic');
+        changeTitle('Feedback Settings');
     }, []);
 
     return (
@@ -47,44 +45,47 @@ const ManageDentalClinicPage = () => {
                     >
                         Delete
                     </Text>
-                    <Text
-                        fontSize={16}
-                        color="blue"
-                        cursor={'pointer'}
-                        onClick={() => setMore(!more)}
-                    >
-                        {more ? 'Hide' : 'Show'}
-                    </Text>
                 </HStack>
                 <Divider />
                 <TableContainer w='full' overflowY="auto" whiteSpace='normal'>
                     <Table variant="simple" size="md">
                         <Thead>
                             <Tr>
-                                <Th textAlign='center'>Logo</Th>
-                                <Th textAlign='center'>ID</Th>
-                                <Th textAlign='center'>Clinic name</Th>
-                                <Th textAlign='center'>Owner</Th>
+                                <Th textAlign='center'>Dental Clinic</Th>
+                                <Th textAlign='center'>Rating</Th>
+                                <Th textAlign='center'>Feedback</Th>
                                 <Th textAlign='center'>Create By</Th>
-                                <Th textAlign='center'>Last Modified</Th>
-                                <Th textAlign='center'>Last Modified By</Th>
+                                <Th textAlign='center'>Create At</Th>
                                 <Th textAlign='center'></Th>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            <Tr _hover={more ? { bg: '#f1f1f1' } : {}}>
+                            <Tr>
                                 <Td textAlign="center">{'logo'}</Td>
                                 <Td textAlign="center">{'1'}</Td>
                                 <Td textAlign='center'>{'name'}</Td>
                                 <Td textAlign="center">{'aaa'}</Td>
                                 <Td textAlign="center">{'bbb'}</Td>
-                                <Td textAlign='center'>{'2 days ago'}</Td>
-                                <Td textAlign='center'>{'ccc'}</Td>
-                                {more && (
-                                    <Td textAlign='center' cursor={'pointer'} onClick={() => navigate('dental-detail')}>
-                                        <FaChevronRight />
-                                    </Td>
-                                )}
+                                <Td p={1} textAlign='center' gap={4}>
+                                    <Button
+                                        borderRadius='full'
+                                        px={3}
+                                        colorScheme="blue"
+                                        variant='ghost'
+
+                                    >
+                                        <RiRotateLockFill />
+                                    </Button>
+                                    <Button
+                                        borderRadius='full'
+                                        px={3}
+                                        colorScheme="red"
+                                        variant='ghost'
+
+                                    >
+                                        <FaTrashCan />
+                                    </Button>
+                                </Td>
                             </Tr>
                         </Tbody>
                     </Table>
@@ -94,4 +95,4 @@ const ManageDentalClinicPage = () => {
     )
 }
 
-export default ManageDentalClinicPage;
+export default FeedbackSettingPage;

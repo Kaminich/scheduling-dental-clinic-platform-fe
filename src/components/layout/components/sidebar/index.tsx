@@ -47,12 +47,12 @@ const adminMenuItems: MenuItem[] = [
         , <FaHouseMedical />,
         [
             getItem(
-                <Link to={'dental-setting/approve-dental'} style={{ fontSize: '17px' }}>Approve Dental Clinic</Link>
+                <Link to={'dentals/approve-dental'} style={{ fontSize: '17px' }}>Approve Dental Clinic</Link>
                 , '3'
                 , <FaHouseMedicalCircleCheck />
             ),
             getItem(
-                <Link to={'dental-setting/manage-dental'} style={{ fontSize: '17px' }}>Manage Dental Clinic</Link>
+                <Link to={'dentals/manage-dental'} style={{ fontSize: '17px' }}>Manage Dental Clinic</Link>
 
                 , '4'
                 , <FaPenToSquare />
@@ -72,14 +72,27 @@ const adminMenuItems: MenuItem[] = [
         ]
     ),
     getItem(
-        <Text fontSize='17px'>Feedback Settings</Text>
+        <Link to={'feedbacks'} style={{ fontSize: '17px' }}>Feedback Settings</Link>
         , '7'
         , <FaCommentMedical />,
     ),
     getItem(
         <Text fontSize='17px'>Blog Settings</Text>
-        , '8'
+        , 'sub2'
         , <FaNewspaper />,
+        [
+            getItem(
+                <Link to={'blogs/approve-blog'} style={{ fontSize: '17px' }}>Approve Blog</Link>
+                , '8'
+                , <FaHouseMedicalCircleCheck />
+            ),
+            getItem(
+                <Link to={'blogs/manage-blog'} style={{ fontSize: '17px' }}>Manage Blog</Link>
+
+                , '9'
+                , <FaPenToSquare />
+            ),
+        ]
     ),
 ];
 
@@ -90,29 +103,24 @@ const clinicOwnerMenuItems: MenuItem[] = [
         , <FaChartSimple />
     ),
     getItem(
-        <Link to={'accounts'} style={{ fontSize: '17px' }}>Dental Clinic Settings</Link>
+        <Link to={'accounts'} style={{ fontSize: '17px' }}>Account Settings</Link>
         , '2'
         , <FaUserGear />
     ),
 
     getItem(
-        <Text fontSize='17px'>Dental Clinic Settings</Text>
+        <Link to={'dentals'} style={{ fontSize: '17px' }}>Dental Clinic Settings</Link>
         , '3'
         , <FaHouseMedical />,
     ),
     getItem(
-        <Text fontSize='17px'>Dentists Settings</Text>
-        , '4'
-        , <FaUserDoctor />,
-    ),
-    getItem(
-        <Text fontSize='17px'>Services Settings</Text>
-        , '5'
+        <Link to={'services'} style={{ fontSize: '17px' }}>Services Settings</Link>
+        , '6'
         , <FaTooth />,
     ),
     getItem(
-        <Text fontSize='17px'>Blogs Settings</Text>
-        , '6'
+        <Link to={'blogs'} style={{ fontSize: '17px' }}>Blogs Settings</Link>
+        , '7'
         , <FaNewspaper />,
     ),
 ];
@@ -156,7 +164,7 @@ const SideBar = ({ collapsed, toggleCollapsed }: SideBarProps) => {
                         mode="inline"
                         inlineCollapsed={collapsed}
                         // items={data?.role === 'ADMIN' ? adminMenuItems : clinicOwnerMenuItems}
-                        items={adminMenuItems}
+                        items={clinicOwnerMenuItems}
                         style={{
                             border: 'none',
                             height: `calc(${windowHeight}px - 152px)`,

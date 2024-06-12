@@ -5,12 +5,12 @@ import { BsSearch } from "react-icons/bs";
 import { Shadow } from "../../../styles/styles";
 import { changeTitle } from "../../../utils/changeTabTitle";
 
-const ApproveDentalClinicPage = () => {
+const ApproveBlogPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
 
     useEffect(() => {
-        changeTitle('Approve Dental Clinic');
+        changeTitle('Approve Blog');
     }, []);
 
     return (
@@ -35,16 +35,16 @@ const ApproveDentalClinicPage = () => {
                         <HStack justify={'space-between'} align={'center'}>
                             <Stack gap={5} flex={3.7}>
                                 <HStack justify={'space-between'} minW={'full'} pr={5}>
-                                    <Text>Dental Clinic ID: </Text>
+                                    <Text>Blog ID: </Text>
                                     <HStack gap={4}>
                                         <Text>Status:</Text>
                                         <Text>Pending</Text>
                                     </HStack>
                                 </HStack>
                                 <Stack>
+                                    <Text>Title: </Text>
                                     <Text>Dental Clinic: </Text>
-                                    <Text>Clinic Owner: </Text>
-                                    <Text>Dental Clinic Detail: </Text>
+                                    <Text>Blog Detail: </Text>
                                 </Stack>
                             </Stack>
                             <HStack gap={8} h={'135px'} flex={1}>
@@ -69,4 +69,4 @@ const ApproveDentalClinicPage = () => {
     )
 }
 
-export default ApproveDentalClinicPage
+export default ApproveBlogPage

@@ -5,14 +5,14 @@ import { BsSearch } from "react-icons/bs";
 import { changeTitle } from "../../../utils/changeTabTitle";
 import { useNavigate } from "react-router";
 
-const ManageDentalClinicPage = () => {
+const ManageBlogPage = () => {
     const ref = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
     const [keyword, setKeyword] = useState<string>('');
     const [more, setMore] = useState<boolean>(false);
-    const navigate = useNavigate();
 
     useEffect(() => {
-        changeTitle('Manage Dental Clinic');
+        changeTitle('Manage Blog');
     }, []);
 
     return (
@@ -61,27 +61,27 @@ const ManageDentalClinicPage = () => {
                     <Table variant="simple" size="md">
                         <Thead>
                             <Tr>
-                                <Th textAlign='center'>Logo</Th>
                                 <Th textAlign='center'>ID</Th>
-                                <Th textAlign='center'>Clinic name</Th>
-                                <Th textAlign='center'>Owner</Th>
+                                <Th textAlign='center'>Title</Th>
+                                <Th textAlign='center'>Create At</Th>
                                 <Th textAlign='center'>Create By</Th>
                                 <Th textAlign='center'>Last Modified</Th>
                                 <Th textAlign='center'>Last Modified By</Th>
+                                <Th textAlign='center'>Status</Th>
                                 <Th textAlign='center'></Th>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            <Tr _hover={more ? { bg: '#f1f1f1' } : {}}>
-                                <Td textAlign="center">{'logo'}</Td>
+                            <Tr _hover={more ? { bg: '#f1f1f1' } : {}} onClick={() => navigate('blog-detail')}>
                                 <Td textAlign="center">{'1'}</Td>
                                 <Td textAlign='center'>{'name'}</Td>
                                 <Td textAlign="center">{'aaa'}</Td>
                                 <Td textAlign="center">{'bbb'}</Td>
                                 <Td textAlign='center'>{'2 days ago'}</Td>
                                 <Td textAlign='center'>{'ccc'}</Td>
+                                <Td textAlign='center'>{'active'}</Td>
                                 {more && (
-                                    <Td textAlign='center' cursor={'pointer'} onClick={() => navigate('dental-detail')}>
+                                    <Td textAlign='center' cursor={'pointer'}>
                                         <FaChevronRight />
                                     </Td>
                                 )}
@@ -94,4 +94,4 @@ const ManageDentalClinicPage = () => {
     )
 }
 
-export default ManageDentalClinicPage;
+export default ManageBlogPage;

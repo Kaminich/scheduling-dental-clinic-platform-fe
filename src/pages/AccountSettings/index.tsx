@@ -32,58 +32,28 @@ const AccountSettings = () => {
             <Stack w={'full'}>
                 <HStack w={'full'} justify={'flex-end'} gap={5} pr={10}>
                     <Text fontSize={16} color="blue">Create</Text>
-                    <Text fontSize={16} color="blue">Delete</Text>
                 </HStack>
                 <Divider />
                 <TableContainer w='full' overflowY="auto" whiteSpace='normal'>
                     <Table variant="simple" size="md">
                         <Thead>
                             <Tr>
-                                <Th textAlign='center'>
-                                    Username
-                                </Th>
-                                <Th textAlign='center'>
-                                    Full name
-                                </Th>
-                                <Th textAlign='center'>
-                                    Gender
-                                </Th>
-                                <Th textAlign='center'>
-                                    Date of Birth
-                                </Th>
-                                <Th textAlign='center'>
-                                    Phone Number
-                                </Th>
-                                <Th textAlign='center'>
-                                    Email
-                                </Th>
-                                <Th textAlign='center'>
-                                    Address
-                                </Th>
+                                <Th textAlign='center'>ID</Th>
+                                <Th textAlign='center'>Username</Th>
+                                <Th textAlign='center'>Role</Th>
+                                <Th textAlign='center'>Email</Th>
+                                <Th textAlign='center'>Status</Th>
+                                <Th></Th>
                             </Tr>
                         </Thead>
                         <Tbody>
                             <Tr>
-                                <Td
-                                    whiteSpace="break-spaces"
-                                    textAlign="center"
-                                >
-                                    {'acc.username'}
-                                </Td>
-                                <Td
-                                    whiteSpace="break-spaces"
-                                    textAlign="center"
-                                >
-                                    {'acc.fullname'}
-                                </Td>
+                                <Td textAlign="center">{'ID'}</Td>
+                                <Td textAlign="center">{'Username'}</Td>
                                 <Td textAlign='center'>{'44'}</Td>
-                                <Td textAlign="center">
-                                    {'acc.role'}
-                                </Td>
-                                <Td textAlign="center">
-                                    2
-                                </Td>
-                                <Td textAlign='center' gap={4}>
+                                <Td textAlign="center">{'admin'}</Td>
+                                <Td textAlign="center">2</Td>
+                                <Td p={1} textAlign='center' gap={4}>
                                     <Button
                                         borderRadius='full'
                                         px={3}
@@ -104,7 +74,6 @@ const AccountSettings = () => {
                                     </Button>
                                 </Td>
                             </Tr>
-
                         </Tbody>
                     </Table>
                 </TableContainer>

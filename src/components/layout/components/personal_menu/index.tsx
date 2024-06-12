@@ -191,7 +191,7 @@ const PersonalMenu = ({ type }: Prop) => {
                             </Button>
                             <Heading mt={-1} fontSize={24} textAlign={'center'}>Settings</Heading>
                         </Flex>
-                        {data?.role !== 'ADMIN' && (
+                        {(data?.role !== 'ADMIN' && data?.role !== 'OWNER') && (
                             <MenuItem
                                 maxW={'95%'}
                                 borderRadius={10}

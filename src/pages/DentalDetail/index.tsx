@@ -36,9 +36,7 @@ const DentalDetailPage = () => {
                     <Button colorScheme={'green'} onClick={onOpen}>Make Appointment</Button>
                 </Flex>
             </Flex>
-
             <Divider my={4} borderColor={'gray'} />
-
             <Tabs variant={'unstyled'}>
                 <TabList>
                     <Tab>About</Tab>
