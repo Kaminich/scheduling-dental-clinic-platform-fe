@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import AppointmentModal, { today } from "../../components/modal/appointment";
 import { FaPenToSquare, FaTrashCan } from "react-icons/fa6";
 import FeedbackModal from "../../components/modal/feedback";
-import { changeTitle } from "../../utils/changeTabTitle";
+import { changeTabTitle } from "../../utils/changeTabTitle";
 
 const Appointment = () => {
     const [fullname, setFullname] = useState<string>('');
@@ -24,7 +24,7 @@ const Appointment = () => {
     const { isOpen: isOpenFeedback, onOpen: onOpenFeedback, onClose: onCloseFeedback } = useDisclosure();
 
     useEffect(() => {
-        changeTitle('Appointment');
+        changeTabTitle('Appointment');
     }, []);
 
     return (

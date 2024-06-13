@@ -67,7 +67,7 @@ class ApiClient<T> {
 
     getDetail = (id: number, config?: AxiosRequestConfig) => {
         return axiosInstance
-            .delete<T>(this.endpoint + '/' + id, this.setAuthHeader(config))
+            .get<T>(this.endpoint + '/' + id, this.setAuthHeader(config))
             .then((res) => res.data)
     }
 

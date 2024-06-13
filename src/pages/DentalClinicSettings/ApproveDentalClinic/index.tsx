@@ -3,14 +3,14 @@ import { FaCheck, FaX } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { Shadow } from "../../../styles/styles";
-import { changeTitle } from "../../../utils/changeTabTitle";
+import { changeTabTitle } from "../../../utils/changeTabTitle";
 
 const ApproveDentalClinicPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
 
     useEffect(() => {
-        changeTitle('Approve Dental Clinic');
+        changeTabTitle('Approve Dental Clinic');
     }, []);
 
     return (

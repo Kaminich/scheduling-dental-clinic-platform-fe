@@ -7,12 +7,12 @@ import MedicalTeam from './components/medical_team';
 import { Color } from '../../styles/styles';
 import BlogsItem from '../../components/blogs_item';
 import { useEffect } from 'react';
-import { changeTitle } from '../../utils/changeTabTitle';
+import { changeTabTitle } from '../../utils/changeTabTitle';
 
 const HomePage = () => {
 
     useEffect(() => {
-        changeTitle('F-Dental');
+        changeTabTitle('F-Dental');
     }, []);
 
     return (

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Customer, { CustomerInit } from "../../types/Customer";
 import useUserProfile from "../../hooks/useUserProfile";
 import { formatDate } from "../../utils/formatDate";
-import { changeTitle } from "../../utils/changeTabTitle";
+import { changeTabTitle } from "../../utils/changeTabTitle";
 
 const ProfilePage = () => {
     const [userData, setUserData] = useState<Customer>(CustomerInit);
@@ -12,7 +12,7 @@ const ProfilePage = () => {
     const { data } = useUserProfile();
 
     useEffect(() => {
-        changeTitle('Profile');
+        changeTabTitle('Profile');
     }, []);
 
     useEffect(() => {

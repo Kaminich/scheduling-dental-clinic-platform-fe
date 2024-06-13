@@ -1,12 +1,12 @@
 import { SimpleGrid } from "@chakra-ui/react"
 import ServiceItem from "../../components/service_item"
 import { useEffect } from "react";
-import { changeTitle } from "../../utils/changeTabTitle";
+import { changeTabTitle } from "../../utils/changeTabTitle";
 
 const ServicePage = () => {
 
     useEffect(() => {
-        changeTitle('Service');
+        changeTabTitle('Service');
     }, []);
 
     return (

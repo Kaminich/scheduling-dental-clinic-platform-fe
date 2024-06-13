@@ -164,7 +164,7 @@ const SideBar = ({ collapsed, toggleCollapsed }: SideBarProps) => {
                         mode="inline"
                         inlineCollapsed={collapsed}
                         // items={data?.role === 'ADMIN' ? adminMenuItems : clinicOwnerMenuItems}
-                        items={clinicOwnerMenuItems}
+                        items={adminMenuItems}
                         style={{
                             border: 'none',
                             height: `calc(${windowHeight}px - 152px)`,

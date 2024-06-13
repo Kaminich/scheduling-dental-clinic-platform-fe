@@ -4,6 +4,7 @@ import { useState } from "react";
 import AppointmentModal from "../modal/appointment";
 import { Link } from "react-router-dom";
 import { Color, Shadow } from "../../styles/styles";
+import { useAuth } from "../../hooks/useAuth";
 
 interface Prop {
     type: number
@@ -11,6 +12,8 @@ interface Prop {
 
 const DentistItem = ({ type }: Prop) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const { role } = useAuth();
 
     const [dentalData, setDentalData] = useState({
         id: '1',
@@ -71,11 +74,13 @@ const DentistItem = ({ type }: Prop) => {
                                 </HStack>
                             </Stack>
                         </CardBody>
-                        <CardFooter justify={'center'}>
-                            <Button variant='solid' colorScheme='green' px={10} onClick={onOpen}>
-                                Make appointment
-                            </Button>
-                        </CardFooter>
+                        {(role !== 'Staff' && role !== 'Dentist') && (
+                            <CardFooter justify={'center'}>
+                                <Button variant='solid' colorScheme='green' px={10} onClick={onOpen}>
+                                    Make appointment
+                                </Button>
+                            </CardFooter>
+                        )}
                     </Card>
                     <AppointmentModal
                         isOpen={isOpen}

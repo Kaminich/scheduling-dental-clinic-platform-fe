@@ -44,7 +44,7 @@ const AdminNavbar = ({ type }: Prop) => {
                 {type === 'admin' && (
                     <HStack mr={20}>
                         <Notification />
-                        <PersonalMenu type="ADMIN" />
+                        <PersonalMenu />
                     </HStack>
                 )}
             </HStack>

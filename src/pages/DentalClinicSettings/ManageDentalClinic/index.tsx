@@ -2,17 +2,16 @@ import { Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, Tab
 import { FaChevronRight } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
-import { changeTitle } from "../../../utils/changeTabTitle";
+import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { useNavigate } from "react-router";
 
 const ManageDentalClinicPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
-    const [more, setMore] = useState<boolean>(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        changeTitle('Manage Dental Clinic');
+        changeTabTitle('Manage Dental Clinic');
     }, []);
 
     return (
@@ -47,14 +46,6 @@ const ManageDentalClinicPage = () => {
                     >
                         Delete
                     </Text>
-                    <Text
-                        fontSize={16}
-                        color="blue"
-                        cursor={'pointer'}
-                        onClick={() => setMore(!more)}
-                    >
-                        {more ? 'Hide' : 'Show'}
-                    </Text>
                 </HStack>
                 <Divider />
                 <TableContainer w='full' overflowY="auto" whiteSpace='normal'>
@@ -72,7 +63,7 @@ const ManageDentalClinicPage = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            <Tr _hover={more ? { bg: '#f1f1f1' } : {}}>
+                            <Tr _hover={{ bg: '#f1f1f1' }}>
                                 <Td textAlign="center">{'logo'}</Td>
                                 <Td textAlign="center">{'1'}</Td>
                                 <Td textAlign='center'>{'name'}</Td>
@@ -80,11 +71,9 @@ const ManageDentalClinicPage = () => {
                                 <Td textAlign="center">{'bbb'}</Td>
                                 <Td textAlign='center'>{'2 days ago'}</Td>
                                 <Td textAlign='center'>{'ccc'}</Td>
-                                {more && (
-                                    <Td textAlign='center' cursor={'pointer'} onClick={() => navigate('dental-detail')}>
-                                        <FaChevronRight />
-                                    </Td>
-                                )}
+                                <Td textAlign='center' cursor={'pointer'} onClick={() => navigate('dental-detail')}>
+                                    <FaChevronRight />
+                                </Td>
                             </Tr>
                         </Tbody>
                     </Table>

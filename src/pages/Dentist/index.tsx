@@ -1,12 +1,12 @@
 import { SimpleGrid } from "@chakra-ui/react"
 import DentistItem from "../../components/dentist_item"
 import { useEffect } from "react";
-import { changeTitle } from "../../utils/changeTabTitle";
+import { changeTabTitle } from "../../utils/changeTabTitle";
 
 const DentistPage = () => {
 
     useEffect(() => {
-        changeTitle('Dentist');
+        changeTabTitle('Dentist');
     }, []);
 
     return (

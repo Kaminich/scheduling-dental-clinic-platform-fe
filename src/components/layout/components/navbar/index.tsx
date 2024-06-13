@@ -71,7 +71,7 @@ const Navbar = () => {
                 {isAuthenticated ? (
                     <HStack>
                         <Notification />
-                        <PersonalMenu type="CUSTOMER" />
+                        <PersonalMenu />
                     </HStack>
                 ) : (
                     <HStack gap={5}>

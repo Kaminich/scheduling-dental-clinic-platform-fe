@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FaBowlFood, FaBreadSlice, FaCartShopping, FaUser } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { changeTitle } from "../../utils/changeTabTitle";
+import { changeTabTitle } from "../../utils/changeTabTitle";
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -63,7 +63,7 @@ const Dashboard = () => {
     ]
 
     useEffect(() => {
-        changeTitle('Dashboard');
+        changeTabTitle('Dashboard');
     }, []);
 
     return (

@@ -59,11 +59,11 @@ const routes = [
             },
             {
                 path: "admin/blogs/appprove-blog/blog-detail",
-                element: <BlogDetailPage type="admin" />
+                element: <BlogDetailPage />
             },
             {
                 path: "admin/blogs/manage-blog/blog-detail",
-                element: <BlogDetailPage type="admin" />
+                element: <BlogDetailPage />
             },
         ],
     },
@@ -79,7 +79,7 @@ const routes = [
             { path: "dentist-detail", element: <DentistDetailPage /> },
             { path: "services", element: <ServicePage /> },
             { path: "blogs", element: <BlogPage /> },
-            { path: "blog-detail", element: <BlogDetailPage type="customer" /> },
+            { path: "blog-detail", element: <BlogDetailPage /> },
             { path: "partner-register", element: <PartnerRegisterPage /> },
             { path: "appointment", element: <Appointment /> },
             { path: "rating-feedback", element: <RatingFeedbackPage /> },
@@ -114,7 +114,7 @@ const routes = [
         ],
     },
     {
-        path: "/clinic-owner",
+        path: "/owner",
         element: <AdminLayout />,
         children: [
             { index: true, element: <Navigate to={'dashboard'} /> },

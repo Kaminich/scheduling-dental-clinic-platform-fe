@@ -4,22 +4,25 @@ import { FaArrowLeft, FaCalendarCheck, FaChevronRight, FaDoorOpen, FaGear, FaGlo
 import { useNavigate } from "react-router";
 import { useAuth } from "../../../../hooks/useAuth";
 import useUserProfile from "../../../../hooks/useUserProfile";
+import ApiClient from "../../../../services/apiClient";
 
-interface Prop {
-    type: string
-}
-
-const PersonalMenu = ({ type }: Prop) => {
+const PersonalMenu = () => {
     const [subMenu, setSubMenu] = useState<boolean>(false);
     const [isVN, setIsVN] = useState<boolean>(false);
+
+    const api = new ApiClient('/auth/logout');
 
     const { data } = useUserProfile();
     const navigate = useNavigate();
     const { setIsAuthenticated } = useAuth();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        const refreshToken = localStorage.getItem('refresh_token');
+        const response = await api.postUnauthen({ refreshToken });
         localStorage.removeItem('access_token');
         setIsAuthenticated(false);
+        console.log(response);
+        localStorage.removeItem('refresh_token');
         navigate('/');
     }
 
@@ -88,7 +91,7 @@ const PersonalMenu = ({ type }: Prop) => {
                                 <FaChevronRight />
                             </Button>
                         </Button>
-                        {type === 'CUSTOMER' && (
+                        {data?.role === 'CUSTOMER' && (
                             <>
                                 <MenuItem
                                     maxW={'95%'}
@@ -152,7 +155,7 @@ const PersonalMenu = ({ type }: Prop) => {
                                 </MenuItem>
                             </>
                         )}
-                        {type === 'ADMIN' && (
+                        {data?.role === 'ADMIN' && (
                             <></>
                         )}
                         <MenuItem

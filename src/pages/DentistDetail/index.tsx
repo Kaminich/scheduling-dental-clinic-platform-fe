@@ -2,9 +2,12 @@ import { Box, Button, Card, CardBody, CardFooter, Flex, Image, ListItem, Stack, 
 import AppointmentModal from "../../components/modal/appointment"
 import { Color, Shadow } from "../../styles/styles";
 import CustomCarousel from "../../components/carousel";
+import { useAuth } from "../../hooks/useAuth";
 
 const DentistDetailPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { role } = useAuth();
+
     return (
         <>
             <Stack w={"6xl"} mx={'auto'} my={6} gap={6}>
@@ -64,9 +67,11 @@ const DentistDetailPage = () => {
                                 </Stack>
                             </Flex>
                         </CardBody>
-                        <CardFooter>
-                            <Button colorScheme="green" onClick={onOpen}>Make Appointment</Button>
-                        </CardFooter>
+                        {(role !== 'Staff' && role !== 'Dentist') && (
+                            <CardFooter>
+                                <Button colorScheme="green" onClick={onOpen}>Make Appointment</Button>
+                            </CardFooter>
+                        )}
                     </Card>
                 </Flex>
                 <Stack mt={12} mb={4}>

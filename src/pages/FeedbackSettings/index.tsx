@@ -2,7 +2,7 @@ import { Button, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Ta
 import { FaTrashCan } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
-import { changeTitle } from "../../utils/changeTabTitle";
+import { changeTabTitle } from "../../utils/changeTabTitle";
 import { RiRotateLockFill } from "react-icons/ri";
 
 const FeedbackSettingPage = () => {
@@ -10,7 +10,7 @@ const FeedbackSettingPage = () => {
     const [keyword, setKeyword] = useState<string>('');
 
     useEffect(() => {
-        changeTitle('Feedback Settings');
+        changeTabTitle('Feedback Settings');
     }, []);
 
     return (

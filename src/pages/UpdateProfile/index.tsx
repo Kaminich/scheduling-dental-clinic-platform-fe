@@ -6,7 +6,7 @@ import { FaEye, FaEyeSlash, FaPen } from "react-icons/fa6";
 import { useParams } from "react-router";
 import useUserProfile from "../../hooks/useUserProfile";
 import Customer, { CustomerInit } from "../../types/Customer";
-import { changeTitle } from "../../utils/changeTabTitle";
+import { changeTabTitle } from "../../utils/changeTabTitle";
 
 const UpdateProfilePage = () => {
     const [fullname, setFullname] = useState<string>('');
@@ -55,9 +55,9 @@ const UpdateProfilePage = () => {
 
     useEffect(() => {
         if (param.type === 'profile') {
-            changeTitle('Update Profile');
+            changeTabTitle('Update Profile');
         } else {
-            changeTitle('Update Password')
+            changeTabTitle('Update Password')
         }
     }, []);
 

@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { today } from "../../components/modal/appointment";
 import { GoogleLogin } from "@react-oauth/google";
 import ApiClient from "../../services/apiClient";
-import { changeTitle } from "../../utils/changeTabTitle";
+import { changeTabTitle } from "../../utils/changeTabTitle";
 
 const SignUpPage = () => {
     const [username, setUsername] = useState<string>('');
@@ -89,7 +89,7 @@ const SignUpPage = () => {
     };
 
     useEffect(() => {
-        changeTitle('Sign Up');
+        changeTabTitle('Sign Up');
     }, []);
 
     return (

@@ -5,13 +5,20 @@ import Footer from "../components/footer"
 import { useLocation } from "react-router-dom"
 import { useEffect } from "react"
 import ChatBox from '../../../components/chatbox';
+import { useAuth } from "../../../hooks/useAuth"
+import NotFoundPage from "../../../pages/NotFound"
 
 const Layout = () => {
     const { pathname } = useLocation();
+    const { role } = useAuth();
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [pathname]);
+
+    if (role === 'Admin' || role === 'Owner') {
+        return <NotFoundPage />
+    }
 
     return (
         <>

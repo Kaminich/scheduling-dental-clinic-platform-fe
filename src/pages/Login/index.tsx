@@ -6,8 +6,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import ApiClient from "../../services/apiClient";
 import { useAuth } from "../../hooks/useAuth";
-import { changeTitle } from "../../utils/changeTabTitle";
+import { changeTabTitle } from "../../utils/changeTabTitle";
 import { AxiosError } from "axios";
+import { jwtDecode } from "jwt-decode";
+import { formatRoleString } from "../../utils/formatRoleString";
+
+interface DecodeJWTRole {
+    role: string;
+}
 
 const LoginPage = () => {
     const [username, setUsername] = useState<string>("");
@@ -16,10 +22,9 @@ const LoginPage = () => {
     const toast = useToast();
     const navigate = useNavigate();
 
-    const { setIsAuthenticated } = useAuth();
+    const { setIsAuthenticated, setRole } = useAuth();
 
     const api = new ApiClient<any>('/auth/login');
-    const apiClient = new ApiClient<any>('/auth/user-information');
 
     const handleLogin = async (e: FormEvent) => {
         e.preventDefault();
@@ -43,12 +48,13 @@ const LoginPage = () => {
                 });
             } else {
                 localStorage.setItem('access_token', response.data.token);
-                const responseRole = await apiClient.getAuthen();
-                console.log(responseRole.data.role);
+                localStorage.setItem('refresh_token', response.data.refreshToken);
+                const decoded = jwtDecode<DecodeJWTRole>(response.data.token);
                 setIsAuthenticated(true);
-                if (responseRole.data.role === 'CUSTOMER') {
+                setRole(formatRoleString(decoded.role[0]));
+                if (formatRoleString(decoded.role[0]) === 'Customer') {
                     navigate('/');
-                } else if (responseRole.data.role === 'ADMIN') {
+                } else if (formatRoleString(decoded.role[0]) === 'Admin') {
                     navigate('/admin');
                 }
             }
@@ -75,7 +81,7 @@ const LoginPage = () => {
     };
 
     useEffect(() => {
-        changeTitle('Login');
+        changeTabTitle('Login');
     }, []);
 
     return (

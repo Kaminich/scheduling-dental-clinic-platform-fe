@@ -2,17 +2,16 @@ import { Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, Tab
 import { FaChevronRight } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
-import { changeTitle } from "../../../utils/changeTabTitle";
+import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { useNavigate } from "react-router";
 
 const ManageBlogPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
     const [keyword, setKeyword] = useState<string>('');
-    const [more, setMore] = useState<boolean>(false);
 
     useEffect(() => {
-        changeTitle('Manage Blog');
+        changeTabTitle('Manage Blog');
     }, []);
 
     return (
@@ -47,14 +46,6 @@ const ManageBlogPage = () => {
                     >
                         Delete
                     </Text>
-                    <Text
-                        fontSize={16}
-                        color="blue"
-                        cursor={'pointer'}
-                        onClick={() => setMore(!more)}
-                    >
-                        {more ? 'Hide' : 'Show'}
-                    </Text>
                 </HStack>
                 <Divider />
                 <TableContainer w='full' overflowY="auto" whiteSpace='normal'>
@@ -72,7 +63,7 @@ const ManageBlogPage = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            <Tr _hover={more ? { bg: '#f1f1f1' } : {}} onClick={() => navigate('blog-detail')}>
+                            <Tr _hover={{ bg: '#f1f1f1' }} onClick={() => navigate('blog-detail')}>
                                 <Td textAlign="center">{'1'}</Td>
                                 <Td textAlign='center'>{'name'}</Td>
                                 <Td textAlign="center">{'aaa'}</Td>
@@ -80,11 +71,9 @@ const ManageBlogPage = () => {
                                 <Td textAlign='center'>{'2 days ago'}</Td>
                                 <Td textAlign='center'>{'ccc'}</Td>
                                 <Td textAlign='center'>{'active'}</Td>
-                                {more && (
-                                    <Td textAlign='center' cursor={'pointer'}>
-                                        <FaChevronRight />
-                                    </Td>
-                                )}
+                                <Td textAlign='center' cursor={'pointer'}>
+                                    <FaChevronRight />
+                                </Td>
                             </Tr>
                         </Tbody>
                     </Table>

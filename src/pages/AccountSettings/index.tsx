@@ -3,14 +3,14 @@ import { FaTrashCan } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { RiRotateLockFill } from "react-icons/ri";
-import { changeTitle } from "../../utils/changeTabTitle";
+import { changeTabTitle } from "../../utils/changeTabTitle";
 
 const AccountSettings = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
 
     useEffect(() => {
-        changeTitle('Account Settings');
+        changeTabTitle('Account Settings');
     }, []);
 
     return (

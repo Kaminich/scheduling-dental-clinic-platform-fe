@@ -1,11 +1,10 @@
 import { Heading, Image, SimpleGrid, Stack, Text } from "@chakra-ui/react"
 import BlogsItem from "../../components/blogs_item"
+import { useAuth } from "../../hooks/useAuth";
 
-interface Prop {
-    type: string;
-}
+const BlogDetailPage = () => {
 
-const BlogDetailPage = ({ type }: Prop) => {
+    const { role } = useAuth();
     return (
         <Stack w={'6xl'} m={'auto'} gap={10} mb={8}>
             <Stack>
@@ -21,7 +20,7 @@ const BlogDetailPage = ({ type }: Prop) => {
                 w={'full'}
             />
             <Text>Blog Content</Text>
-            {type === 'customer' && (
+            {role === 'Customer' && (
                 <Stack>
                     <Heading
                         textAlign={'center'}

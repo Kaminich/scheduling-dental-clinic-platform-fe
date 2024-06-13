@@ -1,3 +1,3 @@
-export const changeTitle = (newTitle: string) => {
+export const changeTabTitle = (newTitle: string) => {
     document.title = newTitle;
 }

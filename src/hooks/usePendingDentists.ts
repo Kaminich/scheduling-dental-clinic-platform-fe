@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import ApiClient from "../services/apiClient";
 
-const useUserProfile = () => {
+const usePendingDentists = () => {
     const api = new ApiClient<any>('/dentists/pending');
     return useQuery({
         queryKey: ["pendingDentists"],
@@ -13,4 +13,4 @@ const useUserProfile = () => {
     });
 };
 
-export default useUserProfile;
+export default usePendingDentists;
