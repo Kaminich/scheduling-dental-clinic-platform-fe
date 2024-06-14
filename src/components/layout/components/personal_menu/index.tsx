@@ -1,6 +1,6 @@
 import { Avatar, Button, Card, Divider, Flex, Heading, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
-import { FaArrowLeft, FaCalendarCheck, FaChevronRight, FaDoorOpen, FaGear, FaGlobe, FaLaptopMedical, FaStar, FaUserGear, FaUserPen } from "react-icons/fa6";
+import { FaArrowLeft, FaCalendarCheck, FaCalendarDays, FaChevronRight, FaDoorOpen, FaGear, FaGlobe, FaLaptopMedical, FaNewspaper, FaStar, FaUserGear, FaUserPen } from "react-icons/fa6";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../../../hooks/useAuth";
 import useUserProfile from "../../../../hooks/useUserProfile";
@@ -27,7 +27,7 @@ const PersonalMenu = () => {
     }
 
     return (
-        <Menu autoSelect={false}>
+        <Menu autoSelect={false} isLazy>
             <MenuButton onClick={() => setSubMenu(false)}>
                 <Avatar size={'md'} name={data?.fullName || data?.username} src='https://bit.ly/sage-adebayo' />
             </MenuButton>
@@ -120,7 +120,7 @@ const PersonalMenu = () => {
                                     mx={2}
                                     fontSize={17}
                                     fontWeight={600}
-                                    onClick={() => navigate('/rating-feedback')}
+                                    onClick={() => navigate('/medical-record')}
                                 >
                                     <Button
                                         px={3}
@@ -155,8 +155,73 @@ const PersonalMenu = () => {
                                 </MenuItem>
                             </>
                         )}
-                        {data?.role === 'ADMIN' && (
-                            <></>
+                        {data?.role === 'STAFF' && (
+                            <>
+                                <MenuItem
+                                    maxW={'95%'}
+                                    borderRadius={10}
+                                    p={3}
+                                    mx={2}
+                                    fontSize={17}
+                                    fontWeight={600}
+                                    onClick={() => navigate('/manage-appointment')}
+                                >
+                                    <Button
+                                        px={3}
+                                        borderRadius={'full'}
+                                        mr={3}
+                                        bg={'#dedede'}
+                                        _hover={{ bg: '#dedede' }}
+                                    >
+                                        <FaCalendarCheck />
+                                    </Button>
+                                    Manage Appointment
+                                </MenuItem>
+                                <MenuItem
+                                    maxW={'95%'}
+                                    borderRadius={10}
+                                    p={3}
+                                    mx={2}
+                                    fontSize={17}
+                                    fontWeight={600}
+                                    onClick={() => navigate('/manage-blog')}
+                                >
+                                    <Button
+                                        px={3}
+                                        borderRadius={'full'}
+                                        mr={3}
+                                        bg={'#dedede'}
+                                        _hover={{ bg: '#dedede' }}
+                                    >
+                                        <FaNewspaper />
+                                    </Button>
+                                    Manage Blog
+                                </MenuItem>
+                            </>
+                        )}
+                        {data?.role === 'DENTIST' && (
+                            <>
+                                <MenuItem
+                                    maxW={'95%'}
+                                    borderRadius={10}
+                                    p={3}
+                                    mx={2}
+                                    fontSize={17}
+                                    fontWeight={600}
+                                    onClick={() => navigate('/view-schedule')}
+                                >
+                                    <Button
+                                        px={3}
+                                        borderRadius={'full'}
+                                        mr={3}
+                                        bg={'#dedede'}
+                                        _hover={{ bg: '#dedede' }}
+                                    >
+                                        <FaCalendarDays />
+                                    </Button>
+                                    View Schedule
+                                </MenuItem>
+                            </>
                         )}
                         <MenuItem
                             maxW={'95%'}

@@ -27,6 +27,10 @@ import ManageBlogPage from "../pages/BlogSettings/ManageBlog";
 import ApproveBlogPage from "../pages/BlogSettings/ApproveBlog";
 import FeedbackSettingPage from "../pages/FeedbackSettings";
 import ClinicDentailSettings from "../pages/ClinicDetailSettings";
+import MessagePage from "../pages/Message";
+import ViewSchedulePage from "../pages/ViewSchedule";
+import ManageAppointmentPage from "../pages/ManageAppointment";
+import MedicalRecordPage from "../pages/MedicalRecord";
 
 const routes = [
     {
@@ -50,19 +54,27 @@ const routes = [
                 element: <ProfilePage />
             },
             {
-                path: "admin/dentals/manage-dental/dental-detail",
-                element: <ClinicDentailSettings />
-            },
-            {
                 path: "update-profile/:type",
                 element: <UpdateProfilePage />
             },
             {
-                path: "admin/blogs/appprove-blog/blog-detail",
+                path: "message",
+                element: <MessagePage />
+            },
+            {
+                path: "administration/dentals/manage-dental/dental-detail",
+                element: <ClinicDentailSettings />
+            },
+            {
+                path: "administration/blogs/appprove-blog/blog-detail",
                 element: <BlogDetailPage />
             },
             {
-                path: "admin/blogs/manage-blog/blog-detail",
+                path: "administration/blogs/manage-blog/blog-detail",
+                element: <BlogDetailPage />
+            },
+            {
+                path: "manage-blog/blog-detail",
                 element: <BlogDetailPage />
             },
         ],
@@ -82,25 +94,15 @@ const routes = [
             { path: "blog-detail", element: <BlogDetailPage /> },
             { path: "partner-register", element: <PartnerRegisterPage /> },
             { path: "appointment", element: <Appointment /> },
+            { path: "medical-record", element: <MedicalRecordPage /> },
             { path: "rating-feedback", element: <RatingFeedbackPage /> },
+            { path: "manage-appointment", element: <ManageAppointmentPage /> },
+            { path: "manage-blog", element: <ManageBlogPage /> },
+            { path: "view-schedule", element: <ViewSchedulePage /> },
         ],
     },
     {
-        path: "/staff",
-        element: <Layout />,
-        children: [
-            { index: true, element: <HomePage /> },
-        ],
-    },
-    {
-        path: "/dentist",
-        element: <Layout />,
-        children: [
-            { index: true, element: <HomePage /> },
-        ],
-    },
-    {
-        path: "/admin",
+        path: "/administration",
         element: <AdminLayout />,
         children: [
             { index: true, element: <Navigate to={'dashboard'} /> },
@@ -111,20 +113,11 @@ const routes = [
             { path: "feedbacks", element: <FeedbackSettingPage /> },
             { path: "blogs/approve-blog", element: <ApproveBlogPage /> },
             { path: "blogs/manage-blog", element: <ManageBlogPage /> },
-        ],
-    },
-    {
-        path: "/owner",
-        element: <AdminLayout />,
-        children: [
-            { index: true, element: <Navigate to={'dashboard'} /> },
-            { path: "dashboard", element: <Dashboard /> },
-            { path: "accounts", element: <AccountSettings /> },
             { path: "dentals", element: <ManageDentalClinicPage /> },
             { path: "services", element: <ManageDentalClinicPage /> },
             { path: "blogs", element: <ManageBlogPage /> },
         ],
-    }
+    },
 ];
 
 const router = createBrowserRouter(routes);

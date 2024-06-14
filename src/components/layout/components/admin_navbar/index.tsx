@@ -5,6 +5,7 @@ import Notification from "../notification";
 import PersonalMenu from "../personal_menu";
 import { Color } from "../../../../styles/styles";
 import { FaChevronLeft } from "react-icons/fa6";
+import { useAuth } from "../../../../hooks/useAuth";
 
 interface Prop {
     type: string;
@@ -12,6 +13,7 @@ interface Prop {
 
 const AdminNavbar = ({ type }: Prop) => {
     const navigate = useNavigate();
+    const { role } = useAuth();
 
     return (
         <Box
@@ -37,7 +39,7 @@ const AdminNavbar = ({ type }: Prop) => {
                             <FaChevronLeft />
                         </Button>
                     )}
-                    <Link to={'/admin'}>
+                    <Link to={(role === 'Admin' || role === 'Owner') ? '/administration' : '/'}>
                         <Logo />
                     </Link>
                 </HStack>

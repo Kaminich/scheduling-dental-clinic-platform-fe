@@ -4,24 +4,26 @@ import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../../hooks/useAuth";
 
 const ManageBlogPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
     const [keyword, setKeyword] = useState<string>('');
+    const { role } = useAuth();
 
     useEffect(() => {
         changeTabTitle('Manage Blog');
     }, []);
 
     return (
-        <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
+        <Stack w={role === 'Customer' ? '7xl' : 'full'} align='center' mx='auto' my={5} gap={10}>
             <InputGroup>
                 <InputLeftElement children={<BsSearch />} />
                 <Input
                     ref={ref}
                     borderRadius={20}
-                    placeholder="Search dental..."
+                    placeholder="Search blog..."
                     variant="filled"
                     border='1px solid gainsboro'
                     onChange={(e) => {

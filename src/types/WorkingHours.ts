@@ -17,7 +17,7 @@ enum Shift {
 }
 
 export default interface WorkingHours {
-    id: string,
+    id: number,
     dayInWeek: DayInWeek,
     shift: Shift,
     openingTime: string,

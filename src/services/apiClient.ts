@@ -16,12 +16,17 @@ const axiosInstance = axios.create({
 
 axios.interceptors.response.use(async (res: any) => {
     if (res.status === 401) {
-        window.localStorage.removeItem("fullname")
-        window.localStorage.removeItem("username")
-        window.localStorage.removeItem("access_token")
-        window.location.replace('http://localhost:5173');
-        console.log('Refresh Token please');
-
+        try {
+            const api = new ApiClient<any>('/auth/refresh-token');
+            const refreshToken = localStorage.getItem('refresh_token');
+            const response = await api.postUnauthen({ refreshToken });
+            if (response.success) {
+                localStorage.setItem('access_token', response.data.token);
+                localStorage.setItem('refresh_token', response.data.refreshToken);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     } else {
         return res;
     }
