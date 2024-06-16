@@ -1,5 +1,5 @@
-import { Button, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
-import { FaChevronRight, FaEllipsis, FaTrashCan } from "react-icons/fa6";
+import { Button, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { FaEllipsis, FaTrashCan } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { useNavigate } from "react-router";

@@ -74,9 +74,9 @@ const Navbar = () => {
                 {isAuthenticated ? (
                     <HStack>
                         <Notification />
-                        {role === 'Staff' && (
-                            <MessageMenu />
-                        )}
+                        {/* {role === 'Staff' && ( */}
+                        <MessageMenu />
+                        {/* )} */}
                         <PersonalMenu />
                     </HStack>
                 ) : (

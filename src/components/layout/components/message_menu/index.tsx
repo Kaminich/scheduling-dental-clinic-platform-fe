@@ -26,7 +26,7 @@ const MessageMenu = () => {
                 </Button>
             </MenuButton>
             <MenuList minW={'sm'} maxW={'sm'} ml={20}>
-                <Heading mx={5} my={2} fontSize={24}>Chat Box</Heading>
+                <Heading mx={5} my={2} fontSize={24}>Chats</Heading>
                 <InputGroup mx={'auto'} w={'90%'} my={4}>
                     <InputLeftElement children={<BsSearch />} />
                     <Input
@@ -170,7 +170,7 @@ const MessageMenu = () => {
                         </MenuItem>
                     </Stack>
                     <HStack justify={'center'} color={'blue'} borderTop={Border.tableBorder} w={'full'} pt={2}>
-                        <Link to={'/message'}>View all chat</Link>
+                        <Link to={'/message'}>View all chats</Link>
                     </HStack>
                 </Stack>
             </MenuList>

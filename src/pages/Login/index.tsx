@@ -50,12 +50,13 @@ const LoginPage = () => {
                 localStorage.setItem('access_token', response.data.token);
                 localStorage.setItem('refresh_token', response.data.refreshToken);
                 const decoded = jwtDecode<DecodeJWTRole>(response.data.token);
+                const decodedRole = formatRoleString(decoded.role[0]);
                 setIsAuthenticated(true);
-                setRole(formatRoleString(decoded.role[0]));
-                if (formatRoleString(decoded.role[0]) === 'Customer') {
+                setRole(decodedRole);
+                if (decodedRole === 'Customer' || decodedRole === 'Staff' || decodedRole === 'Dentist') {
                     navigate('/');
-                } else if (formatRoleString(decoded.role[0]) === 'Admin') {
-                    navigate('/admin');
+                } else if (decodedRole === 'Admin' || decodedRole === 'Owner') {
+                    navigate('/administration');
                 }
             }
         } catch (error) {

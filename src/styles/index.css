@@ -78,20 +78,24 @@
   width: 270px;
 }
 
-.ant-menu-inline::-webkit-scrollbar {
+.ant-menu-inline::-webkit-scrollbar,
+.chakra-stack::-webkit-scrollbar {
   width: 5px;
 }
 
-.ant-menu-inline::-webkit-scrollbar-track {
+.ant-menu-inline::-webkit-scrollbar-track,
+.chakra-stack::-webkit-scrollbar-track {
   background-color: #f1f1f1;
 }
 
-.ant-menu-inline::-webkit-scrollbar-thumb {
+.ant-menu-inline::-webkit-scrollbar-thumb,
+.chakra-stack::-webkit-scrollbar-thumb {
   background-color: #d0d0d0;
   border-radius: 4px;
 }
 
-.ant-menu-inline::-webkit-scrollbar-thumb:hover {
+.ant-menu-inline::-webkit-scrollbar-thumb:hover,
+.chakra-stack::-webkit-scrollbar-thumb:hover {
   background-color: #d9d8d8;
 }
 
