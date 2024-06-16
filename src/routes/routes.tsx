@@ -22,18 +22,15 @@ import Dashboard from "../pages/Dashboard";
 import AccountSettings from "../pages/AccountSettings";
 import ApproveDentalClinicPage from "../pages/DentalClinicSettings/ApproveDentalClinic";
 import ManageDentalClinicPage from "../pages/DentalClinicSettings/ManageDentalClinic";
-
-type NonIndexRoute = {
-    path: string;
-    element: JSX.Element;
-    children?: NonIndexRoute[];
-};
-
-type IndexRoute = {
-    path: string;
-    element: JSX.Element;
-    children?: NonIndexRoute[];
-};
+import SystemLayout from "../components/layout/system";
+import ManageBlogPage from "../pages/BlogSettings/ManageBlog";
+import ApproveBlogPage from "../pages/BlogSettings/ApproveBlog";
+import FeedbackSettingPage from "../pages/FeedbackSettings";
+import ClinicDentailSettings from "../pages/ClinicDetailSettings";
+import MessagePage from "../pages/Message";
+import ViewSchedulePage from "../pages/ViewSchedule";
+import ManageAppointmentPage from "../pages/ManageAppointment";
+import MedicalRecordPage from "../pages/MedicalRecord";
 
 const routes = [
     {
@@ -50,6 +47,40 @@ const routes = [
     },
     {
         path: "/",
+        element: <SystemLayout />,
+        children: [
+            {
+                path: "profile",
+                element: <ProfilePage />
+            },
+            {
+                path: "update-profile/:type",
+                element: <UpdateProfilePage />
+            },
+            {
+                path: "message",
+                element: <MessagePage />
+            },
+            {
+                path: "administration/dentals/manage-dental/dental-detail",
+                element: <ClinicDentailSettings />
+            },
+            {
+                path: "administration/blogs/appprove-blog/blog-detail",
+                element: <BlogDetailPage />
+            },
+            {
+                path: "administration/blogs/manage-blog/blog-detail",
+                element: <BlogDetailPage />
+            },
+            {
+                path: "manage-blog/blog-detail",
+                element: <BlogDetailPage />
+            },
+        ],
+    },
+    {
+        path: "/",
         element: <Layout />,
         children: [
             { index: true, element: <HomePage /> },
@@ -62,25 +93,31 @@ const routes = [
             { path: "blogs", element: <BlogPage /> },
             { path: "blog-detail", element: <BlogDetailPage /> },
             { path: "partner-register", element: <PartnerRegisterPage /> },
-            { path: "profile", element: <ProfilePage /> },
-            { path: "update-profile/:type", element: <UpdateProfilePage /> },
             { path: "appointment", element: <Appointment /> },
+            { path: "medical-record", element: <MedicalRecordPage /> },
             { path: "rating-feedback", element: <RatingFeedbackPage /> },
+            { path: "manage-appointment", element: <ManageAppointmentPage /> },
+            { path: "manage-blog", element: <ManageBlogPage /> },
+            { path: "view-schedule", element: <ViewSchedulePage /> },
         ],
     },
     {
-        path: "/admin",
+        path: "/administration",
         element: <AdminLayout />,
         children: [
             { index: true, element: <Navigate to={'dashboard'} /> },
             { path: "dashboard", element: <Dashboard /> },
             { path: "accounts", element: <AccountSettings /> },
-            { path: "profile", element: <ProfilePage /> },
-            { path: "update-profile/:type", element: <UpdateProfilePage /> },
-            { path: "dental-setting/approve-dental", element: <ApproveDentalClinicPage /> },
-            { path: "dental-setting/manage-dental", element: <ManageDentalClinicPage /> },
+            { path: "dentals/approve-dental", element: <ApproveDentalClinicPage /> },
+            { path: "dentals/manage-dental", element: <ManageDentalClinicPage /> },
+            { path: "feedbacks", element: <FeedbackSettingPage /> },
+            { path: "blogs/approve-blog", element: <ApproveBlogPage /> },
+            { path: "blogs/manage-blog", element: <ManageBlogPage /> },
+            { path: "dentals", element: <ManageDentalClinicPage /> },
+            { path: "services", element: <ManageDentalClinicPage /> },
+            { path: "blogs", element: <ManageBlogPage /> },
         ],
-    }
+    },
 ];
 
 const router = createBrowserRouter(routes);

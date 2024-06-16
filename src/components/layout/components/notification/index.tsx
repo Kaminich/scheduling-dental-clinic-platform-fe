@@ -3,7 +3,7 @@ import { FaBell } from "react-icons/fa6";
 
 const Notification = () => {
     return (
-        <Menu autoSelect={false}>
+        <Menu autoSelect={false} isLazy>
             <MenuButton>
                 <Button
                     bg={'#dedede'}

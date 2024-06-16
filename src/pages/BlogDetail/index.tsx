@@ -1,7 +1,10 @@
 import { Heading, Image, SimpleGrid, Stack, Text } from "@chakra-ui/react"
 import BlogsItem from "../../components/blogs_item"
+import { useAuth } from "../../hooks/useAuth";
 
 const BlogDetailPage = () => {
+
+    const { role } = useAuth();
     return (
         <Stack w={'6xl'} m={'auto'} gap={10} mb={8}>
             <Stack>
@@ -17,19 +20,21 @@ const BlogDetailPage = () => {
                 w={'full'}
             />
             <Text>Blog Content</Text>
-            <Stack>
-                <Heading
-                    textAlign={'center'}
-                    mb={6}
-                >
-                    Highlight Blogs
-                </Heading>
-                <SimpleGrid columns={3} spacingX={7}>
-                    <BlogsItem />
-                    <BlogsItem />
-                    <BlogsItem />
-                </SimpleGrid>
-            </Stack>
+            {role === 'Customer' && (
+                <Stack>
+                    <Heading
+                        textAlign={'center'}
+                        mb={6}
+                    >
+                        Highlight Blogs
+                    </Heading>
+                    <SimpleGrid columns={3} spacingX={7}>
+                        <BlogsItem />
+                        <BlogsItem />
+                        <BlogsItem />
+                    </SimpleGrid>
+                </Stack>
+            )}
         </Stack>
     )
 }

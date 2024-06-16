@@ -6,6 +6,7 @@ import FeedbackModal from "../modal/feedback";
 import AppointmentModal from "../modal/appointment";
 import { useNavigate } from "react-router-dom";
 import { Color } from "../../styles/styles";
+import { useAuth } from "../../hooks/useAuth";
 
 const DentalItem = () => {
     const { isOpen: isOpenFeedback, onOpen: onOpenFeedback, onClose: onCloseFeedback } = useDisclosure();
@@ -15,6 +16,8 @@ const DentalItem = () => {
         id: '1',
         name: 'HCM'
     });
+
+    const { role } = useAuth();
 
     const navigate = useNavigate();
 
@@ -99,9 +102,11 @@ const DentalItem = () => {
                     <Button variant='solid' colorScheme='blue' flex={1} onClick={onOpenFeedback}>
                         Rating and Feedback
                     </Button>
-                    <Button variant='solid' colorScheme='green' flex={1} onClick={onOpenAppointment}>
-                        Make appointment
-                    </Button>
+                    {(role !== 'Staff' && role !== 'Dentist') && (
+                        <Button variant='solid' colorScheme='green' flex={1} onClick={onOpenAppointment}>
+                            Make appointment
+                        </Button>
+                    )}
                 </CardFooter>
             </Card>
             <FeedbackModal isOpen={isOpenFeedback} onClose={onCloseFeedback} type="ratingfeedback" />

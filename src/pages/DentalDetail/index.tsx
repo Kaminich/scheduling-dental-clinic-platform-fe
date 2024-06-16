@@ -5,9 +5,12 @@ import { Color } from "../../styles/styles";
 import DentalAbout from "./components/about";
 import DentalDentist from "./components/dentist";
 import ServicePrice from "./components/service_price";
+import { useAuth } from "../../hooks/useAuth";
 
 const DentalDetailPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { role } = useAuth();
+
     return (
         <Stack w={"6xl"} m={'auto'}>
             <Image
@@ -31,14 +34,14 @@ const DentalDetailPage = () => {
                     />
                     <Heading fontSize={27}>F-Dental</Heading>
                 </Flex>
-                <Flex justify={'center'} gap={4} mt={8}>
-                    <Button colorScheme={'blue'} variant={'outline'}>Chat with Dental</Button>
-                    <Button colorScheme={'green'} onClick={onOpen}>Make Appointment</Button>
-                </Flex>
+                {(role !== 'Staff' && role !== 'Dentist') && (
+                    <Flex justify={'center'} gap={4} mt={8}>
+                        <Button colorScheme={'blue'} variant={'outline'}>Chat with Dental</Button>
+                        <Button colorScheme={'green'} onClick={onOpen}>Make Appointment</Button>
+                    </Flex>
+                )}
             </Flex>
-
             <Divider my={4} borderColor={'gray'} />
-
             <Tabs variant={'unstyled'}>
                 <TabList>
                     <Tab>About</Tab>

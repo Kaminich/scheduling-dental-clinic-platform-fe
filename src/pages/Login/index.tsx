@@ -1,11 +1,19 @@
 import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, InputGroup, InputRightElement, Stack, Text, useToast } from "@chakra-ui/react"
-import { useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Logo from "../../components/logo";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import ApiClient from "../../services/apiClient";
 import { useAuth } from "../../hooks/useAuth";
+import { changeTabTitle } from "../../utils/changeTabTitle";
+import { AxiosError } from "axios";
+import { jwtDecode } from "jwt-decode";
+import { formatRoleString } from "../../utils/formatRoleString";
+
+interface DecodeJWTRole {
+    role: string;
+}
 
 const LoginPage = () => {
     const [username, setUsername] = useState<string>("");
@@ -14,12 +22,11 @@ const LoginPage = () => {
     const toast = useToast();
     const navigate = useNavigate();
 
-    const { setIsAuthenticated } = useAuth();
+    const { setIsAuthenticated, setRole } = useAuth();
 
     const api = new ApiClient<any>('/auth/login');
-    const apiClient = new ApiClient<any>('/auth/user-information');
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleLogin = async (e: FormEvent) => {
         e.preventDefault();
 
         const data = {
@@ -36,30 +43,34 @@ const LoginPage = () => {
                     title: "Error",
                     description: response.message,
                     status: "error",
-                    duration: 5000,
+                    duration: 2500,
                     isClosable: true,
                 });
             } else {
                 localStorage.setItem('access_token', response.data.token);
-                const responseRole = await apiClient.getAuthen();
-                console.log(responseRole.data.role);
+                localStorage.setItem('refresh_token', response.data.refreshToken);
+                const decoded = jwtDecode<DecodeJWTRole>(response.data.token);
+                const decodedRole = formatRoleString(decoded.role[0]);
                 setIsAuthenticated(true);
-                if (responseRole.data.role === 'CUSTOMER') {
+                setRole(decodedRole);
+                if (decodedRole === 'Customer' || decodedRole === 'Staff' || decodedRole === 'Dentist') {
                     navigate('/');
-                } else if (responseRole.data.role === 'ADMIN') {
-                    navigate('/admin');
+                } else if (decodedRole === 'Admin' || decodedRole === 'Owner') {
+                    navigate('/administration');
                 }
             }
         } catch (error) {
             console.log(error);
 
-            toast({
-                title: "Error",
-                description: "An error occurred. Please try again.",
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-            });
+            if (error instanceof AxiosError) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    isClosable: true,
+                });
+            }
         }
     };
 
@@ -69,6 +80,10 @@ const LoginPage = () => {
     const errorMessage = (error: any) => {
         console.log(error);
     };
+
+    useEffect(() => {
+        changeTabTitle('Login');
+    }, []);
 
     return (
         <HStack maxW={'full'} maxH={'100%'}>

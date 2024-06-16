@@ -6,9 +6,10 @@ import {
 import type { MenuProps } from 'antd';
 import { ConfigProvider, Menu } from 'antd';
 import { Button, Box, HStack, Stack, Text } from '@chakra-ui/react';
-import { FaChartSimple, FaCommentMedical, FaHouseMedical, FaHouseMedicalCircleCheck, FaNewspaper, FaPenToSquare, FaUserDoctor, FaUserGear, FaUserNurse } from 'react-icons/fa6';
+import { FaChartSimple, FaCommentMedical, FaHouseMedical, FaHouseMedicalCircleCheck, FaNewspaper, FaPenToSquare, FaTooth, FaUserDoctor, FaUserGear, FaUserNurse } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { Color } from '../../../../styles/styles';
+import useUserProfile from '../../../../hooks/useUserProfile';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -28,7 +29,7 @@ function getItem(
     } as MenuItem;
 }
 
-const items: MenuItem[] = [
+const adminMenuItems: MenuItem[] = [
     getItem(
         <Link to={'dashboard'} style={{ fontSize: '17px' }}>Dashboard</Link>
         , '1'
@@ -46,12 +47,12 @@ const items: MenuItem[] = [
         , <FaHouseMedical />,
         [
             getItem(
-                <Link to={'dental-setting/approve-dental'} style={{ fontSize: '17px' }}>Approve Dental Clinic</Link>
+                <Link to={'dentals/approve-dental'} style={{ fontSize: '17px' }}>Approve Dental Clinic</Link>
                 , '3'
                 , <FaHouseMedicalCircleCheck />
             ),
             getItem(
-                <Link to={'dental-setting/manage-dental'} style={{ fontSize: '17px' }}>Manage Dental Clinic</Link>
+                <Link to={'dentals/manage-dental'} style={{ fontSize: '17px' }}>Manage Dental Clinic</Link>
 
                 , '4'
                 , <FaPenToSquare />
@@ -71,13 +72,55 @@ const items: MenuItem[] = [
         ]
     ),
     getItem(
-        <Text fontSize='17px'>Feedback Settings</Text>
+        <Link to={'feedbacks'} style={{ fontSize: '17px' }}>Feedback Settings</Link>
         , '7'
         , <FaCommentMedical />,
     ),
     getItem(
         <Text fontSize='17px'>Blog Settings</Text>
-        , '8'
+        , 'sub2'
+        , <FaNewspaper />,
+        [
+            getItem(
+                <Link to={'blogs/approve-blog'} style={{ fontSize: '17px' }}>Approve Blog</Link>
+                , '8'
+                , <FaHouseMedicalCircleCheck />
+            ),
+            getItem(
+                <Link to={'blogs/manage-blog'} style={{ fontSize: '17px' }}>Manage Blog</Link>
+
+                , '9'
+                , <FaPenToSquare />
+            ),
+        ]
+    ),
+];
+
+const clinicOwnerMenuItems: MenuItem[] = [
+    getItem(
+        <Link to={'dashboard'} style={{ fontSize: '17px' }}>Dashboard</Link>
+        , '1'
+        , <FaChartSimple />
+    ),
+    getItem(
+        <Link to={'accounts'} style={{ fontSize: '17px' }}>Account Settings</Link>
+        , '2'
+        , <FaUserGear />
+    ),
+
+    getItem(
+        <Link to={'dentals'} style={{ fontSize: '17px' }}>Dental Clinic Settings</Link>
+        , '3'
+        , <FaHouseMedical />,
+    ),
+    getItem(
+        <Link to={'services'} style={{ fontSize: '17px' }}>Services Settings</Link>
+        , '6'
+        , <FaTooth />,
+    ),
+    getItem(
+        <Link to={'blogs'} style={{ fontSize: '17px' }}>Blogs Settings</Link>
+        , '7'
         , <FaNewspaper />,
     ),
 ];
@@ -89,6 +132,7 @@ interface SideBarProps {
 
 const SideBar = ({ collapsed, toggleCollapsed }: SideBarProps) => {
 
+    const { data } = useUserProfile();
     const windowHeight = window.innerHeight;
 
     return (
@@ -119,7 +163,8 @@ const SideBar = ({ collapsed, toggleCollapsed }: SideBarProps) => {
                         defaultSelectedKeys={['1']}
                         mode="inline"
                         inlineCollapsed={collapsed}
-                        items={items}
+                        // items={data?.role === 'ADMIN' ? adminMenuItems : clinicOwnerMenuItems}
+                        items={adminMenuItems}
                         style={{
                             border: 'none',
                             height: `calc(${windowHeight}px - 152px)`,

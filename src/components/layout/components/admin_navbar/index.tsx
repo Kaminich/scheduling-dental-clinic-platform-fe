@@ -1,12 +1,19 @@
-import { Box, HStack } from "@chakra-ui/react";
+import { Box, Button, HStack } from "@chakra-ui/react";
 import Logo from "../../../logo";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Notification from "../notification";
 import PersonalMenu from "../personal_menu";
 import { Color } from "../../../../styles/styles";
+import { FaChevronLeft } from "react-icons/fa6";
+import { useAuth } from "../../../../hooks/useAuth";
 
-const AdminNavbar = () => {
+interface Prop {
+    type: string;
+}
 
+const AdminNavbar = ({ type }: Prop) => {
+    const navigate = useNavigate();
+    const { role } = useAuth();
 
     return (
         <Box
@@ -21,14 +28,27 @@ const AdminNavbar = () => {
                 justify='space-between'
                 m={'auto'}
             >
-                <Link to={'/admin'}>
-                    <Logo />
-                </Link>
-                <HStack mr={20}>
-                    <Notification />
-                    <PersonalMenu type="ADMIN" />
+                <HStack>
+                    {type === 'system' && (
+                        <Button
+                            variant={'ghost'}
+                            ml={10}
+                            py={8}
+                            onClick={() => navigate(-1)}
+                        >
+                            <FaChevronLeft />
+                        </Button>
+                    )}
+                    <Link to={(role === 'Admin' || role === 'Owner') ? '/administration' : '/'}>
+                        <Logo />
+                    </Link>
                 </HStack>
-
+                {type === 'admin' && (
+                    <HStack mr={20}>
+                        <Notification />
+                        <PersonalMenu />
+                    </HStack>
+                )}
             </HStack>
         </Box>
     );

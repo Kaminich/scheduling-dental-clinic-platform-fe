@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Customer, { CustomerInit } from "../../types/Customer";
 import useUserProfile from "../../hooks/useUserProfile";
 import { formatDate } from "../../utils/formatDate";
+import { changeTabTitle } from "../../utils/changeTabTitle";
 
 const ProfilePage = () => {
     const [userData, setUserData] = useState<Customer>(CustomerInit);
@@ -11,11 +12,15 @@ const ProfilePage = () => {
     const { data } = useUserProfile();
 
     useEffect(() => {
+        changeTabTitle('Profile');
+    }, []);
+
+    useEffect(() => {
         data && setUserData(data);
     }, [data]);
 
     return (
-        <HStack gap={20} justify={'space-between'} align={'flex-start'} w={'7xl'} m={'auto'} my={10}>
+        <HStack gap={20} justify={'space-between'} align={'flex-start'} w={'7xl'} m={'auto'}>
             <Card flex={1} shadow={Shadow.cardShadow}>
                 <CardBody>
                     <Stack gap="4" align="center" flexWrap="wrap" h='100%'>

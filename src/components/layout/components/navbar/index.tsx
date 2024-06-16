@@ -5,10 +5,11 @@ import { googleLogout } from "@react-oauth/google";
 import Notification from "../notification";
 import PersonalMenu from "../personal_menu";
 import { useAuth } from "../../../../hooks/useAuth";
+import MessageMenu from "../message_menu";
 
 const Navbar = () => {
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, role } = useAuth();
 
     const onSignout = () => {
         googleLogout();
@@ -62,16 +63,21 @@ const Navbar = () => {
                             Blog
                         </Link>
                     </Text>
-                    <Text>
-                        <Link to={'partner-register'}>
-                            Partner registration
-                        </Link>
-                    </Text>
+                    {role === 'Customer' && (
+                        <Text>
+                            <Link to={'partner-register'}>
+                                Partner registration
+                            </Link>
+                        </Text>
+                    )}
                 </HStack>
                 {isAuthenticated ? (
                     <HStack>
                         <Notification />
-                        <PersonalMenu type="CUSTOMER" />
+                        {/* {role === 'Staff' && ( */}
+                        <MessageMenu />
+                        {/* )} */}
+                        <PersonalMenu />
                     </HStack>
                 ) : (
                     <HStack gap={5}>

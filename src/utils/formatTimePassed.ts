@@ -3,6 +3,10 @@ export const formatTimePassed = (timePassed: string): string => {
     const pastTime: Date = new Date(timePassed);
     const timeDifference: number = now.getTime() - pastTime.getTime();
 
+    if (timeDifference < 1000) {
+        return "Recently";
+    }
+
     const seconds: number = Math.floor(timeDifference / 1000);
     const minutes: number = Math.floor(seconds / 60);
     const hours: number = Math.floor(minutes / 60);

@@ -1,12 +1,18 @@
-import { Button, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-import { FaTrashCan } from "react-icons/fa6";
-import { useRef, useState } from "react";
+import { Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import { FaChevronRight } from "react-icons/fa6";
+import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
-import { RiRotateLockFill } from "react-icons/ri";
+import { changeTabTitle } from "../../../utils/changeTabTitle";
+import { useNavigate } from "react-router";
 
 const ManageDentalClinicPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        changeTabTitle('Manage Dental Clinic');
+    }, []);
 
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
@@ -24,79 +30,55 @@ const ManageDentalClinicPage = () => {
                     value={keyword}
                 />
             </InputGroup>
-            <TableContainer w='full' overflowY="auto" whiteSpace='normal'>
-                <Table variant="simple" size="md">
-                    <Thead>
-                        <Tr>
-                            <Th textAlign='center'>
-                                Username
-                            </Th>
-                            <Th textAlign='center'>
-                                Full name
-                            </Th>
-                            <Th textAlign='center'>
-                                Date of Birth
-                            </Th>
-                            <Th textAlign='center'>
-                                Gender
-                            </Th>
-                            <Th textAlign='center'>
-                                Phone Number
-                            </Th>
-                            <Th textAlign='center'>
-                                Email
-                            </Th>
-                            <Th textAlign='center'>
-                                Address
-                            </Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        <Tr>
-                            <Td
-                                whiteSpace="break-spaces"
-                                textAlign="center"
-                            >
-                                {'acc.username'}
-                            </Td>
-                            <Td
-                                whiteSpace="break-spaces"
-                                textAlign="center"
-                            >
-                                {'acc.fullname'}
-                            </Td>
-                            <Td textAlign='center'>{'44'}</Td>
-                            <Td textAlign="center">
-                                {'acc.role'}
-                            </Td>
-                            <Td textAlign="center">
-                                2
-                            </Td>
-                            <Td textAlign='center' gap={4}>
-                                <Button
-                                    borderRadius='full'
-                                    px={3}
-                                    colorScheme="blue"
-                                    variant='ghost'
-
-                                >
-                                    <RiRotateLockFill />
-                                </Button>
-                                <Button
-                                    borderRadius='full'
-                                    px={3}
-                                    colorScheme="red"
-                                    variant='ghost'
-
-                                >
-                                    <FaTrashCan />
-                                </Button>
-                            </Td>
-                        </Tr>
-
-                    </Tbody>
-                </Table>
-            </TableContainer>
+            <Stack w={'full'}>
+                <HStack w={'full'} justify={'flex-end'} gap={5} pr={10}>
+                    <Text
+                        fontSize={16}
+                        color="blue"
+                        cursor={'pointer'}
+                    >
+                        Create
+                    </Text>
+                    <Text
+                        fontSize={16}
+                        color="blue"
+                        cursor={'pointer'}
+                    >
+                        Delete
+                    </Text>
+                </HStack>
+                <Divider />
+                <TableContainer w='full' overflowY="auto" whiteSpace='normal'>
+                    <Table variant="simple" size="md">
+                        <Thead>
+                            <Tr>
+                                <Th textAlign='center'>Logo</Th>
+                                <Th textAlign='center'>ID</Th>
+                                <Th textAlign='center'>Clinic name</Th>
+                                <Th textAlign='center'>Owner</Th>
+                                <Th textAlign='center'>Create By</Th>
+                                <Th textAlign='center'>Last Modified</Th>
+                                <Th textAlign='center'>Last Modified By</Th>
+                                <Th textAlign='center'></Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            <Tr _hover={{ bg: '#f1f1f1' }}>
+                                <Td textAlign="center">{'logo'}</Td>
+                                <Td textAlign="center">{'1'}</Td>
+                                <Td textAlign='center'>{'name'}</Td>
+                                <Td textAlign="center">{'aaa'}</Td>
+                                <Td textAlign="center">{'bbb'}</Td>
+                                <Td textAlign='center'>{'2 days ago'}</Td>
+                                <Td textAlign='center'>{'ccc'}</Td>
+                                <Td textAlign='center' cursor={'pointer'} onClick={() => navigate('dental-detail')}>
+                                    <FaChevronRight />
+                                </Td>
+                            </Tr>
+                        </Tbody>
+                    </Table>
+                </TableContainer>
+            </Stack>
         </Stack>
     )
 }

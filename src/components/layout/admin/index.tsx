@@ -19,7 +19,7 @@ const AdminLayout = () => {
 
     return (
         <>
-            <AdminNavbar />
+            <AdminNavbar type="admin" />
             <HStack align='flex-start' mt={'96px'}>
                 <Box flex={1}>
                     <SideBar collapsed={collapsed} toggleCollapsed={toggleCollapsed} />

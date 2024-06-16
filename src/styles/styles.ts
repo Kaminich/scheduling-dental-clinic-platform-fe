@@ -12,5 +12,6 @@ export const Border = {
 };
 
 export const Shadow = {
-    cardShadow: '0 0 3px 0 rgba(0, 0, 0, 0.2)'
+    cardShadow: '0 0 3px 0 rgba(0, 0, 0, 0.2)',
+    cardShadowBottom: '0 3px 3px -3px rgba(0, 0, 0, 0.2)',
 }; 

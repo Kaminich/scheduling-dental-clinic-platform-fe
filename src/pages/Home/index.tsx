@@ -6,8 +6,15 @@ import DentalBranch from './components/dental_branch';
 import MedicalTeam from './components/medical_team';
 import { Color } from '../../styles/styles';
 import BlogsItem from '../../components/blogs_item';
+import { useEffect } from 'react';
+import { changeTabTitle } from '../../utils/changeTabTitle';
 
 const HomePage = () => {
+
+    useEffect(() => {
+        changeTabTitle('F-Dental');
+    }, []);
+
     return (
         <>
             <Slider />

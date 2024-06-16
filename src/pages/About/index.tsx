@@ -1,7 +1,14 @@
 import { Flex, HStack, Heading, Image, ListItem, Stack, Text, UnorderedList } from "@chakra-ui/react"
 import { Color } from "../../styles/styles"
+import { useEffect } from "react";
+import { changeTabTitle } from "../../utils/changeTabTitle";
 
 const AboutPage = () => {
+
+    useEffect(() => {
+        changeTabTitle('About Us');
+    }, []);
+
     return (
         <>
             <Stack
