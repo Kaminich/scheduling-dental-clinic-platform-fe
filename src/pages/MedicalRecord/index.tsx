@@ -50,8 +50,8 @@ const MedicalRecordPage = () => {
                         placeholder="Enter email"
                     />
                 </FormControl> */}
-                        <FormControl id="address" flex={2}>
-                            {/* <FormLabel ml={1}>Address</FormLabel>
+                        {/* <FormControl id="address" flex={2}> */}
+                        {/* <FormLabel ml={1}>Address</FormLabel>
                     <Input
                         type="text"
                         value={isPersonal ? 'address' : address}
@@ -59,7 +59,7 @@ const MedicalRecordPage = () => {
                         readOnly={isPersonal}
                         placeholder="Enter Address"
                     /> */}
-                        </FormControl>
+                        {/* </FormControl> */}
                         <FormControl id="dental" flex={1.5}>
                             <FormLabel ml={1}>Dental</FormLabel>
                             <Input

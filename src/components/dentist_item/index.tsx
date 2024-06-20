@@ -1,19 +1,27 @@
 import { Avatar, Button, Card, CardBody, CardFooter, HStack, Heading, Image, Stack, Text, Tooltip, useDisclosure } from "@chakra-ui/react"
 import { FaMapLocationDot, FaTooth } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppointmentModal from "../modal/appointment";
 import { Link } from "react-router-dom";
 import { Color, Shadow } from "../../styles/styles";
 import { useAuth } from "../../hooks/useAuth";
+import Dentist from "../../types/Dentist";
 
-interface Prop {
-    type: number
+interface Props {
+    type: number;
+    data: Dentist[];
 }
 
-const DentistItem = ({ type }: Prop) => {
+const DentistItem = ({ type, data }: Props) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-
+    const [dentists, setDentists] = useState<Dentist[]>([]);
     const { role } = useAuth();
+
+    useEffect(() => {
+        if (data) {
+            setDentists(data);
+        }
+    }, [data])
 
     const [dentalData, setDentalData] = useState({
         id: '1',
@@ -32,56 +40,58 @@ const DentistItem = ({ type }: Prop) => {
         <>
             {type === 1 ? (
                 <>
-                    <Card maxW='sm'>
-                        <CardBody pb={0}>
-                            <Stack align={'center'}>
-                                <Avatar
-                                    size='2xl'
-                                    name='Segun Adebayo'
-                                    src='https://bit.ly/sage-adebayo'
-                                />
-                                <Link to={'/dentist-detail'}>
-                                    <Heading
-                                        size='md'
-                                        mt={4}
-                                        _hover={{ color: Color.hoverBlue }}
-                                    >
-                                        Segun Adebayo
-                                    </Heading>
-                                </Link>
-                                <Text>Doctor</Text>
-                            </Stack>
-                            <Stack mx={3} mt={4}>
-                                <HStack>
-                                    <Tooltip label='Specialty'>
-                                        <span>
-                                            <FaTooth />
-                                        </span>
-                                    </Tooltip>
-                                    <Text>Specialty</Text>
-                                </HStack>
-                            </Stack>
-                            <Stack mx={3} mt={1}>
-                                <HStack>
-                                    <Tooltip label='Dental'>
-                                        <span>
-                                            <FaMapLocationDot />
-                                        </span>
-                                    </Tooltip>
-                                    <Link to={'/dental-detail'}>
-                                        <Text _hover={{ color: Color.hoverBlue }}>Dental</Text>
+                    {dentists.map((dentist) => (
+                        <Card maxW='sm'>
+                            <CardBody pb={0}>
+                                <Stack align={'center'}>
+                                    <Avatar
+                                        size='2xl'
+                                        name='Segun Adebayo'
+                                        src='https://bit.ly/sage-adebayo'
+                                    />
+                                    <Link to={'/dentist-detail'}>
+                                        <Heading
+                                            size='md'
+                                            mt={4}
+                                            _hover={{ color: Color.hoverBlue }}
+                                        >
+                                            {dentist.fullName}
+                                        </Heading>
                                     </Link>
-                                </HStack>
-                            </Stack>
-                        </CardBody>
-                        {(role !== 'Staff' && role !== 'Dentist') && (
-                            <CardFooter justify={'center'}>
-                                <Button variant='solid' colorScheme='green' px={10} onClick={onOpen}>
-                                    Make appointment
-                                </Button>
-                            </CardFooter>
-                        )}
-                    </Card>
+                                    <Text>Doctor</Text>
+                                </Stack>
+                                <Stack mx={3} mt={4}>
+                                    <HStack>
+                                        <Tooltip label='Specialty'>
+                                            <span>
+                                                <FaTooth />
+                                            </span>
+                                        </Tooltip>
+                                        <Text>{dentist.specialty}</Text>
+                                    </HStack>
+                                </Stack>
+                                <Stack mx={3} mt={1}>
+                                    <HStack>
+                                        <Tooltip label='Dental'>
+                                            <span>
+                                                <FaMapLocationDot />
+                                            </span>
+                                        </Tooltip>
+                                        <Link to={'/dental-detail'}>
+                                            <Text _hover={{ color: Color.hoverBlue }}>Dental</Text>
+                                        </Link>
+                                    </HStack>
+                                </Stack>
+                            </CardBody>
+                            {(role !== 'Staff' && role !== 'Dentist') && (
+                                <CardFooter justify={'center'}>
+                                    <Button variant='solid' colorScheme='green' px={10} onClick={onOpen}>
+                                        Make appointment
+                                    </Button>
+                                </CardFooter>
+                            )}
+                        </Card>
+                    ))}
                     <AppointmentModal
                         isOpen={isOpen}
                         onClose={onClose}

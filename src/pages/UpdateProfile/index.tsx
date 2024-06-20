@@ -1,5 +1,5 @@
-import { Button, Card, CardBody, FormControl, FormLabel, HStack, Image, Input, InputGroup, InputRightElement, Select, Stack } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
+import { Button, Card, CardBody, FormControl, FormLabel, HStack, Image, Input, InputGroup, InputRightElement, Select, Stack, Tooltip, useToast } from "@chakra-ui/react"
+import { FormEvent, useEffect, useState } from "react"
 import { today } from "../../components/modal/appointment";
 import { Shadow } from "../../styles/styles";
 import { FaEye, FaEyeSlash, FaPen } from "react-icons/fa6";
@@ -7,11 +7,14 @@ import { useParams } from "react-router";
 import useUserProfile from "../../hooks/useUserProfile";
 import Customer, { CustomerInit } from "../../types/Customer";
 import { changeTabTitle } from "../../utils/changeTabTitle";
+import ApiClient from "../../services/apiClient";
+import { AxiosError } from "axios";
 
 const UpdateProfilePage = () => {
-    const [fullname, setFullname] = useState<string>('');
+    const [username, setUsername] = useState<string>('');
+    const [fullName, setFullName] = useState<string>('');
     const [dob, setDob] = useState<string>('');
-    const [phone, setPhone] = useState<number | string>('');
+    const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [address, setAddress] = useState<string>('');
     const [gender, setGender] = useState<string>('');
@@ -26,7 +29,7 @@ const UpdateProfilePage = () => {
     const [userData, setUserData] = useState<Customer>(CustomerInit);
 
     const { data } = useUserProfile();
-
+    const toast = useToast();
     const param = useParams();
 
     const handleAvatarChange = (e: any) => {
@@ -45,12 +48,95 @@ const UpdateProfilePage = () => {
     }
 
     const handleResetAllChanges = () => {
-        setFullname(userData.fullName);
+        setUsername(userData.username);
+        setFullName(userData.fullName);
         setGender(userData.gender);
         setDob(userData.dob);
         setPhone(userData.phone);
         setEmail(userData.email);
         setAddress(userData.address);
+    }
+
+    const handleUpdateProfile = async (e: FormEvent) => {
+        e.preventDefault();
+        const api = new ApiClient('/auth/user-information');
+        const data: Customer = {
+            username,
+            fullName,
+            email,
+            gender,
+            phone,
+            dob,
+            address,
+            avatar
+        }
+
+        try {
+            const response: any = await api.update(data);
+            console.log(response);
+            if (response.status) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 2500,
+                    isClosable: true,
+                });
+            }
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error?.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 2500,
+                isClosable: true,
+            });
+        }
+    }
+
+    const handleUpdatePassword = async (e: FormEvent) => {
+        e.preventDefault();
+        if (newPass !== confirmPass) {
+            toast({
+                title: "Error",
+                description: "Passwords do not match.",
+                status: "error",
+                duration: 2500,
+                isClosable: true,
+            });
+            return;
+        }
+
+        const api = new ApiClient('/auth/password-change');
+        const data = {
+            oldPassword: currentPass,
+            newPassword: newPass,
+        }
+
+        try {
+            const response: any = await api.create(data);
+            console.log(response);
+            if (response.status) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 2500,
+                    isClosable: true,
+                });
+                setCurrentPass('');
+                setNewPass('');
+                setConfirmPass('');
+            }
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error?.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 2500,
+                isClosable: true,
+            });
+        }
     }
 
     useEffect(() => {
@@ -118,13 +204,28 @@ const UpdateProfilePage = () => {
                         <Card shadow={Shadow.cardShadow}>
                             <CardBody py={8}>
                                 <Stack gap={5}>
+                                    <FormControl id="username">
+                                        <FormLabel ml={1}>Username</FormLabel>
+                                        <Tooltip
+                                            label='You cannot update your username'
+                                            bg='gray.300'
+                                            color='black'
+                                            placement="bottom-start"
+                                        >
+                                            <Input
+                                                type="text"
+                                                value={userData.username}
+                                                readOnly
+                                            />
+                                        </Tooltip>
+                                    </FormControl>
                                     <HStack>
-                                        <FormControl id="fullname" flex={2.5}>
+                                        <FormControl id="fullName" flex={2.5}>
                                             <FormLabel ml={1}>Full Name</FormLabel>
                                             <Input
                                                 type="text"
-                                                value={fullname}
-                                                onChange={(e) => setFullname(e.target.value)}
+                                                value={fullName}
+                                                onChange={(e) => setFullName(e.target.value)}
                                                 placeholder={'Enter full name'}
                                             />
                                         </FormControl>
@@ -197,6 +298,7 @@ const UpdateProfilePage = () => {
                                 colorScheme={"blue"}
                                 variant={"solid"}
                                 flex={1}
+                                onClick={handleUpdateProfile}
                             >
                                 Save changes
                             </Button>
@@ -209,7 +311,7 @@ const UpdateProfilePage = () => {
                         <CardBody py={10}>
                             <Stack gap={6}>
                                 <FormControl id="current-pass" isRequired>
-                                    <FormLabel>Current password</FormLabel>
+                                    <FormLabel>Current Password</FormLabel>
                                     <InputGroup>
                                         <Input
                                             type={showCurrent ? 'text' : 'password'}
@@ -223,7 +325,7 @@ const UpdateProfilePage = () => {
                                     </InputGroup>
                                 </FormControl>
                                 <FormControl id="new-pass" isRequired>
-                                    <FormLabel>New password</FormLabel>
+                                    <FormLabel>New Password</FormLabel>
                                     <InputGroup>
                                         <Input
                                             type={showNew ? 'text' : 'password'}
@@ -237,7 +339,7 @@ const UpdateProfilePage = () => {
                                     </InputGroup>
                                 </FormControl>
                                 <FormControl id="confirm-new-pass" isRequired>
-                                    <FormLabel>Confirm new password</FormLabel>
+                                    <FormLabel>Confirm New Password</FormLabel>
                                     <InputGroup>
                                         <Input
                                             type={showConfirm ? 'text' : 'password'}
@@ -255,6 +357,11 @@ const UpdateProfilePage = () => {
                     <HStack spacing={6} mt={5} w={'full'}>
                         <Button
                             flex={1}
+                            onClick={() => {
+                                setCurrentPass('');
+                                setNewPass('');
+                                setConfirmPass('');
+                            }}
                         >
                             Reset change
                         </Button>
@@ -262,6 +369,7 @@ const UpdateProfilePage = () => {
                             colorScheme={"blue"}
                             variant={"solid"}
                             flex={1}
+                            onClick={handleUpdatePassword}
                         >
                             Save change
                         </Button>

@@ -20,7 +20,7 @@ const BlogDetailPage = () => {
                 w={'full'}
             />
             <Text>Blog Content</Text>
-            {role === 'Customer' && (
+            {role !== 'Staff' && role !== 'Admin' && role !== 'Owner' && (
                 <Stack>
                     <Heading
                         textAlign={'center'}

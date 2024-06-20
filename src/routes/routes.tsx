@@ -31,6 +31,11 @@ import MessagePage from "../pages/Message";
 import ViewSchedulePage from "../pages/ViewSchedule";
 import ManageAppointmentPage from "../pages/ManageAppointment";
 import MedicalRecordPage from "../pages/MedicalRecord";
+import ApproveDentistPage from "../pages/DentalClinicSettings/ApproveDentist";
+import ApproveStaffPage from "../pages/DentalClinicSettings/ApproveStaff";
+import CreateDentistPage from "../pages/AccountSettings/CreateDentist";
+import CreateStaffPage from "../pages/AccountSettings/CreateStaff";
+import CreateBlogPage from "../pages/BlogSettings/CreateBlog";
 
 const routes = [
     {
@@ -62,20 +67,40 @@ const routes = [
                 element: <MessagePage />
             },
             {
-                path: "administration/dentals/manage-dental/dental-detail",
+                path: "administrator/dentals/manage-dental/dental-detail",
                 element: <ClinicDentailSettings />
             },
             {
-                path: "administration/blogs/appprove-blog/blog-detail",
+                path: "administrator/dentals/dental-detail",
+                element: <ClinicDentailSettings />
+            },
+            {
+                path: "administrator/blogs/appprove-blog/blog-detail",
                 element: <BlogDetailPage />
             },
             {
-                path: "administration/blogs/manage-blog/blog-detail",
+                path: "administrator/blogs/manage-blog/blog-detail",
                 element: <BlogDetailPage />
+            },
+            {
+                path: "administrator/blogs/blog-detail",
+                element: <BlogDetailPage />
+            },
+            {
+                path: "administrator/accounts/create-dentist",
+                element: <CreateDentistPage />
+            },
+            {
+                path: "administrator/accounts/create-staff",
+                element: <CreateStaffPage />
             },
             {
                 path: "manage-blog/blog-detail",
                 element: <BlogDetailPage />
+            },
+            {
+                path: "manage-blog/create-blog",
+                element: <CreateBlogPage />
             },
         ],
     },
@@ -102,7 +127,7 @@ const routes = [
         ],
     },
     {
-        path: "/administration",
+        path: "/administrator",
         element: <AdminLayout />,
         children: [
             { index: true, element: <Navigate to={'dashboard'} /> },
@@ -110,6 +135,8 @@ const routes = [
             { path: "accounts", element: <AccountSettings /> },
             { path: "dentals/approve-dental", element: <ApproveDentalClinicPage /> },
             { path: "dentals/manage-dental", element: <ManageDentalClinicPage /> },
+            { path: "dentals/approve-dentist", element: <ApproveDentistPage /> },
+            { path: "dentals/approve-staff", element: <ApproveStaffPage /> },
             { path: "feedbacks", element: <FeedbackSettingPage /> },
             { path: "blogs/approve-blog", element: <ApproveBlogPage /> },
             { path: "blogs/manage-blog", element: <ManageBlogPage /> },

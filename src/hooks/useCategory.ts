@@ -8,13 +8,13 @@ interface Prop {
     data?: Category;
 }
 
-const useService = ({ type, id, data }: Prop) => {
+const useCategory = ({ type, id, data }: Prop) => {
     const api = new ApiClient<any>('/category');
     if (type === 'get') {
         return useQuery({
             queryKey: ["getCategory"],
             queryFn: () =>
-                api.getAuthen()
+                api.getUnauthen()
                     .then((data) => {
                         return data.data;
                     })
@@ -50,4 +50,4 @@ const useService = ({ type, id, data }: Prop) => {
 
 };
 
-export default useService;
+export default useCategory;

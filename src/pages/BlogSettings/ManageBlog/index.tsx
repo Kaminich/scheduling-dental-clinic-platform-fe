@@ -5,6 +5,7 @@ import { BsSearch } from "react-icons/bs";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 const ManageBlogPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -34,13 +35,15 @@ const ManageBlogPage = () => {
             </InputGroup>
             <Stack w={'full'}>
                 <HStack w={'full'} justify={'flex-end'} gap={5} pr={10}>
-                    <Text
-                        fontSize={16}
-                        color="blue"
-                        cursor={'pointer'}
-                    >
-                        Create
-                    </Text>
+                    <Link to={'create-blog'}>
+                        <Text
+                            fontSize={16}
+                            color="blue"
+                            cursor={'pointer'}
+                        >
+                            Create
+                        </Text>
+                    </Link>
                     <Text
                         fontSize={16}
                         color="blue"

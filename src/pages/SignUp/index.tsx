@@ -148,7 +148,7 @@ const SignUpPage = () => {
                     </HStack>
                     <HStack>
                         <FormControl id="fullName" flex={2} isRequired>
-                            <FormLabel pl={1}>FullName</FormLabel>
+                            <FormLabel pl={1}>Full Name</FormLabel>
                             <Input
                                 type="text"
                                 value={fullName}
@@ -177,7 +177,7 @@ const SignUpPage = () => {
                             />
                         </FormControl>
                         <FormControl id="phone" flex={1} isRequired>
-                            <FormLabel pl={1}>Phone number</FormLabel>
+                            <FormLabel pl={1}>Phone Number</FormLabel>
                             <Input
                                 type="tel"
                                 value={phone}

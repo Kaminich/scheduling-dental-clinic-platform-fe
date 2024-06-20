@@ -58,13 +58,13 @@ const adminMenuItems: MenuItem[] = [
                 , <FaPenToSquare />
             ),
             getItem(
-                <Link to={'/menu/manage'} style={{ fontSize: '17px' }}>Approve Dentist</Link>
+                <Link to={'dentals/approve-dentist'} style={{ fontSize: '17px' }}>Approve Dentist</Link>
 
                 , '5'
                 , <FaUserDoctor />
             ),
             getItem(
-                <Link to={'/menu/manage'} style={{ fontSize: '17px' }}>Approve Clinic Staff</Link>
+                <Link to={'dentals/approve-staff'} style={{ fontSize: '17px' }}>Approve Clinic Staff</Link>
 
                 , '6'
                 , <FaUserNurse />
@@ -163,8 +163,8 @@ const SideBar = ({ collapsed, toggleCollapsed }: SideBarProps) => {
                         defaultSelectedKeys={['1']}
                         mode="inline"
                         inlineCollapsed={collapsed}
-                        // items={data?.role === 'ADMIN' ? adminMenuItems : clinicOwnerMenuItems}
-                        items={adminMenuItems}
+                        items={data?.role === 'ADMIN' ? adminMenuItems : clinicOwnerMenuItems}
+                        // items={clinicOwnerMenuItems}
                         style={{
                             border: 'none',
                             height: `calc(${windowHeight}px - 152px)`,

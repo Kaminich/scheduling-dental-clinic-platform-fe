@@ -8,7 +8,7 @@ interface Prop {
     data?: Dentist;
 }
 
-const useDentists = ({ type, id, data }: Prop) => {
+const useStaffs = ({ type, id, data }: Prop) => {
     const api = new ApiClient<any>('/staff');
     if (type === 'get') {
         return useQuery({
@@ -59,4 +59,4 @@ const useDentists = ({ type, id, data }: Prop) => {
 
 };
 
-export default useDentists;
+export default useStaffs;
