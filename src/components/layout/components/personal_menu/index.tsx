@@ -40,7 +40,7 @@ const PersonalMenu = () => {
                                 {data?.role === 'CUSTOMER' ? (
                                     <Text fontWeight={600}>{data?.fullName}</Text>
                                 ) : (
-                                    <Text fontWeight={600} textAlign={'center'} flex={1}>{`Welcome back, ${data?.username}`}</Text>
+                                    <Text fontWeight={600} textAlign={'center'} flex={1}>{`Welcome back, ${data?.fullName || data?.username}`}</Text>
                                 )}
                             </Flex>
                             {data?.role === 'CUSTOMER' && (
@@ -259,7 +259,7 @@ const PersonalMenu = () => {
                             </Button>
                             <Heading mt={-1} fontSize={24} textAlign={'center'}>Settings</Heading>
                         </Flex>
-                        {(data?.role !== 'ADMIN' && data?.role !== 'OWNER') && (
+                        {data?.role !== 'ADMIN' && (
                             <MenuItem
                                 maxW={'95%'}
                                 borderRadius={10}

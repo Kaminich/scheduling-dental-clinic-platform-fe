@@ -2,8 +2,14 @@ import { SimpleGrid } from "@chakra-ui/react"
 import DentistItem from "../../components/dentist_item"
 import { useEffect } from "react";
 import { changeTabTitle } from "../../utils/changeTabTitle";
+import useDentists from "../../hooks/useDentists";
 
 const DentistPage = () => {
+
+    const { data } = useDentists({ type: 'get', id: 0 });
+
+    console.log(data);
+
 
     useEffect(() => {
         changeTabTitle('Dentist');
@@ -19,13 +25,7 @@ const DentistPage = () => {
             mx={'auto'}
             py={8}
         >
-            <DentistItem type={1} />
-            <DentistItem type={1} />
-            <DentistItem type={1} />
-            <DentistItem type={1} />
-            <DentistItem type={1} />
-            <DentistItem type={1} />
-            <DentistItem type={1} />
+            <DentistItem type={1} data={data?.content} />
         </SimpleGrid>
     )
 }

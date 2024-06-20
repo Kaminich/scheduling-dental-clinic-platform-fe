@@ -30,7 +30,7 @@ const LoginPage = () => {
         e.preventDefault();
 
         const data = {
-            usernameOrEmail: username,
+            username,
             password,
         };
 
@@ -56,7 +56,7 @@ const LoginPage = () => {
                 if (decodedRole === 'Customer' || decodedRole === 'Staff' || decodedRole === 'Dentist') {
                     navigate('/');
                 } else if (decodedRole === 'Admin' || decodedRole === 'Owner') {
-                    navigate('/administration');
+                    navigate('/administrator');
                 }
             }
         } catch (error) {

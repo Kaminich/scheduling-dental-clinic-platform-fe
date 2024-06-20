@@ -4,26 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { Shadow } from "../../../styles/styles";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
-import usePendingClinics from "../../../hooks/usePendingClinics";
+import usePendingDentists from "../../../hooks/usePendingDentists";
 
-const ApproveDentalClinicPage = () => {
+const ApproveDentistPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
-    const [clinics, setClinics] = useState<string>('');
-    const { data } = usePendingClinics();
+    const { data } = usePendingDentists();
+
+    console.log();
+
 
     useEffect(() => {
-        changeTabTitle('Approve Dental Clinic');
+        changeTabTitle('Approve Dentist');
     }, []);
-
-    useEffect(() => {
-        if (data) {
-            setClinics(data);
-        }
-    }, [data]);
-
-    console.log(clinics);
-
 
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
@@ -47,7 +40,7 @@ const ApproveDentalClinicPage = () => {
                         <HStack justify={'space-between'} align={'center'}>
                             <Stack gap={5} flex={3.7}>
                                 <HStack justify={'space-between'} minW={'full'} pr={5}>
-                                    <Text>Dental Clinic ID: </Text>
+                                    <Text>Dentist ID: </Text>
                                     <HStack gap={4}>
                                         <Text>Status:</Text>
                                         <Text>Pending</Text>
@@ -55,8 +48,8 @@ const ApproveDentalClinicPage = () => {
                                 </HStack>
                                 <Stack>
                                     <Text>Dental Clinic: </Text>
-                                    <Text>Clinic Owner: </Text>
-                                    <Text>Dental Clinic Detail: </Text>
+                                    <Text>Branch: </Text>
+                                    <Text>Dentist Detail: </Text>
                                 </Stack>
                             </Stack>
                             <HStack gap={8} h={'135px'} flex={1}>
@@ -81,4 +74,4 @@ const ApproveDentalClinicPage = () => {
     )
 }
 
-export default ApproveDentalClinicPage
+export default ApproveDentistPage

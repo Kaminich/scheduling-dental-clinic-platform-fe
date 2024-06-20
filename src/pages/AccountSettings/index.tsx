@@ -1,9 +1,10 @@
-import { Button, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
-import { FaTrashCan } from "react-icons/fa6";
+import { Button, Divider, HStack, Input, InputGroup, InputLeftElement, Menu, MenuButton, MenuItem, MenuList, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import { FaTrashCan, FaUserDoctor, FaUserNurse } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { RiRotateLockFill } from "react-icons/ri";
 import { changeTabTitle } from "../../utils/changeTabTitle";
+import { Link } from "react-router-dom";
 
 const AccountSettings = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -31,7 +32,13 @@ const AccountSettings = () => {
             </InputGroup>
             <Stack w={'full'}>
                 <HStack w={'full'} justify={'flex-end'} gap={5} pr={10}>
-                    <Text fontSize={16} color="blue">Create</Text>
+                    <Menu autoSelect={false} isLazy>
+                        <MenuButton fontSize={16} color="blue">Create</MenuButton>
+                        <MenuList minW={36}>
+                            <MenuItem as={Link} to={'create-dentist'} gap={4}><FaUserDoctor /> Dentist</MenuItem>
+                            <MenuItem as={Link} to={'create-staff'} gap={4}><FaUserNurse /> Staff</MenuItem>
+                        </MenuList>
+                    </Menu>
                 </HStack>
                 <Divider />
                 <TableContainer w='full' overflowY="auto" whiteSpace='normal'>

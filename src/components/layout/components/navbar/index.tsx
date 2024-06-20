@@ -63,7 +63,7 @@ const Navbar = () => {
                             Blog
                         </Link>
                     </Text>
-                    {role === 'Customer' && (
+                    {role !== 'Dentist' && role !== 'Staff' && (
                         <Text>
                             <Link to={'partner-register'}>
                                 Partner registration
@@ -74,9 +74,9 @@ const Navbar = () => {
                 {isAuthenticated ? (
                     <HStack>
                         <Notification />
-                        {/* {role === 'Staff' && ( */}
-                        <MessageMenu />
-                        {/* )} */}
+                        {role === 'Staff' && (
+                            <MessageMenu />
+                        )}
                         <PersonalMenu />
                     </HStack>
                 ) : (

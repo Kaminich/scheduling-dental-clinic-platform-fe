@@ -37,13 +37,6 @@ const ManageDentalClinicPage = () => {
                         color="blue"
                         cursor={'pointer'}
                     >
-                        Create
-                    </Text>
-                    <Text
-                        fontSize={16}
-                        color="blue"
-                        cursor={'pointer'}
-                    >
                         Delete
                     </Text>
                 </HStack>
