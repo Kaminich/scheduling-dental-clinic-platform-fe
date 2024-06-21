@@ -1,10 +1,16 @@
 import { Heading, Image, SimpleGrid, Stack, Text } from "@chakra-ui/react"
 import BlogsItem from "../../components/blogs_item"
 import { useAuth } from "../../hooks/useAuth";
+import { useEffect } from "react";
+import { changeTabTitle } from "../../utils/changeTabTitle";
 
 const BlogDetailPage = () => {
-
     const { role } = useAuth();
+
+    useEffect(() => {
+        changeTabTitle('Blog Detail');
+    }, []);
+
     return (
         <Stack w={'6xl'} m={'auto'} gap={10} mb={8}>
             <Stack>

@@ -1,14 +1,162 @@
-import { Button, Card, CardBody, Divider, FormControl, FormLabel, HStack, Heading, Input, Stack, Text } from "@chakra-ui/react"
-import { useEffect, useState } from "react";
+import { Button, Card, CardBody, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, Stack, Text, useToast } from "@chakra-ui/react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Color, Shadow } from "../../styles/styles";
 import { changeTabTitle } from "../../utils/changeTabTitle";
+import { FaPen, FaUpload } from "react-icons/fa6";
+import axios from "axios";
+import ApiClient from "../../services/apiClient";
 
 const PartnerRegisterPage = () => {
-    const [dentalName, setDentalName] = useState<string>('');
-    const [ownerName, setOwnerName] = useState<string>('');
-    const [phone, setPhone] = useState<number | string>('');
-    const [email, setEmail] = useState<string>('');
+    const [clinicName, setClinicName] = useState<string>('');
+    const [clinicPhone, setClinicPhone] = useState<string>('');
     const [address, setAddress] = useState<string>('');
+    const [city, setCity] = useState<string>('');
+    const [clinicRegistration, setClinicRegistration] = useState<File | null>(null);
+    const [websiteUrl, setWebsiteUrl] = useState<string>('');
+    const [clinicImage, setClinicImage] = useState<string>('');
+    const [clinicImageData, setClinicImageData] = useState<File | null>(null);
+    const [fullName, setFullName] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const toast = useToast();
+
+    const resetAllField = () => {
+        setClinicName('');
+        setClinicPhone('');
+        setAddress('');
+        setCity('');
+        setClinicRegistration(null);
+        setWebsiteUrl('');
+        setClinicImage('');
+        setClinicImageData(null);
+        setFullName('');
+        setPhone('');
+        setEmail('');
+    }
+
+    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = e.target.files?.[0];
+        console.log(selectedFile);
+
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const imageUrl = URL.createObjectURL(selectedFile);
+                setClinicImage(imageUrl);
+            };
+            reader.readAsDataURL(selectedFile);
+            setClinicImageData(selectedFile);
+        }
+    }
+
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setClinicRegistration(file);
+        }
+    };
+
+    const handleSendInfo = async (e: FormEvent) => {
+        e.preventDefault();
+        let imageUrl: string = '';
+        let fileUrl: string = '';
+
+        if (clinicImageData) {
+            const formDataImage = new FormData();
+            formDataImage.append("file", clinicImageData);
+            formDataImage.append("upload_preset", "z5r1wkcn");
+
+            try {
+                const response = await axios.post(
+                    `https://api.cloudinary.com/v1_1/dy1t2fqsc/image/upload`,
+                    formDataImage
+                );
+                imageUrl = response.data.secure_url;
+                console.log("Cloudinary image URL:", imageUrl);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        if (clinicRegistration) {
+            const formDataFile = new FormData();
+            formDataFile.append("file", clinicRegistration);
+            formDataFile.append("upload_preset", "z5r1wkcn");
+            formDataFile.append("filename_override", clinicRegistration.name);
+
+            try {
+                const response = await axios.post(
+                    `https://api.cloudinary.com/v1_1/dy1t2fqsc/auto/upload`,
+                    formDataFile
+                );
+                fileUrl = response.data.secure_url;
+                console.log("Cloudinary file URL:", fileUrl);
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            toast({
+                title: "Error",
+                description: "Clinic Registration must be uploaded",
+                status: "error",
+                duration: 2500,
+                isClosable: true,
+            });
+            return;
+        }
+
+        if (!imageUrl || !fileUrl) {
+            toast({
+                title: "Error",
+                description: "Failed to upload images or files",
+                status: "error",
+                duration: 2500,
+                isClosable: true,
+            });
+            return;
+        }
+
+        const api = new ApiClient<any>('/clinics/registration');
+        const data = {
+            clinicName,
+            address,
+            city,
+            clinicPhone,
+            clinicRegistration: fileUrl,
+            websiteUrl,
+            clinicImage: imageUrl,
+            ownerInformation: {
+                fullName,
+                email,
+                phone
+            }
+        }
+
+        try {
+            const response = await api.postUnauthen(data);
+            console.log(response);
+            if (response.data.success === true) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 2500,
+                    isClosable: true,
+                });
+                resetAllField();
+            }
+        } catch (error: any) {
+            if (error) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    isClosable: true,
+                });
+            }
+        }
+    }
 
     useEffect(() => {
         changeTabTitle('Partner Registration');
@@ -34,15 +182,15 @@ const PartnerRegisterPage = () => {
                     <Text fontSize={24}>Description</Text>
                 </Stack>
             </Stack>
-            <HStack w={'6xl'} m={'auto'} my={8} align={'flex-start'} justify={'space-between'}>
-                <Stack maxW={'3xl'} mt={5}>
+            <HStack w={'7xl'} m={'auto'} my={8} align={'flex-start'} justify={'space-between'}>
+                <Stack flex={1} mt={5}>
                     <Heading fontSize={32}>Become a partner of F-Dental</Heading>
                     <Text fontSize={24}>Please fill this form</Text>
                     <Text fontSize={72}>{'->'}</Text>
                 </Stack>
-                <Card maxW={'lg'} shadow={Shadow.cardShadow}>
+                <Card flex={1} shadow={Shadow.cardShadow}>
                     <CardBody py={12}>
-                        <Stack gap={6}>
+                        <Stack gap={4}>
                             <Heading
                                 fontSize={"2xl"}
                                 textAlign={'center'}
@@ -52,29 +200,127 @@ const PartnerRegisterPage = () => {
                             >
                                 Partner Registration
                             </Heading>
-                            <FormControl id="dental-name" flex={2} isRequired>
-                                <FormLabel pl={1}>Dental Name</FormLabel>
+                            <Heading fontSize={18}>Clinic Information</Heading>
+                            <FormControl id="clinicimage">
+                                <FormLabel pl={1}>Clinic Logo</FormLabel>
+                                <HStack w={'full'} justify={'center'} align={'flex-end'}>
+                                    <Image
+                                        border='1px solid gainsboro'
+                                        borderRadius='full'
+                                        boxSize={'10rem'}
+                                        src={
+                                            clinicImage || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
+                                        }
+                                        alt='logo'
+                                        bgColor='white'
+                                    />
+                                    <FormLabel
+                                        htmlFor="logo"
+                                        cursor='pointer'
+                                        fontSize='md'
+                                        ml={-8}
+                                    >
+                                        <FaPen />
+                                    </FormLabel>
+                                    <Input
+                                        type="file"
+                                        id="logo"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        display='none'
+                                    />
+                                </HStack>
+                            </FormControl>
+                            <FormControl id="clinicname" isRequired>
+                                <FormLabel pl={1}>Clinic Name</FormLabel>
                                 <Input
                                     type="text"
-                                    value={dentalName}
-                                    onChange={(e) => setDentalName(e.target.value)}
-                                    placeholder="Dental Name"
+                                    value={clinicName}
+                                    onChange={(e) => setClinicName(e.target.value)}
+                                    placeholder="Clinic Name"
+                                    required
+                                />
+                            </FormControl>
+                            <FormControl id="address" isRequired>
+                                <FormLabel pl={1}>Address</FormLabel>
+                                <Input
+                                    type="text"
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                    placeholder="Clinic Address"
                                     required
                                 />
                             </FormControl>
                             <HStack>
-                                <FormControl id="owner-name" flex={2} isRequired>
-                                    <FormLabel pl={1}>Owner Name</FormLabel>
+                                <FormControl id="city" flex={1} isRequired>
+                                    <FormLabel pl={1}>City</FormLabel>
                                     <Input
                                         type="text"
-                                        value={ownerName}
-                                        onChange={(e) => setOwnerName(e.target.value)}
-                                        placeholder="Owner Name"
+                                        value={city}
+                                        onChange={(e) => setCity(e.target.value)}
+                                        placeholder="Clinic City"
+                                        required
+                                    />
+                                </FormControl>
+                                <FormControl id="clinicphone" flex={1} isRequired>
+                                    <FormLabel pl={1}>Clinic Phone Number</FormLabel>
+                                    <Input
+                                        type="tel"
+                                        value={clinicPhone}
+                                        onChange={(e) => setClinicPhone(e.target.value)}
+                                        placeholder="Clinic Phone Number"
+                                        required
+                                    />
+                                </FormControl>
+                            </HStack>
+                            <FormControl id="clinicregistration" flex={1} isRequired>
+                                <FormLabel pl={1}>Clinic Registration</FormLabel>
+                                <HStack justify={'center'} mt={4} mb={-4}>
+                                    <Button
+                                        as={FormLabel}
+                                        leftIcon={<FaUpload />}
+                                        requiredIndicator
+                                        htmlFor="registration"
+                                        colorScheme="teal"
+                                        variant={'outline'}
+                                        cursor={'pointer'}
+                                    >
+                                        {clinicRegistration?.name || 'Upload File'}
+                                    </Button>
+                                    <Input
+                                        type="file"
+                                        id="registration"
+                                        onChange={handleFileChange}
+                                        placeholder="Clinic Registration"
+                                        required
+                                        display={'none'}
+                                    />
+                                </HStack>
+                            </FormControl>
+                            <FormControl id="websiteurl" flex={1}>
+                                <FormLabel pl={1}>Website Url</FormLabel>
+                                <Input
+                                    type="url"
+                                    value={websiteUrl}
+                                    onChange={(e) => setWebsiteUrl(e.target.value)}
+                                    placeholder="Website Url"
+                                    required
+                                />
+                            </FormControl>
+                            <Heading fontSize={18}>Owner Information</Heading>
+                            <HStack>
+                                <FormControl id="fullName" flex={2} isRequired>
+                                    <FormLabel pl={1}>Full Name</FormLabel>
+                                    <Input
+                                        type="text"
+                                        value={fullName}
+                                        onChange={(e) => setFullName(e.target.value)}
+                                        placeholder="Full Name"
                                         required
                                     />
                                 </FormControl>
                                 <FormControl id="phone" flex={1} isRequired>
-                                    <FormLabel pl={1}>Phone number</FormLabel>
+                                    <FormLabel pl={1}>Phone Number</FormLabel>
                                     <Input
                                         type="tel"
                                         value={phone}
@@ -94,20 +340,12 @@ const PartnerRegisterPage = () => {
                                     required
                                 />
                             </FormControl>
-                            <FormControl id="address" isRequired>
-                                <FormLabel pl={1}>Address</FormLabel>
-                                <Input
-                                    type="text"
-                                    value={address}
-                                    onChange={(e) => setAddress(e.target.value)}
-                                    placeholder="Dental Address"
-                                    required
-                                />
-                            </FormControl>
                             <Button
                                 bg={Color.greenBlue}
                                 color={'white'}
                                 _hover={{ bg: Color.hoverGreenBlue }}
+                                mt={4}
+                                onClick={handleSendInfo}
                             >
                                 Send information
                             </Button>

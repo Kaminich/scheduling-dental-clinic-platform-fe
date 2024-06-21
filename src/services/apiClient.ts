@@ -82,6 +82,12 @@ class ApiClient<T> {
             .then((res) => res.data)
     }
 
+    createWithId = (id: number, config?: AxiosRequestConfig) => {
+        return axiosInstance
+            .post<T>(this.endpoint + '/' + id, this.setAuthHeader(config))
+            .then((res) => res.data)
+    }
+
     update = (data: T, config?: AxiosRequestConfig) => {
         return axiosInstance
             .put<T>(this.endpoint, data, this.setAuthHeader(config))
