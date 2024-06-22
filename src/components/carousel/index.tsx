@@ -4,12 +4,16 @@ import 'owl.carousel/dist/assets/owl.theme.default.css';
 import ServiceItem from "../service_item";
 import DentistItem from "../dentist_item";
 import { Container } from "@chakra-ui/react";
+import useCategory from "../../hooks/useCategory";
 
 interface Prop {
     type: string
 }
 
 const CustomCarousel = ({ type }: Prop) => {
+    // const { data } = useCategory({ type: 'get', id: 0 });
+    // console.log(data);
+
 
     return (
         <OwlCarousel

@@ -1,15 +1,17 @@
-import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, InputGroup, InputRightElement, Stack, Text, useToast } from "@chakra-ui/react"
+import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Icon, Image, Input, InputGroup, InputRightElement, Stack, Text, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Logo from "../../components/logo";
 import { Link, useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 import ApiClient from "../../services/apiClient";
 import { useAuth } from "../../hooks/useAuth";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import { AxiosError } from "axios";
 import { jwtDecode } from "jwt-decode";
 import { formatRoleString } from "../../utils/formatRoleString";
+import { FcGoogle } from "react-icons/fc";
+import { Border } from "../../styles/styles";
 
 interface DecodeJWTRole {
     role: string;
@@ -23,6 +25,19 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     const { setIsAuthenticated, setRole } = useAuth();
+    const googleLogin = useGoogleLogin({
+        onSuccess: (token) => console.log(token),
+        onError: (error) => {
+            console.log(error);
+            toast({
+                title: "Sign In Error",
+                description: "Sign in by Google failed. Try again!!!",
+                status: "error",
+                duration: 2500,
+                isClosable: true,
+            });
+        }
+    })
 
     const api = new ApiClient<any>('/auth/login');
 
@@ -72,13 +87,6 @@ const LoginPage = () => {
                 });
             }
         }
-    };
-
-    const responseMessage = (response: any) => {
-        console.log(response);
-    };
-    const errorMessage = (error: any) => {
-        console.log(error);
     };
 
     useEffect(() => {
@@ -131,13 +139,15 @@ const LoginPage = () => {
                             </AbsoluteCenter>
                         </Box>
                         <HStack w={'full'} justify={'center'}>
-                            <GoogleLogin
-                                onSuccess={responseMessage}
-                                width={'400'}
-                                size="large"
-                                shape="pill"
-                                locale="EN"
-                            />
+                            <Button
+                                leftIcon={<Icon as={FcGoogle} />}
+                                bg={'white'}
+                                border={Border.tableBorder}
+                                size="lg"
+                                onClick={() => googleLogin()}
+                            >
+                                Sign in with Google
+                            </Button>
                         </HStack>
                         <HStack gap={2} justify={'center'}>
                             <Text align={"center"}>

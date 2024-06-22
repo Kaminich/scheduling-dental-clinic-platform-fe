@@ -1,12 +1,14 @@
-import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, InputGroup, InputRightElement, Select, Stack, Text, useToast } from "@chakra-ui/react"
+import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Icon, Image, Input, InputGroup, InputRightElement, Select, Stack, Text, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Logo from "../../components/logo";
 import { Link, useNavigate } from "react-router-dom";
 import { today } from "../../components/modal/appointment";
-import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 import ApiClient from "../../services/apiClient";
 import { changeTabTitle } from "../../utils/changeTabTitle";
+import { FcGoogle } from "react-icons/fc";
+import { Border } from "../../styles/styles";
 
 const SignUpPage = () => {
     const [username, setUsername] = useState<string>('');
@@ -21,6 +23,19 @@ const SignUpPage = () => {
     const toast = useToast();
     const [showPass, setShowPass] = useState<boolean>(false);
     const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
+    const googleSignup = useGoogleLogin({
+        onSuccess: (token) => console.log(token),
+        onError: (error) => {
+            console.log(error);
+            toast({
+                title: "Sign Up Error",
+                description: "Sign up by Google failed. Try again!!!",
+                status: "error",
+                duration: 2500,
+                isClosable: true,
+            });
+        }
+    })
 
     const navigate = useNavigate();
 
@@ -238,14 +253,15 @@ const SignUpPage = () => {
                             </AbsoluteCenter>
                         </Box>
                         <HStack w={'full'} justify={'center'} mb={2}>
-                            <GoogleLogin
-                                onSuccess={responseMessage}
-                                width={'400'}
-                                text="signup_with"
-                                size="large"
-                                shape="pill"
-                                locale="EN"
-                            />
+                            <Button
+                                leftIcon={<Icon as={FcGoogle} />}
+                                bg={'white'}
+                                border={Border.tableBorder}
+                                size="lg"
+                                onClick={() => googleSignup()}
+                            >
+                                Sign up with Google
+                            </Button>
                         </HStack>
                     </Stack>
                     <HStack gap={2} justify={'center'}>
