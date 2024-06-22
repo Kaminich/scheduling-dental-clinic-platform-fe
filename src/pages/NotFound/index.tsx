@@ -14,14 +14,8 @@ const NotFoundPage = () => {
     }, []);
 
     useEffect(() => {
-        if (role === 'Admin') {
-            setNavigate('/admin');
-        } else if (role === 'Owner') {
-            setNavigate('/owner');
-        } else if (role === 'Staff') {
-            setNavigate('/staff');
-        } else if (role === 'Dentist') {
-            setNavigate('/dentist');
+        if (role === 'Admin' || role === 'Owner') {
+            setNavigate('/administrator');
         } else {
             setNavigate('/');
         }

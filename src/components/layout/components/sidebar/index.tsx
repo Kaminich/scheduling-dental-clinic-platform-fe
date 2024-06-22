@@ -136,7 +136,7 @@ const SideBar = ({ collapsed, toggleCollapsed }: SideBarProps) => {
     const windowHeight = window.innerHeight;
 
     return (
-        <Box bg={Color.blue_100} pt={2} pos={'fixed'} zIndex={9999}>
+        <Box bg={Color.blue_100} pt={2} pos={'fixed'} zIndex={10}>
             <HStack justify='flex-end' mr={4}>
                 <Button
                     colorScheme='blue'

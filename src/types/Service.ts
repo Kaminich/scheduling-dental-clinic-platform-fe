@@ -15,9 +15,7 @@ export default interface Service {
     maximumPrice: number,
     type: string,
     status: Status
-    createBy: string,
     createDate: string,
-    lastModifiedBy: string,
     lastModifiedDate: string,
     categoryId: Category["id"],
     clinicId: Clinic["id"],

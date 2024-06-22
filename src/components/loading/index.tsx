@@ -3,7 +3,7 @@ import { Flex, Spinner, Text } from "@chakra-ui/react"
 const Loading = () => {
     return (
         <Flex
-            h={{ base: '35vh', md: '25vh', lg: '85vh' }}
+            m={'auto'}
             gap={10}
             align='center'
             justify='center'

@@ -6,9 +6,7 @@ export default interface Slot {
     startTime: string,
     endTime: string,
     slotDate: string,
-    createBy: string,
     createDate: string,
-    lastModifiedBy: string,
     lastModifiedDate: string,
     status: boolean,
     brandId: Branch['id']

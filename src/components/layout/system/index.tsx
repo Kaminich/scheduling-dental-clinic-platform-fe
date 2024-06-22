@@ -7,9 +7,9 @@ import NotFoundPage from "../../../pages/NotFound"
 const SystemLayout = () => {
     const { isAuthenticated } = useAuth();
 
-    // if (!isAuthenticated) {
-    //     return <NotFoundPage />
-    // }
+    if (!isAuthenticated) {
+        return <NotFoundPage />
+    }
 
     return (
         <>

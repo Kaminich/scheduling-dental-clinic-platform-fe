@@ -1,7 +1,7 @@
 import ClinicOwner from "./ClinicOwner";
 
 export default interface Clinic extends ClinicOwner {
-    id: number,
+    clinicId: number,
     clinicName: string,
     address: string,
     city: string,
@@ -10,7 +10,6 @@ export default interface Clinic extends ClinicOwner {
     description: string,
     logo: URL,
     totalRating: number,
-    createBy: string,
     createDate: string,
     lastModifiedBy: string,
     lastModifiedDate: string,

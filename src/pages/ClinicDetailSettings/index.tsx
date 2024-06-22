@@ -2,14 +2,25 @@ import { Button, Card, Divider, HStack, Heading, Image, Stack, Text } from "@cha
 import { Shadow } from "../../styles/styles"
 import WorkingHours from "../DentalDetail/components/working_hours"
 import DentalDetailBranch from "../DentalDetail/components/branch"
+import { useAuth } from "../../hooks/useAuth"
+import { useEffect } from "react"
+import { changeTabTitle } from "../../utils/changeTabTitle"
 
 const ClinicDentailSettings = () => {
+    const { role } = useAuth();
+
+    useEffect(() => {
+        changeTabTitle('Clinic Dental Settings');
+    }, []);
+
     return (
         <Stack>
-            <HStack justify={'flex-end'} m={6} mb={0}>
-                <Button colorScheme="blue">Edit</Button>
-            </HStack>
-            <HStack align={'center'}>
+            {role === 'Owner' && (
+                <HStack justify={'flex-end'} m={6} mb={-6}>
+                    <Button colorScheme="blue">Edit</Button>
+                </HStack>
+            )}
+            <HStack align={'center'} mt={6}>
                 <Stack flex={1} align={'center'}>
                     <Image src="/image0.svg" />
                 </Stack>
