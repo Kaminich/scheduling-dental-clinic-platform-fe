@@ -8,7 +8,7 @@ import { FaPen } from "react-icons/fa6";
 import axios from "axios";
 import { Border } from "../../../styles/styles";
 
-const CreateDentistPage = () => {
+const UpdateDentistPage = () => {
     const [fullName, setFullName] = useState<string>('');
     const [dob, setDob] = useState<Date | string>('');
     const [gender, setGender] = useState<string>('');
@@ -142,7 +142,8 @@ const CreateDentistPage = () => {
     };
 
     useEffect(() => {
-        changeTabTitle('Create Dentist');
+        changeTabTitle('Update Dentist Profile');
+        handleReset()
     }, []);
 
     return (
@@ -351,11 +352,11 @@ const CreateDentistPage = () => {
                     onClick={handleCreate}
                     isDisabled={!areAllFieldsFilled()}
                 >
-                    Create
+                    Save
                 </Button>
             </HStack>
         </Stack>
     )
 }
 
-export default CreateDentistPage
+export default UpdateDentistPage

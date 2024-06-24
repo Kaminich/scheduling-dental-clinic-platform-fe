@@ -1,12 +1,65 @@
-import { Box, Button, Card, CardBody, CardFooter, Flex, Image, ListItem, Stack, Text, UnorderedList, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, Card, CardBody, CardFooter, Flex, HStack, Image, ListItem, Stack, Text, UnorderedList, useDisclosure, useToast } from "@chakra-ui/react"
 import AppointmentModal from "../../components/modal/appointment"
 import { Color, Shadow } from "../../styles/styles";
 import CustomCarousel from "../../components/carousel";
 import { useAuth } from "../../hooks/useAuth";
+import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { changeTabTitle } from "../../utils/changeTabTitle";
+import useDentists from "../../hooks/useDentists";
+import Dentist, { DentistInit } from "../../types/Dentist";
+import ApiClient from "../../services/apiClient";
+import DentistCarousel from "../../components/carousel/dentist";
 
 const DentistDetailPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { role } = useAuth();
+
+    const { name } = useParams<{ name: string }>();
+    const decodedName = name ? name.replace(/-/g, ' ') : '';
+    const [id, setId] = useState<number>(0);
+    const [dentist, setDentist] = useState<Dentist>(DentistInit);
+    const { data } = useDentists();
+    const api = new ApiClient<any>('/dentists');
+    const toast = useToast();
+
+    const getDentistDetail = async () => {
+        try {
+            const response = await api.getDetail(id);
+            console.log(response);
+
+            if (response.success) {
+                setDentist(response.data);
+            }
+        } catch (error: unknown) {
+            toast({
+                title: "Error",
+                description: "An error has occur",
+                status: "error",
+                duration: 2500,
+                isClosable: true,
+            });
+        }
+    }
+
+    useEffect(() => {
+        changeTabTitle(decodedName);
+    }, []);
+
+    useEffect(() => {
+        if (data?.content) {
+            const foundDentist = data.content.find((dentist: Dentist) => dentist.fullName === decodedName);
+            if (foundDentist) {
+                setId(foundDentist.dentistId);
+            }
+        }
+    }, [data?.content]);
+
+    useEffect(() => {
+        if (id) {
+            getDentistDetail();
+        }
+    }, [id]);
 
     return (
         <>
@@ -21,7 +74,7 @@ const DentistDetailPage = () => {
                     borderRadius={'full'}
                     bgGradient={Color.headingGradientMd}
                 >
-                    Segun Adebayo
+                    {dentist.fullName}
                 </Text>
                 <Flex my={2} align={'center'}>
                     <Flex flex={1} justify={'center'}>
@@ -40,30 +93,30 @@ const DentistDetailPage = () => {
                             <Flex gap={10}>
                                 <Stack gap={4} flex={1}>
                                     <Text fontWeight={'bold'} textAlign={'center'}>Basic Information </Text>
-                                    <Flex gap={2}>
-                                        <Text fontWeight={'bold'}>Job: </Text>
-                                        <Text>job</Text>
-                                    </Flex>
-                                    <Flex gap={2}>
-                                        <Text fontWeight={'bold'}>Experience: </Text>
-                                        <Text>experience</Text>
-                                    </Flex>
-                                    <Box gap={2}>
-                                        <Text fontWeight={'bold'}>Dental: </Text>
-                                        <Text>dental</Text>
-                                    </Box>
-                                    <Box gap={2}>
-                                        <Text fontWeight={'bold'}>Branch: </Text>
-                                        <Text>address address address address (HCM)</Text>
-                                    </Box>
-                                </Stack>
-                                <Stack gap={4} flex={1.7}>
-                                    <Text fontWeight={'bold'} textAlign={'center'}>Achievement: </Text>
-                                    <UnorderedList spacing={1}>
-                                        <ListItem fontSize={17}>Achievement 1</ListItem>
-                                        <ListItem fontSize={17}>Achievement 2</ListItem>
-                                        <ListItem fontSize={17}>Achievement 3</ListItem>
-                                    </UnorderedList>
+                                    <HStack align={'flex-start'} gap={6}>
+                                        <Stack flex={1}>
+                                            <Flex gap={2}>
+                                                <Text fontWeight={'bold'}>Job: </Text>
+                                                <Text>{dentist.specialty}</Text>
+                                            </Flex>
+                                            <Box gap={2}>
+                                                <Text fontWeight={'bold'}>Experience: </Text>
+                                                <Text>{dentist.experience}</Text>
+                                            </Box>
+                                            <Box gap={2}>
+                                                <Text fontWeight={'bold'}>Clinic: </Text>
+                                                <Text>{dentist.branchName}</Text>
+                                            </Box>
+                                            <Box gap={2}>
+                                                <Text fontWeight={'bold'}>Branch: </Text>
+                                                <Text>{dentist.address}</Text>
+                                            </Box>
+                                        </Stack>
+                                        <Box gap={2} flex={1}>
+                                            <Text fontWeight={'bold'}>Description: </Text>
+                                            <Text>{dentist.description}</Text>
+                                        </Box>
+                                    </HStack>
                                 </Stack>
                             </Flex>
                         </CardBody>
@@ -85,9 +138,9 @@ const DentistDetailPage = () => {
                         borderRadius={'full'}
                         bgGradient={Color.headingGradientMd}
                     >
-                        Medical Team from HCM Branch
+                        Medical Team from {dentist.city} Branch
                     </Text>
-                    <CustomCarousel type="dentist" />
+                    <DentistCarousel />
                 </Stack>
             </Stack>
             <AppointmentModal

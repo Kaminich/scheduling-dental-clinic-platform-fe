@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Text, useDisclosure } from "@chakra-ui/react";
+import { Button, Card, CardBody, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Tag, TagLabel, Text, useDisclosure } from "@chakra-ui/react";
 import { FaCheck, FaX } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
@@ -7,7 +7,8 @@ import { changeTabTitle } from "../../../utils/changeTabTitle";
 import usePendingClinics from "../../../hooks/usePendingClinics";
 import Loading from "../../../components/loading";
 import Clinic from "../../../types/Clinic";
-import DentalModal from "../../../components/modal/dental";
+import DentalApproveModal from "../../../components/modal/dental_approve";
+import DentalDetailModal from "../../../components/modal/dental_detail";
 
 const ApproveDentalClinicPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -17,7 +18,8 @@ const ApproveDentalClinicPage = () => {
 
     const [clinics, setClinics] = useState<Clinic[]>([]);
     const { data, isLoading } = usePendingClinics();
-    const { isOpen, onClose, onOpen } = useDisclosure();
+    const { isOpen: isOpenApprove, onClose: onCloseApprove, onOpen: onOpenApprove } = useDisclosure();
+    const { isOpen: isOpenDetail, onClose: onCloseDetail, onOpen: onOpenDetail } = useDisclosure();
 
     useEffect(() => {
         changeTabTitle('Approve Dental Clinic');
@@ -30,7 +32,6 @@ const ApproveDentalClinicPage = () => {
     }, [data?.content]);
 
     console.log(clinics);
-
 
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
@@ -65,7 +66,9 @@ const ApproveDentalClinicPage = () => {
                                                         </HStack>
                                                         <HStack gap={4}>
                                                             <Text>Status:</Text>
-                                                            <Text>{clinic.status}</Text>
+                                                            <Tag size={'md'} variant='subtle' colorScheme='yellow'>
+                                                                <TagLabel>PENDING</TagLabel>
+                                                            </Tag>
                                                         </HStack>
                                                     </HStack>
                                                     <Stack>
@@ -75,18 +78,26 @@ const ApproveDentalClinicPage = () => {
                                                         </HStack>
                                                         <HStack>
                                                             <Text>Clinic Owner: </Text>
-                                                            <Text>{clinic.fullName}</Text>
+                                                            <Text>{clinic.ownerName}</Text>
                                                         </HStack>
                                                         <HStack>
                                                             <Text>Dental Clinic Detail:</Text>
-                                                            <Text>Click here to see all detail</Text>
+                                                            <Text
+                                                                cursor={'pointer'}
+                                                                onClick={() => {
+                                                                    setId(clinic.clinicId)
+                                                                    onOpenDetail();
+                                                                }}
+                                                            >
+                                                                Click here to see all detail
+                                                            </Text>
                                                         </HStack>
                                                     </Stack>
                                                 </Stack>
                                                 <HStack gap={8} h={'135px'} flex={1}>
                                                     <Divider orientation='vertical' borderColor={'grey'} p={0} />
                                                     <Stack gap={4} align={'center'} m={'auto'} pb={3}>
-                                                        <Text>Approve or Decline</Text>
+                                                        <Text>Approve or Denied</Text>
                                                         <HStack gap={4}>
                                                             <Button
                                                                 colorScheme="green"
@@ -94,7 +105,7 @@ const ApproveDentalClinicPage = () => {
                                                                 onClick={() => {
                                                                     setType('approve');
                                                                     setId(clinic.clinicId)
-                                                                    onOpen();
+                                                                    onOpenApprove();
                                                                 }}
                                                             >
                                                                 <FaCheck />
@@ -103,9 +114,9 @@ const ApproveDentalClinicPage = () => {
                                                                 colorScheme="red"
                                                                 variant={'outline'}
                                                                 onClick={() => {
-                                                                    setType('decline');
+                                                                    setType('denied');
                                                                     setId(clinic.clinicId);
-                                                                    onOpen();
+                                                                    onOpenApprove();
                                                                 }}
                                                             >
                                                                 <FaX />
@@ -118,11 +129,16 @@ const ApproveDentalClinicPage = () => {
                                     </Card>
                                 </Stack>
                             ))}
-                            <DentalModal
-                                isOpen={isOpen}
-                                onClose={onClose}
+                            <DentalApproveModal
+                                isOpen={isOpenApprove}
+                                onClose={onCloseApprove}
                                 id={id}
                                 type={type}
+                            />
+                            <DentalDetailModal
+                                isOpen={isOpenDetail}
+                                onClose={onCloseDetail}
+                                id={id}
                             />
                         </>
                     ) : (

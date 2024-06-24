@@ -6,7 +6,7 @@ import { useAuth } from "../../hooks/useAuth"
 import { useEffect } from "react"
 import { changeTabTitle } from "../../utils/changeTabTitle"
 
-const ClinicDentailSettings = () => {
+const DentalDetailSettingsPage = () => {
     const { role } = useAuth();
 
     useEffect(() => {
@@ -97,4 +97,4 @@ const ClinicDentailSettings = () => {
     )
 }
 
-export default ClinicDentailSettings
+export default DentalDetailSettingsPage

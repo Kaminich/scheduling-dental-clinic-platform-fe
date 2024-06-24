@@ -1,14 +1,10 @@
-import { Button, FormControl, FormLabel, HStack, Heading, Image, Input, Select, Stack, Textarea, useToast } from "@chakra-ui/react"
-import { FormEvent, useEffect, useState } from "react";
+import { Button, FormControl, FormLabel, HStack, Heading, Image, Input, Select, Stack, Textarea } from "@chakra-ui/react"
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ApiClient from "../../../services/apiClient";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { today } from "../../../components/modal/appointment";
-import { FaPen } from "react-icons/fa6";
-import axios from "axios";
-import { Border } from "../../../styles/styles";
 
-const CreateDentistPage = () => {
+const DentistProfileDetailPage = () => {
     const [fullName, setFullName] = useState<string>('');
     const [dob, setDob] = useState<Date | string>('');
     const [gender, setGender] = useState<string>('');
@@ -22,27 +18,7 @@ const CreateDentistPage = () => {
     const [avatarData, setAvatarData] = useState<File | null>(null);
     const [branchId, setBranchId] = useState<number>(0);
 
-    const toast = useToast();
-    const api = new ApiClient<any>('/dentists');
-
     const navigate = useNavigate();
-
-    const areAllFieldsFilled = () => {
-        return (
-            fullName !== '' &&
-            dob !== '' &&
-            gender !== '' &&
-            phone !== '' &&
-            email !== '' &&
-            address !== '' &&
-            description !== '' &&
-            specialty !== '' &&
-            experience !== '' &&
-            avatar !== '' &&
-            avatarData !== null &&
-            branchId !== 0
-        );
-    };
 
     const handleReset = () => {
         setFullName('');
@@ -59,95 +35,17 @@ const CreateDentistPage = () => {
         setBranchId(0);
     }
 
-    const handleAvatarChange = (e: any) => {
-        const selectedFile = e.target.files[0];
-        console.log(selectedFile);
-
-        if (selectedFile) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const imageUrl = URL.createObjectURL(selectedFile);
-                setAvatar(imageUrl);
-            };
-            reader.readAsDataURL(selectedFile);
-            setAvatarData(selectedFile);
-        }
-    }
-
-    const handleCreate = async (e: FormEvent) => {
-        e.preventDefault();
-        let avatarUrl: string = '';
-
-        if (avatarData) {
-            const formDataImage = new FormData();
-            formDataImage.append("file", avatarData);
-            formDataImage.append("upload_preset", "z5r1wkcn");
-
-            try {
-                const response = await axios.post(
-                    `https://api.cloudinary.com/v1_1/dy1t2fqsc/image/upload`,
-                    formDataImage
-                );
-                avatarUrl = response.data.secure_url;
-                console.log("Cloudinary image URL:", avatarUrl);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        const data = {
-            fullName,
-            email,
-            gender,
-            dob,
-            address,
-            description,
-            specialty,
-            experience,
-            avatar: avatarUrl,
-            branchId
-        };
-
-        try {
-            const response = await api.create(data);
-            console.log(response);
-
-            if (response.success) {
-                toast({
-                    title: "Success",
-                    description: response.message,
-                    status: "success",
-                    duration: 2500,
-                    isClosable: true,
-                });
-
-            } else {
-                toast({
-                    title: "Error",
-                    description: response.message,
-                    status: "error",
-                    duration: 2500,
-                    isClosable: true,
-                });
-            }
-        } catch (error: any) {
-            toast({
-                title: "Error",
-                description: error.response?.data?.message || "An error occurred",
-                status: "error",
-                duration: 2500,
-                isClosable: true,
-            });
-        }
-    };
-
     useEffect(() => {
         changeTabTitle('Create Dentist');
+        handleReset();
     }, []);
 
     return (
         <Stack w={'6xl'} m={'auto'}>
-            <HStack gap={20} align={'flex-start'} mb={10}>
+            <HStack pos={'fixed'} right={20} mt={-4}>
+                <Button colorScheme="blue" onClick={() => navigate('update')}>Edit</Button>
+            </HStack>
+            <HStack gap={20} align={'flex-start'}>
                 <Stack gap={3} flex={1}>
                     <Heading fontSize={24} fontWeight={600} mb={4}>Personal Information</Heading>
                     <HStack w={'full'} justify={'center'} align={'flex-end'}>
@@ -160,21 +58,6 @@ const CreateDentistPage = () => {
                             }
                             alt='avatar'
                             bgColor='white'
-                        />
-                        <FormLabel
-                            htmlFor="avt"
-                            cursor='pointer'
-                            fontSize='md'
-                            ml={-8}
-                        >
-                            <FaPen />
-                        </FormLabel>
-                        <Input
-                            type="file"
-                            id="avt"
-                            accept="image/*"
-                            onChange={handleAvatarChange}
-                            display='none'
                         />
                     </HStack>
                     <HStack>
@@ -316,46 +199,8 @@ const CreateDentistPage = () => {
                     </FormControl>
                 </Stack>
             </HStack>
-            <HStack
-                pos={'fixed'}
-                w={'99%'}
-                bg={"blue.200"}
-                left={2}
-                right={2}
-                bottom={2}
-                justify={'flex-end'}
-                gap={4}
-            >
-                <Button
-                    bg={'white'}
-                    border={Border.tableBorder}
-                    variant={"solid"}
-                    fontSize={15}
-                    fontWeight={400}
-                    px={2}
-                    my={1}
-                    h={6}
-                    onClick={handleReset}
-                >
-                    Reset
-                </Button>
-                <Button
-                    colorScheme={"blue"}
-                    variant={"solid"}
-                    fontSize={15}
-                    fontWeight={400}
-                    px={2}
-                    mr={6}
-                    my={1}
-                    h={6}
-                    onClick={handleCreate}
-                    isDisabled={!areAllFieldsFilled()}
-                >
-                    Create
-                </Button>
-            </HStack>
         </Stack>
     )
 }
 
-export default CreateDentistPage
+export default DentistProfileDetailPage

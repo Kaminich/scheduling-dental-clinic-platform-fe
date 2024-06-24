@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Divider, Flex, Heading, Menu, MenuButton, MenuItem, MenuList, Stack, Text } from "@chakra-ui/react";
+import { Avatar, Button, Card, Divider, Flex, Heading, Menu, MenuButton, MenuItem, MenuList, Stack, Text, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaArrowLeft, FaCalendarCheck, FaCalendarDays, FaChevronRight, FaDoorOpen, FaGear, FaGlobe, FaLaptopMedical, FaNewspaper, FaStar, FaUserGear, FaUserPen } from "react-icons/fa6";
 import { useNavigate } from "react-router";
@@ -10,20 +10,42 @@ const PersonalMenu = () => {
     const [subMenu, setSubMenu] = useState<boolean>(false);
     const [isVN, setIsVN] = useState<boolean>(false);
 
-    const api = new ApiClient('/auth/logout');
+    const api = new ApiClient<any>('/auth/logout');
 
     const { data } = useUserProfile();
     const navigate = useNavigate();
-    const { setIsAuthenticated } = useAuth();
+    const { setIsAuthenticated, setRole } = useAuth();
+    const toast = useToast();
 
     const handleLogout = async () => {
         const refreshToken = localStorage.getItem('refresh_token');
-        const response = await api.postUnauthen({ refreshToken });
-        localStorage.removeItem('access_token');
-        setIsAuthenticated(false);
-        console.log(response);
-        localStorage.removeItem('refresh_token');
-        navigate('/');
+        try {
+            const response = await api.postUnauthen({ refreshToken });
+            if (response.success) {
+                localStorage.removeItem('access_token');
+                setIsAuthenticated(false);
+                setRole('');
+                console.log(response);
+                localStorage.removeItem('refresh_token');
+                navigate('/');
+            } else {
+                toast({
+                    title: "Error",
+                    description: "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    isClosable: true,
+                });
+            }
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error?.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 2500,
+                isClosable: true,
+            });
+        }
     }
 
     return (
@@ -43,7 +65,7 @@ const PersonalMenu = () => {
                                     <Text fontWeight={600} textAlign={'center'} flex={1}>{`Welcome back, ${data?.fullName || data?.username}`}</Text>
                                 )}
                             </Flex>
-                            {data?.role === 'CUSTOMER' && (
+                            {data?.role !== 'ADMIN' && (
                                 <>
                                     <Divider my={3} />
                                     <MenuItem

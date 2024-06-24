@@ -8,7 +8,7 @@ import axios from "axios";
 import { FaPen } from "react-icons/fa6";
 import { Border } from "../../../styles/styles";
 
-const CreateStaffPage = () => {
+const UpdateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
     const [dob, setDob] = useState<Date | string>('');
     const [gender, setGender] = useState<string>('');
@@ -131,7 +131,8 @@ const CreateStaffPage = () => {
     };
 
     useEffect(() => {
-        changeTabTitle('Create Staff');
+        changeTabTitle('Update Staff Profile');
+        handleReset();
     }, []);
 
     return (
@@ -291,11 +292,11 @@ const CreateStaffPage = () => {
                     onClick={handleCreate}
                     isDisabled={!areAllFieldsFilled()}
                 >
-                    Create
+                    Save
                 </Button>
             </HStack>
         </Stack>
     )
 }
 
-export default CreateStaffPage
+export default UpdateStaffPage

@@ -1,13 +1,19 @@
-import { Button, Card, CardBody, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Text } from "@chakra-ui/react";
+import { Button, Card, CardBody, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Tag, TagLabel, Text, useDisclosure } from "@chakra-ui/react";
 import { FaCheck, FaX } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { Shadow } from "../../../styles/styles";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
+import StaffApproveModal from "../../../components/modal/staff_approve";
+import StaffDetailModal from "../../../components/modal/staff_detail";
 
 const ApproveStaffPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
+    const [type, setType] = useState<string>('');
+    const [id, setId] = useState<number>(0);
+    const { isOpen: isOpenApprove, onClose: onCloseApprove, onOpen: onOpenApprove } = useDisclosure();
+    const { isOpen: isOpenDetail, onClose: onCloseDetail, onOpen: onOpenDetail } = useDisclosure();
 
     useEffect(() => {
         changeTabTitle('Approve Staff');
@@ -29,22 +35,45 @@ const ApproveStaffPage = () => {
                     value={keyword}
                 />
             </InputGroup>
+            <></>
             <Stack gap={6} w={'full'} >
                 <Card shadow={Shadow.cardShadow}>
                     <CardBody pl={8}>
                         <HStack justify={'space-between'} align={'center'}>
                             <Stack gap={5} flex={3.7}>
                                 <HStack justify={'space-between'} minW={'full'} pr={5}>
-                                    <Text>Clinic Staff ID: </Text>
+                                    <HStack>
+                                        <Text>Clinic Staff ID:</Text>
+                                        <Text>{'clinic.clinicId'}</Text>
+                                    </HStack>
                                     <HStack gap={4}>
                                         <Text>Status:</Text>
-                                        <Text>Pending</Text>
+                                        <Tag size={'md'} variant='subtle' colorScheme='yellow'>
+                                            <TagLabel>PENDING</TagLabel>
+                                        </Tag>
                                     </HStack>
                                 </HStack>
                                 <Stack>
-                                    <Text>Dental Clinic: </Text>
-                                    <Text>Branch: </Text>
-                                    <Text>Staff Detail: </Text>
+                                    <HStack>
+                                        <Text>Dental Clinic: </Text>
+                                        <Text>{'clinic.clinicName'}</Text>
+                                    </HStack>
+                                    <HStack>
+                                        <Text>Branch: </Text>
+                                        <Text>{'clinic.ownerName'}</Text>
+                                    </HStack>
+                                    <HStack>
+                                        <Text>Staff Detail:</Text>
+                                        <Text
+                                            cursor={'pointer'}
+                                            onClick={() => {
+                                                setId(0)
+                                                onOpenDetail();
+                                            }}
+                                        >
+                                            Click here to see all detail
+                                        </Text>
+                                    </HStack>
                                 </Stack>
                             </Stack>
                             <HStack gap={8} h={'135px'} flex={1}>
@@ -52,10 +81,26 @@ const ApproveStaffPage = () => {
                                 <Stack gap={4} align={'center'} m={'auto'} pb={3}>
                                     <Text>Approve or Decline</Text>
                                     <HStack gap={4}>
-                                        <Button colorScheme="green" variant={'outline'}>
+                                        <Button
+                                            colorScheme="green"
+                                            variant={'outline'}
+                                            onClick={() => {
+                                                setType('approve');
+                                                setId(0)
+                                                onOpenApprove();
+                                            }}
+                                        >
                                             <FaCheck />
                                         </Button>
-                                        <Button colorScheme="red" variant={'outline'}>
+                                        <Button
+                                            colorScheme="red"
+                                            variant={'outline'}
+                                            onClick={() => {
+                                                setType('denied');
+                                                setId(0);
+                                                onOpenApprove();
+                                            }}
+                                        >
                                             <FaX />
                                         </Button>
                                     </HStack>
@@ -65,6 +110,17 @@ const ApproveStaffPage = () => {
                     </CardBody>
                 </Card>
             </Stack>
+            <StaffApproveModal
+                isOpen={isOpenApprove}
+                onClose={onCloseApprove}
+                id={id}
+                type={type}
+            />
+            <StaffDetailModal
+                isOpen={isOpenDetail}
+                onClose={onCloseDetail}
+                id={id}
+            />
         </Stack>
     )
 }

@@ -1,14 +1,11 @@
-import { Button, FormControl, FormLabel, HStack, Image, Input, Select, Stack, useToast } from "@chakra-ui/react"
-import { FormEvent, useEffect, useState } from "react";
+import { Button, FormControl, FormLabel, HStack, Image, Input, Select, Stack } from "@chakra-ui/react"
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ApiClient from "../../../services/apiClient";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { today } from "../../../components/modal/appointment";
-import axios from "axios";
 import { FaPen } from "react-icons/fa6";
-import { Border } from "../../../styles/styles";
 
-const CreateStaffPage = () => {
+const StaffProfileDetailPage = () => {
     const [fullName, setFullName] = useState<string>('');
     const [dob, setDob] = useState<Date | string>('');
     const [gender, setGender] = useState<string>('');
@@ -18,25 +15,8 @@ const CreateStaffPage = () => {
     const [clinicBranchId, setClinicBranchId] = useState<number>(0);
     const [avatar, setAvatar] = useState<string>('');
     const [avatarData, setAvatarData] = useState<File | null>(null);
-    const toast = useToast();
 
     const navigate = useNavigate();
-
-    const api = new ApiClient<any>('/staff');
-
-    const areAllFieldsFilled = () => {
-        return (
-            fullName !== '' &&
-            dob !== '' &&
-            gender !== '' &&
-            phone !== '' &&
-            email !== '' &&
-            address !== '' &&
-            avatar !== '' &&
-            avatarData !== null &&
-            clinicBranchId !== 0
-        );
-    };
 
     const handleReset = () => {
         setFullName('');
@@ -50,93 +30,17 @@ const CreateStaffPage = () => {
         setAvatarData(null);
     }
 
-    const handleAvatarChange = (e: any) => {
-        const selectedFile = e.target.files[0];
-        console.log(selectedFile);
-
-        if (selectedFile) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const imageUrl = URL.createObjectURL(selectedFile);
-                setAvatar(imageUrl);
-            };
-            reader.readAsDataURL(selectedFile);
-            setAvatarData(selectedFile);
-        }
-    }
-
-    const handleCreate = async (e: FormEvent) => {
-        e.preventDefault();
-
-        let avatarUrl: string = '';
-
-        if (avatarData) {
-            const formDataImage = new FormData();
-            formDataImage.append("file", avatarData);
-            formDataImage.append("upload_preset", "z5r1wkcn");
-
-            try {
-                const response = await axios.post(
-                    `https://api.cloudinary.com/v1_1/dy1t2fqsc/image/upload`,
-                    formDataImage
-                );
-                avatarUrl = response.data.secure_url;
-                console.log("Cloudinary image URL:", avatarUrl);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        const data = {
-            fullName,
-            dob,
-            gender,
-            phone,
-            email,
-            address,
-            avatar: avatarUrl,
-            clinicBranchId
-        };
-
-        try {
-            const response = await api.create(data);
-            console.log(response);
-
-            if (response.success) {
-                toast({
-                    title: "Success",
-                    description: response.message,
-                    status: "success",
-                    duration: 2500,
-                    isClosable: true,
-                });
-            } else {
-                toast({
-                    title: "Error",
-                    description: response.message,
-                    status: "error",
-                    duration: 2500,
-                    isClosable: true,
-                });
-            }
-        } catch (error: any) {
-            toast({
-                title: "Error",
-                description: error.response?.data?.message || "An error occurred",
-                status: "error",
-                duration: 2500,
-                isClosable: true,
-            });
-        }
-    };
-
     useEffect(() => {
         changeTabTitle('Create Staff');
+        handleReset();
     }, []);
 
     return (
         <Stack w={'2xl'} m={'auto'}>
-            <Stack gap={2} minW={'lg'} mb={10}>
+            <HStack pos={'fixed'} right={20} mt={-4}>
+                <Button colorScheme="blue" onClick={() => navigate('update')}>Edit</Button>
+            </HStack>
+            <Stack gap={2} minW={'lg'}>
                 <HStack w={'full'} justify={'center'} align={'flex-end'}>
                     <Image
                         border='1px solid gainsboro'
@@ -147,21 +51,6 @@ const CreateStaffPage = () => {
                         }
                         alt='avatar'
                         bgColor='white'
-                    />
-                    <FormLabel
-                        htmlFor="avt"
-                        cursor='pointer'
-                        fontSize='md'
-                        ml={-8}
-                    >
-                        <FaPen />
-                    </FormLabel>
-                    <Input
-                        type="file"
-                        id="avt"
-                        accept="image/*"
-                        onChange={handleAvatarChange}
-                        display='none'
                     />
                 </HStack>
                 <HStack>
@@ -256,46 +145,8 @@ const CreateStaffPage = () => {
                     </Select>
                 </FormControl>
             </Stack>
-            <HStack
-                pos={'fixed'}
-                w={'99%'}
-                bg={"blue.200"}
-                left={2}
-                right={2}
-                bottom={2}
-                justify={'flex-end'}
-                gap={4}
-            >
-                <Button
-                    bg={'white'}
-                    border={Border.tableBorder}
-                    variant={"solid"}
-                    fontSize={15}
-                    fontWeight={400}
-                    px={2}
-                    my={1}
-                    h={6}
-                    onClick={handleReset}
-                >
-                    Reset
-                </Button>
-                <Button
-                    colorScheme={"blue"}
-                    variant={"solid"}
-                    fontSize={15}
-                    fontWeight={400}
-                    px={2}
-                    mr={6}
-                    my={1}
-                    h={6}
-                    onClick={handleCreate}
-                    isDisabled={!areAllFieldsFilled()}
-                >
-                    Create
-                </Button>
-            </HStack>
         </Stack>
     )
 }
 
-export default CreateStaffPage
+export default StaffProfileDetailPage

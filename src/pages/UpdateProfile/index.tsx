@@ -8,7 +8,6 @@ import useUserProfile from "../../hooks/useUserProfile";
 import Customer, { CustomerInit } from "../../types/Customer";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import ApiClient from "../../services/apiClient";
-import { AxiosError } from "axios";
 
 const UpdateProfilePage = () => {
     const [username, setUsername] = useState<string>('');
@@ -59,7 +58,7 @@ const UpdateProfilePage = () => {
 
     const handleUpdateProfile = async (e: FormEvent) => {
         e.preventDefault();
-        const api = new ApiClient('/auth/user-information');
+        const api = new ApiClient<any>('/auth/user-information');
         const data: Customer = {
             username,
             fullName,
@@ -72,7 +71,7 @@ const UpdateProfilePage = () => {
         }
 
         try {
-            const response: any = await api.update(data);
+            const response = await api.update(data);
             console.log(response);
             if (response.status) {
                 toast({

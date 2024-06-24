@@ -26,7 +26,10 @@ const LoginPage = () => {
 
     const { setIsAuthenticated, setRole } = useAuth();
     const googleLogin = useGoogleLogin({
-        onSuccess: (token) => console.log(token),
+        onSuccess: (token) => {
+            console.log(token.access_token);
+            handleGoogleLogin(token.access_token);
+        },
         onError: (error) => {
             console.log(error);
             toast({
@@ -39,11 +42,56 @@ const LoginPage = () => {
         }
     })
 
-    const api = new ApiClient<any>('/auth/login');
+    const handleGoogleLogin = async (token: string) => {
+        const api = new ApiClient<any>('/auth/login-google');
+        const data = {
+            token
+        };
+
+        try {
+            const response = await api.postUnauthen(data);
+            console.log(response);
+
+            if (response.success) {
+                localStorage.setItem('access_token', response.data.token);
+                localStorage.setItem('refresh_token', response.data.refreshToken);
+                const decoded = jwtDecode<DecodeJWTRole>(response.data.token);
+                const decodedRole = formatRoleString(decoded.role[0]);
+                console.log(decodedRole);
+
+                setIsAuthenticated(true);
+                setRole(decodedRole);
+                if (decodedRole === 'Customer') {
+                    navigate('/');
+                } else {
+                    return;
+                }
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    isClosable: true,
+                });
+            }
+        } catch (error) {
+
+            if (error instanceof AxiosError) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    isClosable: true,
+                });
+            }
+        }
+    };
 
     const handleLogin = async (e: FormEvent) => {
         e.preventDefault();
-
+        const api = new ApiClient<any>('/auth/login');
         const data = {
             username,
             password,
@@ -75,8 +123,6 @@ const LoginPage = () => {
                 }
             }
         } catch (error) {
-            console.log(error);
-
             if (error instanceof AxiosError) {
                 toast({
                     title: "Error",

@@ -15,7 +15,7 @@ const ServicePage = () => {
 
     useEffect(() => {
         if (data) {
-            setCategories(data);
+            setCategories(data.Categories);
         }
     }, [data]);
 
@@ -24,7 +24,9 @@ const ServicePage = () => {
 
     return (
         <SimpleGrid columns={4} spacingX={7} spacingY={8} w={'6xl'} m={'auto'} my={10}>
-            <ServiceItem data={categories} />
+            {categories.map((category) => (
+                <ServiceItem categoryName={category.categoryName} />
+            ))}
         </SimpleGrid>
     )
 }
