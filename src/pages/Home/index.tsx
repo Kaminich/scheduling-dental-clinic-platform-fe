@@ -1,13 +1,13 @@
 import { Card, CardBody, Container, Flex, Heading, Image, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import Slider from './components/slider';
 import SearchBar from '../../components/search_bar';
-import CustomCarousel from '../../components/carousel';
 import DentalBranch from './components/dental_branch';
 import MedicalTeam from './components/medical_team';
 import { Color } from '../../styles/styles';
 import BlogsItem from '../../components/blogs_item';
 import { useEffect } from 'react';
 import { changeTabTitle } from '../../utils/changeTabTitle';
+import ServiceCarousel from '../../components/carousel/service';
 
 const HomePage = () => {
 
@@ -113,7 +113,7 @@ const HomePage = () => {
                     >
                         Highlight Services
                     </Heading>
-                    <CustomCarousel type='service' />
+                    <ServiceCarousel />
                 </Stack>
             </Flex>
             <Stack

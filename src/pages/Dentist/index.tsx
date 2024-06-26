@@ -5,11 +5,7 @@ import { changeTabTitle } from "../../utils/changeTabTitle";
 import useDentists from "../../hooks/useDentists";
 
 const DentistPage = () => {
-
-    const { data } = useDentists({ type: 'get', id: 0 });
-
-    console.log(data);
-
+    const { data } = useDentists();
 
     useEffect(() => {
         changeTabTitle('Dentist');

@@ -1,15 +1,21 @@
+import Appointment from "./Appointment";
+import Feedback from "./Feedback";
+import TreatmentOutcome from "./TreatmentOutcome";
+
 export default interface Customer {
     id?: number;
     username: string;
     fullName: string;
     email: string;
-    phone: string;
-    gender: string;
-    dob: string;
     address: string;
-    role?: string;
+    phone: string;
+    dob: string;
+    gender: string;
     avatar?: string;
     status?: boolean;
+    appointments?: Appointment[];
+    feedbacks?: Feedback[];
+    treatmentOutcomes?: TreatmentOutcome[];
 }
 
 export const CustomerInit: Customer = {
@@ -21,7 +27,4 @@ export const CustomerInit: Customer = {
     gender: '',
     dob: '',
     address: '',
-    role: '',
-    avatar: '',
-    status: false,
 };

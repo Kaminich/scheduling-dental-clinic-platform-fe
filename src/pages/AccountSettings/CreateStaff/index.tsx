@@ -1,25 +1,88 @@
-import { Button, FormControl, FormLabel, HStack, Input, Select, Stack, useToast } from "@chakra-ui/react"
+import { Button, FormControl, FormLabel, HStack, Image, Input, Select, Stack, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import ApiClient from "../../../services/apiClient";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { today } from "../../../components/modal/appointment";
+import axios from "axios";
+import { FaPen } from "react-icons/fa6";
+import { Border } from "../../../styles/styles";
 
 const CreateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
     const [dob, setDob] = useState<Date | string>('');
     const [gender, setGender] = useState<string>('');
-    const [phone, setPhone] = useState<string | number>('');
+    const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [address, setAddress] = useState<string>('');
+    const [clinicBranchId, setClinicBranchId] = useState<number>(0);
+    const [avatar, setAvatar] = useState<string>('');
+    const [avatarData, setAvatarData] = useState<File | null>(null);
     const toast = useToast();
 
-    const navigate = useNavigate();
+    const api = new ApiClient<any>('/staff');
 
-    const api = new ApiClient<any>('/auth/register');
+    const areAllFieldsFilled = () => {
+        return (
+            fullName !== '' &&
+            dob !== '' &&
+            gender !== '' &&
+            phone !== '' &&
+            email !== '' &&
+            address !== '' &&
+            avatar !== '' &&
+            avatarData !== null &&
+            clinicBranchId !== 0
+        );
+    };
 
-    const handleSignUp = async (e: FormEvent) => {
+    const handleReset = () => {
+        setFullName('');
+        setGender('');
+        setDob('');
+        setPhone('');
+        setEmail('');
+        setAddress('');
+        setClinicBranchId(0);
+        setAvatar('');
+        setAvatarData(null);
+    }
+
+    const handleAvatarChange = (e: any) => {
+        const selectedFile = e.target.files[0];
+        console.log(selectedFile);
+
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const imageUrl = URL.createObjectURL(selectedFile);
+                setAvatar(imageUrl);
+            };
+            reader.readAsDataURL(selectedFile);
+            setAvatarData(selectedFile);
+        }
+    }
+
+    const handleCreate = async (e: FormEvent) => {
         e.preventDefault();
+
+        let avatarUrl: string = '';
+
+        if (avatarData) {
+            const formDataImage = new FormData();
+            formDataImage.append("file", avatarData);
+            formDataImage.append("upload_preset", "z5r1wkcn");
+
+            try {
+                const response = await axios.post(
+                    `https://api.cloudinary.com/v1_1/dy1t2fqsc/image/upload`,
+                    formDataImage
+                );
+                avatarUrl = response.data.secure_url;
+                console.log("Cloudinary image URL:", avatarUrl);
+            } catch (error) {
+                console.error(error);
+            }
+        }
 
         const data = {
             fullName,
@@ -27,11 +90,13 @@ const CreateStaffPage = () => {
             gender,
             phone,
             email,
-            address
+            address,
+            avatar: avatarUrl,
+            clinicBranchId
         };
 
         try {
-            const response = await api.postUnauthen(data);
+            const response = await api.create(data);
             console.log(response);
 
             if (response.success) {
@@ -42,7 +107,6 @@ const CreateStaffPage = () => {
                     duration: 2500,
                     isClosable: true,
                 });
-                navigate('/login');
             } else {
                 toast({
                     title: "Error",
@@ -52,10 +116,10 @@ const CreateStaffPage = () => {
                     isClosable: true,
                 });
             }
-        } catch (error) {
+        } catch (error: any) {
             toast({
                 title: "Error",
-                description: "An error occurred. Please try again.",
+                description: error.response?.data?.message || "An error occurred",
                 status: "error",
                 duration: 2500,
                 isClosable: true,
@@ -68,8 +132,35 @@ const CreateStaffPage = () => {
     }, []);
 
     return (
-        <Stack w={'2xl'} m={'auto'} gap={5}>
-            <Stack gap={3} minW={'lg'}>
+        <Stack w={'2xl'} m={'auto'}>
+            <Stack gap={2} minW={'lg'} mb={10}>
+                <HStack w={'full'} justify={'center'} align={'flex-end'}>
+                    <Image
+                        border='1px solid gainsboro'
+                        borderRadius='full'
+                        boxSize={'9rem'}
+                        src={
+                            avatar || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
+                        }
+                        alt='avatar'
+                        bgColor='white'
+                    />
+                    <FormLabel
+                        htmlFor="avt"
+                        cursor='pointer'
+                        fontSize='md'
+                        ml={-8}
+                    >
+                        <FaPen />
+                    </FormLabel>
+                    <Input
+                        type="file"
+                        id="avt"
+                        accept="image/*"
+                        onChange={handleAvatarChange}
+                        display='none'
+                    />
+                </HStack>
                 <HStack>
                     <FormControl id="fullName" flex={2} isRequired>
                         <FormLabel pl={1}>Full Name</FormLabel>
@@ -147,7 +238,7 @@ const CreateStaffPage = () => {
                     <Select
                         name="branch"
                         value={gender}
-                        onChange={(e) => setGender(e.target.value)}
+                        onChange={(e) => setClinicBranchId(parseInt(e.target.value))}
                         placeholder={'Select branch'}
                     >
                         <option value="Male">
@@ -162,13 +253,44 @@ const CreateStaffPage = () => {
                     </Select>
                 </FormControl>
             </Stack>
-            <Button
-                colorScheme={"blue"}
-                variant={"solid"}
-                onClick={handleSignUp}
+            <HStack
+                pos={'fixed'}
+                w={'99%'}
+                bg={"blue.200"}
+                left={2}
+                right={2}
+                bottom={2}
+                justify={'flex-end'}
+                gap={4}
             >
-                Sign up
-            </Button>
+                <Button
+                    bg={'white'}
+                    border={Border.tableBorder}
+                    variant={"solid"}
+                    fontSize={15}
+                    fontWeight={400}
+                    px={2}
+                    my={1}
+                    h={6}
+                    onClick={handleReset}
+                >
+                    Reset
+                </Button>
+                <Button
+                    colorScheme={"blue"}
+                    variant={"solid"}
+                    fontSize={15}
+                    fontWeight={400}
+                    px={2}
+                    mr={6}
+                    my={1}
+                    h={6}
+                    onClick={handleCreate}
+                    isDisabled={!areAllFieldsFilled()}
+                >
+                    Create
+                </Button>
+            </HStack>
         </Stack>
     )
 }

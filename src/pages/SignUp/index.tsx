@@ -16,7 +16,7 @@ const SignUpPage = () => {
     const [password, setPassword] = useState<string>('');
     const [dob, setDob] = useState<Date | string>('');
     const [gender, setGender] = useState<string>('');
-    const [phone, setPhone] = useState<string | number>('');
+    const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [address, setAddress] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');

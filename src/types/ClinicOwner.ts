@@ -1,19 +1,29 @@
 import Clinic from "./Clinic";
-
-enum Status {
-    Pending = "Pending",
-    Active = "Active",
-    Inactive = "Inactive"
-}
+import { Status } from "./type.enum";
 
 export default interface ClinicOwner {
     id: number;
-    fullName: string,
-    email: string,
-    password: string,
-    phoneNumber: string;
+    username: string;
+    fullName: string;
+    email: string;
+    address: string;
+    phone: string;
     dob: string;
+    gender: string;
     avatar: string;
     status: Status;
-    clinicId: Clinic['id']
+    clinic?: Clinic;
 }
+
+export const ClinicOwnerInit: ClinicOwner = {
+    id: 0,
+    username: '',
+    fullName: '',
+    email: '',
+    address: '',
+    phone: '',
+    dob: '',
+    gender: '',
+    avatar: '',
+    status: Status.INACTIVE,
+};

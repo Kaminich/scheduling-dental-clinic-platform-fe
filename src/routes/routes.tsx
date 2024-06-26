@@ -26,7 +26,6 @@ import SystemLayout from "../components/layout/system";
 import ManageBlogPage from "../pages/BlogSettings/ManageBlog";
 import ApproveBlogPage from "../pages/BlogSettings/ApproveBlog";
 import FeedbackSettingPage from "../pages/FeedbackSettings";
-import ClinicDentailSettings from "../pages/ClinicDetailSettings";
 import MessagePage from "../pages/Message";
 import ViewSchedulePage from "../pages/ViewSchedule";
 import ManageAppointmentPage from "../pages/ManageAppointment";
@@ -36,6 +35,12 @@ import ApproveStaffPage from "../pages/DentalClinicSettings/ApproveStaff";
 import CreateDentistPage from "../pages/AccountSettings/CreateDentist";
 import CreateStaffPage from "../pages/AccountSettings/CreateStaff";
 import CreateBlogPage from "../pages/BlogSettings/CreateBlog";
+import UpdateDentistPage from "../pages/AccountSettings/UpdateDentist";
+import UpdateStaffPage from "../pages/AccountSettings/UpdateStaff";
+import DentalClinicSettings from "../pages/DentalClinicSettings";
+import DentalDetailSettingsPage from "../pages/DentalDetailSettings";
+import DentistProfileDetailPage from "../pages/AccountSettings/DentistProfileDetail";
+import StaffProfileDetailPage from "../pages/AccountSettings/StaffProfileDetail";
 
 const routes = [
     {
@@ -68,11 +73,11 @@ const routes = [
             },
             {
                 path: "administrator/dentals/manage-dental/dental-detail",
-                element: <ClinicDentailSettings />
+                element: <DentalDetailSettingsPage />
             },
             {
                 path: "administrator/dentals/dental-detail",
-                element: <ClinicDentailSettings />
+                element: <DentalDetailSettingsPage />
             },
             {
                 path: "administrator/blogs/appprove-blog/blog-detail",
@@ -95,6 +100,22 @@ const routes = [
                 element: <CreateStaffPage />
             },
             {
+                path: "administrator/accounts/dentist/:id",
+                element: <DentistProfileDetailPage />
+            },
+            {
+                path: "administrator/accounts/staff/:id",
+                element: <StaffProfileDetailPage />
+            },
+            {
+                path: "administrator/accounts/dentist/:id/update",
+                element: <UpdateDentistPage />
+            },
+            {
+                path: "administrator/accounts/staff/:id/update",
+                element: <UpdateStaffPage />
+            },
+            {
                 path: "manage-blog/blog-detail",
                 element: <BlogDetailPage />
             },
@@ -113,7 +134,7 @@ const routes = [
             { path: "dentals", element: <DentalPage /> },
             { path: "dental-detail", element: <DentalDetailPage /> },
             { path: "dentists", element: <DentistPage /> },
-            { path: "dentist-detail", element: <DentistDetailPage /> },
+            { path: "dentists/:name", element: <DentistDetailPage /> },
             { path: "services", element: <ServicePage /> },
             { path: "blogs", element: <BlogPage /> },
             { path: "blog-detail", element: <BlogDetailPage /> },
@@ -140,7 +161,7 @@ const routes = [
             { path: "feedbacks", element: <FeedbackSettingPage /> },
             { path: "blogs/approve-blog", element: <ApproveBlogPage /> },
             { path: "blogs/manage-blog", element: <ManageBlogPage /> },
-            { path: "dentals", element: <ManageDentalClinicPage /> },
+            { path: "dentals", element: <DentalClinicSettings /> },
             { path: "services", element: <ManageDentalClinicPage /> },
             { path: "blogs", element: <ManageBlogPage /> },
         ],

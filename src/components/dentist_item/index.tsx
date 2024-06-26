@@ -2,7 +2,7 @@ import { Avatar, Button, Card, CardBody, CardFooter, HStack, Heading, Image, Sta
 import { FaMapLocationDot, FaTooth } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import AppointmentModal from "../modal/appointment";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Color, Shadow } from "../../styles/styles";
 import { useAuth } from "../../hooks/useAuth";
 import Dentist from "../../types/Dentist";
@@ -16,6 +16,12 @@ const DentistItem = ({ type, data }: Props) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [dentists, setDentists] = useState<Dentist[]>([]);
     const { role } = useAuth();
+    const navigate = useNavigate();
+
+    const navigateToDetail = (name: string) => {
+        const hyphenatedName = name.replace(/ /g, '-');
+        navigate(`/dentists/${hyphenatedName}`);
+    };
 
     useEffect(() => {
         if (data) {
@@ -36,6 +42,9 @@ const DentistItem = ({ type, data }: Props) => {
         name: 'HCM'
     });
 
+    console.log(dentists);
+
+
     return (
         <>
             {type === 1 ? (
@@ -49,15 +58,15 @@ const DentistItem = ({ type, data }: Props) => {
                                         name='Segun Adebayo'
                                         src='https://bit.ly/sage-adebayo'
                                     />
-                                    <Link to={'/dentist-detail'}>
-                                        <Heading
-                                            size='md'
-                                            mt={4}
-                                            _hover={{ color: Color.hoverBlue }}
-                                        >
-                                            {dentist.fullName}
-                                        </Heading>
-                                    </Link>
+                                    <Heading
+                                        size='md'
+                                        mt={4}
+                                        _hover={{ color: Color.hoverBlue }}
+                                        cursor={'pointer'}
+                                        onClick={() => navigateToDetail(dentist.fullName)}
+                                    >
+                                        {dentist.fullName}
+                                    </Heading>
                                     <Text>Doctor</Text>
                                 </Stack>
                                 <Stack mx={3} mt={4}>
@@ -78,7 +87,7 @@ const DentistItem = ({ type, data }: Props) => {
                                             </span>
                                         </Tooltip>
                                         <Link to={'/dental-detail'}>
-                                            <Text _hover={{ color: Color.hoverBlue }}>Dental</Text>
+                                            <Text _hover={{ color: Color.hoverBlue }}>Clinic</Text>
                                         </Link>
                                     </HStack>
                                 </Stack>

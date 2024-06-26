@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, Stack, Text, useToast } from "@chakra-ui/react"
+import { Button, Card, CardBody, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, Select, Stack, Text, useToast } from "@chakra-ui/react"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Color, Shadow } from "../../styles/styles";
 import { changeTabTitle } from "../../utils/changeTabTitle";
@@ -58,6 +58,7 @@ const PartnerRegisterPage = () => {
 
     const handleSendInfo = async (e: FormEvent) => {
         e.preventDefault();
+
         let imageUrl: string = '';
         let fileUrl: string = '';
 
@@ -201,7 +202,7 @@ const PartnerRegisterPage = () => {
                                 Partner Registration
                             </Heading>
                             <Heading fontSize={18}>Clinic Information</Heading>
-                            <FormControl id="clinicimage">
+                            {/* <FormControl id="clinicimage">
                                 <FormLabel pl={1}>Clinic Logo</FormLabel>
                                 <HStack w={'full'} justify={'center'} align={'flex-end'}>
                                     <Image
@@ -230,7 +231,7 @@ const PartnerRegisterPage = () => {
                                         display='none'
                                     />
                                 </HStack>
-                            </FormControl>
+                            </FormControl> */}
                             <FormControl id="clinicname" isRequired>
                                 <FormLabel pl={1}>Clinic Name</FormLabel>
                                 <Input
@@ -254,13 +255,23 @@ const PartnerRegisterPage = () => {
                             <HStack>
                                 <FormControl id="city" flex={1} isRequired>
                                     <FormLabel pl={1}>City</FormLabel>
-                                    <Input
-                                        type="text"
+                                    <Select
+                                        name="city"
                                         value={city}
                                         onChange={(e) => setCity(e.target.value)}
-                                        placeholder="Clinic City"
+                                        placeholder={'Select city'}
                                         required
-                                    />
+                                    >
+                                        <option value="Male">
+                                            Male
+                                        </option>
+                                        <option value="Female">
+                                            Female
+                                        </option>
+                                        <option value="Other">
+                                            Other
+                                        </option>
+                                    </Select>
                                 </FormControl>
                                 <FormControl id="clinicphone" flex={1} isRequired>
                                     <FormLabel pl={1}>Clinic Phone Number</FormLabel>
@@ -273,30 +284,68 @@ const PartnerRegisterPage = () => {
                                     />
                                 </FormControl>
                             </HStack>
-                            <FormControl id="clinicregistration" flex={1} isRequired>
-                                <FormLabel pl={1}>Clinic Registration</FormLabel>
-                                <HStack justify={'center'} mt={4} mb={-4}>
-                                    <Button
-                                        as={FormLabel}
-                                        leftIcon={<FaUpload />}
-                                        requiredIndicator
-                                        htmlFor="registration"
-                                        colorScheme="teal"
-                                        variant={'outline'}
-                                        cursor={'pointer'}
-                                    >
-                                        {clinicRegistration?.name || 'Upload File'}
-                                    </Button>
-                                    <Input
-                                        type="file"
-                                        id="registration"
-                                        onChange={handleFileChange}
-                                        placeholder="Clinic Registration"
-                                        required
-                                        display={'none'}
-                                    />
-                                </HStack>
-                            </FormControl>
+                            <HStack>
+                                <FormControl id="clinicregistration" flex={1} isRequired>
+                                    <FormLabel pl={1}>Clinic Registration</FormLabel>
+                                    <HStack justify="center" mt={4}>
+                                        <Button
+                                            as={FormLabel}
+                                            leftIcon={<FaUpload />}
+                                            requiredIndicator
+                                            htmlFor="registration"
+                                            colorScheme="teal"
+                                            variant="outline"
+                                            cursor="pointer"
+                                            maxW={'294px'}
+                                            m={0}
+                                        >
+                                            <Text
+                                                noOfLines={1}
+                                            >
+                                                {clinicRegistration?.name || 'Upload File'}
+                                            </Text>
+                                        </Button>
+                                        <Input
+                                            type="file"
+                                            id="registration"
+                                            onChange={handleFileChange}
+                                            placeholder="Clinic Registration"
+                                            required
+                                            display="none"
+                                        />
+                                    </HStack>
+                                </FormControl>
+                                <FormControl id="clinicimage" flex={1}>
+                                    <FormLabel pl={1}>Clinic Image</FormLabel>
+                                    <HStack justify="center" mt={4}>
+                                        <Button
+                                            as={FormLabel}
+                                            leftIcon={<FaUpload />}
+                                            requiredIndicator
+                                            htmlFor="image"
+                                            colorScheme="teal"
+                                            variant="outline"
+                                            cursor="pointer"
+                                            maxW={'294px'}
+                                            m={0}
+                                        >
+                                            <Text
+                                                noOfLines={1}
+                                            >
+                                                {clinicImageData?.name || 'Upload Image'}
+                                            </Text>
+                                        </Button>
+                                        <Input
+                                            type="file"
+                                            id="image"
+                                            accept="image/*"
+                                            onChange={handleImageChange}
+                                            display="none"
+                                        />
+                                    </HStack>
+                                </FormControl>
+                            </HStack>
+
                             <FormControl id="websiteurl" flex={1}>
                                 <FormLabel pl={1}>Website Url</FormLabel>
                                 <Input
@@ -346,6 +395,16 @@ const PartnerRegisterPage = () => {
                                 _hover={{ bg: Color.hoverGreenBlue }}
                                 mt={4}
                                 onClick={handleSendInfo}
+                                isDisabled={
+                                    clinicName === '' ||
+                                    clinicPhone === '' ||
+                                    address === '' ||
+                                    city === '' ||
+                                    clinicRegistration === null ||
+                                    fullName === '' ||
+                                    phone === '' ||
+                                    email === ''
+                                }
                             >
                                 Send information
                             </Button>
