@@ -1,27 +1,26 @@
-import Branch from "./Branch";
-
-enum DayInWeek {
-    Monday = "Monday",
-    Tuesday = "Tuesday",
-    Wednesday = "Wednesday",
-    Thursday = "Thursday",
-    Friday = "Friday",
-    Saturday = "Saturday",
-    Sunday = "Sunday",
-}
-
-enum Shift {
-    Morning = "Morning",
-    Afternoon = "Afternoon",
-    AllDay = "AllDay",
-}
+import Clinic, { ClinicInit } from "./Clinic";
+import { DayInWeek, Shift } from "./type.enum";
 
 export default interface WorkingHours {
-    id: number,
-    dayInWeek: DayInWeek,
-    shift: Shift,
-    openingTime: string,
-    closingTime: string,
-    status: boolean,
-    branchId: Branch['id']
+    id: number;
+    day: DayInWeek;
+    shift: Shift;
+    startTime: string;
+    endTime: string;
+    status: boolean;
+    createdDate: string;
+    modifiedDate?: string;
+    clinic: Clinic;
 }
+
+export const WorkingHoursInit: WorkingHours = {
+    id: 0,
+    day: DayInWeek.MONDAY,
+    shift: Shift.MORNING,
+    startTime: '',
+    endTime: '',
+    status: false,
+    createdDate: '',
+    modifiedDate: '',
+    clinic: ClinicInit,
+};

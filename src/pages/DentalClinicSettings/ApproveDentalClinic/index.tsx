@@ -1,14 +1,14 @@
 import { Button, Card, CardBody, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Tag, TagLabel, Text, useDisclosure } from "@chakra-ui/react";
-import { FaCheck, FaX } from "react-icons/fa6";
+import { FaCheck, FaEye, FaSliders, FaX } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { Shadow } from "../../../styles/styles";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import usePendingClinics from "../../../hooks/usePendingClinics";
 import Loading from "../../../components/loading";
-import Clinic from "../../../types/Clinic";
 import DentalApproveModal from "../../../components/modal/dental_approve";
 import DentalDetailModal from "../../../components/modal/dental_detail";
+import PendingClinicListResponse from "../../../types/PendingClinicListResponse";
 
 const ApproveDentalClinicPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -16,7 +16,7 @@ const ApproveDentalClinicPage = () => {
     const [type, setType] = useState<string>('');
     const [id, setId] = useState<number>(0);
 
-    const [clinics, setClinics] = useState<Clinic[]>([]);
+    const [clinics, setClinics] = useState<PendingClinicListResponse[]>([]);
     const { data, isLoading } = usePendingClinics();
     const { isOpen: isOpenApprove, onClose: onCloseApprove, onOpen: onOpenApprove } = useDisclosure();
     const { isOpen: isOpenDetail, onClose: onCloseDetail, onOpen: onOpenDetail } = useDisclosure();
@@ -34,13 +34,13 @@ const ApproveDentalClinicPage = () => {
     console.log(clinics);
 
     return (
-        <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
+        <Stack w={'full'} align='center' mx='auto' my={5} gap={5}>
             <InputGroup>
                 <InputLeftElement children={<BsSearch />} />
                 <Input
                     ref={ref}
                     borderRadius={20}
-                    placeholder="Search dental..."
+                    placeholder="Search clinic name..."
                     variant="filled"
                     border='1px solid gainsboro'
                     onChange={(e) => {
@@ -49,6 +49,9 @@ const ApproveDentalClinicPage = () => {
                     value={keyword}
                 />
             </InputGroup>
+            <HStack justify={'flex-end'} w={'full'}>
+                <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
+            </HStack>
             {!isLoading ? (
                 <>
                     {clinics ? (
@@ -82,15 +85,16 @@ const ApproveDentalClinicPage = () => {
                                                         </HStack>
                                                         <HStack>
                                                             <Text>Dental Clinic Detail:</Text>
-                                                            <Text
-                                                                cursor={'pointer'}
+                                                            <Button
+                                                                px={2}
+                                                                borderRadius={'full'}
                                                                 onClick={() => {
                                                                     setId(clinic.clinicId)
                                                                     onOpenDetail();
                                                                 }}
                                                             >
-                                                                Click here to see all detail
-                                                            </Text>
+                                                                <FaEye />
+                                                            </Button>
                                                         </HStack>
                                                     </Stack>
                                                 </Stack>

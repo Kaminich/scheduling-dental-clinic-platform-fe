@@ -1,12 +1,26 @@
-import Clinic from "./Clinic";
+import Clinic, { ClinicInit } from "./Clinic";
+import Service from "./Service";
 
 export default interface Category {
-    id: number,
-    name: string,
-    status: boolean,
-    createBy: string,
-    createDate: string,
-    lastModifiedBy: string,
-    lastModifiedDate: string,
-    clinicId: Clinic["id"]
+    id: number;
+    categoryName: string;
+    status: boolean;
+    createdBy: string;
+    createdDate: string;
+    modifiedBy?: string;
+    modifiedDate?: string;
+    services: Service[];
+    clinic: Clinic;
 }
+
+export const CategoryInit: Category = {
+    id: 0,
+    categoryName: '',
+    status: false,
+    createdBy: '',
+    createdDate: '',
+    modifiedBy: '',
+    modifiedDate: '',
+    services: [],
+    clinic: ClinicInit,
+};

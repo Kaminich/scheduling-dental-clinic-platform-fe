@@ -345,10 +345,10 @@ const PersonalMenu = () => {
                                 </Button>
                                 Language
                             </Flex>
-                            <Flex mr={-3}>
+                            <Flex mr={-3} gap={1}>
                                 <Button
                                     colorScheme={isVN ? "green" : 'gray'}
-                                    borderStartRadius={'full'}
+                                    borderStartRadius={5}
                                     pr={3}
                                     onClick={() => setIsVN(true)}
                                 >
@@ -356,7 +356,7 @@ const PersonalMenu = () => {
                                 </Button>
                                 <Button
                                     colorScheme={!isVN ? "blue" : 'gray'}
-                                    borderEndRadius={'full'}
+                                    borderEndRadius={5}
                                     pl={3}
                                     onClick={() => setIsVN(false)}
                                 >

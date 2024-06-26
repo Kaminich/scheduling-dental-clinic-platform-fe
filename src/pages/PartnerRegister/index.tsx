@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, Stack, Text, useToast } from "@chakra-ui/react"
+import { Button, Card, CardBody, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, Select, Stack, Text, useToast } from "@chakra-ui/react"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Color, Shadow } from "../../styles/styles";
 import { changeTabTitle } from "../../utils/changeTabTitle";
@@ -19,22 +19,6 @@ const PartnerRegisterPage = () => {
     const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const toast = useToast();
-
-    const areAllFieldsFilled = () => {
-        return (
-            clinicName !== '' &&
-            clinicPhone !== '' &&
-            address !== '' &&
-            city !== '' &&
-            clinicRegistration !== null &&
-            websiteUrl !== '' &&
-            clinicImage !== '' &&
-            clinicImageData !== null &&
-            fullName !== '' &&
-            phone !== '' &&
-            email !== ''
-        );
-    };
 
     const resetAllField = () => {
         setClinicName('');
@@ -271,13 +255,23 @@ const PartnerRegisterPage = () => {
                             <HStack>
                                 <FormControl id="city" flex={1} isRequired>
                                     <FormLabel pl={1}>City</FormLabel>
-                                    <Input
-                                        type="text"
+                                    <Select
+                                        name="city"
                                         value={city}
                                         onChange={(e) => setCity(e.target.value)}
-                                        placeholder="Clinic City"
+                                        placeholder={'Select city'}
                                         required
-                                    />
+                                    >
+                                        <option value="Male">
+                                            Male
+                                        </option>
+                                        <option value="Female">
+                                            Female
+                                        </option>
+                                        <option value="Other">
+                                            Other
+                                        </option>
+                                    </Select>
                                 </FormControl>
                                 <FormControl id="clinicphone" flex={1} isRequired>
                                     <FormLabel pl={1}>Clinic Phone Number</FormLabel>
@@ -321,7 +315,7 @@ const PartnerRegisterPage = () => {
                                         />
                                     </HStack>
                                 </FormControl>
-                                <FormControl id="clinicimage" flex={1} isRequired>
+                                <FormControl id="clinicimage" flex={1}>
                                     <FormLabel pl={1}>Clinic Image</FormLabel>
                                     <HStack justify="center" mt={4}>
                                         <Button
@@ -338,7 +332,7 @@ const PartnerRegisterPage = () => {
                                             <Text
                                                 noOfLines={1}
                                             >
-                                                {clinicImageData?.name || 'Upload File'}
+                                                {clinicImageData?.name || 'Upload Image'}
                                             </Text>
                                         </Button>
                                         <Input
@@ -401,7 +395,16 @@ const PartnerRegisterPage = () => {
                                 _hover={{ bg: Color.hoverGreenBlue }}
                                 mt={4}
                                 onClick={handleSendInfo}
-                                isDisabled={!areAllFieldsFilled}
+                                isDisabled={
+                                    clinicName === '' ||
+                                    clinicPhone === '' ||
+                                    address === '' ||
+                                    city === '' ||
+                                    clinicRegistration === null ||
+                                    fullName === '' ||
+                                    phone === '' ||
+                                    email === ''
+                                }
                             >
                                 Send information
                             </Button>

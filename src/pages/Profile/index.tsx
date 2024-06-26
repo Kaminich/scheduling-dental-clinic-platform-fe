@@ -1,13 +1,13 @@
 import { Avatar, Box, Card, CardBody, Heading, Text, Stack, HStack, Divider } from "@chakra-ui/react";
 import { Shadow } from "../../styles/styles";
 import { useEffect, useState } from "react";
-import Customer, { CustomerInit } from "../../types/Customer";
 import useUserProfile from "../../hooks/useUserProfile";
 import { formatDate } from "../../utils/formatDate";
 import { changeTabTitle } from "../../utils/changeTabTitle";
+import UserInformationResponse, { initialUserInformationResponse } from "../../types/UserInformationResponse";
 
 const ProfilePage = () => {
-    const [userData, setUserData] = useState<Customer>(CustomerInit);
+    const [userData, setUserData] = useState<UserInformationResponse>(initialUserInformationResponse);
 
     const { data } = useUserProfile();
 
@@ -45,11 +45,15 @@ const ProfilePage = () => {
             <Stack align='center' flex={2} gap={10}>
                 <Card w={'full'} shadow={Shadow.cardShadow}>
                     <CardBody w='100%'>
-                        <HStack gap={5}>
-                            <Text minW={36}>Username: </Text>
-                            <Text color={'gray'}>{userData.username}</Text>
-                        </HStack>
-                        <Divider my={4} />
+                        {userData.username && (
+                            <>
+                                <HStack gap={5}>
+                                    <Text minW={36}>Username: </Text>
+                                    <Text color={'gray'}>{userData.username}</Text>
+                                </HStack>
+                                <Divider my={4} />
+                            </>
+                        )}
                         <HStack gap={5}>
                             <Text minW={36}>Full Name: </Text>
                             <Text color={'gray'}>{userData.fullName}</Text>

@@ -2,6 +2,7 @@ import { Button, HStack, Heading, Link, Modal, ModalBody, ModalCloseButton, Moda
 import { useEffect, useState } from "react";
 import ApiClient from "../../../services/apiClient";
 import { Border } from "../../../styles/styles";
+import ClinicRegisterResponse, { initialClinicRegisterResponse } from "../../../types/ClinicRegisterResponse";
 
 interface Props {
     isOpen: boolean;
@@ -10,7 +11,7 @@ interface Props {
 }
 
 const DentalDetailModal = ({ isOpen, onClose, id }: Props) => {
-    const [dentalDetail, setDentalDetail] = useState<any>()
+    const [dentalDetail, setDentalDetail] = useState<ClinicRegisterResponse>(initialClinicRegisterResponse)
 
     const handleShowInfo = async (id: number) => {
         try {
@@ -46,50 +47,50 @@ const DentalDetailModal = ({ isOpen, onClose, id }: Props) => {
                         <Stack>
                             <HStack>
                                 <Text>Dental Clinic ID:</Text>
-                                <Text>{dentalDetail?.clinicId}</Text>
+                                <Text>{dentalDetail.clinicId}</Text>
                             </HStack>
                             <HStack>
                                 <Text>Dental Clinic Name:</Text>
-                                <Text>{dentalDetail?.clinicName}</Text>
+                                <Text>{dentalDetail.clinicName}</Text>
                             </HStack>
                             <HStack>
                                 <Text>Address:</Text>
-                                <Text>{dentalDetail?.address}</Text>
+                                <Text>{dentalDetail.address}</Text>
                             </HStack>
                             <HStack>
                                 <Text>City:</Text>
-                                <Text>{dentalDetail?.city}</Text>
+                                <Text>{dentalDetail.city}</Text>
                             </HStack>
                             <HStack>
                                 <Text>Phone:</Text>
-                                <Text>{dentalDetail?.phone}</Text>
+                                <Text>{dentalDetail.phone}</Text>
                             </HStack>
                             <HStack>
                                 <Text>Website Url:</Text>
-                                <Text>{dentalDetail?.websiteUrl}</Text>
+                                <Text>{dentalDetail.websiteUrl}</Text>
                             </HStack>
                             <HStack>
                                 <Text>Dental Clinic Image:</Text>
-                                <Text>{dentalDetail?.clinicImage}</Text>
+                                <Text>{dentalDetail.clinicImage}</Text>
                             </HStack>
                             <HStack>
                                 <Text>Dental Clinic Registration:</Text>
-                                <Link href={dentalDetail?.clinicRegistration} isExternal>View Clinic Registration</Link>
+                                <Link href={dentalDetail.clinicRegistration} isExternal>View Clinic Registration</Link>
                             </HStack>
                         </Stack>
                         <Heading fontSize='xl'>Owner Information</Heading>
                         <Stack>
                             <HStack>
                                 <Text>Full Name:</Text>
-                                <Text>{dentalDetail?.ownerDetail.fullName}</Text>
+                                <Text>{dentalDetail.ownerDetail.fullName}</Text>
                             </HStack>
                             <HStack>
                                 <Text>Email Name:</Text>
-                                <Text>{dentalDetail?.ownerDetail.email}</Text>
+                                <Text>{dentalDetail.ownerDetail.email}</Text>
                             </HStack>
                             <HStack>
                                 <Text>Phone:</Text>
-                                <Text>{dentalDetail?.ownerDetail.phone}</Text>
+                                <Text>{dentalDetail.ownerDetail.phone}</Text>
                             </HStack>
                         </Stack>
                     </Stack>

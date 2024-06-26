@@ -1,12 +1,14 @@
 import { Button, FormControl, FormLabel, HStack, Image, Input, Select, Stack, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ApiClient from "../../../services/apiClient";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { today } from "../../../components/modal/appointment";
 import axios from "axios";
 import { FaPen } from "react-icons/fa6";
 import { Border } from "../../../styles/styles";
+import StaffDetailResponse, { initialStaffDetailResponse } from "../../../types/StaffDetailResponse";
+import { ApiResponse } from "../../../types/ApiResponse";
 
 const UpdateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -18,35 +20,43 @@ const UpdateStaffPage = () => {
     const [clinicBranchId, setClinicBranchId] = useState<number>(0);
     const [avatar, setAvatar] = useState<string>('');
     const [avatarData, setAvatarData] = useState<File | null>(null);
+    const [staff, setStaff] = useState<StaffDetailResponse>(initialStaffDetailResponse);
+    const param = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const toast = useToast();
 
-    const navigate = useNavigate();
+    const getStaffDetailById = async (id: number) => {
+        try {
+            const api = new ApiClient<ApiResponse<StaffDetailResponse>>('/staff');
+            const response = await api.getDetail(id);
+            console.log(response);
+            if (response.success) {
+                setStaff(response.data);
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    isClosable: true,
+                });
+            }
+        } catch (error) {
+            navigate('/not-found');
+        }
+    }
 
     const api = new ApiClient<any>('/staff');
 
-    const areAllFieldsFilled = () => {
-        return (
-            fullName !== '' &&
-            dob !== '' &&
-            gender !== '' &&
-            phone !== '' &&
-            email !== '' &&
-            address !== '' &&
-            avatar !== '' &&
-            avatarData !== null &&
-            clinicBranchId !== 0
-        );
-    };
-
     const handleReset = () => {
-        setFullName('');
-        setGender('');
-        setDob('');
-        setPhone('');
-        setEmail('');
-        setAddress('');
+        setFullName(staff.fullName);
+        setGender(staff.gender);
+        setDob(staff.dob);
+        setPhone(staff.phone);
+        setEmail(staff.email);
+        setAddress(staff.address);
         setClinicBranchId(0);
-        setAvatar('');
+        setAvatar(staff.avatar);
         setAvatarData(null);
     }
 
@@ -70,7 +80,7 @@ const UpdateStaffPage = () => {
 
         let avatarUrl: string = '';
 
-        if (avatarData) {
+        if (avatarData !== null) {
             const formDataImage = new FormData();
             formDataImage.append("file", avatarData);
             formDataImage.append("upload_preset", "z5r1wkcn");
@@ -88,18 +98,19 @@ const UpdateStaffPage = () => {
         }
 
         const data = {
+            id: parseInt(param.id || '0'),
             fullName,
             dob,
             gender,
             phone,
             email,
             address,
-            avatar: avatarUrl,
+            avatar: avatarUrl || avatar,
             clinicBranchId
         };
 
         try {
-            const response = await api.create(data);
+            const response = await api.update(data);
             console.log(response);
 
             if (response.success) {
@@ -110,6 +121,7 @@ const UpdateStaffPage = () => {
                     duration: 2500,
                     isClosable: true,
                 });
+                navigate(`administrator/accounts/staff/${param.id}`);
             } else {
                 toast({
                     title: "Error",
@@ -134,6 +146,12 @@ const UpdateStaffPage = () => {
         changeTabTitle('Update Staff Profile');
         handleReset();
     }, []);
+
+    useEffect(() => {
+        if (param.id) {
+            getStaffDetailById(parseInt(param.id));
+        }
+    }, [param.id]);
 
     return (
         <Stack w={'2xl'} m={'auto'}>
@@ -290,7 +308,6 @@ const UpdateStaffPage = () => {
                     my={1}
                     h={6}
                     onClick={handleCreate}
-                    isDisabled={!areAllFieldsFilled()}
                 >
                     Save
                 </Button>

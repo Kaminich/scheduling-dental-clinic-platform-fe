@@ -100,19 +100,19 @@ const routes = [
                 element: <CreateStaffPage />
             },
             {
-                path: "administrator/accounts/dentist/detail",
+                path: "administrator/accounts/dentist/:id",
                 element: <DentistProfileDetailPage />
             },
             {
-                path: "administrator/accounts/staff/detail",
+                path: "administrator/accounts/staff/:id",
                 element: <StaffProfileDetailPage />
             },
             {
-                path: "administrator/accounts/dentist/detail/update",
+                path: "administrator/accounts/dentist/:id/update",
                 element: <UpdateDentistPage />
             },
             {
-                path: "administrator/accounts/staff/detail/update",
+                path: "administrator/accounts/staff/:id/update",
                 element: <UpdateStaffPage />
             },
             {

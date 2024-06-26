@@ -1,16 +1,18 @@
 import { Button, FormControl, FormLabel, HStack, Heading, Image, Input, Select, Stack, Textarea, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ApiClient from "../../../services/apiClient";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { today } from "../../../components/modal/appointment";
 import { FaPen } from "react-icons/fa6";
 import axios from "axios";
 import { Border } from "../../../styles/styles";
+import { ApiResponse } from "../../../types/ApiResponse";
+import DentistDetailResponse, { initialDentistDetailResponse } from "../../../types/DentistDetailResponse";
 
 const UpdateDentistPage = () => {
     const [fullName, setFullName] = useState<string>('');
-    const [dob, setDob] = useState<Date | string>('');
+    const [dob, setDob] = useState<string>('');
     const [gender, setGender] = useState<string>('');
     const [phone, setPhone] = useState<string | number>('');
     const [email, setEmail] = useState<string>('');
@@ -21,40 +23,45 @@ const UpdateDentistPage = () => {
     const [avatar, setAvatar] = useState<string>('');
     const [avatarData, setAvatarData] = useState<File | null>(null);
     const [branchId, setBranchId] = useState<number>(0);
-
+    const [dentist, setDentist] = useState<DentistDetailResponse>(initialDentistDetailResponse);
+    const param = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const toast = useToast();
+
+    const getDentistDetailById = async (id: number) => {
+        try {
+            const api = new ApiClient<ApiResponse<DentistDetailResponse>>('/dentists');
+            const response = await api.getDetail(id);
+            console.log(response);
+            if (response.success) {
+                setDentist(response.data);
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    isClosable: true,
+                });
+            }
+        } catch (error) {
+            navigate('/not-found');
+        }
+    }
+
     const api = new ApiClient<any>('/dentists');
 
-    const navigate = useNavigate();
-
-    const areAllFieldsFilled = () => {
-        return (
-            fullName !== '' &&
-            dob !== '' &&
-            gender !== '' &&
-            phone !== '' &&
-            email !== '' &&
-            address !== '' &&
-            description !== '' &&
-            specialty !== '' &&
-            experience !== '' &&
-            avatar !== '' &&
-            avatarData !== null &&
-            branchId !== 0
-        );
-    };
-
     const handleReset = () => {
-        setFullName('');
-        setDob('');
-        setGender('');
-        setPhone('');
-        setEmail('');
-        setAddress('');
-        setDescription('');
-        setSpecialty('');
-        setExperience('');
-        setAvatar('');
+        setFullName(dentist.fullName);
+        setDob(dentist.dob);
+        setGender(dentist.gender);
+        setPhone(dentist.phone);
+        setEmail(dentist.email);
+        setAddress(dentist.address);
+        setDescription(dentist.description);
+        setSpecialty(dentist.specialty);
+        setExperience(dentist.experience);
+        setAvatar(dentist.avatar);
         setAvatarData(null);
         setBranchId(0);
     }
@@ -96,6 +103,7 @@ const UpdateDentistPage = () => {
         }
 
         const data = {
+            id: parseInt(param.id || '0'),
             fullName,
             email,
             gender,
@@ -109,7 +117,7 @@ const UpdateDentistPage = () => {
         };
 
         try {
-            const response = await api.create(data);
+            const response = await api.update(data);
             console.log(response);
 
             if (response.success) {
@@ -120,7 +128,7 @@ const UpdateDentistPage = () => {
                     duration: 2500,
                     isClosable: true,
                 });
-
+                navigate(`administrator/accounts/dentist/${param.id}`);
             } else {
                 toast({
                     title: "Error",
@@ -143,8 +151,14 @@ const UpdateDentistPage = () => {
 
     useEffect(() => {
         changeTabTitle('Update Dentist Profile');
-        handleReset()
+        handleReset();
     }, []);
+
+    useEffect(() => {
+        if (param.id) {
+            getDentistDetailById(parseInt(param.id));
+        }
+    }, [param.id]);
 
     return (
         <Stack w={'6xl'} m={'auto'}>
@@ -215,6 +229,7 @@ const UpdateDentistPage = () => {
                             <Input
                                 type="date"
                                 max={today}
+                                value={dob}
                                 onChange={(e) => setDob(e.target.value)}
                                 required
                             />
@@ -288,7 +303,7 @@ const UpdateDentistPage = () => {
                         <FormLabel pl={1}>Specialty</FormLabel>
                         <Select
                             name="specialty"
-                            value={gender}
+                            value={specialty}
                             onChange={(e) => setSpecialty(e.target.value)}
                             placeholder={'Select specialty'}
                         >
@@ -350,7 +365,6 @@ const UpdateDentistPage = () => {
                     my={1}
                     h={6}
                     onClick={handleCreate}
-                    isDisabled={!areAllFieldsFilled()}
                 >
                     Save
                 </Button>

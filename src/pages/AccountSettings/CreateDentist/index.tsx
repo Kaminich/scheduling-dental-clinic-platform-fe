@@ -1,6 +1,5 @@
 import { Button, FormControl, FormLabel, HStack, Heading, Image, Input, Select, Stack, Textarea, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import ApiClient from "../../../services/apiClient";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { today } from "../../../components/modal/appointment";
@@ -24,8 +23,6 @@ const CreateDentistPage = () => {
 
     const toast = useToast();
     const api = new ApiClient<any>('/dentists');
-
-    const navigate = useNavigate();
 
     const areAllFieldsFilled = () => {
         return (

@@ -12,14 +12,14 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <GoogleOAuthProvider clientId='758503744205-dsdvki2sdmn0cm90316md5djc6afncuf.apps.googleusercontent.com'>
-    <React.StrictMode>
-      <AuthProvider>
-        <ChakraProvider>
-          <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-          </QueryClientProvider>
-        </ChakraProvider>
-      </AuthProvider>
-    </React.StrictMode>
+    {/* <React.StrictMode> */}
+    <AuthProvider>
+      <ChakraProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </ChakraProvider>
+    </AuthProvider>
+    {/* </React.StrictMode> */}
   </GoogleOAuthProvider>
 )

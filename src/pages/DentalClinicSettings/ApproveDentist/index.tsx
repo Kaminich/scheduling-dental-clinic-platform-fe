@@ -1,24 +1,28 @@
 import { Button, Card, CardBody, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Tag, TagLabel, Text, useDisclosure } from "@chakra-ui/react";
-import { FaCheck, FaX } from "react-icons/fa6";
+import { FaCheck, FaSliders, FaX } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { Shadow } from "../../../styles/styles";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import usePendingDentists from "../../../hooks/usePendingDentists";
-import Dentist from "../../../types/Dentist";
 import Loading from "../../../components/loading";
 import DentistApproveModal from "../../../components/modal/dentist_approve";
 import DentistDetailModal from "../../../components/modal/dentist_detail";
+import DentistListResponse from "../../../types/DentistListResponse";
 
 const ApproveDentistPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
-    const [dentists, setDentists] = useState<Dentist[]>([]);
+    const [dentists, setDentists] = useState<DentistListResponse[]>([]);
     const [type, setType] = useState<string>('');
     const [id, setId] = useState<number>(0);
     const { data, isLoading } = usePendingDentists();
     const { isOpen: isOpenApprove, onClose: onCloseApprove, onOpen: onOpenApprove } = useDisclosure();
     const { isOpen: isOpenDetail, onClose: onCloseDetail, onOpen: onOpenDetail } = useDisclosure();
+
+    let filteredDentists = dentists.filter((dentist) => {
+        return dentist.fullName.toLowerCase().includes(keyword.toLowerCase())
+    })
 
     useEffect(() => {
         changeTabTitle('Approve Dentist');
@@ -30,17 +34,17 @@ const ApproveDentistPage = () => {
         }
     }, [data]);
 
-    console.log(dentists);
+    console.log(dentists.length);
 
 
     return (
-        <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
+        <Stack w={'full'} align='center' mx='auto' my={5} gap={5}>
             <InputGroup>
                 <InputLeftElement children={<BsSearch />} />
                 <Input
                     ref={ref}
                     borderRadius={20}
-                    placeholder="Search dental..."
+                    placeholder="Search dentist name..."
                     variant="filled"
                     border='1px solid gainsboro'
                     onChange={(e) => {
@@ -49,9 +53,12 @@ const ApproveDentistPage = () => {
                     value={keyword}
                 />
             </InputGroup>
+            <HStack justify={'flex-end'} w={'full'}>
+                <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
+            </HStack>
             {!isLoading ? (
                 <>
-                    {dentists ? (
+                    {filteredDentists.length !== 0 ? (
                         <>
                             <Stack gap={6} w={'full'} >
                                 <Card shadow={Shadow.cardShadow}>
