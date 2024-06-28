@@ -115,6 +115,7 @@ const CreateDentistPage = () => {
                     description: response.message,
                     status: "success",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
 
@@ -124,6 +125,7 @@ const CreateDentistPage = () => {
                     description: response.message,
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }
@@ -133,6 +135,7 @@ const CreateDentistPage = () => {
                 description: error.response?.data?.message || "An error occurred",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
         }

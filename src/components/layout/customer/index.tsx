@@ -1,6 +1,6 @@
 import { Stack } from "@chakra-ui/react"
 import Navbar from "../components/navbar"
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import Footer from "../components/footer"
 import { useLocation } from "react-router-dom"
 import { useEffect } from "react"
@@ -11,13 +11,24 @@ import NotFoundPage from "../../../pages/NotFound"
 const Layout = () => {
     const { pathname } = useLocation();
     const { role } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [pathname]);
 
+    useEffect(() => {
+        if (role === 'Admin' || role === 'Owner') {
+            if (pathname === '/') {
+                navigate('/administrator');
+            }
+        }
+    }, [role, pathname, navigate]);
+
     if (role === 'Admin' || role === 'Owner') {
-        return <NotFoundPage />
+        if (pathname !== '/' && !pathname.startsWith('/administrator')) {
+            return <NotFoundPage />;
+        }
     }
 
     return (

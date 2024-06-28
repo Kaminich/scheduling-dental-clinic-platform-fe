@@ -1,20 +1,22 @@
-import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Menu, MenuButton, MenuItem, MenuList, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tooltip, Tr } from "@chakra-ui/react";
-import { FaEye, FaSliders, FaTrashCan, FaUserDoctor, FaUserNurse } from "react-icons/fa6";
+import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Menu, MenuButton, MenuItem, MenuList, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr } from "@chakra-ui/react";
+import { FaChevronRight, FaEye, FaSliders, FaTrashCan, FaUserCheck, FaUserDoctor, FaUserNurse, FaUserXmark } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { changeTabTitle } from "../../utils/changeTabTitle";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Color, Shadow } from "../../styles/styles";
 import { AddIcon } from "@chakra-ui/icons";
+import { Status } from "../../types/type.enum";
 
 const AccountSettings = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
     const [accounts, setAccounts] = useState([
-        { id: 1, username: 'John Doe', role: 'role 1', email: 'aaa', status: 'active' },
-        { id: 2, username: 'John Sin', role: 'role 1', email: 'aaa', status: 'active' },
-        { id: 3, username: 'Doe Sin', role: 'role 1', email: 'aaa', status: 'active' },
+        { id: 1, username: 'John Doe', role: 'role 1', email: 'aaa', status: 'ACTIVE' },
+        { id: 2, username: 'John Sin', role: 'role 1', email: 'aaa', status: 'INACTIVE' },
+        { id: 3, username: 'Doe Sin', role: 'role 1', email: 'aaa', status: 'PENDING' },
     ]);
+    const navigate = useNavigate();
 
     let filteredAccounts = accounts.filter((account) => {
         return account.username.toLowerCase().includes(keyword.toLowerCase())
@@ -84,16 +86,39 @@ const AccountSettings = () => {
                                     <Th textAlign='center' borderColor={'gainsboro'}>Email</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Status</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Action</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}></Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
                                 {filteredAccounts.map((account) => (
-                                    <Tr>
+                                    <Tr _hover={{ bg: 'gray.100' }}>
                                         <Td textAlign="center" borderColor={'gainsboro'}>{account.id}</Td>
                                         <Td textAlign="center" borderColor={'gainsboro'}>{account.username}</Td>
                                         <Td textAlign='center' borderColor={'gainsboro'}>{account.role}</Td>
                                         <Td textAlign="center" borderColor={'gainsboro'}>{account.email}</Td>
-                                        <Td textAlign="center" borderColor={'gainsboro'}>{account.status}</Td>
+                                        <Td textAlign="center" borderColor={'gainsboro'}>
+                                            {account.status === Status.ACTIVE && (
+                                                <Tag colorScheme="green">
+                                                    <TagLabel>
+                                                        {account.status}
+                                                    </TagLabel>
+                                                </Tag>
+                                            )}
+                                            {account.status === Status.INACTIVE && (
+                                                <Tag colorScheme="red">
+                                                    <TagLabel>
+                                                        {account.status}
+                                                    </TagLabel>
+                                                </Tag>
+                                            )}
+                                            {account.status === Status.PENDING && (
+                                                <Tag colorScheme="yellow">
+                                                    <TagLabel>
+                                                        {account.status}
+                                                    </TagLabel>
+                                                </Tag>
+                                            )}
+                                        </Td>
                                         <Td
                                             p={1}
                                             textAlign='center'
@@ -112,18 +137,56 @@ const AccountSettings = () => {
                                                     </span>
                                                 </Tooltip>
                                             </Button>
-                                            <Button
-                                                borderRadius='full'
-                                                px={3}
-                                                colorScheme="red"
-                                                variant='ghost'
-                                            >
-                                                <Tooltip label='Deactivate user account'>
-                                                    <span>
-                                                        <FaTrashCan />
-                                                    </span>
-                                                </Tooltip>
-                                            </Button>
+                                            {account.status === Status.ACTIVE && (
+                                                <Button
+                                                    borderRadius='full'
+                                                    px={3}
+                                                    colorScheme="red"
+                                                    variant='ghost'
+                                                >
+                                                    <Tooltip label='Deactivate user account'>
+                                                        <span>
+                                                            <FaUserXmark />
+                                                        </span>
+                                                    </Tooltip>
+                                                </Button>
+                                            )}
+                                            {account.status === Status.INACTIVE && (
+                                                <Button
+                                                    borderRadius='full'
+                                                    px={3}
+                                                    colorScheme="green"
+                                                    variant='ghost'
+                                                >
+                                                    <Tooltip label='Activate user account'>
+                                                        <span>
+                                                            <FaUserCheck />
+                                                        </span>
+                                                    </Tooltip>
+                                                </Button>
+                                            )}
+                                            {account.status === Status.PENDING && (
+                                                <Button
+                                                    borderRadius='full'
+                                                    px={3}
+                                                    colorScheme="red"
+                                                    variant='ghost'
+                                                >
+                                                    <Tooltip label='Remove user account'>
+                                                        <span>
+                                                            <FaTrashCan />
+                                                        </span>
+                                                    </Tooltip>
+                                                </Button>
+                                            )}
+                                        </Td>
+                                        <Td
+                                            textAlign='center'
+                                            borderColor={'gainsboro'}
+                                            cursor={'pointer'}
+                                            onClick={() => navigate('dental-detail')}
+                                        >
+                                            <FaChevronRight />
                                         </Td>
                                     </Tr>
                                 ))}

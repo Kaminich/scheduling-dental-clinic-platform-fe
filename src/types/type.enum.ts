@@ -21,3 +21,13 @@ export enum Shift {
     AFTERNOON = "AFTERNOON",
     ALL_DAY = "ALLDAY",
 }
+
+export enum ReportReason {
+    SPAM = 'Spam',
+    INAPPROPRIATE_CONTENT = 'Inappropriate content',
+    ABUSIVE_BEHAVIOR = 'Abusive behavior',
+    FALSE_INFORMATION = 'False information',
+    HARASSMENT = 'Harassment',
+    DISCRIMINATION = 'Discrimination',
+    VIOLATION_OF_TERMS = 'Violation of term'
+}

@@ -85,7 +85,7 @@ const DentalDetailModal = ({ isOpen, onClose, id }: Props) => {
                                 <Text>{dentalDetail.ownerDetail.fullName}</Text>
                             </HStack>
                             <HStack>
-                                <Text>Email Name:</Text>
+                                <Text>Email:</Text>
                                 <Text>{dentalDetail.ownerDetail.email}</Text>
                             </HStack>
                             <HStack>

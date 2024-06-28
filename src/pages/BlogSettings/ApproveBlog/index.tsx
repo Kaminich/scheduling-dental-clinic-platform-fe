@@ -1,9 +1,10 @@
-import { Button, Card, CardBody, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Text } from "@chakra-ui/react";
-import { FaCheck, FaX } from "react-icons/fa6";
+import { Button, Card, CardBody, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Text, Th, Thead, Tooltip, Tr } from "@chakra-ui/react";
+import { FaCheck, FaEye, FaSliders, FaX } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
-import { Shadow } from "../../../styles/styles";
+import { Color, Shadow } from "../../../styles/styles";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
+import Loading from "../../../components/loading";
 
 const ApproveBlogPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -29,40 +30,126 @@ const ApproveBlogPage = () => {
                     value={keyword}
                 />
             </InputGroup>
-            <Stack gap={6} w={'full'} >
-                <Card shadow={Shadow.cardShadow}>
-                    <CardBody pl={8}>
-                        <HStack justify={'space-between'} align={'center'}>
-                            <Stack gap={5} flex={3.7}>
-                                <HStack justify={'space-between'} minW={'full'} pr={5}>
-                                    <Text>Blog ID: </Text>
-                                    <HStack gap={4}>
-                                        <Text>Status:</Text>
-                                        <Text>Pending</Text>
-                                    </HStack>
-                                </HStack>
-                                <Stack>
-                                    <Text>Title: </Text>
-                                    <Text>Dental Clinic: </Text>
-                                    <Text>Blog Detail: </Text>
-                                </Stack>
-                            </Stack>
-                            <HStack gap={8} h={'135px'} flex={1}>
-                                <Divider orientation='vertical' borderColor={'grey'} p={0} />
-                                <Stack gap={4} align={'center'} m={'auto'} pb={3}>
-                                    <Text>Approve or Decline</Text>
-                                    <HStack gap={4}>
-                                        <Button colorScheme="green" variant={'outline'}>
-                                            <FaCheck />
-                                        </Button>
-                                        <Button colorScheme="red" variant={'outline'}>
-                                            <FaX />
-                                        </Button>
-                                    </HStack>
-                                </Stack>
-                            </HStack>
+            <Stack w={'full'} >
+                <Card shadow={Shadow.cardShadow} bg={Color.blue_100}>
+                    <CardHeader py={3}>
+                        <HStack w={'full'} justify={'flex-end'} gap={5}>
+                            <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
                         </HStack>
-                    </CardBody>
+                    </CardHeader>
+                    <Divider borderColor={'gainsboro'} />
+                    <TableContainer w='full' overflowY="auto" whiteSpace='normal'>
+                        <Table variant="simple" size="md">
+                            <Thead>
+                                <Tr>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>ID</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Clinic Name</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Title</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Status</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Action</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'} minW={120}>Approve or Denied</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {/* {!isLoading ? (
+                                    <>
+                                        {filteredClinics.length !== 0 ? (
+                                            <>
+                                                {filteredClinics.map((clinic) => ( */}
+                                <Tr _hover={{ bg: 'gray.100' }}>
+                                    <Td textAlign="center" borderColor={'gainsboro'}>{'clinic.clinicId'}</Td>
+                                    <Td textAlign="center" borderColor={'gainsboro'}>{'clinic.clinicName'}</Td>
+                                    <Td textAlign='center' borderColor={'gainsboro'}>{'clinic.ownerName'}</Td>
+                                    <Td textAlign='center' borderColor={'gainsboro'}>
+                                        <Tag size={'md'} variant='subtle' colorScheme='yellow'>
+                                            <TagLabel>PENDING</TagLabel>
+                                        </Tag>
+                                    </Td>
+                                    <Td
+                                        p={1}
+                                        textAlign='center'
+                                        gap={4}
+                                        borderColor={'gainsboro'}
+                                    >
+                                        <Button
+                                            borderRadius='full'
+                                            px={3}
+                                            colorScheme="blue"
+                                            variant='ghost'
+                                        // onClick={() => {
+                                        //     setId(clinic.clinicId)
+                                        //     onOpenDetail();
+                                        // }}
+                                        >
+                                            <Tooltip label='Show user information'>
+                                                <span>
+                                                    <FaEye />
+                                                </span>
+                                            </Tooltip>
+                                        </Button>
+                                    </Td>
+                                    <Td
+                                        p={1}
+                                        textAlign='center'
+                                        gap={4}
+                                        borderColor={'gainsboro'}
+                                    >
+                                        <Button
+                                            borderRadius='full'
+                                            px={3}
+                                            colorScheme="green"
+                                            variant='ghost'
+                                        // onClick={() => {
+                                        //     setType('approve');
+                                        //     setId(clinic.clinicId)
+                                        //     onOpenApprove();
+                                        // }}
+                                        >
+                                            <Tooltip label='Approve'>
+                                                <span>
+                                                    <FaCheck />
+                                                </span>
+                                            </Tooltip>
+                                        </Button>
+                                        <Button
+                                            borderRadius='full'
+                                            px={3}
+                                            colorScheme="red"
+                                            variant='ghost'
+                                        // onClick={() => {
+                                        //     setType('denied');
+                                        //     setId(clinic.clinicId);
+                                        //     onOpenApprove();
+                                        // }}
+                                        >
+                                            <Tooltip label='Denied'>
+                                                <span>
+                                                    <FaX />
+                                                </span>
+                                            </Tooltip>
+                                        </Button>
+                                    </Td>
+                                </Tr>
+                                {/* ))}
+                                            </>
+                                        ) : (
+                                            <Tr>
+                                                <Td colSpan={6} textAlign="center">
+                                                    No pending blog
+                                                </Td>
+                                            </Tr>
+                                        )}
+                                    </>
+                                ) : (
+                                    <Tr>
+                                        <Td colSpan={6} textAlign="center">
+                                            <Loading />
+                                        </Td>
+                                    </Tr>
+                                )} */}
+                            </Tbody>
+                        </Table>
+                    </TableContainer>
                 </Card>
             </Stack>
         </Stack>

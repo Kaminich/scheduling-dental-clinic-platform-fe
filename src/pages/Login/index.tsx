@@ -37,6 +37,7 @@ const LoginPage = () => {
                 description: "Sign in by Google failed. Try again!!!",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
         }
@@ -72,6 +73,7 @@ const LoginPage = () => {
                     description: response.message,
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }
@@ -83,6 +85,7 @@ const LoginPage = () => {
                     description: error.response?.data?.message || "An error occurred",
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }
@@ -107,6 +110,7 @@ const LoginPage = () => {
                     description: response.message,
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             } else {
@@ -129,6 +133,7 @@ const LoginPage = () => {
                     description: error.response?.data?.message || "An error occurred",
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }

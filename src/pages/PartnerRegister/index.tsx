@@ -1,8 +1,8 @@
-import { Button, Card, CardBody, Divider, FormControl, FormLabel, HStack, Heading, Image, Input, Select, Stack, Text, useToast } from "@chakra-ui/react"
+import { Button, Card, CardBody, Divider, FormControl, FormLabel, HStack, Heading, Input, Select, Stack, Text, useToast } from "@chakra-ui/react"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Color, Shadow } from "../../styles/styles";
 import { changeTabTitle } from "../../utils/changeTabTitle";
-import { FaPen, FaUpload } from "react-icons/fa6";
+import { FaUpload } from "react-icons/fa6";
 import axios from "axios";
 import ApiClient from "../../services/apiClient";
 
@@ -13,7 +13,6 @@ const PartnerRegisterPage = () => {
     const [city, setCity] = useState<string>('');
     const [clinicRegistration, setClinicRegistration] = useState<File | null>(null);
     const [websiteUrl, setWebsiteUrl] = useState<string>('');
-    const [clinicImage, setClinicImage] = useState<string>('');
     const [clinicImageData, setClinicImageData] = useState<File | null>(null);
     const [fullName, setFullName] = useState<string>('');
     const [phone, setPhone] = useState<string>('');
@@ -27,7 +26,6 @@ const PartnerRegisterPage = () => {
         setCity('');
         setClinicRegistration(null);
         setWebsiteUrl('');
-        setClinicImage('');
         setClinicImageData(null);
         setFullName('');
         setPhone('');
@@ -39,12 +37,12 @@ const PartnerRegisterPage = () => {
         console.log(selectedFile);
 
         if (selectedFile) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const imageUrl = URL.createObjectURL(selectedFile);
-                setClinicImage(imageUrl);
-            };
-            reader.readAsDataURL(selectedFile);
+            // const reader = new FileReader();
+            // reader.onload = () => {
+            //     const imageUrl = URL.createObjectURL(selectedFile);
+            //     setClinicImage(imageUrl);
+            // };
+            // reader.readAsDataURL(selectedFile);
             setClinicImageData(selectedFile);
         }
     }
@@ -101,6 +99,7 @@ const PartnerRegisterPage = () => {
                 description: "Clinic Registration must be uploaded",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
             return;
@@ -112,6 +111,7 @@ const PartnerRegisterPage = () => {
                 description: "Failed to upload images or files",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
             return;
@@ -142,6 +142,7 @@ const PartnerRegisterPage = () => {
                     description: response.message,
                     status: "success",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
                 resetAllField();
@@ -153,6 +154,7 @@ const PartnerRegisterPage = () => {
                     description: error.response?.data?.message || "An error occurred",
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }
@@ -301,6 +303,7 @@ const PartnerRegisterPage = () => {
                                         >
                                             <Text
                                                 noOfLines={1}
+                                                fontSize={15}
                                             >
                                                 {clinicRegistration?.name || 'Upload File'}
                                             </Text>
@@ -331,6 +334,7 @@ const PartnerRegisterPage = () => {
                                         >
                                             <Text
                                                 noOfLines={1}
+                                                fontSize={15}
                                             >
                                                 {clinicImageData?.name || 'Upload Image'}
                                             </Text>

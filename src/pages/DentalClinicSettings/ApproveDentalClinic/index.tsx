@@ -1,8 +1,8 @@
-import { Button, Card, CardBody, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Tag, TagLabel, Text, useDisclosure } from "@chakra-ui/react";
+import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure } from "@chakra-ui/react";
 import { FaCheck, FaEye, FaSliders, FaX } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
-import { Shadow } from "../../../styles/styles";
+import { Color, Shadow } from "../../../styles/styles";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import usePendingClinics from "../../../hooks/usePendingClinics";
 import Loading from "../../../components/loading";
@@ -21,6 +21,10 @@ const ApproveDentalClinicPage = () => {
     const { isOpen: isOpenApprove, onClose: onCloseApprove, onOpen: onOpenApprove } = useDisclosure();
     const { isOpen: isOpenDetail, onClose: onCloseDetail, onOpen: onOpenDetail } = useDisclosure();
 
+    let filteredClinics = clinics.filter((clinic) => {
+        return clinic.clinicName.toLowerCase().includes(keyword.toLowerCase())
+    })
+
     useEffect(() => {
         changeTabTitle('Approve Dental Clinic');
     }, []);
@@ -31,10 +35,10 @@ const ApproveDentalClinicPage = () => {
         }
     }, [data?.content]);
 
-    console.log(clinics);
+    console.log(filteredClinics);
 
     return (
-        <Stack w={'full'} align='center' mx='auto' my={5} gap={5}>
+        <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
             <InputGroup>
                 <InputLeftElement children={<BsSearch />} />
                 <Input
@@ -49,112 +53,140 @@ const ApproveDentalClinicPage = () => {
                     value={keyword}
                 />
             </InputGroup>
-            <HStack justify={'flex-end'} w={'full'}>
-                <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
-            </HStack>
-            {!isLoading ? (
-                <>
-                    {clinics ? (
-                        <>
-                            {clinics.map((clinic) => (
-                                <Stack gap={6} w={'full'}>
-                                    <Card shadow={Shadow.cardShadow}>
-                                        <CardBody pl={8}>
-                                            <HStack justify={'space-between'} align={'center'}>
-                                                <Stack gap={5} flex={3.7}>
-                                                    <HStack justify={'space-between'} minW={'full'} pr={5}>
-                                                        <HStack>
-                                                            <Text>Dental Clinic ID:</Text>
-                                                            <Text>{clinic.clinicId}</Text>
-                                                        </HStack>
-                                                        <HStack gap={4}>
-                                                            <Text>Status:</Text>
+            <Stack w={'full'}>
+                <Card shadow={Shadow.cardShadow} bg={Color.blue_100}>
+                    <CardHeader py={3}>
+                        <HStack w={'full'} justify={'flex-end'} gap={5}>
+                            <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
+                        </HStack>
+                    </CardHeader>
+                    <Divider borderColor={'gainsboro'} />
+                    <TableContainer w='full' overflowY="auto" whiteSpace='normal'>
+                        <Table variant="simple" size="md">
+                            <Thead>
+                                <Tr>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>ID</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Clinic Name</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Owner</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Status</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Action</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'} minW={120}>Approve or Denied</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {!isLoading ? (
+                                    <>
+                                        {filteredClinics.length !== 0 ? (
+                                            <>
+                                                {filteredClinics.map((clinic) => (
+                                                    <Tr _hover={{ bg: 'gray.100' }}>
+                                                        <Td textAlign="center" borderColor={'gainsboro'}>{clinic.clinicId}</Td>
+                                                        <Td textAlign="center" borderColor={'gainsboro'}>{clinic.clinicName}</Td>
+                                                        <Td textAlign='center' borderColor={'gainsboro'}>{clinic.ownerName}</Td>
+                                                        <Td textAlign='center' borderColor={'gainsboro'}>
                                                             <Tag size={'md'} variant='subtle' colorScheme='yellow'>
                                                                 <TagLabel>PENDING</TagLabel>
                                                             </Tag>
-                                                        </HStack>
-                                                    </HStack>
-                                                    <Stack>
-                                                        <HStack>
-                                                            <Text>Dental Clinic: </Text>
-                                                            <Text>{clinic.clinicName}</Text>
-                                                        </HStack>
-                                                        <HStack>
-                                                            <Text>Clinic Owner: </Text>
-                                                            <Text>{clinic.ownerName}</Text>
-                                                        </HStack>
-                                                        <HStack>
-                                                            <Text>Dental Clinic Detail:</Text>
+                                                        </Td>
+                                                        <Td
+                                                            p={1}
+                                                            textAlign='center'
+                                                            gap={4}
+                                                            borderColor={'gainsboro'}
+                                                        >
                                                             <Button
-                                                                px={2}
-                                                                borderRadius={'full'}
+                                                                borderRadius='full'
+                                                                px={3}
+                                                                colorScheme="blue"
+                                                                variant='ghost'
                                                                 onClick={() => {
                                                                     setId(clinic.clinicId)
                                                                     onOpenDetail();
                                                                 }}
                                                             >
-                                                                <FaEye />
+                                                                <Tooltip label='Show user information'>
+                                                                    <span>
+                                                                        <FaEye />
+                                                                    </span>
+                                                                </Tooltip>
                                                             </Button>
-                                                        </HStack>
-                                                    </Stack>
-                                                </Stack>
-                                                <HStack gap={8} h={'135px'} flex={1}>
-                                                    <Divider orientation='vertical' borderColor={'grey'} p={0} />
-                                                    <Stack gap={4} align={'center'} m={'auto'} pb={3}>
-                                                        <Text>Approve or Denied</Text>
-                                                        <HStack gap={4}>
+                                                        </Td>
+                                                        <Td
+                                                            p={1}
+                                                            textAlign='center'
+                                                            gap={4}
+                                                            borderColor={'gainsboro'}
+                                                        >
                                                             <Button
+                                                                borderRadius='full'
+                                                                px={3}
                                                                 colorScheme="green"
-                                                                variant={'outline'}
+                                                                variant='ghost'
                                                                 onClick={() => {
                                                                     setType('approve');
                                                                     setId(clinic.clinicId)
                                                                     onOpenApprove();
                                                                 }}
                                                             >
-                                                                <FaCheck />
+                                                                <Tooltip label='Approve'>
+                                                                    <span>
+                                                                        <FaCheck />
+                                                                    </span>
+                                                                </Tooltip>
                                                             </Button>
                                                             <Button
+                                                                borderRadius='full'
+                                                                px={3}
                                                                 colorScheme="red"
-                                                                variant={'outline'}
+                                                                variant='ghost'
                                                                 onClick={() => {
                                                                     setType('denied');
                                                                     setId(clinic.clinicId);
                                                                     onOpenApprove();
                                                                 }}
                                                             >
-                                                                <FaX />
+                                                                <Tooltip label='Denied'>
+                                                                    <span>
+                                                                        <FaX />
+                                                                    </span>
+                                                                </Tooltip>
                                                             </Button>
-                                                        </HStack>
-                                                    </Stack>
-                                                </HStack>
-                                            </HStack>
-                                        </CardBody>
-                                    </Card>
-                                </Stack>
-                            ))}
-                            <DentalApproveModal
-                                isOpen={isOpenApprove}
-                                onClose={onCloseApprove}
-                                id={id}
-                                type={type}
-                            />
-                            <DentalDetailModal
-                                isOpen={isOpenDetail}
-                                onClose={onCloseDetail}
-                                id={id}
-                            />
-                        </>
-                    ) : (
-                        <>No pending clinic</>
-                    )}
-                </>
-            ) : (
-                <Stack minH={'calc(100vh - 216px - 2.5rem)'}>
-                    <Loading />
-                </Stack>
-            )}
-        </Stack>
+                                                        </Td>
+                                                    </Tr>
+                                                ))}
+                                            </>
+                                        ) : (
+                                            <Tr>
+                                                <Td colSpan={6} textAlign="center">
+                                                    No pending clinic
+                                                </Td>
+                                            </Tr>
+                                        )}
+                                    </>
+                                ) : (
+                                    <Tr>
+                                        <Td colSpan={6} textAlign="center">
+                                            <Loading />
+                                        </Td>
+                                    </Tr>
+                                )}
+                            </Tbody>
+                        </Table>
+                    </TableContainer>
+                </Card>
+            </Stack>
+            <DentalApproveModal
+                isOpen={isOpenApprove}
+                onClose={onCloseApprove}
+                id={id}
+                type={type}
+            />
+            <DentalDetailModal
+                isOpen={isOpenDetail}
+                onClose={onCloseDetail}
+                id={id}
+            />
+        </Stack >
     )
 }
 

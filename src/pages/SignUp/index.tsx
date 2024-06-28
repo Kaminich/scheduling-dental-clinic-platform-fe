@@ -32,16 +32,13 @@ const SignUpPage = () => {
                 description: "Sign up by Google failed. Try again!!!",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
         }
     })
 
     const navigate = useNavigate();
-
-    const responseMessage = (response: any) => {
-        console.log(response);
-    };
 
     const api = new ApiClient<any>('/auth/register');
 
@@ -54,6 +51,7 @@ const SignUpPage = () => {
                 description: "Passwords do not match.",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
             return;
@@ -80,6 +78,7 @@ const SignUpPage = () => {
                     description: response.message,
                     status: "success",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
                 navigate('/login');
@@ -89,6 +88,7 @@ const SignUpPage = () => {
                     description: response.message,
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }
@@ -98,6 +98,7 @@ const SignUpPage = () => {
                 description: "An error occurred. Please try again.",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
         }

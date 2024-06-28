@@ -105,6 +105,7 @@ const CreateStaffPage = () => {
                     description: response.message,
                     status: "success",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             } else {
@@ -113,6 +114,7 @@ const CreateStaffPage = () => {
                     description: response.message,
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }
@@ -122,6 +124,7 @@ const CreateStaffPage = () => {
                 description: error.response?.data?.message || "An error occurred",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
         }

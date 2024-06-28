@@ -8,45 +8,45 @@ interface Prop {
     data?: Category;
 }
 
-const useCategory = ({ type, id, data }: Prop) => {
+const useCategory = () => {
     const api = new ApiClient<any>('/category');
-    if (type === 'get') {
-        return useQuery({
-            queryKey: ["getCategory"],
-            queryFn: () =>
-                api.getUnauthen()
-                    .then((data) => {
-                        return data.data;
-                    })
-        });
-    } else if (type === 'post') {
-        return useQuery({
-            queryKey: ["createCategory"],
-            queryFn: () =>
-                api.create(data)
-                    .then((data) => {
-                        return data.data;
-                    })
-        });
-    } else if (type === 'put') {
-        return useQuery({
-            queryKey: ["updateCategory"],
-            queryFn: () =>
-                api.update(data)
-                    .then((data) => {
-                        return data.data;
-                    })
-        });
-    } else {
-        return useQuery({
-            queryKey: ["deleteCategory"],
-            queryFn: () =>
-                api.delete(id)
-                    .then((data) => {
-                        return data.data;
-                    })
-        });
-    }
+    // if (type === 'get') {
+    return useQuery({
+        queryKey: ["getCategory"],
+        queryFn: () =>
+            api.getUnauthen()
+                .then((data) => {
+                    return data.data;
+                })
+    });
+    // } else if (type === 'post') {
+    //     return useQuery({
+    //         queryKey: ["createCategory"],
+    //         queryFn: () =>
+    //             api.create(data)
+    //                 .then((data) => {
+    //                     return data.data;
+    //                 })
+    //     });
+    // } else if (type === 'put') {
+    //     return useQuery({
+    //         queryKey: ["updateCategory"],
+    //         queryFn: () =>
+    //             api.update(data)
+    //                 .then((data) => {
+    //                     return data.data;
+    //                 })
+    //     });
+    // } else {
+    //     return useQuery({
+    //         queryKey: ["deleteCategory"],
+    //         queryFn: () =>
+    //             api.delete(id)
+    //                 .then((data) => {
+    //                     return data.data;
+    //                 })
+    //     });
+    // }
 
 };
 

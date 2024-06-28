@@ -12,7 +12,7 @@ import { ApiResponse } from "../../../types/ApiResponse";
 
 const UpdateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
-    const [dob, setDob] = useState<Date | string>('');
+    const [dob, setDob] = useState<string>('');
     const [gender, setGender] = useState<string>('');
     const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -38,6 +38,7 @@ const UpdateStaffPage = () => {
                     description: response.message,
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }
@@ -75,7 +76,7 @@ const UpdateStaffPage = () => {
         }
     }
 
-    const handleCreate = async (e: FormEvent) => {
+    const handleUpdate = async (e: FormEvent) => {
         e.preventDefault();
 
         let avatarUrl: string = '';
@@ -119,6 +120,7 @@ const UpdateStaffPage = () => {
                     description: response.message,
                     status: "success",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
                 navigate(`administrator/accounts/staff/${param.id}`);
@@ -128,6 +130,7 @@ const UpdateStaffPage = () => {
                     description: response.message,
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }
@@ -137,6 +140,7 @@ const UpdateStaffPage = () => {
                 description: error.response?.data?.message || "An error occurred",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
         }
@@ -144,7 +148,6 @@ const UpdateStaffPage = () => {
 
     useEffect(() => {
         changeTabTitle('Update Staff Profile');
-        handleReset();
     }, []);
 
     useEffect(() => {
@@ -152,6 +155,10 @@ const UpdateStaffPage = () => {
             getStaffDetailById(parseInt(param.id));
         }
     }, [param.id]);
+
+    useEffect(() => {
+        handleReset();
+    }, [staff]);
 
     return (
         <Stack w={'2xl'} m={'auto'}>
@@ -220,6 +227,7 @@ const UpdateStaffPage = () => {
                         <Input
                             type="date"
                             max={today}
+                            value={dob}
                             onChange={(e) => setDob(e.target.value)}
                             required
                         />
@@ -307,7 +315,17 @@ const UpdateStaffPage = () => {
                     mr={6}
                     my={1}
                     h={6}
-                    onClick={handleCreate}
+                    onClick={handleUpdate}
+                    isDisabled={
+                        fullName === '' ||
+                        dob === '' ||
+                        gender === '' ||
+                        phone === '' ||
+                        email === '' ||
+                        address === '' ||
+                        avatar === '' ||
+                        clinicBranchId === 0
+                    }
                 >
                     Save
                 </Button>
