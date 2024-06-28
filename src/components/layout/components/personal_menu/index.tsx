@@ -34,6 +34,7 @@ const PersonalMenu = () => {
                     description: "An error occurred",
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }
@@ -43,22 +44,26 @@ const PersonalMenu = () => {
                 description: error?.response?.data?.message || "An error occurred",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
         }
     }
 
+    console.log(data);
+
+
     return (
         <Menu autoSelect={false} isLazy>
             <MenuButton onClick={() => setSubMenu(false)}>
-                <Avatar size={'md'} name={data?.fullName || data?.username} src='https://bit.ly/sage-adebayo' />
+                <Avatar size={'md'} name={data?.fullName || data?.username} src={data?.avatar || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'} />
             </MenuButton>
             <MenuList minW={'sm'}>
                 {!subMenu ? (
                     <Stack gap={0}>
                         <Card maxW={'full'} p={5} m={4} mt={2} borderTop={'0.5px solid #f0f0f0'}>
                             <Flex gap={4} align={'center'}>
-                                <Avatar size={'sm'} name={data?.fullName || data?.username} src='https://bit.ly/sage-adebayo' />
+                                <Avatar size={'sm'} name={data?.fullName || data?.username} src={data?.avatar || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'} />
                                 {data?.role === 'CUSTOMER' ? (
                                     <Text fontWeight={600}>{data?.fullName}</Text>
                                 ) : (

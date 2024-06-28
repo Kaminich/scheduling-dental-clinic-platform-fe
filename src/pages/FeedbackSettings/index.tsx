@@ -1,13 +1,19 @@
-import { Button, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
-import { FaTrashCan } from "react-icons/fa6";
+import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tooltip, Tr } from "@chakra-ui/react";
+import { FaCheck, FaEye, FaSliders, FaTrashCan, FaX } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import { RiRotateLockFill } from "react-icons/ri";
+import Loading from "../../components/loading";
+import { Color, Shadow } from "../../styles/styles";
 
 const FeedbackSettingPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
+
+    // let filteredClinics = clinics.filter((clinic) => {
+    //     return clinic.username.toLowerCase().includes(keyword.toLowerCase())
+    // })
 
     useEffect(() => {
         changeTabTitle('Feedback Settings');
@@ -30,66 +36,113 @@ const FeedbackSettingPage = () => {
                 />
             </InputGroup>
             <Stack w={'full'}>
-                <HStack w={'full'} justify={'flex-end'} gap={5} pr={10}>
-                    <Text
-                        fontSize={16}
-                        color="blue"
-                        cursor={'pointer'}
-                    >
-                        Create
-                    </Text>
-                    <Text
-                        fontSize={16}
-                        color="blue"
-                        cursor={'pointer'}
-                    >
-                        Delete
-                    </Text>
-                </HStack>
-                <Divider />
-                <TableContainer w='full' overflowY="auto" whiteSpace='normal'>
-                    <Table variant="simple" size="md">
-                        <Thead>
-                            <Tr>
-                                <Th textAlign='center'>Dental Clinic</Th>
-                                <Th textAlign='center'>Rating</Th>
-                                <Th textAlign='center'>Feedback</Th>
-                                <Th textAlign='center'>Create By</Th>
-                                <Th textAlign='center'>Create At</Th>
-                                <Th textAlign='center'></Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            <Tr>
-                                <Td textAlign="center">{'logo'}</Td>
-                                <Td textAlign="center">{'1'}</Td>
-                                <Td textAlign='center'>{'name'}</Td>
-                                <Td textAlign="center">{'aaa'}</Td>
-                                <Td textAlign="center">{'bbb'}</Td>
-                                <Td p={1} textAlign='center' gap={4}>
-                                    <Button
-                                        borderRadius='full'
-                                        px={3}
-                                        colorScheme="blue"
-                                        variant='ghost'
+                <Card shadow={Shadow.cardShadow} bg={Color.blue_100}>
+                    <CardHeader py={3}>
+                        <HStack w={'full'} justify={'flex-end'} gap={5}>
+                            <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
+                        </HStack>
+                    </CardHeader>
+                    <Divider borderColor={'gainsboro'} />
+                    <TableContainer w='full' overflowY="auto" whiteSpace='normal'>
+                        <Table variant="simple" size="md">
+                            <Thead>
+                                <Tr>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>ID</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Clinic Name</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Owner</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Status</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Action</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'} minW={120}>Approve or Denied</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {/* {!isLoading ? ( */}
+                                <>
+                                    {/* {clinics ? ( */}
+                                    <>
+                                        {/* {filteredClinics.map((clinic) => ( */}
+                                        <Tr _hover={{ bg: 'gray.100' }}>
+                                            <Td textAlign="center" borderColor={'gainsboro'}>{'clinic.clinicId'}</Td>
+                                            <Td textAlign="center" borderColor={'gainsboro'}>{'clinic.clinicName'}</Td>
+                                            <Td textAlign='center' borderColor={'gainsboro'}>{'clinic.ownerName clinic.ownerName clinic.ownerName'}</Td>
+                                            <Td textAlign='center' borderColor={'gainsboro'}>
+                                                {/* <Tag size={'md'} variant='subtle' colorScheme='yellow'>
+                                                                <TagLabel>PENDING</TagLabel>
+                                                            </Tag> */}
+                                            </Td>
+                                            <Td
+                                                p={1}
+                                                textAlign='center'
+                                                gap={4}
+                                                borderColor={'gainsboro'}
+                                            >
+                                                <Button
+                                                    borderRadius='full'
+                                                    px={3}
+                                                    colorScheme="blue"
+                                                    variant='ghost'
 
-                                    >
-                                        <RiRotateLockFill />
-                                    </Button>
-                                    <Button
-                                        borderRadius='full'
-                                        px={3}
-                                        colorScheme="red"
-                                        variant='ghost'
+                                                >
+                                                    <Tooltip label='Show user information'>
+                                                        <span>
+                                                            <FaEye />
+                                                        </span>
+                                                    </Tooltip>
+                                                </Button>
+                                            </Td>
+                                            <Td
+                                                p={1}
+                                                textAlign='center'
+                                                gap={4}
+                                                borderColor={'gainsboro'}
+                                            >
+                                                <Button
+                                                    borderRadius='full'
+                                                    px={3}
+                                                    colorScheme="green"
+                                                    variant='ghost'
 
-                                    >
-                                        <FaTrashCan />
-                                    </Button>
-                                </Td>
-                            </Tr>
-                        </Tbody>
-                    </Table>
-                </TableContainer>
+                                                >
+                                                    <Tooltip label='Approve'>
+                                                        <span>
+                                                            <FaCheck />
+                                                        </span>
+                                                    </Tooltip>
+                                                </Button>
+                                                <Button
+                                                    borderRadius='full'
+                                                    px={3}
+                                                    colorScheme="red"
+                                                    variant='ghost'
+
+                                                >
+                                                    <Tooltip label='Denied'>
+                                                        <span>
+                                                            <FaX />
+                                                        </span>
+                                                    </Tooltip>
+                                                </Button>
+                                            </Td>
+                                        </Tr>
+                                        {/* ))} */}
+                                    </>
+                                    {/* ) : (
+                                            <>No pending clinic</>
+                                        )} */}
+                                </>
+                                {/* ) : ( */}
+                                {/* <Tr>
+                                    <Td></Td>
+                                    <Td></Td>
+                                    <Td></Td>
+                                    <Td><Loading /></Td>
+                                    <Td></Td>
+                                </Tr> */}
+                                {/* )} */}
+                            </Tbody>
+                        </Table>
+                    </TableContainer>
+                </Card>
             </Stack>
         </Stack>
     )

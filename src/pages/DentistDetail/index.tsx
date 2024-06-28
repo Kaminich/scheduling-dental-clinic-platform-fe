@@ -37,6 +37,7 @@ const DentistDetailPage = () => {
                 description: "An error has occur",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
         }

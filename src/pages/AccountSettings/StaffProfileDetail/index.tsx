@@ -6,6 +6,7 @@ import StaffDetailResponse, { initialStaffDetailResponse } from "../../../types/
 import ApiClient from "../../../services/apiClient";
 import { ApiResponse } from "../../../types/ApiResponse";
 import { formatDate } from "../../../utils/formatDate";
+import { FaPenToSquare } from "react-icons/fa6";
 
 const StaffProfileDetailPage = () => {
     const [staff, setStaff] = useState<StaffDetailResponse>(initialStaffDetailResponse);
@@ -26,6 +27,7 @@ const StaffProfileDetailPage = () => {
                     description: response.message,
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }
@@ -46,8 +48,8 @@ const StaffProfileDetailPage = () => {
 
     return (
         <Stack w={'2xl'} m={'auto'}>
-            <HStack pos={'fixed'} right={20} mt={-4}>
-                <Button colorScheme="blue" onClick={() => navigate('update')}>Edit</Button>
+            <HStack pos={'fixed'} top={128} right={20} mt={-4}>
+                <Button leftIcon={<FaPenToSquare />} colorScheme="blue" onClick={() => navigate('update')}>Edit</Button>
             </HStack>
             <Stack gap={2} minW={'lg'}>
                 <HStack w={'full'} justify={'center'} align={'flex-end'}>

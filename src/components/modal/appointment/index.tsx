@@ -259,7 +259,7 @@ const AppointmentModal = ({ isOpen, onClose, dentalData, dentistData, locationDa
                             justify={'center'}
                         >
                             <Stack mx={5} align={'center'} gap={4}>
-                                <Text>You must login to review this dental</Text>
+                                <Text>You must login to make appointment</Text>
                                 <Button
                                     maxW={24}
                                     p={5}

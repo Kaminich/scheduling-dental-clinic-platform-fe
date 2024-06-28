@@ -41,6 +41,7 @@ const UpdateDentistPage = () => {
                     description: response.message,
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }
@@ -81,7 +82,7 @@ const UpdateDentistPage = () => {
         }
     }
 
-    const handleCreate = async (e: FormEvent) => {
+    const handleUpdate = async (e: FormEvent) => {
         e.preventDefault();
         let avatarUrl: string = '';
 
@@ -126,6 +127,7 @@ const UpdateDentistPage = () => {
                     description: response.message,
                     status: "success",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
                 navigate(`administrator/accounts/dentist/${param.id}`);
@@ -135,6 +137,7 @@ const UpdateDentistPage = () => {
                     description: response.message,
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }
@@ -144,6 +147,7 @@ const UpdateDentistPage = () => {
                 description: error.response?.data?.message || "An error occurred",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
         }
@@ -159,6 +163,10 @@ const UpdateDentistPage = () => {
             getDentistDetailById(parseInt(param.id));
         }
     }, [param.id]);
+
+    useEffect(() => {
+        handleReset();
+    }, [dentist]);
 
     return (
         <Stack w={'6xl'} m={'auto'}>
@@ -364,7 +372,21 @@ const UpdateDentistPage = () => {
                     mr={6}
                     my={1}
                     h={6}
-                    onClick={handleCreate}
+                    onClick={handleUpdate}
+                    isDisabled={
+                        fullName === '' ||
+                        dob === '' ||
+                        gender === '' ||
+                        phone === '' ||
+                        email === '' ||
+                        address === '' ||
+                        description === '' ||
+                        specialty === '' ||
+                        experience === '' ||
+                        avatar === '' ||
+                        avatarData === null ||
+                        branchId === 0
+                    }
                 >
                     Save
                 </Button>

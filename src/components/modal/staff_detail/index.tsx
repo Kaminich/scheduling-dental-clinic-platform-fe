@@ -1,7 +1,9 @@
-import { Button, HStack, Heading, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, } from "@chakra-ui/react";
+import { Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import ApiClient from "../../../services/apiClient";
 import { Border } from "../../../styles/styles";
+import StaffDetailResponse, { initialStaffDetailResponse } from "../../../types/StaffDetailResponse";
+import { formatDate } from "../../../utils/formatDate";
 
 interface Props {
     isOpen: boolean;
@@ -10,7 +12,7 @@ interface Props {
 }
 
 const StaffDetailModal = ({ isOpen, onClose, id }: Props) => {
-    const [dentalDetail, setDentalDetail] = useState<any>()
+    const [staff, setStaff] = useState<StaffDetailResponse>(initialStaffDetailResponse)
 
     const handleShowInfo = async (id: number) => {
         try {
@@ -18,7 +20,7 @@ const StaffDetailModal = ({ isOpen, onClose, id }: Props) => {
             const response = await api.getDetail(id);
             console.log(response);
             if (response.success) {
-                setDentalDetail(response.data);
+                setStaff(response.data);
             }
         } catch (error) {
 
@@ -31,8 +33,6 @@ const StaffDetailModal = ({ isOpen, onClose, id }: Props) => {
         }
     }, [id]);
 
-    console.log(dentalDetail);
-
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
@@ -42,56 +42,38 @@ const StaffDetailModal = ({ isOpen, onClose, id }: Props) => {
                 <ModalCloseButton />
                 <ModalBody p={6} borderY={Border.tableBorder}>
                     <Stack gap={4}>
-                        <Heading fontSize='xl'>Clinic Information</Heading>
-                        <Stack>
-                            <HStack>
-                                <Text>Dental Clinic ID:</Text>
-                                <Text>{dentalDetail?.clinicId}</Text>
-                            </HStack>
-                            <HStack>
-                                <Text>Dental Clinic Name:</Text>
-                                <Text>{dentalDetail?.clinicName}</Text>
-                            </HStack>
-                            <HStack>
-                                <Text>Address:</Text>
-                                <Text>{dentalDetail?.address}</Text>
-                            </HStack>
-                            <HStack>
-                                <Text>City:</Text>
-                                <Text>{dentalDetail?.city}</Text>
-                            </HStack>
-                            <HStack>
-                                <Text>Phone:</Text>
-                                <Text>{dentalDetail?.phone}</Text>
-                            </HStack>
-                            <HStack>
-                                <Text>Website Url:</Text>
-                                <Text>{dentalDetail?.websiteUrl}</Text>
-                            </HStack>
-                            <HStack>
-                                <Text>Dental Clinic Image:</Text>
-                                <Text>{dentalDetail?.clinicImage}</Text>
-                            </HStack>
-                            <HStack>
-                                <Text>Dental Clinic Registration:</Text>
-                                <Link href={dentalDetail?.clinicRegistration} isExternal>View Clinic Registration</Link>
-                            </HStack>
-                        </Stack>
-                        <Heading fontSize='xl'>Owner Information</Heading>
-                        <Stack>
-                            <HStack>
-                                <Text>Full Name:</Text>
-                                <Text>{dentalDetail?.ownerDetail.fullName}</Text>
-                            </HStack>
-                            <HStack>
-                                <Text>Email Name:</Text>
-                                <Text>{dentalDetail?.ownerDetail.email}</Text>
-                            </HStack>
-                            <HStack>
-                                <Text>Phone:</Text>
-                                <Text>{dentalDetail?.ownerDetail.phone}</Text>
-                            </HStack>
-                        </Stack>
+                        <HStack>
+                            <Text>Staff ID:</Text>
+                            <Text>{staff.id}</Text>
+                        </HStack>
+                        <HStack>
+                            <Text>Full Name:</Text>
+                            <Text>{staff.fullName}</Text>
+                        </HStack>
+                        <HStack>
+                            <Text>Gender:</Text>
+                            <Text>{staff.gender}</Text>
+                        </HStack>
+                        <HStack>
+                            <Text>Date of Birth:</Text>
+                            <Text>{formatDate(staff.dob)}</Text>
+                        </HStack>
+                        <HStack>
+                            <Text>Phone:</Text>
+                            <Text>{staff.phone}</Text>
+                        </HStack>
+                        <HStack>
+                            <Text>Email:</Text>
+                            <Text>{staff.email}</Text>
+                        </HStack>
+                        <HStack>
+                            <Text>Address:</Text>
+                            <Text>{staff.address}</Text>
+                        </HStack>
+                        <HStack>
+                            <Text>Clinic Branch Name:</Text>
+                            <Text>{staff.clinicBranchName}</Text>
+                        </HStack>
                     </Stack>
                 </ModalBody>
                 <ModalFooter>

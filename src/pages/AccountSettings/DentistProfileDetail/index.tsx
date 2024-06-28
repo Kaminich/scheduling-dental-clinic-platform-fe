@@ -27,6 +27,7 @@ const DentistProfileDetailPage = () => {
                     description: response.message,
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }

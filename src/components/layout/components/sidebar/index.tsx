@@ -1,12 +1,9 @@
 import React from 'react';
-import {
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-} from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { ConfigProvider, Menu } from 'antd';
 import { Button, Box, HStack, Stack, Text } from '@chakra-ui/react';
-import { FaChartSimple, FaCommentMedical, FaHouseMedical, FaHouseMedicalCircleCheck, FaNewspaper, FaPenToSquare, FaTooth, FaUserDoctor, FaUserGear, FaUserNurse } from 'react-icons/fa6';
+import { FaBriefcaseMedical, FaChartSimple, FaCommentMedical, FaHospital, FaHospitalUser, FaHouseMedicalCircleCheck, FaNewspaper, FaPenToSquare, FaTooth, FaUserDoctor, FaUserGear, FaUserNurse } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { Color } from '../../../../styles/styles';
 import useUserProfile from '../../../../hooks/useUserProfile';
@@ -44,7 +41,7 @@ const adminMenuItems: MenuItem[] = [
     getItem(
         <Text fontSize='17px'>Dental Clinic Settings</Text>
         , 'sub1'
-        , <FaHouseMedical />,
+        , <FaHospital />,
         [
             getItem(
                 <Link to={'dentals/approve-dental'} style={{ fontSize: '17px' }}>Approve Dental Clinic</Link>
@@ -111,7 +108,17 @@ const clinicOwnerMenuItems: MenuItem[] = [
     getItem(
         <Link to={'dentals'} style={{ fontSize: '17px' }}>Dental Clinic Settings</Link>
         , '3'
-        , <FaHouseMedical />,
+        , <FaHospital />,
+    ),
+    getItem(
+        <Link to={'branches'} style={{ fontSize: '17px' }}>Clinic Branch Settings</Link>
+        , '4'
+        , <FaHospitalUser />,
+    ),
+    getItem(
+        <Link to={'categories'} style={{ fontSize: '17px' }}>Categories Settings</Link>
+        , '5'
+        , <FaBriefcaseMedical />,
     ),
     getItem(
         <Link to={'services'} style={{ fontSize: '17px' }}>Services Settings</Link>
@@ -133,7 +140,6 @@ interface SideBarProps {
 const SideBar = ({ collapsed, toggleCollapsed }: SideBarProps) => {
 
     const { data } = useUserProfile();
-    const windowHeight = window.innerHeight;
 
     return (
         <Box bg={Color.blue_100} pt={2} pos={'fixed'} zIndex={10}>
@@ -167,11 +173,11 @@ const SideBar = ({ collapsed, toggleCollapsed }: SideBarProps) => {
                         // items={adminMenuItems}
                         style={{
                             border: 'none',
-                            height: `calc(${windowHeight}px - 152px)`,
+                            height: `calc(100vh - 152px)`,
                             background: Color.blue_100,
                             overflowY: 'auto',
                             overflowX: 'hidden',
-                            maxHeight: `calc(${windowHeight}px - 152px)`
+                            maxHeight: `calc(100vh - 152px)`
                         }}
                     />
                 </ConfigProvider>

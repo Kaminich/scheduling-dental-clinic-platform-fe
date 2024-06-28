@@ -1,11 +1,12 @@
-import { Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
-import { FaChevronRight } from "react-icons/fa6";
+import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { FaChevronRight, FaSliders } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
-import { Link } from "react-router-dom";
+import { Color, Shadow } from "../../../styles/styles";
+import { AddIcon } from "@chakra-ui/icons";
 
 const ManageBlogPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -34,55 +35,45 @@ const ManageBlogPage = () => {
                 />
             </InputGroup>
             <Stack w={'full'}>
-                <HStack w={'full'} justify={'flex-end'} gap={5} pr={10}>
-                    <Link to={'create-blog'}>
-                        <Text
-                            fontSize={16}
-                            color="blue"
-                            cursor={'pointer'}
-                        >
-                            Create
-                        </Text>
-                    </Link>
-                    <Text
-                        fontSize={16}
-                        color="blue"
-                        cursor={'pointer'}
-                    >
-                        Delete
-                    </Text>
-                </HStack>
-                <Divider />
-                <TableContainer w='full' overflowY="auto" whiteSpace='normal'>
-                    <Table variant="simple" size="md">
-                        <Thead>
-                            <Tr>
-                                <Th textAlign='center'>ID</Th>
-                                <Th textAlign='center'>Title</Th>
-                                <Th textAlign='center'>Create At</Th>
-                                <Th textAlign='center'>Create By</Th>
-                                <Th textAlign='center'>Last Modified</Th>
-                                <Th textAlign='center'>Last Modified By</Th>
-                                <Th textAlign='center'>Status</Th>
-                                <Th textAlign='center'></Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            <Tr _hover={{ bg: '#f1f1f1' }} onClick={() => navigate('blog-detail')}>
-                                <Td textAlign="center">{'1'}</Td>
-                                <Td textAlign='center'>{'name'}</Td>
-                                <Td textAlign="center">{'aaa'}</Td>
-                                <Td textAlign="center">{'bbb'}</Td>
-                                <Td textAlign='center'>{'2 days ago'}</Td>
-                                <Td textAlign='center'>{'ccc'}</Td>
-                                <Td textAlign='center'>{'active'}</Td>
-                                <Td textAlign='center' cursor={'pointer'}>
-                                    <FaChevronRight />
-                                </Td>
-                            </Tr>
-                        </Tbody>
-                    </Table>
-                </TableContainer>
+                <Card shadow={Shadow.cardShadow} bg={Color.blue_100}>
+                    <CardHeader py={3}>
+                        <HStack w={'full'} justify={'flex-end'} gap={5}>
+                            <Button leftIcon={<AddIcon />} colorScheme="green">Create</Button>
+                            <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
+                        </HStack>
+                    </CardHeader>
+                    <Divider borderColor={'gainsboro'} />
+                    <TableContainer w='full' overflowY="auto" whiteSpace='normal'>
+                        <Table variant="simple" size="md">
+                            <Thead>
+                                <Tr>
+                                    <Th textAlign='center'>ID</Th>
+                                    <Th textAlign='center'>Title</Th>
+                                    <Th textAlign='center'>Create At</Th>
+                                    <Th textAlign='center'>Create By</Th>
+                                    <Th textAlign='center'>Last Modified</Th>
+                                    <Th textAlign='center'>Last Modified By</Th>
+                                    <Th textAlign='center'>Status</Th>
+                                    <Th textAlign='center'></Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                <Tr _hover={{ bg: '#f1f1f1' }} onClick={() => navigate('blog-detail')}>
+                                    <Td textAlign="center">{'1'}</Td>
+                                    <Td textAlign='center'>{'name'}</Td>
+                                    <Td textAlign="center">{'aaa'}</Td>
+                                    <Td textAlign="center">{'bbb'}</Td>
+                                    <Td textAlign='center'>{'2 days ago'}</Td>
+                                    <Td textAlign='center'>{'ccc'}</Td>
+                                    <Td textAlign='center'>{'active'}</Td>
+                                    <Td textAlign='center' cursor={'pointer'}>
+                                        <FaChevronRight />
+                                    </Td>
+                                </Tr>
+                            </Tbody>
+                        </Table>
+                    </TableContainer>
+                </Card>
             </Stack>
         </Stack>
     )

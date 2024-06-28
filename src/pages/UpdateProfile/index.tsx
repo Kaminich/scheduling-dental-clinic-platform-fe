@@ -79,6 +79,7 @@ const UpdateProfilePage = () => {
                     description: response.message,
                     status: "success",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
             }
@@ -88,6 +89,7 @@ const UpdateProfilePage = () => {
                 description: error?.response?.data?.message || "An error occurred",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
         }
@@ -101,6 +103,7 @@ const UpdateProfilePage = () => {
                 description: "Passwords do not match.",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
             return;
@@ -121,6 +124,7 @@ const UpdateProfilePage = () => {
                     description: response.message,
                     status: "success",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
                 setCurrentPass('');
@@ -133,6 +137,7 @@ const UpdateProfilePage = () => {
                 description: error?.response?.data?.message || "An error occurred",
                 status: "error",
                 duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
         }

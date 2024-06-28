@@ -1,5 +1,4 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useToast } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import ApiClient from "../../../services/apiClient";
 import { Border } from "../../../styles/styles";
 
@@ -12,7 +11,6 @@ interface Props {
 
 const StaffApproveModal = ({ isOpen, onClose, id, type }: Props) => {
     const toast = useToast();
-    const navigate = useNavigate();
 
     const handleClick = async () => {
         if (type === 'approve') {
@@ -30,6 +28,7 @@ const StaffApproveModal = ({ isOpen, onClose, id, type }: Props) => {
                         description: response.message,
                         status: "success",
                         duration: 2500,
+                        position: 'top',
                         isClosable: true,
                     });
                     onClose();
@@ -39,6 +38,7 @@ const StaffApproveModal = ({ isOpen, onClose, id, type }: Props) => {
                         description: response.message,
                         status: "error",
                         duration: 2500,
+                        position: 'top',
                         isClosable: true,
                     });
                     onClose();
@@ -49,6 +49,7 @@ const StaffApproveModal = ({ isOpen, onClose, id, type }: Props) => {
                     description: error,
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
                 onClose();
@@ -69,6 +70,7 @@ const StaffApproveModal = ({ isOpen, onClose, id, type }: Props) => {
                         description: response.message,
                         status: "success",
                         duration: 2500,
+                        position: 'top',
                         isClosable: true,
                     });
                     onClose();
@@ -78,6 +80,7 @@ const StaffApproveModal = ({ isOpen, onClose, id, type }: Props) => {
                         description: response.message,
                         status: "error",
                         duration: 2500,
+                        position: 'top',
                         isClosable: true,
                     });
                     onClose();
@@ -88,6 +91,7 @@ const StaffApproveModal = ({ isOpen, onClose, id, type }: Props) => {
                     description: error,
                     status: "error",
                     duration: 2500,
+                    position: 'top',
                     isClosable: true,
                 });
                 onClose();
@@ -103,7 +107,7 @@ const StaffApproveModal = ({ isOpen, onClose, id, type }: Props) => {
                     <ModalHeader fontSize='xl'>Approve Staff Account</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
-                        <Text fontSize='lg'>Are you sure you want to approve this account</Text>
+                        <Text fontSize='lg'>Are you sure you want to approve this account?</Text>
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme='blue' mr={3} onClick={handleClick}>
@@ -122,7 +126,7 @@ const StaffApproveModal = ({ isOpen, onClose, id, type }: Props) => {
                     <ModalHeader fontSize='xl'>Denied Staff Account</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
-                        <Text fontSize='lg'>Are you sure you want to denied this account</Text>
+                        <Text fontSize='lg'>Are you sure you want to denied this account?</Text>
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme='red' mr={3} onClick={handleClick}>
