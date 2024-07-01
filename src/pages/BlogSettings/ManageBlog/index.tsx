@@ -38,7 +38,9 @@ const ManageBlogPage = () => {
                 <Card shadow={Shadow.cardShadow} bg={Color.blue_100}>
                     <CardHeader py={3}>
                         <HStack w={'full'} justify={'flex-end'} gap={5}>
-                            <Button leftIcon={<AddIcon />} colorScheme="green">Create</Button>
+                            {role !== 'Admin' && (
+                                <Button leftIcon={<AddIcon />} colorScheme="green">Create</Button>
+                            )}
                             <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
                         </HStack>
                     </CardHeader>

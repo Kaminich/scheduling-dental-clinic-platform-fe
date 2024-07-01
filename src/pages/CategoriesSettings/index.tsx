@@ -1,5 +1,5 @@
 import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure } from "@chakra-ui/react";
-import { FaEye, FaPenToSquare, FaSliders, FaTrashCan } from "react-icons/fa6";
+import { FaArrowRightArrowLeft, FaEye, FaPenToSquare, FaSliders, FaTrashCan } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { changeTabTitle } from "../../utils/changeTabTitle";
@@ -9,12 +9,14 @@ import { AddIcon } from "@chakra-ui/icons";
 import useCategory from "../../hooks/useCategory";
 import CategoryModal from "../../components/modal/category";
 import DeleteModal from "../../components/modal/delete";
+import CategoryChangeStatusModal from "../../components/modal/category_change_status";
 
 const CategoriesSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
     const [type, setType] = useState<string>('');
     const [id, setId] = useState<number>(0);
+    const [status, setStatus] = useState<string>('');
     const [clinics, setClinics] = useState([
         { id: 1, username: 'John Doe', role: 'role 1', email: 'aaa', status: 'active' },
         { id: 2, username: 'John Sin', role: 'role 1', email: 'aaa', status: 'active' },
@@ -23,6 +25,7 @@ const CategoriesSettingsPage = () => {
     const { data } = useCategory();
     const { isOpen: isOpenCategory, onClose: onCloseCategory, onOpen: onOpenCategory } = useDisclosure();
     const { isOpen: isOpenDelete, onClose: onCloseDelete, onOpen: onOpenDelete } = useDisclosure();
+    const { isOpen: isOpenChange, onClose: onCloseChange, onOpen: onOpenChange } = useDisclosure();
     const navigate = useNavigate();
 
     let filteredClinics = clinics.filter((clinic) => {
@@ -117,6 +120,23 @@ const CategoriesSettingsPage = () => {
                                             <Button
                                                 borderRadius='full'
                                                 px={3}
+                                                colorScheme="blue"
+                                                variant='ghost'
+                                                onClick={() => {
+                                                    setId(0);
+                                                    setStatus('')
+                                                    onOpenChange();
+                                                }}
+                                            >
+                                                <Tooltip label='Change status'>
+                                                    <span>
+                                                        <FaArrowRightArrowLeft />
+                                                    </span>
+                                                </Tooltip>
+                                            </Button>
+                                            <Button
+                                                borderRadius='full'
+                                                px={3}
                                                 colorScheme="gray"
                                                 variant='ghost'
                                                 onClick={() => {
@@ -166,6 +186,12 @@ const CategoriesSettingsPage = () => {
                 onClose={onCloseDelete}
                 id={id}
                 type="category"
+            />
+            <CategoryChangeStatusModal
+                isOpen={isOpenChange}
+                onClose={onCloseChange}
+                id={id}
+                status={status === 'ACTIVE' ? true : false}
             />
         </Stack>
     )

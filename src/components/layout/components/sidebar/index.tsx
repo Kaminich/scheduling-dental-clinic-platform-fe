@@ -3,7 +3,7 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { ConfigProvider, Menu } from 'antd';
 import { Button, Box, HStack, Stack, Text } from '@chakra-ui/react';
-import { FaBriefcaseMedical, FaChartSimple, FaCommentMedical, FaHospital, FaHospitalUser, FaHouseMedicalCircleCheck, FaNewspaper, FaPenToSquare, FaTooth, FaUserDoctor, FaUserGear, FaUserNurse } from 'react-icons/fa6';
+import { FaBriefcaseMedical, FaChartSimple, FaFlag, FaHospital, FaHospitalUser, FaHouseMedicalCircleCheck, FaNewspaper, FaPenToSquare, FaTooth, FaUserDoctor, FaUserGear, FaUserNurse } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { Color } from '../../../../styles/styles';
 import useUserProfile from '../../../../hooks/useUserProfile';
@@ -69,9 +69,9 @@ const adminMenuItems: MenuItem[] = [
         ]
     ),
     getItem(
-        <Link to={'feedbacks'} style={{ fontSize: '17px' }}>Feedback Settings</Link>
+        <Link to={'reports'} style={{ fontSize: '17px' }}>Report Settings</Link>
         , '7'
-        , <FaCommentMedical />,
+        , <FaFlag />,
     ),
     getItem(
         <Text fontSize='17px'>Blog Settings</Text>

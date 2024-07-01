@@ -1,8 +1,11 @@
-import { Avatar, HStack, Stack, Text } from "@chakra-ui/react"
+import { Avatar, HStack, Stack, Text, useDisclosure } from "@chakra-ui/react"
 import { Rate } from "antd"
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Color } from "../../../../styles/styles";
+import { FaFlag } from "react-icons/fa6";
+import ReportFeedbackModal from "../../../modal/report_feedback";
+import { useAuth } from "../../../../hooks/useAuth";
 
 interface Prop {
     type: string,
@@ -10,21 +13,43 @@ interface Prop {
 
 const FeedbackItem = ({ type }: Prop) => {
     const [showFullText, setShowFullText] = useState<boolean>(false);
+    const [feedbackId, setFeedbackId] = useState<number>(0);
+    const { isOpen, onClose, onOpen } = useDisclosure();
+    const { isAuthenticated } = useAuth();
 
     const toggleShowFullText = () => {
         setShowFullText(!showFullText);
     };
 
     return (
-        <Stack gap={4} mb={3}>
+        <Stack gap={4} mb={3} pos={'relative'}>
+            {isAuthenticated && (
+                <HStack
+                    pos={'absolute'}
+                    right={-2}
+                    top={-2}
+                    color={'gray'}
+                    _hover={{ color: 'gray.600' }}
+                    cursor={'pointer'}
+                    onClick={() => {
+                        onOpen();
+                        setFeedbackId(0)
+                    }}
+                >
+                    <FaFlag />
+                    <Text fontSize={14}>Report</Text>
+                </HStack>
+            )}
             <HStack gap={4}>
                 <Avatar size={'md'} name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
                 <Stack gap={0}>
                     <Text fontWeight={'medium'}>Segun Adebayo</Text>
-                    {type === 'personal' && (
+                    {type === 'personal' ? (
                         <Link to={'/dental-detail'}>
                             <Text fontSize={16} color={'blue'} _hover={{ color: Color.hoverBlue }}>F-Dental</Text>
                         </Link>
+                    ) : (
+                        <Text fontSize={16} color={'blue'}>F-Dental</Text>
                     )}
                 </Stack>
             </HStack>
@@ -61,6 +86,11 @@ const FeedbackItem = ({ type }: Prop) => {
                     {showFullText ? "Show less" : "Read more"}
                 </Text>
             </Stack>
+            <ReportFeedbackModal
+                isOpen={isOpen}
+                onClose={onClose}
+                feedbackId={feedbackId}
+            />
         </Stack>
     )
 }

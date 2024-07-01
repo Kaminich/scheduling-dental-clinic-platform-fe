@@ -22,7 +22,7 @@ const ClinicBranchSettingsPage = () => {
     })
 
     useEffect(() => {
-        changeTabTitle('Services Settings');
+        changeTabTitle('Clinic Branch Settings');
     }, []);
 
     return (
@@ -32,7 +32,7 @@ const ClinicBranchSettingsPage = () => {
                 <Input
                     ref={ref}
                     borderRadius={20}
-                    placeholder="Search clinic name..."
+                    placeholder="Search branch name..."
                     variant="filled"
                     border='1px solid gainsboro'
                     onChange={(e) => {

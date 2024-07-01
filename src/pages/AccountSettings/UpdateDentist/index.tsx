@@ -309,22 +309,12 @@ const UpdateDentistPage = () => {
                     </FormControl>
                     <FormControl id="specialty" isRequired>
                         <FormLabel pl={1}>Specialty</FormLabel>
-                        <Select
-                            name="specialty"
+                        <Input
+                            type="text"
                             value={specialty}
                             onChange={(e) => setSpecialty(e.target.value)}
-                            placeholder={'Select specialty'}
-                        >
-                            <option value="Male">
-                                Male
-                            </option>
-                            <option value="Female">
-                                Female
-                            </option>
-                            <option value="Other">
-                                Other
-                            </option>
-                        </Select>
+                            placeholder={'Enter specialty'}
+                        />
                     </FormControl>
                     <FormControl id="experience" isRequired>
                         <FormLabel pl={1}>Experience</FormLabel>

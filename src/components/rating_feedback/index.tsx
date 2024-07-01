@@ -1,7 +1,6 @@
 import { Card, Container, Divider, Flex, HStack, Progress, Stack, Text } from "@chakra-ui/react"
 import { Rate } from "antd"
 import FeedbackItem from "./components/feedback_item";
-import FeedbackForm from "./components/feedback_form";
 import { Color, Shadow } from "../../styles/styles";
 
 interface Prop {
@@ -67,7 +66,7 @@ const RatingAndFeedback = ({ isModal }: Prop) => {
             </Card>
             <Divider mt={10} mb={6} borderColor={'#8080808f'} />
             <HStack gap={6} align={'flex-start'} mb={2}>
-                <Stack maxW={'3xl'} flex={2}>
+                <Stack gap={2}>
                     <Text
                         maxW={'sm'}
                         fontSize={20}
@@ -87,11 +86,6 @@ const RatingAndFeedback = ({ isModal }: Prop) => {
                         <FeedbackItem type="dental" />
                     </Card>
                 </Stack>
-                {!isModal && (
-                    <Stack flex={1}>
-                        <FeedbackForm type="dental" />
-                    </Stack>
-                )}
             </HStack>
         </>
     )

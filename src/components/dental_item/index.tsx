@@ -109,7 +109,7 @@ const DentalItem = () => {
                     )}
                 </CardFooter>
             </Card>
-            <FeedbackModal isOpen={isOpenFeedback} onClose={onCloseFeedback} type="ratingfeedback" />
+            <FeedbackModal isOpen={isOpenFeedback} onClose={onCloseFeedback} />
             <AppointmentModal
                 isOpen={isOpenAppointment}
                 onClose={onCloseAppointment}
