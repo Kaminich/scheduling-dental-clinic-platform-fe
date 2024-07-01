@@ -14,7 +14,7 @@ export default interface ReportResponse {
 export const initialReportResponse: ReportResponse = {
     reportId: 0,
     feedbackId: 0,
-    reportReason: ReportReason.SPAM, // Default to a specific enum value
+    reportReason: ReportReason.SPAM,
     reporter: '',
     reportedCustomer: '',
     createdDateTime: '',

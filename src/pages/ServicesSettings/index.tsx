@@ -1,4 +1,4 @@
-import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
 import { FaChevronRight, FaSliders } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
@@ -6,16 +6,20 @@ import { changeTabTitle } from "../../utils/changeTabTitle";
 import { useNavigate } from "react-router";
 import { Color, Shadow } from "../../styles/styles";
 import { AddIcon } from "@chakra-ui/icons";
+import ServiceChangeStatusModal from "../../components/modal/service_change_status";
 
 const ServicesSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
+    const [id, setId] = useState<number>(0);
+    const [status, setStatus] = useState<string>('');
     const [clinics, setClinics] = useState([
         { id: 1, username: 'John Doe', role: 'role 1', email: 'aaa', status: 'active' },
         { id: 2, username: 'John Sin', role: 'role 1', email: 'aaa', status: 'active' },
         { id: 3, username: 'Doe Sin', role: 'role 1', email: 'aaa', status: 'active' },
     ]);
     const navigate = useNavigate();
+    const { isOpen: isOpenChange, onClose: onCloseChange, onOpen: onOpenChange } = useDisclosure();
 
     let filteredClinics = clinics.filter((clinic) => {
         return clinic.username.toLowerCase().includes(keyword.toLowerCase())
@@ -95,6 +99,12 @@ const ServicesSettingsPage = () => {
                     </TableContainer>
                 </Card>
             </Stack>
+            <ServiceChangeStatusModal
+                isOpen={isOpenChange}
+                onClose={onCloseChange}
+                id={id}
+                status={status === 'ACTIVE' ? true : false}
+            />
         </Stack>
     )
 }

@@ -222,7 +222,7 @@ const PersonalMenu = () => {
                                     >
                                         <FaNewspaper />
                                     </Button>
-                                    Manage Blog
+                                    Manage Blogs
                                 </MenuItem>
                             </>
                         )}

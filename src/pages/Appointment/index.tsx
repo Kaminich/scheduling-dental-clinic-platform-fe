@@ -3,10 +3,10 @@ import { Color, Shadow } from "../../styles/styles"
 import { useEffect, useState } from "react";
 import AppointmentModal, { today } from "../../components/modal/appointment";
 import { FaPenToSquare, FaTrashCan } from "react-icons/fa6";
-import FeedbackModal from "../../components/modal/feedback";
 import { changeTabTitle } from "../../utils/changeTabTitle";
+import FeedbackFormModal from "../../components/modal/feedback_form";
 
-const Appointment = () => {
+const AppointmentPage = () => {
     const [fullname, setFullname] = useState<string>('');
     const [age, setAge] = useState<number | string>('');
     const [phone, setPhone] = useState<number | string>('');
@@ -282,10 +282,9 @@ const Appointment = () => {
                             dentistData={''}
                             locationData={''}
                         />
-                        <FeedbackModal
+                        <FeedbackFormModal
                             isOpen={isOpenFeedback}
                             onClose={onCloseFeedback}
-                            type="review"
                         />
                     </TabPanel>
                 </TabPanels>
@@ -294,4 +293,4 @@ const Appointment = () => {
     )
 }
 
-export default Appointment
+export default AppointmentPage

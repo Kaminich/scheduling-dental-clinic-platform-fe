@@ -16,7 +16,6 @@ const StaffApproveModal = ({ isOpen, onClose, id, type }: Props) => {
         if (type === 'approve') {
             const api = new ApiClient<any>(`/staff/approval`);
             const data = {
-                id,
                 isApproved: true,
             }
             try {
@@ -46,7 +45,7 @@ const StaffApproveModal = ({ isOpen, onClose, id, type }: Props) => {
             } catch (error: any) {
                 toast({
                     title: "Error",
-                    description: error,
+                    description: error.response?.data?.message || "An error occurred",
                     status: "error",
                     duration: 2500,
                     position: 'top',
@@ -58,7 +57,6 @@ const StaffApproveModal = ({ isOpen, onClose, id, type }: Props) => {
         } else {
             const api = new ApiClient<any>(`/clinics/approval`);
             const data = {
-                id,
                 isApproved: false,
             }
             try {
@@ -88,7 +86,7 @@ const StaffApproveModal = ({ isOpen, onClose, id, type }: Props) => {
             } catch (error: any) {
                 toast({
                     title: "Error",
-                    description: error,
+                    description: error.response?.data?.message || "An error occurred",
                     status: "error",
                     duration: 2500,
                     position: 'top',

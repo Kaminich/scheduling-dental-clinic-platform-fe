@@ -17,14 +17,6 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
     const [categoryImage, setCategoryImage] = useState<string>('');
     const [categoryImageData, setCategoryImageData] = useState<File | null>(null);
 
-    const areAllFieldsFilled = () => {
-        return (
-            categoryName !== '' &&
-            categoryImage !== '' &&
-            categoryImageData !== null
-        );
-    };
-
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
         console.log(selectedFile);
@@ -70,7 +62,7 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
             } catch (error: any) {
                 toast({
                     title: "Error",
-                    description: error,
+                    description: error.response?.data?.message || "An error occurred",
                     status: "error",
                     duration: 2500,
                     position: 'top',
@@ -107,7 +99,7 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
             } catch (error: any) {
                 toast({
                     title: "Error",
-                    description: error,
+                    description: error.response?.data?.message || "An error occurred",
                     status: "error",
                     duration: 2500,
                     position: 'top',
@@ -144,7 +136,7 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
             } catch (error: any) {
                 toast({
                     title: "Error",
-                    description: error,
+                    description: error.response?.data?.message || "An error occurred",
                     status: "error",
                     duration: 2500,
                     position: 'top',

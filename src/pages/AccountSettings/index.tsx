@@ -8,7 +8,7 @@ import { Color, Shadow } from "../../styles/styles";
 import { AddIcon } from "@chakra-ui/icons";
 import { Status } from "../../types/type.enum";
 
-const AccountSettings = () => {
+const AccountSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
     const [accounts, setAccounts] = useState([
@@ -199,4 +199,4 @@ const AccountSettings = () => {
     )
 }
 
-export default AccountSettings;
+export default AccountSettingsPage;

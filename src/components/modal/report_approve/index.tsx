@@ -9,17 +9,14 @@ interface Props {
     type: string;
 }
 
-const DentistApproveModal = ({ isOpen, onClose, id, type }: Props) => {
+const ReportApproveModal = ({ isOpen, onClose, id, type }: Props) => {
     const toast = useToast();
 
     const handleClick = async () => {
         if (type === 'approve') {
-            const api = new ApiClient<any>(`/dentists/approval`);
-            const data = {
-                isApproved: true,
-            }
+            const api = new ApiClient<any>(`/report/approve`);
             try {
-                const response = await api.createWithIdAndData(id, data);
+                const response = await api.createWithId(id);
                 console.log(response);
                 if (response.success) {
                     toast({
@@ -55,12 +52,10 @@ const DentistApproveModal = ({ isOpen, onClose, id, type }: Props) => {
             }
 
         } else {
-            const api = new ApiClient<any>(`/clinics/approval`);
-            const data = {
-                isApproved: false,
-            }
+            const api = new ApiClient<any>(`/report/decline`);
+
             try {
-                const response = await api.createWithIdAndData(id, data);
+                const response = await api.createWithId(id);
                 console.log(response);
                 if (response.success) {
                     toast({
@@ -103,10 +98,10 @@ const DentistApproveModal = ({ isOpen, onClose, id, type }: Props) => {
             <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
                 <ModalOverlay backdropFilter={'blur(5px)'} />
                 <ModalContent>
-                    <ModalHeader fontSize='xl'>Approve Dentist Account</ModalHeader>
+                    <ModalHeader fontSize='xl'>Approve Report</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
-                        <Text fontSize='lg'>Are you sure you want to approve this account?</Text>
+                        <Text fontSize='lg'>Are you sure you want to approve this report?</Text>
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme='blue' mr={3} onClick={handleClick}>
@@ -122,10 +117,10 @@ const DentistApproveModal = ({ isOpen, onClose, id, type }: Props) => {
             <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
                 <ModalOverlay backdropFilter={'blur(5px)'} />
                 <ModalContent>
-                    <ModalHeader fontSize='xl'>Denied Dentist Account</ModalHeader>
+                    <ModalHeader fontSize='xl'>Denied Report</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
-                        <Text fontSize='lg'>Are you sure you want to denied this account?</Text>
+                        <Text fontSize='lg'>Are you sure you want to denied this report?</Text>
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme='red' mr={3} onClick={handleClick}>
@@ -139,4 +134,4 @@ const DentistApproveModal = ({ isOpen, onClose, id, type }: Props) => {
     }
 }
 
-export default DentistApproveModal;
+export default ReportApproveModal;
