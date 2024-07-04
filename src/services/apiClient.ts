@@ -100,6 +100,12 @@ class ApiClient<T> {
             .then((res) => res.data)
     }
 
+    updateWithId = (id: number, config?: AxiosRequestConfig) => {
+        return axiosInstance
+            .put<T>(this.endpoint + '/' + id, this.setAuthHeader(config))
+            .then((res) => res.data)
+    }
+
     delete = (id: number, config?: AxiosRequestConfig) => {
         return axiosInstance
             .delete<T>(this.endpoint + '/' + id, this.setAuthHeader(config))

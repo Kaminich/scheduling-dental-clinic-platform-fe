@@ -88,8 +88,8 @@ const routes = [
             { path: "administrator/branches/:id", element: <ClinicBranchDetailPage /> },
             { path: "administrator/branches/:id/update", element: <UpdateClinicBranchPage /> },
             { path: "administrator/services/create", element: <CreateServicePage /> },
-            { path: "administrator/services/detail", element: <ServiceDetailPage /> },
-            { path: "administrator/services/update", element: <UpdateServicePage /> },
+            { path: "administrator/services/:id", element: <ServiceDetailPage /> },
+            { path: "administrator/services/:id/update", element: <UpdateServicePage /> },
         ],
     },
     {

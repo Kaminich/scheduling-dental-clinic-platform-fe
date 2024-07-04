@@ -1,23 +1,26 @@
 import { Button, FormControl, FormLabel, HStack, Image, Input, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, UnorderedList, useToast } from "@chakra-ui/react";
 import ApiClient from "../../../services/apiClient";
 import { Border } from "../../../styles/styles";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa6";
-import CategoryViewListResponse from "../../../types/CategoryViewListResponse";
+import CategoryViewResponse, { initialCategoryViewResponse } from "../../../types/CategoryViewResponse";
+import axios from "axios";
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
-    id: number | null;
-    data: CategoryViewListResponse;
+    id?: number;
     type: string;
 }
 
 const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
     const [categoryName, setCategoryName] = useState<string>('');
-    const toast = useToast();
     const [categoryImage, setCategoryImage] = useState<string>('');
+    const [categoryNameUpdate, setCategoryNameUpdate] = useState<string>('');
+    const [categoryImageUpdate, setCategoryImageUpdate] = useState<string>('');
     const [categoryImageData, setCategoryImageData] = useState<File | null>(null);
+    const [category, setCategory] = useState<CategoryViewResponse>(initialCategoryViewResponse);
+    const toast = useToast();
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
@@ -27,18 +30,81 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
             const reader = new FileReader();
             reader.onload = () => {
                 const imageUrl = URL.createObjectURL(selectedFile);
-                setCategoryImage(imageUrl);
+                if (type === 'create') {
+                    setCategoryImage(imageUrl);
+                } else {
+                    setCategoryImageUpdate(imageUrl);
+                }
             };
             reader.readAsDataURL(selectedFile);
             setCategoryImageData(selectedFile);
         }
     }
 
-    const handleClick = async () => {
-        if (type === 'update' && id !== null) {
+    const getCategoryDetail = async (id: number) => {
+        const api = new ApiClient<any>(`/category`);
+        try {
+            const response = await api.getDetail(id);
+            if (response.success) {
+                setCategory(response.data)
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            }
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 2500,
+                position: 'top',
+                isClosable: true,
+            });
+        }
+    }
+
+    const getUpdateInfo = () => {
+        setCategoryNameUpdate(category.categoryName);
+        setCategoryImageUpdate(category.categoryImage)
+    }
+
+    const handleClick = async (e: FormEvent) => {
+        e.preventDefault();
+        let imageUrl: string = '';
+
+        if (categoryImageData) {
+            const formDataImage = new FormData();
+            formDataImage.append("file", categoryImageData);
+            formDataImage.append("upload_preset", "z5r1wkcn");
+
+            try {
+                const response = await axios.post(
+                    `https://api.cloudinary.com/v1_1/dy1t2fqsc/image/upload`,
+                    formDataImage
+                );
+                imageUrl = response.data.secure_url;
+                console.log("Cloudinary image URL:", imageUrl);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        if (type === 'update' && id !== undefined) {
+            const data = {
+                categoryId: id,
+                categoryName: categoryNameUpdate,
+                categoryImage: imageUrl === '' ? categoryImageUpdate : imageUrl,
+                categoryStatus: true
+            }
             try {
                 const api = new ApiClient<any>(`/category`);
-                const response = await api.update(id);
+                const response = await api.update(data);
                 console.log(response);
                 if (response.success) {
                     toast({
@@ -49,7 +115,6 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                         position: 'top',
                         isClosable: true,
                     });
-                    onClose();
                 } else {
                     toast({
                         title: "Error",
@@ -59,7 +124,6 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                         position: 'top',
                         isClosable: true,
                     });
-                    onClose();
                 }
             } catch (error: any) {
                 toast({
@@ -70,49 +134,28 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                     position: 'top',
                     isClosable: true,
                 });
-                onClose();
-            }
-        } else if (type === 'detail' && id !== null) {
-            const api = new ApiClient<any>(`/category`);
-            try {
-                const response = await api.getDetail(id);
-                console.log(response);
-                if (response.success) {
-                    toast({
-                        title: "Success",
-                        description: response.message,
-                        status: "success",
-                        duration: 2500,
-                        position: 'top',
-                        isClosable: true,
-                    });
-                    onClose();
-                } else {
-                    toast({
-                        title: "Error",
-                        description: response.message,
-                        status: "error",
-                        duration: 2500,
-                        position: 'top',
-                        isClosable: true,
-                    });
-                    onClose();
-                }
-            } catch (error: any) {
-                toast({
-                    title: "Error",
-                    description: error.response?.data?.message || "An error occurred",
-                    status: "error",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                });
+            } finally {
                 onClose();
             }
         } else if (type === 'create') {
+            if (imageUrl === '') {
+                toast({
+                    title: "Error",
+                    description: "Failed to upload images or files",
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+                return;
+            }
             const api = new ApiClient<any>(`/category`);
+            const data = {
+                categoryName,
+                categoryImage: imageUrl,
+            }
             try {
-                const response = await api.create(id);
+                const response = await api.create(data);
                 console.log(response);
                 if (response.success) {
                     toast({
@@ -123,7 +166,6 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                         position: 'top',
                         isClosable: true,
                     });
-                    onClose();
                 } else {
                     toast({
                         title: "Error",
@@ -133,7 +175,6 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                         position: 'top',
                         isClosable: true,
                     });
-                    onClose();
                 }
             } catch (error: any) {
                 toast({
@@ -144,10 +185,21 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                     position: 'top',
                     isClosable: true,
                 });
+            } finally {
                 onClose();
             }
         }
     }
+
+    useEffect(() => {
+        if (id) {
+            getCategoryDetail(id);
+        }
+    }, [id])
+
+    useEffect(() => {
+        getUpdateInfo();
+    }, [category])
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
@@ -164,7 +216,7 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                 )}
                 <ModalCloseButton />
                 <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
-                    {(type === 'create' || type === 'update') && (
+                    {(type === 'create') && (
                         <Stack gap={4}>
                             <FormControl id="categoryimage" isRequired>
                                 <FormLabel pl={1}>Category Image</FormLabel>
@@ -208,20 +260,64 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                                 />
                             </FormControl>
                         </Stack>
-
                     )}
+                    {type === 'update' && (
+                        <Stack gap={4}>
+                            <FormControl id="categoryimage" isRequired>
+                                <FormLabel pl={1}>Category Image</FormLabel>
+                                <HStack w={'full'} justify={'center'} align={'flex-end'} ml={4}>
+                                    <Image
+                                        border='1px solid gainsboro'
+                                        borderRadius={5}
+                                        h={32}
+                                        w={72}
+                                        src={
+                                            categoryImageUpdate || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
+                                        }
+                                        alt='logo'
+                                        bgColor='white'
+                                    />
+                                    <FormLabel
+                                        htmlFor="logo"
+                                        cursor='pointer'
+                                        fontSize='md'
+                                        requiredIndicator
+                                    >
+                                        <FaPen />
+                                    </FormLabel>
+                                    <Input
+                                        type="file"
+                                        id="logo"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        display='none'
+                                    />
+                                </HStack>
+                            </FormControl>
+                            <FormControl id="categoryName" flex={2} isRequired>
+                                <FormLabel pl={1}>Category Name</FormLabel>
+                                <Input
+                                    type="text"
+                                    value={categoryNameUpdate}
+                                    onChange={(e) => setCategoryNameUpdate(e.target.value)}
+                                    placeholder="Enter category name"
+                                    required
+                                />
+                            </FormControl>
+                        </Stack>
+                    )}
+
                     {type === 'detail' && (
                         <Stack>
                             <HStack gap={4}>
                                 <Text>Category Name: </Text>
-                                <Text>Category Name</Text>
+                                <Text>{category.categoryName}</Text>
                             </HStack>
                             <Text>Category Services:</Text>
                             <UnorderedList pl={4}>
-                                <ListItem>list 1</ListItem>
-                                <ListItem>list 1</ListItem>
-                                <ListItem>list 1</ListItem>
-                                <ListItem>list 1</ListItem>
+                                {category.services.map((service) => (
+                                    <ListItem>{service.serviceName}</ListItem>
+                                ))}
                             </UnorderedList>
                         </Stack>
                     )}
@@ -233,9 +329,12 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                             mr={3}
                             onClick={handleClick}
                             isDisabled={
-                                categoryName === '' ||
-                                categoryImage === '' ||
-                                categoryImageData === null
+                                type === 'create' ?
+                                    categoryName === '' ||
+                                    categoryImage === ''
+                                    :
+                                    categoryNameUpdate === '' ||
+                                    categoryImageUpdate === ''
                             }
                         >
                             {type === 'create' ? 'Create' : 'Save'}

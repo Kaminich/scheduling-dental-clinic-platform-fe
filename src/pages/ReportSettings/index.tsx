@@ -7,6 +7,7 @@ import { Color, Shadow } from "../../styles/styles";
 import useReports from "../../hooks/useReports";
 import Loading from "../../components/loading";
 import ReportApproveModal from "../../components/modal/report_approve";
+import ReportResponse from "../../types/ReportResponse";
 
 const ReportSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -15,10 +16,10 @@ const ReportSettingsPage = () => {
     const [id, setId] = useState<number>(0);
     const { data, isLoading } = useReports();
     const { isOpen: isOpenApprove, onClose: OnCloseApprove, onOpen: onOpenApprove } = useDisclosure();
-    const [reports, setReports] = useState([]);
+    const [reports, setReports] = useState<ReportResponse[]>([]);
 
     let filteredReports = reports.filter((report) => {
-        return report.id?.toLowerCase().includes(keyword.toLowerCase())
+        return report.reportReason.toLowerCase().includes(keyword.toLowerCase())
     })
 
     useEffect(() => {
@@ -40,7 +41,7 @@ const ReportSettingsPage = () => {
                 <Input
                     ref={ref}
                     borderRadius={20}
-                    placeholder="Search clinic..."
+                    placeholder="Search report reason..."
                     variant="filled"
                     border='1px solid gainsboro'
                     onChange={(e) => {

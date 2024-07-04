@@ -7,6 +7,8 @@ import axios from "axios";
 import { FaPen } from "react-icons/fa6";
 import { Border } from "../../../styles/styles";
 import useUserProfile from "../../../hooks/useUserProfile";
+import BranchDetailResponse from "../../../types/BranchDetailResponse";
+import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
 
 const CreateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -19,10 +21,11 @@ const CreateStaffPage = () => {
     const [avatar, setAvatar] = useState<string>('');
     const [avatarData, setAvatarData] = useState<File | null>(null);
     const toast = useToast();
-    const { data } = useUserProfile();
+    const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
+    const { data: userData } = useUserProfile();
+    const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
 
     const api = new ApiClient<any>('/staff');
-    const apiBranch = new ApiClient<any>('/branch/clinic');
 
     const areAllFieldsFilled = () => {
         return (
@@ -62,43 +65,6 @@ const CreateStaffPage = () => {
             };
             reader.readAsDataURL(selectedFile);
             setAvatarData(selectedFile);
-        }
-    }
-
-    const getBranchByClinic = async () => {
-        try {
-            const response = await apiBranch.getDetail(data?.clinicId);
-            console.log(response);
-
-            if (response.success) {
-                toast({
-                    title: "Success",
-                    description: response.message,
-                    status: "success",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                });
-
-            } else {
-                toast({
-                    title: "Error",
-                    description: response.message,
-                    status: "error",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                });
-            }
-        } catch (error: any) {
-            toast({
-                title: "Error",
-                description: error.response?.data?.message || "An error occurred",
-                status: "error",
-                duration: 2500,
-                position: 'top',
-                isClosable: true,
-            });
         }
     }
 
@@ -148,6 +114,7 @@ const CreateStaffPage = () => {
                     position: 'top',
                     isClosable: true,
                 });
+                handleReset();
             } else {
                 toast({
                     title: "Error",
@@ -175,10 +142,10 @@ const CreateStaffPage = () => {
     }, []);
 
     useEffect(() => {
-        if (data?.clinicId) {
-            getBranchByClinic();
+        if (branchData) {
+            setBranches(branchData);
         }
-    }, [data?.clinicId]);
+    }, [branchData]);
 
     return (
         <Stack w={'2xl'} m={'auto'}>
@@ -286,19 +253,15 @@ const CreateStaffPage = () => {
                     <FormLabel pl={1}>Branch</FormLabel>
                     <Select
                         name="branch"
-                        value={gender}
+                        value={clinicBranchId}
                         onChange={(e) => setClinicBranchId(parseInt(e.target.value))}
                         placeholder={'Select branch'}
                     >
-                        <option value="Male">
-                            Male
-                        </option>
-                        <option value="Female">
-                            Female
-                        </option>
-                        <option value="Other">
-                            Other
-                        </option>
+                        {branches.map((branch) => (
+                            <option key={branch.branchId} value={branch.branchId}>
+                                {branch.branchName} ({branch.city})
+                            </option>
+                        ))}
                     </Select>
                 </FormControl>
             </Stack>

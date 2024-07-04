@@ -1,15 +1,20 @@
-import { Status } from "./type.enum";
 
 export default interface ServiceViewListResponse {
     id: number;
     serviceName: string;
-    status: Status;
+    status: boolean;
+    createdDate: string;
+    modifiedDate: string;
+    categoryName: string;
     clinicId: number;
 }
 
-const initialServiceViewListResponse: ServiceViewListResponse = {
-    id: 0,
-    serviceName: "",
-    status: Status.INACTIVE,
-    clinicId: 0
-};
+// const initialServiceViewListResponse: ServiceViewListResponse = {
+//     id: 0,
+//     serviceName: "",
+//     createdDate: "",
+//     modifiedDate: "",
+//     categoryName: "",
+//     status: false,
+//     clinicId: 0
+// };

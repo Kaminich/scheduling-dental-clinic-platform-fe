@@ -8,6 +8,7 @@ import useUserProfile from "../../hooks/useUserProfile";
 import Customer, { CustomerInit } from "../../types/Customer";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import ApiClient from "../../services/apiClient";
+import axios from "axios";
 
 const UpdateProfilePage = () => {
     const [username, setUsername] = useState<string>('');
@@ -58,6 +59,24 @@ const UpdateProfilePage = () => {
 
     const handleUpdateProfile = async (e: FormEvent) => {
         e.preventDefault();
+        let imageUrl: string = '';
+
+        if (avatarData) {
+            const formDataImage = new FormData();
+            formDataImage.append("file", avatarData);
+            formDataImage.append("upload_preset", "z5r1wkcn");
+
+            try {
+                const response = await axios.post(
+                    `https://api.cloudinary.com/v1_1/dy1t2fqsc/image/upload`,
+                    formDataImage
+                );
+                imageUrl = response.data.secure_url;
+                console.log("Cloudinary image URL:", imageUrl);
+            } catch (error) {
+                console.error(error);
+            }
+        }
         const api = new ApiClient<any>('/auth/user-information');
         const data: Customer = {
             username,
@@ -67,7 +86,7 @@ const UpdateProfilePage = () => {
             phone,
             dob,
             address,
-            avatar
+            avatar: imageUrl === '' ? avatar : imageUrl
         }
 
         try {

@@ -4,15 +4,10 @@ import ApiClient from "../../../../services/apiClient"
 import { ApiResponse } from "../../../../types/ApiResponse";
 import CategoryViewResponse from "../../../../types/CategoryViewResponse";
 import { useEffect, useState } from "react";
-import CategoryViewListResponse from "../../../../types/CategoryViewListResponse";
+import CategoryResponse from "../../../../types/CategoryResponse";
 
 interface Prop {
     clinicId: number;
-}
-
-interface CategoryResponse {
-    Categories?: CategoryViewListResponse[];
-    "Categories by clinic": CategoryViewResponse[];
 }
 
 const ServicePrice = ({ clinicId }: Prop) => {

@@ -2,20 +2,20 @@ import { Button, FormControl, FormLabel, HStack, Input, InputGroup, InputRightAd
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
-import StaffDetailResponse, { initialStaffDetailResponse } from "../../../types/StaffDetailResponse";
 import ApiClient from "../../../services/apiClient";
 import { ApiResponse } from "../../../types/ApiResponse";
 import { FaPenToSquare } from "react-icons/fa6";
+import ServiceViewDetailsResponse, { initialServiceViewDetailsResponse } from "../../../types/ServiceViewDetailResponse";
 
 const ServiceDetailPage = () => {
-    const [service, setService] = useState<StaffDetailResponse>(initialStaffDetailResponse);
+    const [service, setService] = useState<ServiceViewDetailsResponse>(initialServiceViewDetailsResponse);
     const param = useParams<{ id: string }>();
     const navigate = useNavigate();
     const toast = useToast();
 
     const getServiceDetailById = async (id: number) => {
         try {
-            const api = new ApiClient<ApiResponse<StaffDetailResponse>>('/service');
+            const api = new ApiClient<ApiResponse<ServiceViewDetailsResponse>>('/service');
             const response = await api.getDetail(id);
             console.log(response);
             if (response.success) {
@@ -36,8 +36,8 @@ const ServiceDetailPage = () => {
     }
 
     useEffect(() => {
-        changeTabTitle(service.fullName);
-    }, [service.fullName]);
+        changeTabTitle(service.serviceName);
+    }, [service.serviceName]);
 
     useEffect(() => {
         if (param.id) {
@@ -54,14 +54,14 @@ const ServiceDetailPage = () => {
                 <FormControl id="serviceName" isRequired>
                     <FormLabel pl={1}>Service Name</FormLabel>
                     <Input
-                        value={'serviceName'}
+                        value={service.serviceName}
                         readOnly
                     />
                 </FormControl>
                 <FormControl id="description" isRequired>
                     <FormLabel pl={1}>Description</FormLabel>
                     <Textarea
-                        value={'description'}
+                        value={service.description}
                         focusBorderColor='#E2E8F0'
                         resize={'none'}
                         maxH={32}
@@ -72,7 +72,7 @@ const ServiceDetailPage = () => {
                 <FormControl id="category" isRequired>
                     <FormLabel pl={1}>Category</FormLabel>
                     <Input
-                        value={'categoryId'}
+                        value={service.categoryName}
                         readOnly
                     />
                 </FormControl>
@@ -80,7 +80,7 @@ const ServiceDetailPage = () => {
                     <FormControl id="unit" flex={1} isRequired>
                         <FormLabel pl={1}>Unit</FormLabel>
                         <Input
-                            value={'unitOfPrice'}
+                            value={service.unitOfPrice}
                             readOnly
                         />
                     </FormControl>
@@ -88,7 +88,7 @@ const ServiceDetailPage = () => {
                         <FormLabel pl={1}>Minimum Price</FormLabel>
                         <InputGroup>
                             <Input
-                                value={'minimumPrice'}
+                                value={service.minimumPrice}
                                 readOnly
                             />
                             <InputRightAddon>VND</InputRightAddon>
@@ -98,7 +98,7 @@ const ServiceDetailPage = () => {
                         <FormLabel pl={1}>Maximum Price</FormLabel>
                         <InputGroup>
                             <Input
-                                value={'maximumPrice'}
+                                value={service.maximumPrice}
                                 readOnly
                             />
                             <InputRightAddon>VND</InputRightAddon>
@@ -110,7 +110,7 @@ const ServiceDetailPage = () => {
                         <FormLabel pl={1}>Duration</FormLabel>
                         <InputGroup>
                             <Input
-                                value={'duration'}
+                                value={service.duration}
                                 readOnly
                             />
                             <InputRightAddon px={2}>Minute(s)</InputRightAddon>
@@ -119,7 +119,7 @@ const ServiceDetailPage = () => {
                     <FormControl id="serviceType" flex={2} isRequired>
                         <FormLabel pl={1}>Service Type</FormLabel>
                         <Input
-                            value={'serviceType'}
+                            value={service.serviceType}
                             readOnly
                         />
                     </FormControl>

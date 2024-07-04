@@ -147,7 +147,7 @@ const UpdateStaffPage = () => {
             phone,
             email,
             address,
-            avatar: avatarUrl || avatar,
+            avatar: avatarUrl === '' ? avatar : avatarUrl,
             clinicBranchId
         };
 

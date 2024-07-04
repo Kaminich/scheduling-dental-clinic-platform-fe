@@ -2,13 +2,13 @@ import OwlCarousel from "react-owl-carousel";
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import { useEffect, useState } from "react";
-import Category from "../../../types/Category";
 import useCategory from "../../../hooks/useCategory";
 import ServiceItem from "../../service_item";
+import CategoryViewListResponse from "../../../types/CategoryViewListResponse";
 
 const ServiceCarousel = () => {
-    const { data } = useCategory({ type: 'get', id: 0 });
-    const [categories, setCategories] = useState<Category[]>([]);
+    const { data } = useCategory();
+    const [categories, setCategories] = useState<CategoryViewListResponse[]>([]);
 
     useEffect(() => {
         if (data?.Categories) {
@@ -31,6 +31,7 @@ const ServiceCarousel = () => {
                 {categories.map((category) => (
                     <ServiceItem
                         key={category.id}
+                        categoryImage={category.categoryImage}
                         categoryName={category.categoryName}
                     />
                 ))}

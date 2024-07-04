@@ -7,6 +7,8 @@ import { FaPen } from "react-icons/fa6";
 import axios from "axios";
 import { Border } from "../../../styles/styles";
 import useUserProfile from "../../../hooks/useUserProfile";
+import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
+import BranchDetailResponse from "../../../types/BranchDetailResponse";
 
 const CreateDentistPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -21,11 +23,12 @@ const CreateDentistPage = () => {
     const [avatar, setAvatar] = useState<string>('');
     const [avatarData, setAvatarData] = useState<File | null>(null);
     const [branchId, setBranchId] = useState<number>(0);
-    const { data } = useUserProfile();
+    const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
+    const { data: userData } = useUserProfile();
+    const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
 
     const toast = useToast();
     const api = new ApiClient<any>('/dentists');
-    const apiBranch = new ApiClient<any>('/branch/clinic');
 
     const areAllFieldsFilled = () => {
         return (
@@ -74,43 +77,6 @@ const CreateDentistPage = () => {
         }
     }
 
-    const getBranchByClinic = async () => {
-        try {
-            const response = await apiBranch.getDetail(data?.clinicId);
-            console.log(response);
-
-            if (response.success) {
-                toast({
-                    title: "Success",
-                    description: response.message,
-                    status: "success",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                });
-
-            } else {
-                toast({
-                    title: "Error",
-                    description: response.message,
-                    status: "error",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                });
-            }
-        } catch (error: any) {
-            toast({
-                title: "Error",
-                description: error.response?.data?.message || "An error occurred",
-                status: "error",
-                duration: 2500,
-                position: 'top',
-                isClosable: true,
-            });
-        }
-    }
-
     const handleCreate = async (e: FormEvent) => {
         e.preventDefault();
         let avatarUrl: string = '';
@@ -136,6 +102,7 @@ const CreateDentistPage = () => {
             fullName,
             email,
             gender,
+            phone,
             dob,
             address,
             description,
@@ -158,7 +125,7 @@ const CreateDentistPage = () => {
                     position: 'top',
                     isClosable: true,
                 });
-
+                handleReset();
             } else {
                 toast({
                     title: "Error",
@@ -186,10 +153,10 @@ const CreateDentistPage = () => {
     }, []);
 
     useEffect(() => {
-        if (data?.clinicId) {
-            getBranchByClinic();
+        if (branchData) {
+            setBranches(branchData);
         }
-    }, [data?.clinicId]);
+    }, [branchData]);
 
     return (
         <Stack w={'6xl'} m={'auto'}>
@@ -314,26 +281,22 @@ const CreateDentistPage = () => {
                         <FormLabel pl={1}>Branch</FormLabel>
                         <Select
                             name="branch"
-                            value={gender}
+                            value={branchId}
                             onChange={(e) => setBranchId(parseInt(e.target.value))}
                             placeholder={'Select branch'}
                         >
-                            <option value="Male">
-                                Male
-                            </option>
-                            <option value="Female">
-                                Female
-                            </option>
-                            <option value="Other">
-                                Other
-                            </option>
+                            {branches.map((branch) => (
+                                <option key={branch.branchId} value={branch.branchId}>
+                                    {branch.branchName} ({branch.city})
+                                </option>
+                            ))}
                         </Select>
                     </FormControl>
                     <FormControl id="specialty" isRequired>
                         <FormLabel pl={1}>Specialty</FormLabel>
                         <Input
                             type="text"
-                            value={gender}
+                            value={specialty}
                             onChange={(e) => setSpecialty(e.target.value)}
                             placeholder={'Enter specialty'}
                         />

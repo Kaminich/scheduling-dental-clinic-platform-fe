@@ -155,7 +155,7 @@ const UpdateDentistPage = () => {
             description,
             specialty,
             experience,
-            avatar: avatarUrl,
+            avatar: avatarUrl === '' ? avatar : avatarUrl,
             branchId
         };
 
