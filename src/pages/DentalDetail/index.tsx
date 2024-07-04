@@ -58,7 +58,7 @@ const DentalDetailPage = () => {
                         <DentalDentist />
                     </TabPanel>
                     <TabPanel>
-                        <ServicePrice />
+                        <ServicePrice clinicId={1} />
                     </TabPanel>
                     <TabPanel>
                         <RatingAndFeedback isModal={false} />

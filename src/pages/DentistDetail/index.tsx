@@ -1,15 +1,15 @@
-import { Box, Button, Card, CardBody, CardFooter, Flex, HStack, Image, ListItem, Stack, Text, UnorderedList, useDisclosure, useToast } from "@chakra-ui/react"
+import { Box, Button, Card, CardBody, CardFooter, Flex, HStack, Image, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react"
 import AppointmentModal from "../../components/modal/appointment"
 import { Color, Shadow } from "../../styles/styles";
-import CustomCarousel from "../../components/carousel";
 import { useAuth } from "../../hooks/useAuth";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import useDentists from "../../hooks/useDentists";
-import Dentist, { DentistInit } from "../../types/Dentist";
+import Dentist from "../../types/Dentist";
 import ApiClient from "../../services/apiClient";
 import DentistCarousel from "../../components/carousel/dentist";
+import DentistDetailResponse, { initialDentistDetailResponse } from "../../types/DentistDetailResponse";
 
 const DentistDetailPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -18,7 +18,7 @@ const DentistDetailPage = () => {
     const { name } = useParams<{ name: string }>();
     const decodedName = name ? name.replace(/-/g, ' ') : '';
     const [id, setId] = useState<number>(0);
-    const [dentist, setDentist] = useState<Dentist>(DentistInit);
+    const [dentist, setDentist] = useState<DentistDetailResponse>(initialDentistDetailResponse);
     const { data } = useDentists();
     const api = new ApiClient<any>('/dentists');
     const toast = useToast();
@@ -139,9 +139,9 @@ const DentistDetailPage = () => {
                         borderRadius={'full'}
                         bgGradient={Color.headingGradientMd}
                     >
-                        Medical Team from {dentist.city} Branch
+                        Medical Team from {dentist.branchName} Branch
                     </Text>
-                    <DentistCarousel />
+                    <DentistCarousel branchId={dentist.id} />
                 </Stack>
             </Stack>
             <AppointmentModal

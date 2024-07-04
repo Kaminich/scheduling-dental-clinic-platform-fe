@@ -9,6 +9,7 @@ import { FaPen } from "react-icons/fa6";
 import { Border } from "../../../styles/styles";
 import StaffDetailResponse, { initialStaffDetailResponse } from "../../../types/StaffDetailResponse";
 import { ApiResponse } from "../../../types/ApiResponse";
+import useUserProfile from "../../../hooks/useUserProfile";
 
 const UpdateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -24,6 +25,7 @@ const UpdateStaffPage = () => {
     const param = useParams<{ id: string }>();
     const navigate = useNavigate();
     const toast = useToast();
+    const { data } = useUserProfile();
 
     const getStaffDetailById = async (id: number) => {
         try {
@@ -44,6 +46,45 @@ const UpdateStaffPage = () => {
             }
         } catch (error) {
             navigate('/not-found');
+        }
+    }
+
+    const apiBranch = new ApiClient<any>('/branch/clinic');
+
+    const getBranchByClinic = async () => {
+        try {
+            const response = await apiBranch.getDetail(data?.clinicId);
+            console.log(response);
+
+            if (response.success) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            }
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 2500,
+                position: 'top',
+                isClosable: true,
+            });
         }
     }
 
@@ -159,6 +200,12 @@ const UpdateStaffPage = () => {
     useEffect(() => {
         handleReset();
     }, [staff]);
+
+    useEffect(() => {
+        if (data?.clinicId) {
+            getBranchByClinic();
+        }
+    }, [data?.clinicId]);
 
     return (
         <Stack w={'2xl'} m={'auto'}>

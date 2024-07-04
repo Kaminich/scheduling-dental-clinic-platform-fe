@@ -3,11 +3,13 @@ import ApiClient from "../../../services/apiClient";
 import { Border } from "../../../styles/styles";
 import { ChangeEvent, useState } from "react";
 import { FaPen } from "react-icons/fa6";
+import CategoryViewListResponse from "../../../types/CategoryViewListResponse";
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
     id: number | null;
+    data: CategoryViewListResponse;
     type: string;
 }
 

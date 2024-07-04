@@ -24,7 +24,6 @@ const CategoriesSettingsPage = () => {
     ]);
     const { data } = useCategory();
     const { isOpen: isOpenCategory, onClose: onCloseCategory, onOpen: onOpenCategory } = useDisclosure();
-    const { isOpen: isOpenDelete, onClose: onCloseDelete, onOpen: onOpenDelete } = useDisclosure();
     const { isOpen: isOpenChange, onClose: onCloseChange, onOpen: onOpenChange } = useDisclosure();
     const navigate = useNavigate();
 
@@ -151,7 +150,7 @@ const CategoriesSettingsPage = () => {
                                                     </span>
                                                 </Tooltip>
                                             </Button>
-                                            <Button
+                                            {/* <Button
                                                 borderRadius='full'
                                                 px={3}
                                                 colorScheme="red"
@@ -166,7 +165,7 @@ const CategoriesSettingsPage = () => {
                                                         <FaTrashCan />
                                                     </span>
                                                 </Tooltip>
-                                            </Button>
+                                            </Button> */}
                                         </Td>
                                     </Tr>
                                 ))}
@@ -181,12 +180,12 @@ const CategoriesSettingsPage = () => {
                 id={null}
                 type={type}
             />
-            <DeleteModal
+            {/* <DeleteModal
                 isOpen={isOpenDelete}
                 onClose={onCloseDelete}
                 id={id}
                 type="category"
-            />
+            /> */}
             <CategoryChangeStatusModal
                 isOpen={isOpenChange}
                 onClose={onCloseChange}

@@ -9,6 +9,7 @@ import axios from "axios";
 import { Border } from "../../../styles/styles";
 import { ApiResponse } from "../../../types/ApiResponse";
 import DentistDetailResponse, { initialDentistDetailResponse } from "../../../types/DentistDetailResponse";
+import useUserProfile from "../../../hooks/useUserProfile";
 
 const UpdateDentistPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -27,6 +28,8 @@ const UpdateDentistPage = () => {
     const param = useParams<{ id: string }>();
     const navigate = useNavigate();
     const toast = useToast();
+    const { data } = useUserProfile();
+
 
     const getDentistDetailById = async (id: number) => {
         try {
@@ -47,6 +50,45 @@ const UpdateDentistPage = () => {
             }
         } catch (error) {
             navigate('/not-found');
+        }
+    }
+
+    const apiBranch = new ApiClient<any>('/branch/clinic');
+
+    const getBranchByClinic = async () => {
+        try {
+            const response = await apiBranch.getDetail(data?.clinicId);
+            console.log(response);
+
+            if (response.success) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            }
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 2500,
+                position: 'top',
+                isClosable: true,
+            });
         }
     }
 
@@ -167,6 +209,12 @@ const UpdateDentistPage = () => {
     useEffect(() => {
         handleReset();
     }, [dentist]);
+
+    useEffect(() => {
+        if (data?.clinicId) {
+            getBranchByClinic();
+        }
+    }, [data?.clinicId]);
 
     return (
         <Stack w={'6xl'} m={'auto'}>

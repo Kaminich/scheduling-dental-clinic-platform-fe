@@ -6,6 +6,7 @@ import { today } from "../../../components/modal/appointment";
 import { FaPen } from "react-icons/fa6";
 import axios from "axios";
 import { Border } from "../../../styles/styles";
+import useUserProfile from "../../../hooks/useUserProfile";
 
 const CreateDentistPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -20,9 +21,11 @@ const CreateDentistPage = () => {
     const [avatar, setAvatar] = useState<string>('');
     const [avatarData, setAvatarData] = useState<File | null>(null);
     const [branchId, setBranchId] = useState<number>(0);
+    const { data } = useUserProfile();
 
     const toast = useToast();
     const api = new ApiClient<any>('/dentists');
+    const apiBranch = new ApiClient<any>('/branch/clinic');
 
     const areAllFieldsFilled = () => {
         return (
@@ -68,6 +71,43 @@ const CreateDentistPage = () => {
             };
             reader.readAsDataURL(selectedFile);
             setAvatarData(selectedFile);
+        }
+    }
+
+    const getBranchByClinic = async () => {
+        try {
+            const response = await apiBranch.getDetail(data?.clinicId);
+            console.log(response);
+
+            if (response.success) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            }
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 2500,
+                position: 'top',
+                isClosable: true,
+            });
         }
     }
 
@@ -144,6 +184,12 @@ const CreateDentistPage = () => {
     useEffect(() => {
         changeTabTitle('Create Dentist');
     }, []);
+
+    useEffect(() => {
+        if (data?.clinicId) {
+            getBranchByClinic();
+        }
+    }, [data?.clinicId]);
 
     return (
         <Stack w={'6xl'} m={'auto'}>
