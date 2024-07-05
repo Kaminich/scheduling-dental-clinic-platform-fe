@@ -12,7 +12,7 @@ import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
 
 const CreateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
-    const [dob, setDob] = useState<Date | string>('');
+    const [dob, setDob] = useState<string>('');
     const [gender, setGender] = useState<string>('');
     const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -160,6 +160,7 @@ const CreateStaffPage = () => {
                         }
                         alt='avatar'
                         bgColor='white'
+                        objectFit={'cover'}
                     />
                     <FormLabel
                         htmlFor="avt"
@@ -214,6 +215,7 @@ const CreateStaffPage = () => {
                         <Input
                             type="date"
                             max={today}
+                            value={dob}
                             onChange={(e) => setDob(e.target.value)}
                             required
                         />

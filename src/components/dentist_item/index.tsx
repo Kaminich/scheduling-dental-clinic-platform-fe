@@ -3,22 +3,22 @@ import { FaMapLocationDot, FaTooth } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import AppointmentModal from "../modal/appointment";
 import { Link, useNavigate } from "react-router-dom";
-import { Color, Shadow } from "../../styles/styles";
+import { Border, Color, Shadow } from "../../styles/styles";
 import { useAuth } from "../../hooks/useAuth";
-import Dentist from "../../types/Dentist";
+import DentistListResponse from "../../types/DentistListResponse";
 
 interface Props {
     type: number;
-    data: Dentist[];
+    data: DentistListResponse[];
 }
 
 const DentistItem = ({ type, data }: Props) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [dentists, setDentists] = useState<Dentist[]>([]);
+    const [dentists, setDentists] = useState<DentistListResponse[]>([]);
     const { role } = useAuth();
     const navigate = useNavigate();
 
-    const navigateToDetail = (name: string) => {
+    const navigateToDentistDetail = (name: string) => {
         const hyphenatedName = name.replace(/ /g, '-');
         navigate(`/dentists/${hyphenatedName}`);
     };
@@ -29,41 +29,26 @@ const DentistItem = ({ type, data }: Props) => {
         }
     }, [data])
 
-    const [dentalData, setDentalData] = useState({
-        id: '1',
-        name: 'ABC HCM'
-    });
-    const [dentistData, setDentistData] = useState({
-        id: '1',
-        name: 'Dentist A'
-    });
-    const [locationData, setLocationData] = useState({
-        id: '1',
-        name: 'HCM'
-    });
-
-    console.log(dentists);
-
-
     return (
         <>
             {type === 1 ? (
                 <>
                     {dentists.map((dentist) => (
-                        <Card maxW='sm'>
+                        <Card maxW='sm' key={dentist.dentistId}>
                             <CardBody pb={0}>
                                 <Stack align={'center'}>
                                     <Avatar
                                         size='2xl'
                                         name='Segun Adebayo'
-                                        src='https://bit.ly/sage-adebayo'
+                                        src={dentist.avatar || ''}
+                                        border={Border.tableBorder}
                                     />
                                     <Heading
                                         size='md'
                                         mt={4}
                                         _hover={{ color: Color.hoverBlue }}
                                         cursor={'pointer'}
-                                        onClick={() => navigateToDetail(dentist.fullName)}
+                                        onClick={() => navigateToDentistDetail(dentist.fullName)}
                                     >
                                         {dentist.fullName}
                                     </Heading>
@@ -87,26 +72,28 @@ const DentistItem = ({ type, data }: Props) => {
                                             </span>
                                         </Tooltip>
                                         <Link to={'/dental-detail'}>
-                                            <Text _hover={{ color: Color.hoverBlue }}>Clinic</Text>
+                                            <Text _hover={{ color: Color.hoverBlue }}>{dentist.clinicName}</Text>
                                         </Link>
                                     </HStack>
                                 </Stack>
                             </CardBody>
-                            {(role !== 'Staff' && role !== 'Dentist') && (
+                            {(role !== 'Staff' && role !== 'Dentist') ? (
                                 <CardFooter justify={'center'}>
                                     <Button variant='solid' colorScheme='green' px={10} onClick={onOpen}>
                                         Make appointment
                                     </Button>
                                 </CardFooter>
+                            ) : (
+                                <CardFooter></CardFooter>
                             )}
                         </Card>
                     ))}
                     <AppointmentModal
                         isOpen={isOpen}
                         onClose={onClose}
-                        dentalData={dentalData}
-                        dentistData={dentistData}
-                        locationData={locationData}
+                        dentalData={'dentalData'}
+                        dentistData={'dentistData'}
+                        locationData={'locationData'}
                     />
                 </>
             ) : (

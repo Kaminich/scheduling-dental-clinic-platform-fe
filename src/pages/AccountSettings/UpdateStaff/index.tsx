@@ -10,6 +10,8 @@ import { Border } from "../../../styles/styles";
 import StaffDetailResponse, { initialStaffDetailResponse } from "../../../types/StaffDetailResponse";
 import { ApiResponse } from "../../../types/ApiResponse";
 import useUserProfile from "../../../hooks/useUserProfile";
+import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
+import BranchDetailResponse from "../../../types/BranchDetailResponse";
 
 const UpdateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -25,7 +27,9 @@ const UpdateStaffPage = () => {
     const param = useParams<{ id: string }>();
     const navigate = useNavigate();
     const toast = useToast();
-    const { data } = useUserProfile();
+    const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
+    const { data: userData } = useUserProfile();
+    const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
 
     const getStaffDetailById = async (id: number) => {
         try {
@@ -49,45 +53,6 @@ const UpdateStaffPage = () => {
         }
     }
 
-    const apiBranch = new ApiClient<any>('/branch/clinic');
-
-    const getBranchByClinic = async () => {
-        try {
-            const response = await apiBranch.getDetail(data?.clinicId);
-            console.log(response);
-
-            if (response.success) {
-                toast({
-                    title: "Success",
-                    description: response.message,
-                    status: "success",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                });
-
-            } else {
-                toast({
-                    title: "Error",
-                    description: response.message,
-                    status: "error",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                });
-            }
-        } catch (error: any) {
-            toast({
-                title: "Error",
-                description: error.response?.data?.message || "An error occurred",
-                status: "error",
-                duration: 2500,
-                position: 'top',
-                isClosable: true,
-            });
-        }
-    }
-
     const api = new ApiClient<any>('/staff');
 
     const handleReset = () => {
@@ -97,7 +62,7 @@ const UpdateStaffPage = () => {
         setPhone(staff.phone);
         setEmail(staff.email);
         setAddress(staff.address);
-        setClinicBranchId(0);
+        setClinicBranchId(staff.clinicBranchId);
         setAvatar(staff.avatar);
         setAvatarData(null);
     }
@@ -202,10 +167,10 @@ const UpdateStaffPage = () => {
     }, [staff]);
 
     useEffect(() => {
-        if (data?.clinicId) {
-            getBranchByClinic();
+        if (branchData) {
+            setBranches(branchData);
         }
-    }, [data?.clinicId]);
+    }, [branchData]);
 
     return (
         <Stack w={'2xl'} m={'auto'}>
@@ -220,6 +185,7 @@ const UpdateStaffPage = () => {
                         }
                         alt='avatar'
                         bgColor='white'
+                        objectFit={'cover'}
                     />
                     <FormLabel
                         htmlFor="avt"
@@ -314,19 +280,15 @@ const UpdateStaffPage = () => {
                     <FormLabel pl={1}>Branch</FormLabel>
                     <Select
                         name="branch"
-                        value={gender}
+                        value={clinicBranchId}
                         onChange={(e) => setClinicBranchId(parseInt(e.target.value))}
                         placeholder={'Select branch'}
                     >
-                        <option value="Male">
-                            Male
-                        </option>
-                        <option value="Female">
-                            Female
-                        </option>
-                        <option value="Other">
-                            Other
-                        </option>
+                        {branches.map((branch) => (
+                            <option key={branch.branchId} value={branch.branchId}>
+                                {branch.branchName} ({branch.city})
+                            </option>
+                        ))}
                     </Select>
                 </FormControl>
             </Stack>

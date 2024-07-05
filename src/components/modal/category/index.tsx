@@ -308,17 +308,34 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                     )}
 
                     {type === 'detail' && (
-                        <Stack>
+                        <Stack gap={4}>
+                            <>
+                                <Text>Category Image: </Text>
+                                <Image
+                                    border='1px solid gainsboro'
+                                    borderRadius={5}
+                                    h={32}
+                                    w={72}
+                                    m={'auto'}
+                                    src={
+                                        category.categoryImage || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
+                                    }
+                                    alt='logo'
+                                    bgColor='white'
+                                />
+                            </>
                             <HStack gap={4}>
                                 <Text>Category Name: </Text>
                                 <Text>{category.categoryName}</Text>
                             </HStack>
-                            <Text>Category Services:</Text>
-                            <UnorderedList pl={4}>
-                                {category.services.map((service) => (
-                                    <ListItem>{service.serviceName}</ListItem>
-                                ))}
-                            </UnorderedList>
+                            <>
+                                <Text>Category Services:</Text>
+                                <UnorderedList pl={4}>
+                                    {category.services.map((service) => (
+                                        <ListItem>{service.serviceName}</ListItem>
+                                    ))}
+                                </UnorderedList>
+                            </>
                         </Stack>
                     )}
                 </ModalBody>

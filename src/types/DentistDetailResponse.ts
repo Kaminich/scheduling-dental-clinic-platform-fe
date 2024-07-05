@@ -14,6 +14,10 @@ export default interface DentistDetailResponse {
     experience: string;
     avatar: string;
     branchName: string;
+    city: string;
+    branchId: number;
+    clinicId: number;
+    clinicName: string;
     status: Status;
 }
 
@@ -31,5 +35,9 @@ export const initialDentistDetailResponse: DentistDetailResponse = {
     experience: "",
     avatar: "",
     branchName: "",
+    city: "",
+    branchId: 0,
+    clinicId: 0,
+    clinicName: "",
     status: Status.INACTIVE
 };

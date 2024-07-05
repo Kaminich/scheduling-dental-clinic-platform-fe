@@ -55,6 +55,7 @@ const UpdateProfilePage = () => {
         setPhone(userData.phone);
         setEmail(userData.email);
         setAddress(userData.address);
+        setAvatar(userData.avatar)
     }
 
     const handleUpdateProfile = async (e: FormEvent) => {
@@ -77,6 +78,7 @@ const UpdateProfilePage = () => {
                 console.error(error);
             }
         }
+
         const api = new ApiClient<any>('/auth/user-information');
         const data: Customer = {
             username,
@@ -202,6 +204,7 @@ const UpdateProfilePage = () => {
                                     }
                                     alt='avatar'
                                     bgColor='white'
+                                    objectFit={'cover'}
                                 />
                                 <FormLabel
                                     htmlFor="avt"
@@ -211,22 +214,20 @@ const UpdateProfilePage = () => {
                                 >
                                     <FaPen />
                                 </FormLabel>
-                                {!avatar && (
-                                    <Input
-                                        type="file"
-                                        id="avt"
-                                        accept="image/*"
-                                        onChange={handleAvatarChange}
-                                        display='none'
-                                    />
-                                )}
+                                <Input
+                                    type="file"
+                                    id="avt"
+                                    accept="image/*"
+                                    onChange={handleAvatarChange}
+                                    display='none'
+                                />
                             </HStack>
                         </CardBody>
                     </Card>
                     <Stack flex={1.5}>
                         <Card shadow={Shadow.cardShadow}>
                             <CardBody py={8}>
-                                <Stack gap={5}>
+                                <Stack gap={4}>
                                     <FormControl id="username">
                                         <FormLabel ml={1}>Username</FormLabel>
                                         <Tooltip

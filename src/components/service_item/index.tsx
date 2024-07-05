@@ -17,6 +17,9 @@ const ServiceItem = ({ categoryImage, categoryName }: Prop) => {
                             src={categoryImage || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'}
                             alt='Green double couch with wooden legs'
                             borderRadius='lg'
+                            w={233}
+                            h={155}
+                            objectFit={'cover'}
                         />
                         <Heading
                             size='md'

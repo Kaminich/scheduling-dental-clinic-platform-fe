@@ -226,7 +226,7 @@ const CategoriesSettingsPage = () => {
                                                                     onOpenCategory();
                                                                 }}
                                                             >
-                                                                <Tooltip label='Show user information'>
+                                                                <Tooltip label='Show category information'>
                                                                     <span>
                                                                         <FaEye />
                                                                     </span>
@@ -272,7 +272,7 @@ const CategoriesSettingsPage = () => {
                                             </>
                                         ) : (
                                             <Tr>
-                                                <Td colSpan={6} textAlign="center">
+                                                <Td colSpan={7} textAlign="center">
                                                     No category
                                                 </Td>
                                             </Tr>
@@ -280,7 +280,7 @@ const CategoriesSettingsPage = () => {
                                     </>
                                 ) : (
                                     <Tr>
-                                        <Td colSpan={6} textAlign="center">
+                                        <Td colSpan={7} textAlign="center">
                                             <Loading />
                                         </Td>
                                     </Tr>

@@ -41,7 +41,7 @@ const AppointmentModal = ({ isOpen, onClose, dentalData, dentistData, locationDa
     }, [data])
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered size={'5xl'}>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered size={isAuthenticated ? '5xl' : 'lg'}>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader textAlign={'center'}>Make Appointment</ModalHeader>

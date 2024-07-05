@@ -1,28 +1,74 @@
-import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure } from "@chakra-ui/react";
+import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { FaCheck, FaEye, FaSliders, FaX } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { Color, Shadow } from "../../../styles/styles";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
-import StaffApproveModal from "../../../components/modal/staff_approve";
 import StaffDetailModal from "../../../components/modal/staff_detail";
 import StaffSummaryResponse from "../../../types/StaffSummaryResponse";
 import usePendingStaffs from "../../../hooks/usePendingStaffs";
 import Loading from "../../../components/loading";
+import ApiClient from "../../../services/apiClient";
+import ApproveModal from "../../../components/modal/approve";
 
 const ApproveStaffPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
-    const [type, setType] = useState<string>('');
+    const [approve, setApprove] = useState<boolean>(false);
     const [id, setId] = useState<number>(0);
     const [staffs, setStaffs] = useState<StaffSummaryResponse[]>([]);
-    const { data, isLoading } = usePendingStaffs();
+    const { data, isLoading, refetch } = usePendingStaffs();
     const { isOpen: isOpenApprove, onClose: onCloseApprove, onOpen: onOpenApprove } = useDisclosure();
     const { isOpen: isOpenDetail, onClose: onCloseDetail, onOpen: onOpenDetail } = useDisclosure();
+    const toast = useToast();
+    const api = new ApiClient<any>(`/staff/approval`);
 
     let filteredStaffs = staffs.filter((staff) => {
         return staff.fullName.toLowerCase().includes(keyword.toLowerCase())
     })
+
+
+    const handleApprove = async () => {
+        try {
+            const response = await api.createWithId(id, {
+                params: {
+                    isApproved: approve
+                }
+            });
+            console.log(response);
+            if (response.success) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+                refetch && refetch();
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            }
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 2500,
+                position: 'top',
+                isClosable: true,
+            });
+        } finally {
+            onCloseApprove();
+        }
+    }
 
     useEffect(() => {
         changeTabTitle('Approve Staff');
@@ -120,7 +166,7 @@ const ApproveStaffPage = () => {
                                                                 colorScheme="green"
                                                                 variant='ghost'
                                                                 onClick={() => {
-                                                                    setType('approve');
+                                                                    setApprove(true);
                                                                     setId(staff.id)
                                                                     onOpenApprove();
                                                                 }}
@@ -137,7 +183,7 @@ const ApproveStaffPage = () => {
                                                                 colorScheme="red"
                                                                 variant='ghost'
                                                                 onClick={() => {
-                                                                    setType('denied');
+                                                                    setApprove(false);
                                                                     setId(staff.id);
                                                                     onOpenApprove();
                                                                 }}
@@ -172,11 +218,12 @@ const ApproveStaffPage = () => {
                     </TableContainer>
                 </Card>
             </Stack>
-            <StaffApproveModal
+            <ApproveModal
                 isOpen={isOpenApprove}
                 onClose={onCloseApprove}
-                id={id}
-                type={type}
+                type={'staff'}
+                approve={approve}
+                handleApprove={handleApprove}
             />
             <StaffDetailModal
                 isOpen={isOpenDetail}

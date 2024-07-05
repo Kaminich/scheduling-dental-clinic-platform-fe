@@ -12,6 +12,8 @@ export default interface StaffDetailResponse {
     avatar: string;
     status: Status;
     clinicBranchName: string;
+    clinicBranchId: number;
+    clinicBranchCity: string;
 }
 
 export const initialStaffDetailResponse: StaffDetailResponse = {
@@ -25,5 +27,7 @@ export const initialStaffDetailResponse: StaffDetailResponse = {
     gender: "",
     avatar: "",
     status: Status.INACTIVE,
-    clinicBranchName: ""
+    clinicBranchName: "",
+    clinicBranchId: 0,
+    clinicBranchCity: ''
 };

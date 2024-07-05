@@ -159,9 +159,9 @@ const ClinicBranchSettingsPage = () => {
                                 <Tr>
                                     <Th textAlign='center' borderColor={'gainsboro'}>ID</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Branch name</Th>
-                                    <Th textAlign='center' borderColor={'gainsboro'}>Clinic name</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>City</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Create Date</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Modified Date</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Status</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Action</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}></Th>
@@ -173,7 +173,7 @@ const ClinicBranchSettingsPage = () => {
                                         {filteredBranches.length !== 0 ? (
                                             <>
                                                 {filteredBranches.map((branch) => (
-                                                    <Tr _hover={{ bg: 'gray.100' }}>
+                                                    <Tr key={branch.branchId} _hover={{ bg: 'gray.100' }}>
                                                         <Td
                                                             textAlign="center"
                                                             borderColor={'gainsboro'}
@@ -187,12 +187,6 @@ const ClinicBranchSettingsPage = () => {
                                                             {branch.branchName}
                                                         </Td>
                                                         <Td
-                                                            textAlign='center'
-                                                            borderColor={'gainsboro'}
-                                                        >
-                                                            {branch.clinicName}
-                                                        </Td>
-                                                        <Td
                                                             textAlign="center"
                                                             borderColor={'gainsboro'}
                                                         >
@@ -203,6 +197,12 @@ const ClinicBranchSettingsPage = () => {
                                                             borderColor={'gainsboro'}
                                                         >
                                                             {formatDate(branch.createdDate)}
+                                                        </Td>
+                                                        <Td
+                                                            textAlign='center'
+                                                            borderColor={'gainsboro'}
+                                                        >
+                                                            {branch.modifiedDate}
                                                         </Td>
                                                         <Td
                                                             textAlign='center'
@@ -223,6 +223,7 @@ const ClinicBranchSettingsPage = () => {
                                                         <Td
                                                             textAlign='center'
                                                             borderColor={'gainsboro'}
+                                                            p={1}
                                                         >
                                                             <Button
                                                                 borderRadius='full'
@@ -255,7 +256,7 @@ const ClinicBranchSettingsPage = () => {
                                             </>
                                         ) : (
                                             <Tr>
-                                                <Td colSpan={6} textAlign="center">
+                                                <Td colSpan={8} textAlign="center">
                                                     No branch
                                                 </Td>
                                             </Tr>
@@ -263,7 +264,7 @@ const ClinicBranchSettingsPage = () => {
                                     </>
                                 ) : (
                                     <Tr>
-                                        <Td colSpan={6} textAlign="center">
+                                        <Td colSpan={8} textAlign="center">
                                             <Loading />
                                         </Td>
                                     </Tr>

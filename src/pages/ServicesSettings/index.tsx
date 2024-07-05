@@ -214,7 +214,7 @@ const ServicesSettingsPage = () => {
                                             </>
                                         ) : (
                                             <Tr>
-                                                <Td colSpan={6} textAlign="center">
+                                                <Td colSpan={8} textAlign="center">
                                                     No category
                                                 </Td>
                                             </Tr>
@@ -222,7 +222,7 @@ const ServicesSettingsPage = () => {
                                     </>
                                 ) : (
                                     <Tr>
-                                        <Td colSpan={6} textAlign="center">
+                                        <Td colSpan={8} textAlign="center">
                                             <Loading />
                                         </Td>
                                     </Tr>

@@ -64,6 +64,7 @@ const DentistProfileDetailPage = () => {
                             }
                             alt='avatar'
                             bgColor='white'
+                            objectFit={'cover'}
                         />
                     </HStack>
                     <HStack>
@@ -129,7 +130,7 @@ const DentistProfileDetailPage = () => {
                     <FormControl id="branch">
                         <FormLabel pl={1}>Branch</FormLabel>
                         <Input
-                            value={dentist.branchName}
+                            value={`${dentist.branchName} (${dentist.city})`}
                             readOnly
                         />
                     </FormControl>

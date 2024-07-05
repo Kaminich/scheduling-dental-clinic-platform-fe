@@ -1,4 +1,4 @@
-import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure } from "@chakra-ui/react";
+import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { FaCheck, FaEye, FaSliders, FaX } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
@@ -6,24 +6,69 @@ import { Color, Shadow } from "../../../styles/styles";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import usePendingClinics from "../../../hooks/usePendingClinics";
 import Loading from "../../../components/loading";
-import DentalApproveModal from "../../../components/modal/dental_approve";
 import DentalDetailModal from "../../../components/modal/dental_detail";
 import PendingClinicListResponse from "../../../types/PendingClinicListResponse";
+import ApiClient from "../../../services/apiClient";
+import ApproveModal from "../../../components/modal/approve";
 
 const ApproveDentalClinicPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
-    const [type, setType] = useState<string>('');
+    const [approve, setApprove] = useState<boolean>(false);
     const [id, setId] = useState<number>(0);
 
     const [clinics, setClinics] = useState<PendingClinicListResponse[]>([]);
-    const { data, isLoading } = usePendingClinics();
+    const { data, isLoading, refetch } = usePendingClinics();
     const { isOpen: isOpenApprove, onClose: onCloseApprove, onOpen: onOpenApprove } = useDisclosure();
     const { isOpen: isOpenDetail, onClose: onCloseDetail, onOpen: onOpenDetail } = useDisclosure();
+    const toast = useToast();
+    const api = new ApiClient<any>(`/clinics/approval`);
 
     let filteredClinics = clinics.filter((clinic) => {
         return clinic.clinicName.toLowerCase().includes(keyword.toLowerCase())
     })
+
+    const handleApprove = async () => {
+        try {
+            const response = await api.createWithId(id, {
+                params: {
+                    isApproved: approve
+                }
+            });
+            console.log(response);
+            if (response.success) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+                refetch && refetch()
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            }
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 2500,
+                position: 'top',
+                isClosable: true,
+            });
+        } finally {
+            onCloseApprove();
+        }
+    }
 
     useEffect(() => {
         changeTabTitle('Approve Dental Clinic');
@@ -123,7 +168,7 @@ const ApproveDentalClinicPage = () => {
                                                                 colorScheme="green"
                                                                 variant='ghost'
                                                                 onClick={() => {
-                                                                    setType('approve');
+                                                                    setApprove(true);
                                                                     setId(clinic.clinicId)
                                                                     onOpenApprove();
                                                                 }}
@@ -140,7 +185,7 @@ const ApproveDentalClinicPage = () => {
                                                                 colorScheme="red"
                                                                 variant='ghost'
                                                                 onClick={() => {
-                                                                    setType('denied');
+                                                                    setApprove(false);
                                                                     setId(clinic.clinicId);
                                                                     onOpenApprove();
                                                                 }}
@@ -175,11 +220,12 @@ const ApproveDentalClinicPage = () => {
                     </TableContainer>
                 </Card>
             </Stack>
-            <DentalApproveModal
+            <ApproveModal
                 isOpen={isOpenApprove}
                 onClose={onCloseApprove}
-                id={id}
-                type={type}
+                type={'clinic'}
+                approve={approve}
+                handleApprove={handleApprove}
             />
             <DentalDetailModal
                 isOpen={isOpenDetail}

@@ -62,6 +62,7 @@ const StaffProfileDetailPage = () => {
                         }
                         alt='avatar'
                         bgColor='white'
+                        objectFit={'cover'}
                     />
                 </HStack>
                 <HStack>
@@ -113,7 +114,7 @@ const StaffProfileDetailPage = () => {
                 <FormControl id="branch" flex={1} isRequired>
                     <FormLabel pl={1}>Branch</FormLabel>
                     <Input
-                        value={staff.clinicBranchName}
+                        value={`${staff.clinicBranchName} (${staff.clinicBranchCity})`}
                         readOnly
                     />
                 </FormControl>

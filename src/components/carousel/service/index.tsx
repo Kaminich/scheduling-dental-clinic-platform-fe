@@ -17,26 +17,24 @@ const ServiceCarousel = () => {
     }, [data]);
 
     return (
-        <>
-            <OwlCarousel
-                key={categories.length}
-                items={4}
-                autoplay
-                autoplayTimeout={4000}
-                loop
-                dots={false}
-                mouseDrag={false}
-                margin={20}
-            >
-                {categories.map((category) => (
-                    <ServiceItem
-                        key={category.id}
-                        categoryImage={category.categoryImage}
-                        categoryName={category.categoryName}
-                    />
-                ))}
-            </OwlCarousel>
-        </>
+        <OwlCarousel
+            key={categories.length}
+            items={4}
+            autoplay
+            autoplayTimeout={4000}
+            loop
+            dots={false}
+            mouseDrag={false}
+            margin={20}
+        >
+            {categories.map((category) => (
+                <ServiceItem
+                    key={category.id}
+                    categoryImage={category.categoryImage}
+                    categoryName={category.categoryName}
+                />
+            ))}
+        </OwlCarousel>
     );
 };
 

@@ -29,7 +29,8 @@ const ProfilePage = () => {
                             fontSize='6rem'
                             border='1px solid gainsboro'
                             bgColor='white'
-                            src={'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'}
+                            objectFit={'cover'}
+                            src={data?.avatar || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'}
                         />
                         <Box
                             display="flex"

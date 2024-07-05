@@ -50,13 +50,15 @@ const PersonalMenu = () => {
         }
     }
 
-    console.log(data);
-
-
     return (
         <Menu autoSelect={false} isLazy>
             <MenuButton onClick={() => setSubMenu(false)}>
-                <Avatar size={'md'} name={data?.fullName || data?.username} src={data?.avatar || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'} />
+                <Avatar
+                    size={'md'}
+                    name={data?.fullName || data?.username}
+                    src={data?.avatar || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'}
+                    objectFit={'cover'}
+                />
             </MenuButton>
             <MenuList minW={'sm'}>
                 {!subMenu ? (
