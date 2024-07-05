@@ -4,11 +4,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import ApiClient from "../../../services/apiClient";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { Border } from "../../../styles/styles";
-import StaffDetailResponse, { initialStaffDetailResponse } from "../../../types/StaffDetailResponse";
 import { ApiResponse } from "../../../types/ApiResponse";
+import ServiceViewDetailsResponse, { initialServiceViewDetailsResponse } from "../../../types/ServiceViewDetailResponse";
+import useUserProfile from "../../../hooks/useUserProfile";
+import useCategoryByClinicId from "../../../hooks/useCategoryByClinicId";
+import CategoryViewListResponse from "../../../types/CategoryViewListResponse";
 
 const UpdateServicePage = () => {
-    const [service, setService] = useState<StaffDetailResponse>(initialStaffDetailResponse);
+    const [service, setService] = useState<ServiceViewDetailsResponse>(initialServiceViewDetailsResponse);
     const [serviceName, setServiceName] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [unitOfPrice, setUnitOfPrice] = useState<string>('');
@@ -17,6 +20,9 @@ const UpdateServicePage = () => {
     const [maximumPrice, setMaximumPrice] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
     const [categoryId, setCategoryId] = useState<number>(0);
+    const [categories, setCategories] = useState<CategoryViewListResponse[]>([]);
+    const { data: userData } = useUserProfile();
+    const { data: categoryData } = useCategoryByClinicId({ clinicId: userData?.clinicId })
 
     const param = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -24,7 +30,7 @@ const UpdateServicePage = () => {
 
     const getServiceDetailById = async (id: number) => {
         try {
-            const api = new ApiClient<ApiResponse<StaffDetailResponse>>('/service');
+            const api = new ApiClient<ApiResponse<ServiceViewDetailsResponse>>('/service');
             const response = await api.getDetail(id);
             console.log(response);
             if (response.success) {
@@ -47,21 +53,21 @@ const UpdateServicePage = () => {
     const api = new ApiClient<any>('/service');
 
     const handleReset = () => {
-        setServiceName('');
-        setDescription('');
-        setUnitOfPrice('');
-        setMaximumPrice(0);
-        setDuration(0);
-        setCategoryId(0);
-        setMinimumPrice(0);
-        setServiceType('');
+        setServiceName(service.serviceName);
+        setDescription(service.description);
+        setUnitOfPrice(service.unitOfPrice);
+        setMaximumPrice(service.maximumPrice);
+        setDuration(service.duration);
+        setCategoryId(service.categoryId);
+        setMinimumPrice(service.minimumPrice);
+        setServiceType(service.serviceType);
     }
 
     const handleUpdate = async (e: FormEvent) => {
         e.preventDefault();
 
         const data = {
-            id: parseInt(param.id || '0'),
+            serviceId: parseInt(param.id || '0'),
             serviceName,
             description,
             unitOfPrice,
@@ -85,7 +91,7 @@ const UpdateServicePage = () => {
                     position: 'top',
                     isClosable: true,
                 });
-                navigate(`administrator/accounts/staff/${param.id}`);
+                navigate(-1);
             } else {
                 toast({
                     title: "Error",
@@ -110,7 +116,6 @@ const UpdateServicePage = () => {
 
     useEffect(() => {
         changeTabTitle('Update Service');
-        handleReset();
     }, []);
 
     useEffect(() => {
@@ -122,6 +127,12 @@ const UpdateServicePage = () => {
     useEffect(() => {
         handleReset();
     }, [service]);
+
+    useEffect(() => {
+        if (categoryData) {
+            setCategories(categoryData);
+        }
+    }, [categoryData]);
 
     return (
         <Stack w={'2xl'} m={'auto'}>
@@ -156,15 +167,11 @@ const UpdateServicePage = () => {
                         onChange={(e) => setCategoryId(parseInt(e.target.value))}
                         placeholder={'Select category'}
                     >
-                        <option value="Male">
-                            Male
-                        </option>
-                        <option value="Female">
-                            Female
-                        </option>
-                        <option value="Other">
-                            Other
-                        </option>
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.categoryName}
+                            </option>
+                        ))}
                     </Select>
                 </FormControl>
                 <HStack>

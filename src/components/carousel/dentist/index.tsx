@@ -1,26 +1,34 @@
 import OwlCarousel from "react-owl-carousel"
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
-import { Container } from "@chakra-ui/react";
-import DentistItem from "../../dentist_item";
+import { Card, CardBody, Container, HStack, Heading, Image, Stack, Text, Tooltip } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Color, Shadow } from "../../../styles/styles";
+import { useNavigate } from "react-router-dom";
+import { FaTooth } from "react-icons/fa6";
+import DentistListResponse from "../../../types/DentistListResponse";
 
-const DentistCarousel = () => {
+interface Prop {
+    dentistList: DentistListResponse[]
+}
 
-    // const { data } = useCategory({ type: 'get', id: 0 });
-    // console.log(data);
-    // const { data } = useCategory({ type: 'get', id: 0 })
-    // const [categories, setCategories] = useState<Category[]>([]);
+const DentistCarousel = ({ dentistList }: Prop) => {
+    const [dentists, setDentists] = useState<DentistListResponse[]>([]);
+    const navigate = useNavigate();
+    const navigateToDetail = (name: string) => {
+        const hyphenatedName = name.replace(/ /g, '-');
+        navigate(`/dentists/${hyphenatedName}`);
+    };
 
-    // useEffect(() => {
-    //     if (data?.Categories) {
-    //         setCategories(data.Categories);
-    //     }
-    // }, [data]);
-
-    // console.log(categories);
+    useEffect(() => {
+        if (dentistList) {
+            setDentists(dentistList);
+        }
+    }, [dentistList])
 
     return (
         <OwlCarousel
+            key={dentists.length}
             items={4}
             autoplay
             autoplayTimeout={4000}
@@ -29,27 +37,47 @@ const DentistCarousel = () => {
             mouseDrag={false}
             margin={20}
         >
-            <>
-                <Container h={'380px'} pt={1} m={0} px={1}>
-                    <DentistItem type={2} />
+            {dentists.map((dentist) => (
+                <Container key={dentist.dentistId} h={'380px'} pt={1} m={0} px={1}>
+                    <Card
+                        maxW='sm'
+                        shadow={Shadow.cardShadow}
+                        onClick={() => navigateToDetail(dentist.fullName)}
+                        cursor={'pointer'}
+                    >
+                        <CardBody pb={4}>
+                            <Stack align={'center'}>
+                                <Image
+                                    src={dentist.avatar}
+                                    alt='Dentist image'
+                                    borderRadius='lg'
+                                    w={221}
+                                    h={200}
+                                    objectFit={'cover'}
+                                />
+                                <Heading
+                                    size='md'
+                                    py={2}
+                                    pb={0}
+                                    _hover={{ color: Color.hoverBlue }}
+                                >
+                                    {dentist.fullName}
+                                </Heading>
+                            </Stack>
+                            <Stack mx={2} mt={6}>
+                                <HStack>
+                                    <Tooltip label='Specialty'>
+                                        <span>
+                                            <FaTooth />
+                                        </span>
+                                    </Tooltip>
+                                    <Text noOfLines={1}>{dentist.specialty}</Text>
+                                </HStack>
+                            </Stack>
+                        </CardBody>
+                    </Card>
                 </Container>
-                <Container h={'380px'} pt={1} m={0} px={1}>
-                    <DentistItem type={2} />
-                </Container>
-                <Container h={'380px'} pt={1} m={0} px={1}>
-                    <DentistItem type={2} />
-                </Container>
-                <Container h={'380px'} pt={1} m={0} px={1}>
-                    <DentistItem type={2} />
-                </Container>
-                <Container h={'380px'} pt={1} m={0} px={1}>
-                    <DentistItem type={2} />
-                </Container>
-                <Container h={'380px'} pt={1} m={0} px={1}>
-                    <DentistItem type={2} />
-                </Container>
-            </>
-
+            ))}
         </OwlCarousel>
     )
 }

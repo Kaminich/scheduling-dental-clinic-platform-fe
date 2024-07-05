@@ -1,4 +1,4 @@
-import Category from "./Category";
+import Category from "./CategoryResponse";
 import ClinicBranch from "./ClinicBranch";
 import ClinicOwner, { ClinicOwnerInit } from "./ClinicOwner";
 import Service from "./Service";

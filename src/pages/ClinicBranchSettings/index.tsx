@@ -1,29 +1,126 @@
-import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-import { FaChevronRight, FaSliders } from "react-icons/fa6";
+import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
+import { FaArrowRightArrowLeft, FaChevronRight, FaSliders } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import { useNavigate } from "react-router";
 import { Color, Shadow } from "../../styles/styles";
 import { AddIcon } from "@chakra-ui/icons";
+import useUserProfile from "../../hooks/useUserProfile";
+import BranchDetailResponse from "../../types/BranchDetailResponse";
+import { formatDate } from "../../utils/formatDate";
+import Loading from "../../components/loading";
+import useBranchByClinicId from "../../hooks/useBranchByClinicId";
+import ChangeStatusModal from "../../components/modal/change_status";
+import ApiClient from "../../services/apiClient";
 
 const ClinicBranchSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
-    const [clinics, setClinics] = useState([
-        { id: 1, username: 'John Doe', role: 'role 1', email: 'aaa', status: 'active' },
-        { id: 2, username: 'John Sin', role: 'role 1', email: 'aaa', status: 'active' },
-        { id: 3, username: 'Doe Sin', role: 'role 1', email: 'aaa', status: 'active' },
-    ]);
+    const [id, setId] = useState<number>(0);
+    const [status, setStatus] = useState<string>('');
+    const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
+    const { data: userData } = useUserProfile();
+    const { data: branchData, isLoading, refetch } = useBranchByClinicId({ clinicId: userData?.clinicId })
+    const { isOpen: isOpenChange, onClose: onCloseChange, onOpen: onOpenChange } = useDisclosure();
+    const toast = useToast();
     const navigate = useNavigate();
+    const api = new ApiClient<any>('branch');
 
-    let filteredClinics = clinics.filter((clinic) => {
-        return clinic.username.toLowerCase().includes(keyword.toLowerCase())
+    let filteredBranches = branches.filter((branch) => {
+        return branch.branchName.toLowerCase().includes(keyword.toLowerCase())
     })
+
+    const handleChangeStatus = async () => {
+        if (status === 'INACTIVE') {
+            try {
+                const response = await api.updateWithId(id);
+                console.log(response);
+                if (response.success) {
+                    toast({
+                        title: "Success",
+                        description: response.message,
+                        status: "success",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                    refetch && refetch()
+                } else {
+                    toast({
+                        title: "Error",
+                        description: response.message,
+                        status: "error",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                }
+            } catch (error: any) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            } finally {
+                onCloseChange();
+            }
+        } else {
+            try {
+                const response = await api.delete(id);
+                console.log(response);
+                if (response.success) {
+                    toast({
+                        title: "Success",
+                        description: response.message,
+                        status: "success",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                    refetch && refetch()
+                } else {
+                    toast({
+                        title: "Error",
+                        description: response.message,
+                        status: "error",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                }
+            } catch (error: any) {
+                console.log(error);
+
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            } finally {
+                onCloseChange();
+            }
+        }
+    }
 
     useEffect(() => {
         changeTabTitle('Clinic Branch Settings');
     }, []);
+
+    useEffect(() => {
+        if (branchData) {
+            setBranches(branchData);
+        }
+    }, [branchData]);
+
+    console.log(branches);
+
 
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
@@ -61,40 +158,128 @@ const ClinicBranchSettingsPage = () => {
                             <Thead>
                                 <Tr>
                                     <Th textAlign='center' borderColor={'gainsboro'}>ID</Th>
-                                    <Th textAlign='center' borderColor={'gainsboro'}>Clinic name</Th>
-                                    <Th textAlign='center' borderColor={'gainsboro'}>Owner</Th>
-                                    <Th textAlign='center' borderColor={'gainsboro'}>Create By</Th>
-                                    <Th textAlign='center' borderColor={'gainsboro'}>Last Modified</Th>
-                                    <Th textAlign='center' borderColor={'gainsboro'}>Last Modified By</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Branch name</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>City</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Create Date</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Modified Date</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Status</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Action</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}></Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {filteredClinics.map((clinic) => (
-                                    <Tr _hover={{ bg: 'gray.100' }}>
-                                        <Td textAlign="center" borderColor={'gainsboro'}>{'logo'}</Td>
-                                        <Td textAlign="center" borderColor={'gainsboro'}>{'1'}</Td>
-                                        <Td textAlign='center' borderColor={'gainsboro'}>{'name'}</Td>
-                                        <Td textAlign="center" borderColor={'gainsboro'}>{'aaa'}</Td>
-                                        <Td textAlign="center" borderColor={'gainsboro'}>{'bbb'}</Td>
-                                        <Td textAlign='center' borderColor={'gainsboro'}>{'2 days ago'}</Td>
-                                        <Td textAlign='center' borderColor={'gainsboro'}>{'ccc'}</Td>
-                                        <Td
-                                            textAlign='center'
-                                            borderColor={'gainsboro'}
-                                            cursor={'pointer'}
-                                            onClick={() => navigate('dental-detail')}
-                                        >
-                                            <FaChevronRight />
+                                {!isLoading ? (
+                                    <>
+                                        {filteredBranches.length !== 0 ? (
+                                            <>
+                                                {filteredBranches.map((branch) => (
+                                                    <Tr key={branch.branchId} _hover={{ bg: 'gray.100' }}>
+                                                        <Td
+                                                            textAlign="center"
+                                                            borderColor={'gainsboro'}
+                                                        >
+                                                            {branch.branchId}
+                                                        </Td>
+                                                        <Td
+                                                            textAlign="center"
+                                                            borderColor={'gainsboro'}
+                                                        >
+                                                            {branch.branchName}
+                                                        </Td>
+                                                        <Td
+                                                            textAlign="center"
+                                                            borderColor={'gainsboro'}
+                                                        >
+                                                            {branch.city}
+                                                        </Td>
+                                                        <Td
+                                                            textAlign="center"
+                                                            borderColor={'gainsboro'}
+                                                        >
+                                                            {formatDate(branch.createdDate)}
+                                                        </Td>
+                                                        <Td
+                                                            textAlign='center'
+                                                            borderColor={'gainsboro'}
+                                                        >
+                                                            {branch.modifiedDate}
+                                                        </Td>
+                                                        <Td
+                                                            textAlign='center'
+                                                            borderColor={'gainsboro'}
+                                                        >
+                                                            <Tag
+                                                                colorScheme={
+                                                                    branch.status === 'ACTIVE'
+                                                                        ? 'green'
+                                                                        : 'red'
+                                                                }
+                                                            >
+                                                                <TagLabel>
+                                                                    {branch.status}
+                                                                </TagLabel>
+                                                            </Tag>
+                                                        </Td>
+                                                        <Td
+                                                            textAlign='center'
+                                                            borderColor={'gainsboro'}
+                                                            p={1}
+                                                        >
+                                                            <Button
+                                                                borderRadius='full'
+                                                                px={3}
+                                                                colorScheme="blue"
+                                                                variant='ghost'
+                                                                onClick={() => {
+                                                                    setId(branch.branchId);
+                                                                    setStatus(branch.status)
+                                                                    onOpenChange();
+                                                                }}
+                                                            >
+                                                                <Tooltip label='Change status'>
+                                                                    <span>
+                                                                        <FaArrowRightArrowLeft />
+                                                                    </span>
+                                                                </Tooltip>
+                                                            </Button>
+                                                        </Td>
+                                                        <Td
+                                                            textAlign='center'
+                                                            borderColor={'gainsboro'}
+                                                            cursor={'pointer'}
+                                                            onClick={() => navigate(branch.branchId.toString())}
+                                                        >
+                                                            <FaChevronRight />
+                                                        </Td>
+                                                    </Tr>
+                                                ))}
+                                            </>
+                                        ) : (
+                                            <Tr>
+                                                <Td colSpan={8} textAlign="center">
+                                                    No branch
+                                                </Td>
+                                            </Tr>
+                                        )}
+                                    </>
+                                ) : (
+                                    <Tr>
+                                        <Td colSpan={8} textAlign="center">
+                                            <Loading />
                                         </Td>
                                     </Tr>
-                                ))}
+                                )}
                             </Tbody>
                         </Table>
                     </TableContainer>
                 </Card>
             </Stack>
+            <ChangeStatusModal
+                isOpen={isOpenChange}
+                onClose={onCloseChange}
+                type="branch"
+                handleChangeStatus={handleChangeStatus}
+            />
         </Stack>
     )
 }

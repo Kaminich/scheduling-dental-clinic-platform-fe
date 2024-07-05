@@ -8,6 +8,7 @@ import useUserProfile from "../../hooks/useUserProfile";
 import Customer, { CustomerInit } from "../../types/Customer";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import ApiClient from "../../services/apiClient";
+import axios from "axios";
 
 const UpdateProfilePage = () => {
     const [username, setUsername] = useState<string>('');
@@ -54,10 +55,30 @@ const UpdateProfilePage = () => {
         setPhone(userData.phone);
         setEmail(userData.email);
         setAddress(userData.address);
+        setAvatar(userData.avatar)
     }
 
     const handleUpdateProfile = async (e: FormEvent) => {
         e.preventDefault();
+        let imageUrl: string = '';
+
+        if (avatarData) {
+            const formDataImage = new FormData();
+            formDataImage.append("file", avatarData);
+            formDataImage.append("upload_preset", "z5r1wkcn");
+
+            try {
+                const response = await axios.post(
+                    `https://api.cloudinary.com/v1_1/dy1t2fqsc/image/upload`,
+                    formDataImage
+                );
+                imageUrl = response.data.secure_url;
+                console.log("Cloudinary image URL:", imageUrl);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
         const api = new ApiClient<any>('/auth/user-information');
         const data: Customer = {
             username,
@@ -67,7 +88,7 @@ const UpdateProfilePage = () => {
             phone,
             dob,
             address,
-            avatar
+            avatar: imageUrl === '' ? avatar : imageUrl
         }
 
         try {
@@ -183,6 +204,7 @@ const UpdateProfilePage = () => {
                                     }
                                     alt='avatar'
                                     bgColor='white'
+                                    objectFit={'cover'}
                                 />
                                 <FormLabel
                                     htmlFor="avt"
@@ -192,22 +214,20 @@ const UpdateProfilePage = () => {
                                 >
                                     <FaPen />
                                 </FormLabel>
-                                {!avatar && (
-                                    <Input
-                                        type="file"
-                                        id="avt"
-                                        accept="image/*"
-                                        onChange={handleAvatarChange}
-                                        display='none'
-                                    />
-                                )}
+                                <Input
+                                    type="file"
+                                    id="avt"
+                                    accept="image/*"
+                                    onChange={handleAvatarChange}
+                                    display='none'
+                                />
                             </HStack>
                         </CardBody>
                     </Card>
                     <Stack flex={1.5}>
                         <Card shadow={Shadow.cardShadow}>
                             <CardBody py={8}>
-                                <Stack gap={5}>
+                                <Stack gap={4}>
                                     <FormControl id="username">
                                         <FormLabel ml={1}>Username</FormLabel>
                                         <Tooltip

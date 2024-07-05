@@ -3,10 +3,12 @@ import { Outlet, useLocation } from "react-router"
 import AdminNavbar from "../components/admin_navbar"
 import SideBar from "../components/sidebar"
 import { useEffect, useState } from "react"
+import { useAuth } from "../../../hooks/useAuth"
+import NotFoundPage from "../../../pages/NotFound"
 
 const AdminLayout = () => {
     const [collapsed, setCollapsed] = useState<boolean>(false);
-
+    const { role } = useAuth();
     const { pathname } = useLocation();
 
     useEffect(() => {
@@ -16,6 +18,10 @@ const AdminLayout = () => {
     const toggleCollapsed = () => {
         setCollapsed(!collapsed);
     };
+
+    if (role !== 'Admin' && role !== 'Owner') {
+        return <NotFoundPage />
+    }
 
     return (
         <>

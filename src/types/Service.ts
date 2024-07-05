@@ -1,5 +1,5 @@
 import Appointment from "./Appointment";
-import Category, { CategoryInit } from "./Category"
+import Category, { CategoryInit } from "./CategoryResponse"
 import Clinic, { ClinicInit } from "./Clinic"
 import { Status } from "./type.enum";
 

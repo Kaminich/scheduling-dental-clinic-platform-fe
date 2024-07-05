@@ -3,6 +3,9 @@ import { FormEvent, useEffect, useState } from "react";
 import ApiClient from "../../../services/apiClient";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { Border } from "../../../styles/styles";
+import useUserProfile from "../../../hooks/useUserProfile";
+import useCategoryByClinicId from "../../../hooks/useCategoryByClinicId";
+import CategoryViewListResponse from "../../../types/CategoryViewListResponse";
 
 const CreateServicePage = () => {
     const [serviceName, setServiceName] = useState<string>('');
@@ -13,7 +16,10 @@ const CreateServicePage = () => {
     const [maximumPrice, setMaximumPrice] = useState<number | string>('');
     const [duration, setDuration] = useState<number | string>('');
     const [categoryId, setCategoryId] = useState<number>(0);
+    const [categories, setCategories] = useState<CategoryViewListResponse[]>([]);
     const toast = useToast();
+    const { data: userData } = useUserProfile();
+    const { data: categoryData } = useCategoryByClinicId({ clinicId: userData?.clinicId })
 
     const api = new ApiClient<any>('/service');
 
@@ -23,9 +29,9 @@ const CreateServicePage = () => {
             description !== '' &&
             unitOfPrice !== '' &&
             serviceType !== '' &&
-            minimumPrice !== 0 &&
-            maximumPrice !== 0 &&
-            duration !== 0 &&
+            minimumPrice !== undefined &&
+            maximumPrice !== undefined &&
+            duration !== undefined &&
             categoryId !== 0
         );
     };
@@ -34,10 +40,10 @@ const CreateServicePage = () => {
         setServiceName('');
         setDescription('');
         setUnitOfPrice('');
-        setMaximumPrice(0);
-        setDuration(0);
+        setMaximumPrice('');
+        setDuration('');
         setCategoryId(0);
-        setMinimumPrice(0);
+        setMinimumPrice('');
         setServiceType('');
     }
 
@@ -68,6 +74,7 @@ const CreateServicePage = () => {
                     position: 'top',
                     isClosable: true,
                 });
+                handleReset();
             } else {
                 toast({
                     title: "Error",
@@ -93,6 +100,12 @@ const CreateServicePage = () => {
     useEffect(() => {
         changeTabTitle('Create Service');
     }, []);
+
+    useEffect(() => {
+        if (categoryData) {
+            setCategories(categoryData);
+        }
+    }, [categoryData]);
 
     return (
         <Stack w={'2xl'} m={'auto'}>
@@ -127,15 +140,11 @@ const CreateServicePage = () => {
                         onChange={(e) => setCategoryId(parseInt(e.target.value))}
                         placeholder={'Select category'}
                     >
-                        <option value="Male">
-                            Male
-                        </option>
-                        <option value="Female">
-                            Female
-                        </option>
-                        <option value="Other">
-                            Other
-                        </option>
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.categoryName}
+                            </option>
+                        ))}
                     </Select>
                 </FormControl>
                 <HStack>
@@ -155,7 +164,7 @@ const CreateServicePage = () => {
                             <Input
                                 type="number"
                                 value={minimumPrice}
-                                onChange={(e) => setMinimumPrice(e.target.value)}
+                                onChange={(e) => setMinimumPrice(parseInt(e.target.value))}
                                 placeholder="Enter min price"
                                 required
                             />
@@ -168,7 +177,7 @@ const CreateServicePage = () => {
                             <Input
                                 type="number"
                                 value={maximumPrice}
-                                onChange={(e) => setMaximumPrice(e.target.value)}
+                                onChange={(e) => setMaximumPrice(parseInt(e.target.value))}
                                 placeholder="Enter max price"
                                 required
                             />
@@ -183,7 +192,7 @@ const CreateServicePage = () => {
                             <Input
                                 type="number"
                                 value={duration}
-                                onChange={(e) => setDuration(e.target.value)}
+                                onChange={(e) => setDuration(parseInt(e.target.value))}
                                 placeholder="Enter duration"
                                 required
                             />

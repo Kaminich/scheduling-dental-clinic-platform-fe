@@ -1,12 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import ApiClient from "../services/apiClient";
-import Category from "../types/Category";
-
-interface Prop {
-    type: string;
-    id: number;
-    data?: Category;
-}
 
 const useCategory = () => {
     const api = new ApiClient<any>('/category');

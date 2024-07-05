@@ -6,10 +6,13 @@ import { today } from "../../../components/modal/appointment";
 import { FaPen } from "react-icons/fa6";
 import axios from "axios";
 import { Border } from "../../../styles/styles";
+import useUserProfile from "../../../hooks/useUserProfile";
+import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
+import BranchDetailResponse from "../../../types/BranchDetailResponse";
 
 const CreateDentistPage = () => {
     const [fullName, setFullName] = useState<string>('');
-    const [dob, setDob] = useState<Date | string>('');
+    const [dob, setDob] = useState<string>('');
     const [gender, setGender] = useState<string>('');
     const [phone, setPhone] = useState<string | number>('');
     const [email, setEmail] = useState<string>('');
@@ -20,6 +23,9 @@ const CreateDentistPage = () => {
     const [avatar, setAvatar] = useState<string>('');
     const [avatarData, setAvatarData] = useState<File | null>(null);
     const [branchId, setBranchId] = useState<number>(0);
+    const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
+    const { data: userData } = useUserProfile();
+    const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
 
     const toast = useToast();
     const api = new ApiClient<any>('/dentists');
@@ -96,6 +102,7 @@ const CreateDentistPage = () => {
             fullName,
             email,
             gender,
+            phone,
             dob,
             address,
             description,
@@ -118,7 +125,7 @@ const CreateDentistPage = () => {
                     position: 'top',
                     isClosable: true,
                 });
-
+                handleReset();
             } else {
                 toast({
                     title: "Error",
@@ -145,6 +152,12 @@ const CreateDentistPage = () => {
         changeTabTitle('Create Dentist');
     }, []);
 
+    useEffect(() => {
+        if (branchData) {
+            setBranches(branchData);
+        }
+    }, [branchData]);
+
     return (
         <Stack w={'6xl'} m={'auto'}>
             <HStack gap={20} align={'flex-start'} mb={10}>
@@ -160,6 +173,7 @@ const CreateDentistPage = () => {
                             }
                             alt='avatar'
                             bgColor='white'
+                            objectFit={'cover'}
                         />
                         <FormLabel
                             htmlFor="avt"
@@ -214,6 +228,7 @@ const CreateDentistPage = () => {
                             <Input
                                 type="date"
                                 max={today}
+                                value={dob}
                                 onChange={(e) => setDob(e.target.value)}
                                 required
                             />
@@ -268,26 +283,22 @@ const CreateDentistPage = () => {
                         <FormLabel pl={1}>Branch</FormLabel>
                         <Select
                             name="branch"
-                            value={gender}
+                            value={branchId}
                             onChange={(e) => setBranchId(parseInt(e.target.value))}
                             placeholder={'Select branch'}
                         >
-                            <option value="Male">
-                                Male
-                            </option>
-                            <option value="Female">
-                                Female
-                            </option>
-                            <option value="Other">
-                                Other
-                            </option>
+                            {branches.map((branch) => (
+                                <option key={branch.branchId} value={branch.branchId}>
+                                    {branch.branchName} ({branch.city})
+                                </option>
+                            ))}
                         </Select>
                     </FormControl>
                     <FormControl id="specialty" isRequired>
                         <FormLabel pl={1}>Specialty</FormLabel>
                         <Input
                             type="text"
-                            value={gender}
+                            value={specialty}
                             onChange={(e) => setSpecialty(e.target.value)}
                             placeholder={'Enter specialty'}
                         />

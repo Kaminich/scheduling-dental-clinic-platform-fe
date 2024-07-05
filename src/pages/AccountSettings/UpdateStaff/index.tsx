@@ -9,6 +9,9 @@ import { FaPen } from "react-icons/fa6";
 import { Border } from "../../../styles/styles";
 import StaffDetailResponse, { initialStaffDetailResponse } from "../../../types/StaffDetailResponse";
 import { ApiResponse } from "../../../types/ApiResponse";
+import useUserProfile from "../../../hooks/useUserProfile";
+import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
+import BranchDetailResponse from "../../../types/BranchDetailResponse";
 
 const UpdateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -24,6 +27,9 @@ const UpdateStaffPage = () => {
     const param = useParams<{ id: string }>();
     const navigate = useNavigate();
     const toast = useToast();
+    const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
+    const { data: userData } = useUserProfile();
+    const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
 
     const getStaffDetailById = async (id: number) => {
         try {
@@ -56,7 +62,7 @@ const UpdateStaffPage = () => {
         setPhone(staff.phone);
         setEmail(staff.email);
         setAddress(staff.address);
-        setClinicBranchId(0);
+        setClinicBranchId(staff.clinicBranchId);
         setAvatar(staff.avatar);
         setAvatarData(null);
     }
@@ -106,7 +112,7 @@ const UpdateStaffPage = () => {
             phone,
             email,
             address,
-            avatar: avatarUrl || avatar,
+            avatar: avatarUrl === '' ? avatar : avatarUrl,
             clinicBranchId
         };
 
@@ -160,6 +166,12 @@ const UpdateStaffPage = () => {
         handleReset();
     }, [staff]);
 
+    useEffect(() => {
+        if (branchData) {
+            setBranches(branchData);
+        }
+    }, [branchData]);
+
     return (
         <Stack w={'2xl'} m={'auto'}>
             <Stack gap={2} minW={'lg'} mb={10}>
@@ -173,6 +185,7 @@ const UpdateStaffPage = () => {
                         }
                         alt='avatar'
                         bgColor='white'
+                        objectFit={'cover'}
                     />
                     <FormLabel
                         htmlFor="avt"
@@ -267,19 +280,15 @@ const UpdateStaffPage = () => {
                     <FormLabel pl={1}>Branch</FormLabel>
                     <Select
                         name="branch"
-                        value={gender}
+                        value={clinicBranchId}
                         onChange={(e) => setClinicBranchId(parseInt(e.target.value))}
                         placeholder={'Select branch'}
                     >
-                        <option value="Male">
-                            Male
-                        </option>
-                        <option value="Female">
-                            Female
-                        </option>
-                        <option value="Other">
-                            Other
-                        </option>
+                        {branches.map((branch) => (
+                            <option key={branch.branchId} value={branch.branchId}>
+                                {branch.branchName} ({branch.city})
+                            </option>
+                        ))}
                     </Select>
                 </FormControl>
             </Stack>

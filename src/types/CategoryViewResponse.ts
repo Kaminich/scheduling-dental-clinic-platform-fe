@@ -3,6 +3,7 @@ import { Status } from "./type.enum";
 export default interface CategoryViewResponse {
     id: number;
     categoryName: string;
+    categoryImage: string;
     status: boolean;
     services: ServiceViewDetailsResponse[];
 }
@@ -10,6 +11,7 @@ export default interface CategoryViewResponse {
 export const initialCategoryViewResponse: CategoryViewResponse = {
     id: 0,
     categoryName: "",
+    categoryImage: "",
     status: false,
     services: []
 };

@@ -6,10 +6,13 @@ import { today } from "../../../components/modal/appointment";
 import axios from "axios";
 import { FaPen } from "react-icons/fa6";
 import { Border } from "../../../styles/styles";
+import useUserProfile from "../../../hooks/useUserProfile";
+import BranchDetailResponse from "../../../types/BranchDetailResponse";
+import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
 
 const CreateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
-    const [dob, setDob] = useState<Date | string>('');
+    const [dob, setDob] = useState<string>('');
     const [gender, setGender] = useState<string>('');
     const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -18,6 +21,9 @@ const CreateStaffPage = () => {
     const [avatar, setAvatar] = useState<string>('');
     const [avatarData, setAvatarData] = useState<File | null>(null);
     const toast = useToast();
+    const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
+    const { data: userData } = useUserProfile();
+    const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
 
     const api = new ApiClient<any>('/staff');
 
@@ -108,6 +114,7 @@ const CreateStaffPage = () => {
                     position: 'top',
                     isClosable: true,
                 });
+                handleReset();
             } else {
                 toast({
                     title: "Error",
@@ -134,6 +141,12 @@ const CreateStaffPage = () => {
         changeTabTitle('Create Staff');
     }, []);
 
+    useEffect(() => {
+        if (branchData) {
+            setBranches(branchData);
+        }
+    }, [branchData]);
+
     return (
         <Stack w={'2xl'} m={'auto'}>
             <Stack gap={2} minW={'lg'} mb={10}>
@@ -147,6 +160,7 @@ const CreateStaffPage = () => {
                         }
                         alt='avatar'
                         bgColor='white'
+                        objectFit={'cover'}
                     />
                     <FormLabel
                         htmlFor="avt"
@@ -201,6 +215,7 @@ const CreateStaffPage = () => {
                         <Input
                             type="date"
                             max={today}
+                            value={dob}
                             onChange={(e) => setDob(e.target.value)}
                             required
                         />
@@ -240,19 +255,15 @@ const CreateStaffPage = () => {
                     <FormLabel pl={1}>Branch</FormLabel>
                     <Select
                         name="branch"
-                        value={gender}
+                        value={clinicBranchId}
                         onChange={(e) => setClinicBranchId(parseInt(e.target.value))}
                         placeholder={'Select branch'}
                     >
-                        <option value="Male">
-                            Male
-                        </option>
-                        <option value="Female">
-                            Female
-                        </option>
-                        <option value="Other">
-                            Other
-                        </option>
+                        {branches.map((branch) => (
+                            <option key={branch.branchId} value={branch.branchId}>
+                                {branch.branchName} ({branch.city})
+                            </option>
+                        ))}
                     </Select>
                 </FormControl>
             </Stack>

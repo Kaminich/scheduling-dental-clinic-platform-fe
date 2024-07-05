@@ -9,6 +9,9 @@ import axios from "axios";
 import { Border } from "../../../styles/styles";
 import { ApiResponse } from "../../../types/ApiResponse";
 import DentistDetailResponse, { initialDentistDetailResponse } from "../../../types/DentistDetailResponse";
+import useUserProfile from "../../../hooks/useUserProfile";
+import BranchDetailResponse from "../../../types/BranchDetailResponse";
+import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
 
 const UpdateDentistPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -27,6 +30,9 @@ const UpdateDentistPage = () => {
     const param = useParams<{ id: string }>();
     const navigate = useNavigate();
     const toast = useToast();
+    const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
+    const { data: userData } = useUserProfile();
+    const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
 
     const getDentistDetailById = async (id: number) => {
         try {
@@ -64,7 +70,7 @@ const UpdateDentistPage = () => {
         setExperience(dentist.experience);
         setAvatar(dentist.avatar);
         setAvatarData(null);
-        setBranchId(0);
+        setBranchId(dentist.branchId);
     }
 
     const handleAvatarChange = (e: any) => {
@@ -113,7 +119,7 @@ const UpdateDentistPage = () => {
             description,
             specialty,
             experience,
-            avatar: avatarUrl,
+            avatar: avatarUrl === '' ? avatar : avatarUrl,
             branchId
         };
 
@@ -168,6 +174,12 @@ const UpdateDentistPage = () => {
         handleReset();
     }, [dentist]);
 
+    useEffect(() => {
+        if (branchData) {
+            setBranches(branchData);
+        }
+    }, [branchData]);
+
     return (
         <Stack w={'6xl'} m={'auto'}>
             <HStack gap={20} align={'flex-start'} mb={10}>
@@ -183,6 +195,7 @@ const UpdateDentistPage = () => {
                             }
                             alt='avatar'
                             bgColor='white'
+                            objectFit={'cover'}
                         />
                         <FormLabel
                             htmlFor="avt"
@@ -292,19 +305,15 @@ const UpdateDentistPage = () => {
                         <FormLabel pl={1}>Branch</FormLabel>
                         <Select
                             name="branch"
-                            value={gender}
+                            value={branchId}
                             onChange={(e) => setBranchId(parseInt(e.target.value))}
                             placeholder={'Select branch'}
                         >
-                            <option value="Male">
-                                Male
-                            </option>
-                            <option value="Female">
-                                Female
-                            </option>
-                            <option value="Other">
-                                Other
-                            </option>
+                            {branches.map((branch) => (
+                                <option key={branch.branchId} value={branch.branchId}>
+                                    {branch.branchName} ({branch.city})
+                                </option>
+                            ))}
                         </Select>
                     </FormControl>
                     <FormControl id="specialty" isRequired>
