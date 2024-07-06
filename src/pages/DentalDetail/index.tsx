@@ -115,7 +115,7 @@ const DentalDetailPage = () => {
                         <ServicePrice clinicId={1} />
                     </TabPanel>
                     <TabPanel>
-                        <RatingAndFeedback isModal={false} />
+                        <RatingAndFeedback isModal={false} clinicId={id} />
                     </TabPanel>
                 </TabPanels>
             </Tabs>

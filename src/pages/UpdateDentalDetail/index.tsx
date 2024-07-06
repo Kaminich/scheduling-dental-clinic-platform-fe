@@ -1,14 +1,11 @@
-import { Avatar, Box, Button, Container, FormControl, FormLabel, HStack, Heading, Image, Input, Select, Stack, Textarea, useDisclosure, useToast } from "@chakra-ui/react"
+import { Button, FormControl, FormLabel, HStack, Image, Input, Select, Stack, Textarea, useDisclosure, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ApiClient from "../../services/apiClient";
 import { changeTabTitle } from "../../utils/changeTabTitle";
-import { today } from "../../components/modal/appointment";
 import { FaCamera, FaPen } from "react-icons/fa6";
 import axios from "axios";
 import { Border } from "../../styles/styles";
-import { ApiResponse } from "../../types/ApiResponse";
-import DentistDetailResponse, { initialDentistDetailResponse } from "../../types/DentistDetailResponse";
 import useUserProfile from "../../hooks/useUserProfile";
 import BranchDetailResponse from "../../types/BranchDetailResponse";
 import useBranchByClinicId from "../../hooks/useBranchByClinicId";
