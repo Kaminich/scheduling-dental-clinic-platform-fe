@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, FormControl, FormLabel, HStack, Image, Input, InputGroup, InputRightElement, Select, Stack, Tooltip, useToast } from "@chakra-ui/react"
+import { Button, Card, CardBody, FormControl, FormLabel, HStack, Image, Input, InputGroup, InputRightElement, Select, Stack, Tooltip, useDisclosure, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react"
 import { today } from "../../components/modal/appointment";
 import { Shadow } from "../../styles/styles";
@@ -9,6 +9,7 @@ import Customer, { CustomerInit } from "../../types/Customer";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import ApiClient from "../../services/apiClient";
 import axios from "axios";
+import LoadingModal from "../../components/modal/loading";
 
 const UpdateProfilePage = () => {
     const [username, setUsername] = useState<string>('');
@@ -27,7 +28,7 @@ const UpdateProfilePage = () => {
     const [newPass, setNewPass] = useState<string>('');
     const [confirmPass, setConfirmPass] = useState<string>('');
     const [userData, setUserData] = useState<Customer>(CustomerInit);
-
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
     const { data } = useUserProfile();
     const toast = useToast();
     const param = useParams();
@@ -55,11 +56,13 @@ const UpdateProfilePage = () => {
         setPhone(userData.phone);
         setEmail(userData.email);
         setAddress(userData.address);
-        setAvatar(userData.avatar)
+        setAvatar(userData.avatar);
+        setAvatarData(null);
     }
 
     const handleUpdateProfile = async (e: FormEvent) => {
         e.preventDefault();
+        onOpenLoading();
         let imageUrl: string = '';
 
         if (avatarData) {
@@ -104,6 +107,7 @@ const UpdateProfilePage = () => {
                     isClosable: true,
                 });
             }
+            handleResetAllChanges();
         } catch (error: any) {
             toast({
                 title: "Error",
@@ -113,6 +117,8 @@ const UpdateProfilePage = () => {
                 position: 'top',
                 isClosable: true,
             });
+        } finally {
+            onCloseLoading();
         }
     }
 
@@ -400,6 +406,10 @@ const UpdateProfilePage = () => {
                     </HStack>
                 </Stack>
             )}
+            <LoadingModal
+                isOpen={isOpenLoading}
+                onClose={onCloseLoading}
+            />
         </>
 
     )

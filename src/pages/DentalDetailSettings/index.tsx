@@ -1,23 +1,58 @@
-import { Button, Card, Divider, HStack, Heading, Image, Stack, Text } from "@chakra-ui/react"
+import { Button, Card, Divider, HStack, Heading, Image, Stack, Text, useToast } from "@chakra-ui/react"
 import { Shadow } from "../../styles/styles"
 import WorkingHours from "../DentalDetail/components/working_hours"
 import DentalDetailBranch from "../DentalDetail/components/branch"
 import { useAuth } from "../../hooks/useAuth"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { changeTabTitle } from "../../utils/changeTabTitle"
+import { useNavigate, useParams } from "react-router"
+import DentistDetailResponse, { initialDentistDetailResponse } from "../../types/DentistDetailResponse"
+import ApiClient from "../../services/apiClient"
 
 const DentalDetailSettingsPage = () => {
     const { role } = useAuth();
+    const { id } = useParams<{ id: string }>();
+    const [dental, setDental] = useState<DentistDetailResponse>(initialDentistDetailResponse);
+    const api = new ApiClient<any>('/dentists');
+    const navigate = useNavigate();
+
+    const toast = useToast();
+
+    const getDentalDetail = async (id: number) => {
+        try {
+            const response = await api.getDetail(id);
+            console.log(response);
+
+            if (response.success) {
+                setDental(response.data);
+            }
+        } catch (error: unknown) {
+            toast({
+                title: "Error",
+                description: "An error has occur",
+                status: "error",
+                duration: 2500,
+                position: 'top',
+                isClosable: true,
+            });
+        }
+    }
 
     useEffect(() => {
         changeTabTitle('Clinic Dental Settings');
     }, []);
 
+    useEffect(() => {
+        if (id) {
+            getDentalDetail(parseInt(id));
+        }
+    }, [id]);
+
     return (
         <Stack>
             {role === 'Owner' && (
                 <HStack justify={'flex-end'} m={6} mb={-6}>
-                    <Button colorScheme="blue">Edit</Button>
+                    <Button colorScheme="blue" onClick={() => navigate('update')}>Edit</Button>
                 </HStack>
             )}
             <HStack align={'center'} mt={6}>
@@ -28,7 +63,9 @@ const DentalDetailSettingsPage = () => {
                     <Heading fontSize={28}>F-Dental</Heading>
                     <HStack mt={4} ml={4} align={'flex-start'}>
                         <Stack flex={1}>
-                            <Text>Owner: { }</Text>
+                            {role === 'Admin' && (
+                                <Text>Owner: { }</Text>
+                            )}
                             <Text>Phone Number: { }</Text>
                             <Text>Email: { }</Text>
                             <Text>Address: { }</Text>

@@ -1,10 +1,11 @@
-import { Button, Card, CardBody, Divider, FormControl, FormLabel, HStack, Heading, Input, Select, Stack, Text, useToast } from "@chakra-ui/react"
+import { Button, Card, CardBody, Divider, FormControl, FormLabel, HStack, Heading, Input, Select, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Color, Shadow } from "../../styles/styles";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import { FaUpload } from "react-icons/fa6";
 import axios from "axios";
 import ApiClient from "../../services/apiClient";
+import LoadingModal from "../../components/modal/loading";
 
 const PartnerRegisterPage = () => {
     const [clinicName, setClinicName] = useState<string>('');
@@ -17,6 +18,8 @@ const PartnerRegisterPage = () => {
     const [fullName, setFullName] = useState<string>('');
     const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
+
     const toast = useToast();
 
     const resetAllField = () => {
@@ -34,15 +37,8 @@ const PartnerRegisterPage = () => {
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
-        console.log(selectedFile);
 
         if (selectedFile) {
-            // const reader = new FileReader();
-            // reader.onload = () => {
-            //     const imageUrl = URL.createObjectURL(selectedFile);
-            //     setClinicImage(imageUrl);
-            // };
-            // reader.readAsDataURL(selectedFile);
             setClinicImageData(selectedFile);
         }
     }
@@ -56,7 +52,7 @@ const PartnerRegisterPage = () => {
 
     const handleSendInfo = async (e: FormEvent) => {
         e.preventDefault();
-
+        onOpenLoading();
         let imageUrl: string = '';
         let fileUrl: string = '';
 
@@ -158,6 +154,8 @@ const PartnerRegisterPage = () => {
                     isClosable: true,
                 });
             }
+        } finally {
+            onCloseLoading();
         }
     }
 
@@ -204,36 +202,6 @@ const PartnerRegisterPage = () => {
                                 Partner Registration
                             </Heading>
                             <Heading fontSize={18}>Clinic Information</Heading>
-                            {/* <FormControl id="clinicimage">
-                                <FormLabel pl={1}>Clinic Logo</FormLabel>
-                                <HStack w={'full'} justify={'center'} align={'flex-end'}>
-                                    <Image
-                                        border='1px solid gainsboro'
-                                        borderRadius='full'
-                                        boxSize={'10rem'}
-                                        src={
-                                            clinicImage || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
-                                        }
-                                        alt='logo'
-                                        bgColor='white'
-                                    />
-                                    <FormLabel
-                                        htmlFor="logo"
-                                        cursor='pointer'
-                                        fontSize='md'
-                                        ml={-8}
-                                    >
-                                        <FaPen />
-                                    </FormLabel>
-                                    <Input
-                                        type="file"
-                                        id="logo"
-                                        accept="image/*"
-                                        onChange={handleImageChange}
-                                        display='none'
-                                    />
-                                </HStack>
-                            </FormControl> */}
                             <FormControl id="clinicname" isRequired>
                                 <FormLabel pl={1}>Clinic Name</FormLabel>
                                 <Input
@@ -349,7 +317,6 @@ const PartnerRegisterPage = () => {
                                     </HStack>
                                 </FormControl>
                             </HStack>
-
                             <FormControl id="websiteurl" flex={1}>
                                 <FormLabel pl={1}>Website Url</FormLabel>
                                 <Input
@@ -405,6 +372,7 @@ const PartnerRegisterPage = () => {
                                     address === '' ||
                                     city === '' ||
                                     clinicRegistration === null ||
+                                    clinicImageData === null ||
                                     fullName === '' ||
                                     phone === '' ||
                                     email === ''
@@ -415,6 +383,10 @@ const PartnerRegisterPage = () => {
                         </Stack>
                     </CardBody>
                 </Card>
+                <LoadingModal
+                    isOpen={isOpenLoading}
+                    onClose={onCloseLoading}
+                />
             </HStack>
         </>
     )

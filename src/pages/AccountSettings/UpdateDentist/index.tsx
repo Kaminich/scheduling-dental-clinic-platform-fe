@@ -1,4 +1,4 @@
-import { Button, FormControl, FormLabel, HStack, Heading, Image, Input, Select, Stack, Textarea, useToast } from "@chakra-ui/react"
+import { Button, FormControl, FormLabel, HStack, Heading, Image, Input, Select, Stack, Textarea, useDisclosure, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ApiClient from "../../../services/apiClient";
@@ -12,6 +12,7 @@ import DentistDetailResponse, { initialDentistDetailResponse } from "../../../ty
 import useUserProfile from "../../../hooks/useUserProfile";
 import BranchDetailResponse from "../../../types/BranchDetailResponse";
 import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
+import LoadingModal from "../../../components/modal/loading";
 
 const UpdateDentistPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -33,6 +34,7 @@ const UpdateDentistPage = () => {
     const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
     const { data: userData } = useUserProfile();
     const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
 
     const getDentistDetailById = async (id: number) => {
         try {
@@ -90,6 +92,7 @@ const UpdateDentistPage = () => {
 
     const handleUpdate = async (e: FormEvent) => {
         e.preventDefault();
+        onOpenLoading();
         let avatarUrl: string = '';
 
         if (avatarData) {
@@ -156,12 +159,13 @@ const UpdateDentistPage = () => {
                 position: 'top',
                 isClosable: true,
             });
+        } finally {
+            onCloseLoading();
         }
     };
 
     useEffect(() => {
         changeTabTitle('Update Dentist Profile');
-        handleReset();
     }, []);
 
     useEffect(() => {
@@ -390,6 +394,10 @@ const UpdateDentistPage = () => {
                     Save
                 </Button>
             </HStack>
+            <LoadingModal
+                isOpen={isOpenLoading}
+                onClose={onCloseLoading}
+            />
         </Stack>
     )
 }

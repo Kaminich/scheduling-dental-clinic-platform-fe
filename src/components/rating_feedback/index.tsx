@@ -2,12 +2,32 @@ import { Card, Container, Divider, Flex, HStack, Progress, Stack, Text } from "@
 import { Rate } from "antd"
 import FeedbackItem from "./components/feedback_item";
 import { Color, Shadow } from "../../styles/styles";
+import ApiClient from "../../services/apiClient";
+import { useEffect, useState } from "react";
 
 interface Prop {
-    isModal: boolean
+    isModal: boolean;
+    clinicId: number;
 }
 
-const RatingAndFeedback = ({ isModal }: Prop) => {
+const RatingAndFeedback = ({ isModal, clinicId }: Prop) => {
+    const [feedbacks, setFeedbacks] = useState([]);
+
+    const getFeedbackByClinicId = async () => {
+        const api = new ApiClient<any>('/feedback/clinic');
+        try {
+            const response = await api.getDetail(clinicId);
+            console.log(response);
+        } catch (error) {
+
+        }
+    }
+
+    useEffect(() => {
+        if (clinicId) {
+            getFeedbackByClinicId();
+        }
+    }, [clinicId])
 
     return (
         <>
@@ -80,10 +100,10 @@ const RatingAndFeedback = ({ isModal }: Prop) => {
                         Feedback posts
                     </Text>
                     <Card py={4} px={8} mb={4} pt={6} shadow={Shadow.cardShadow}>
-                        <FeedbackItem type="dental" />
+                        <FeedbackItem type="dental" clinicId={clinicId} />
                     </Card>
                     <Card py={4} px={8} mb={4} pt={6} shadow={Shadow.cardShadow}>
-                        <FeedbackItem type="dental" />
+                        <FeedbackItem type="dental" clinicId={clinicId} />
                     </Card>
                 </Stack>
             </HStack>

@@ -1,4 +1,4 @@
-import { Avatar, Button, Divider, Flex, Heading, Image, Stack, Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs, useDisclosure } from "@chakra-ui/react"
+import { Avatar, Button, Divider, Flex, Heading, Image, Stack, Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs, useDisclosure, useToast } from "@chakra-ui/react"
 import AppointmentModal from "../../components/modal/appointment"
 import RatingAndFeedback from "../../components/rating_feedback";
 import { Color } from "../../styles/styles";
@@ -6,10 +6,64 @@ import DentalAbout from "./components/about";
 import DentalDentist from "./components/dentist";
 import ServicePrice from "./components/service_price";
 import { useAuth } from "../../hooks/useAuth";
+import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { changeTabTitle } from "../../utils/changeTabTitle";
+import DentistListResponse from "../../types/DentistListResponse";
+import DentistDetailResponse, { initialDentistDetailResponse } from "../../types/DentistDetailResponse";
+import useDentists from "../../hooks/useDentists";
+import ApiClient from "../../services/apiClient";
 
 const DentalDetailPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { name } = useParams<{ name: string }>();
+    const decodedName = name ? name.replace(/-/g, ' ') : '';
+    const [id, setId] = useState<number>(0);
+    const [dentals, setDentals] = useState<DentistListResponse[]>([]);
+    const [dental, setDental] = useState<DentistDetailResponse>(initialDentistDetailResponse);
+    const { data } = useDentists();
+    const api = new ApiClient<any>('/dentists');
     const { role } = useAuth();
+    const toast = useToast();
+
+    const getDentalDetail = async () => {
+        try {
+            const response = await api.getDetail(id);
+            console.log(response);
+
+            if (response.success) {
+                setDental(response.data);
+            }
+        } catch (error: unknown) {
+            toast({
+                title: "Error",
+                description: "An error has occur",
+                status: "error",
+                duration: 2500,
+                position: 'top',
+                isClosable: true,
+            });
+        }
+    }
+
+    useEffect(() => {
+        changeTabTitle(decodedName);
+    }, []);
+
+    useEffect(() => {
+        if (data?.content) {
+            const foundDental = data.content.find((dentist: DentistDetailResponse) => dentist.fullName === decodedName);
+            if (foundDental) {
+                setId(foundDental.dentistId);
+            }
+        }
+    }, [data?.content, name]);
+
+    useEffect(() => {
+        if (id) {
+            getDentalDetail();
+        }
+    }, [id]);
 
     return (
         <Stack w={"6xl"} m={'auto'}>

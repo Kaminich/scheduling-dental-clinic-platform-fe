@@ -174,7 +174,7 @@ const CategoriesSettingsPage = () => {
                                                                     <Image
                                                                         src={category.categoryImage}
                                                                         w={100}
-                                                                        h={'auto'}
+                                                                        h={47}
                                                                         m={'auto'}
                                                                     />
                                                                 </>
@@ -295,6 +295,7 @@ const CategoriesSettingsPage = () => {
                 onClose={onCloseCategory}
                 id={id}
                 type={type}
+                refetch={refetch}
             />
             <ChangeStatusModal
                 isOpen={isOpenChange}

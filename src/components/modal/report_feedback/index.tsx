@@ -7,10 +7,11 @@ import { ApiResponse } from '../../../types/ApiResponse';
 interface Props {
     isOpen: boolean;
     onClose: () => void;
-    feedbackId: number
+    feedbackId: number;
+    reportedCustomer: string;
 }
 
-const ReportFeedbackModal = ({ isOpen, onClose, feedbackId }: Props) => {
+const ReportFeedbackModal = ({ isOpen, onClose, feedbackId, reportedCustomer }: Props) => {
     const [selectedReasons, setSelectedReasons] = useState<Set<ReportReason>>(new Set());
     const toast = useToast();
 
@@ -32,6 +33,7 @@ const ReportFeedbackModal = ({ isOpen, onClose, feedbackId }: Props) => {
         const data = {
             feedbackId: feedbackId,
             reportReason: Array.from(selectedReasons),
+            reportedCustomer
         }
 
         const api = new ApiClient<any>('/report')

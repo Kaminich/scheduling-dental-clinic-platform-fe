@@ -1,4 +1,4 @@
-import { Button, FormControl, FormLabel, HStack, Image, Input, Select, Stack, useToast } from "@chakra-ui/react"
+import { Button, FormControl, FormLabel, HStack, Image, Input, Select, Stack, useDisclosure, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react";
 import ApiClient from "../../../services/apiClient";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
@@ -9,6 +9,7 @@ import { Border } from "../../../styles/styles";
 import useUserProfile from "../../../hooks/useUserProfile";
 import BranchDetailResponse from "../../../types/BranchDetailResponse";
 import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
+import LoadingModal from "../../../components/modal/loading";
 
 const CreateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -24,6 +25,7 @@ const CreateStaffPage = () => {
     const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
     const { data: userData } = useUserProfile();
     const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
 
     const api = new ApiClient<any>('/staff');
 
@@ -70,7 +72,7 @@ const CreateStaffPage = () => {
 
     const handleCreate = async (e: FormEvent) => {
         e.preventDefault();
-
+        onOpenLoading();
         let avatarUrl: string = '';
 
         if (avatarData) {
@@ -134,6 +136,8 @@ const CreateStaffPage = () => {
                 position: 'top',
                 isClosable: true,
             });
+        } finally {
+            onCloseLoading();
         }
     };
 
@@ -305,6 +309,10 @@ const CreateStaffPage = () => {
                     Create
                 </Button>
             </HStack>
+            <LoadingModal
+                isOpen={isOpenLoading}
+                onClose={onCloseLoading}
+            />
         </Stack>
     )
 }

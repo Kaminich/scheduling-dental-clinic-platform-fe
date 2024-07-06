@@ -50,6 +50,7 @@ import ServiceDetailPage from "../pages/ServicesSettings/ServiceDetail";
 import ClinicBranchDetailPage from "../pages/ClinicBranchSettings/ClinicBranchDetail";
 import AppointmentPage from "../pages/Appointment";
 import ReportSettingsPage from "../pages/ReportSettings";
+import UpdateDentalDetailPage from "../pages/UpdateDentalDetail";
 
 const routes = [
     {
@@ -75,6 +76,7 @@ const routes = [
             { path: "manage-blog/create-blog", element: <CreateBlogPage /> },
             { path: "administrator/dentals/manage-dental/dental-detail", element: <DentalDetailSettingsPage /> },
             { path: "administrator/dentals/dental-detail", element: <DentalDetailSettingsPage /> },
+            { path: "administrator/dentals/dental-detail/update", element: <UpdateDentalDetailPage /> },
             { path: "administrator/blogs/appprove-blog/blog-detail", element: <BlogDetailPage /> },
             { path: "administrator/blogs/manage-blog/blog-detail", element: <BlogDetailPage /> },
             { path: "administrator/blogs/blog-detail", element: <BlogDetailPage /> },

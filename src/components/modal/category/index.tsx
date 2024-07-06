@@ -5,21 +5,25 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa6";
 import CategoryViewResponse, { initialCategoryViewResponse } from "../../../types/CategoryViewResponse";
 import axios from "axios";
+import Loading from "../../loading";
+import { QueryObserverResult } from "@tanstack/react-query";
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
     id?: number;
     type: string;
+    refetch: () => Promise<QueryObserverResult<any, Error>>;
 }
 
-const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
+const CategoryModal = ({ isOpen, onClose, id, type, refetch }: Props) => {
     const [categoryName, setCategoryName] = useState<string>('');
     const [categoryImage, setCategoryImage] = useState<string>('');
     const [categoryNameUpdate, setCategoryNameUpdate] = useState<string>('');
     const [categoryImageUpdate, setCategoryImageUpdate] = useState<string>('');
     const [categoryImageData, setCategoryImageData] = useState<File | null>(null);
     const [category, setCategory] = useState<CategoryViewResponse>(initialCategoryViewResponse);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const toast = useToast();
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -71,11 +75,12 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
 
     const getUpdateInfo = () => {
         setCategoryNameUpdate(category.categoryName);
-        setCategoryImageUpdate(category.categoryImage)
+        setCategoryImageUpdate(category.categoryImage);
     }
 
     const handleClick = async (e: FormEvent) => {
         e.preventDefault();
+        setIsLoading(true);
         let imageUrl: string = '';
 
         if (categoryImageData) {
@@ -100,7 +105,7 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                 categoryId: id,
                 categoryName: categoryNameUpdate,
                 categoryImage: imageUrl === '' ? categoryImageUpdate : imageUrl,
-                categoryStatus: true
+                categoryStatus: category.status
             }
             try {
                 const api = new ApiClient<any>(`/category`);
@@ -115,6 +120,7 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                         position: 'top',
                         isClosable: true,
                     });
+                    refetch && refetch();
                 } else {
                     toast({
                         title: "Error",
@@ -136,6 +142,7 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                 });
             } finally {
                 onClose();
+                setIsLoading(false);
             }
         } else if (type === 'create') {
             if (imageUrl === '') {
@@ -166,6 +173,7 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                         position: 'top',
                         isClosable: true,
                     });
+                    refetch && refetch();
                 } else {
                     toast({
                         title: "Error",
@@ -187,6 +195,7 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
                 });
             } finally {
                 onClose();
+                setIsLoading(false);
             }
         }
     }
@@ -202,164 +211,172 @@ const CategoryModal = ({ isOpen, onClose, id, type }: Props) => {
     }, [category])
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
+        <Modal isOpen={isOpen} onClose={onClose} size={isLoading ? 'md' : 'xl'} isCentered>
             <ModalOverlay backdropFilter={'blur(5px)'} />
-            <ModalContent>
-                {type === 'create' && (
-                    <ModalHeader fontSize='xl'>Create Category</ModalHeader>
-                )}
-                {type === 'update' && (
-                    <ModalHeader fontSize='xl'>Update Category</ModalHeader>
-                )}
-                {type === 'detail' && (
-                    <ModalHeader fontSize='xl'>Category Detail</ModalHeader>
-                )}
-                <ModalCloseButton />
-                <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
-                    {(type === 'create') && (
-                        <Stack gap={4}>
-                            <FormControl id="categoryimage" isRequired>
-                                <FormLabel pl={1}>Category Image</FormLabel>
-                                <HStack w={'full'} justify={'center'} align={'flex-end'} ml={4}>
-                                    <Image
-                                        border='1px solid gainsboro'
-                                        borderRadius={5}
-                                        h={32}
-                                        w={72}
-                                        src={
-                                            categoryImage || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
-                                        }
-                                        alt='logo'
-                                        bgColor='white'
-                                    />
-                                    <FormLabel
-                                        htmlFor="logo"
-                                        cursor='pointer'
-                                        fontSize='md'
-                                        requiredIndicator
-                                    >
-                                        <FaPen />
-                                    </FormLabel>
-                                    <Input
-                                        type="file"
-                                        id="logo"
-                                        accept="image/*"
-                                        onChange={handleImageChange}
-                                        display='none'
-                                    />
-                                </HStack>
-                            </FormControl>
-                            <FormControl id="categoryName" flex={2} isRequired>
-                                <FormLabel pl={1}>Category Name</FormLabel>
-                                <Input
-                                    type="text"
-                                    value={categoryName}
-                                    onChange={(e) => setCategoryName(e.target.value)}
-                                    placeholder="Enter category name"
-                                    required
-                                />
-                            </FormControl>
-                        </Stack>
+            {!isLoading ? (
+                <ModalContent>
+                    {type === 'create' && (
+                        <ModalHeader fontSize='xl'>Create Category</ModalHeader>
                     )}
                     {type === 'update' && (
-                        <Stack gap={4}>
-                            <FormControl id="categoryimage" isRequired>
-                                <FormLabel pl={1}>Category Image</FormLabel>
-                                <HStack w={'full'} justify={'center'} align={'flex-end'} ml={4}>
+                        <ModalHeader fontSize='xl'>Update Category</ModalHeader>
+                    )}
+                    {type === 'detail' && (
+                        <ModalHeader fontSize='xl'>Category Detail</ModalHeader>
+                    )}
+                    <ModalCloseButton />
+                    <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
+                        {(type === 'create') && (
+                            <Stack gap={4}>
+                                <FormControl id="categoryimage" isRequired>
+                                    <FormLabel pl={1}>Category Image</FormLabel>
+                                    <HStack w={'full'} justify={'center'} align={'flex-end'} ml={4}>
+                                        <Image
+                                            border='1px solid gainsboro'
+                                            borderRadius={5}
+                                            h={32}
+                                            w={72}
+                                            src={categoryImage || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'}
+                                            alt='logo'
+                                            bgColor='white'
+                                        />
+                                        <FormLabel
+                                            htmlFor="logo"
+                                            cursor='pointer'
+                                            fontSize='md'
+                                            requiredIndicator
+                                        >
+                                            <FaPen />
+                                        </FormLabel>
+                                        <Input
+                                            type="file"
+                                            id="logo"
+                                            accept="image/*"
+                                            onChange={handleImageChange}
+                                            display='none'
+                                        />
+                                    </HStack>
+                                </FormControl>
+                                <FormControl id="categoryName" flex={2} isRequired>
+                                    <FormLabel pl={1}>Category Name</FormLabel>
+                                    <Input
+                                        type="text"
+                                        value={categoryName}
+                                        onChange={(e) => setCategoryName(e.target.value)}
+                                        placeholder="Enter category name"
+                                        required
+                                    />
+                                </FormControl>
+                            </Stack>
+                        )}
+                        {type === 'update' && (
+                            <Stack gap={4}>
+                                <FormControl id="categoryimage" isRequired>
+                                    <FormLabel pl={1}>Category Image</FormLabel>
+                                    <HStack w={'full'} justify={'center'} align={'flex-end'} ml={4}>
+                                        <Image
+                                            border='1px solid gainsboro'
+                                            borderRadius={5}
+                                            h={32}
+                                            w={72}
+                                            src={
+                                                categoryImageUpdate || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
+                                            }
+                                            alt='logo'
+                                            bgColor='white'
+                                        />
+                                        <FormLabel
+                                            htmlFor="logo"
+                                            cursor='pointer'
+                                            fontSize='md'
+                                            requiredIndicator
+                                        >
+                                            <FaPen />
+                                        </FormLabel>
+                                        <Input
+                                            type="file"
+                                            id="logo"
+                                            accept="image/*"
+                                            onChange={handleImageChange}
+                                            display='none'
+                                        />
+                                    </HStack>
+                                </FormControl>
+                                <FormControl id="categoryName" flex={2} isRequired>
+                                    <FormLabel pl={1}>Category Name</FormLabel>
+                                    <Input
+                                        type="text"
+                                        value={categoryNameUpdate}
+                                        onChange={(e) => setCategoryNameUpdate(e.target.value)}
+                                        placeholder="Enter category name"
+                                        required
+                                    />
+                                </FormControl>
+                            </Stack>
+                        )}
+
+                        {type === 'detail' && (
+                            <Stack gap={4}>
+                                <>
+                                    <Text>Category Image: </Text>
                                     <Image
                                         border='1px solid gainsboro'
                                         borderRadius={5}
                                         h={32}
                                         w={72}
+                                        m={'auto'}
                                         src={
-                                            categoryImageUpdate || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
+                                            category.categoryImage || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
                                         }
                                         alt='logo'
                                         bgColor='white'
                                     />
-                                    <FormLabel
-                                        htmlFor="logo"
-                                        cursor='pointer'
-                                        fontSize='md'
-                                        requiredIndicator
-                                    >
-                                        <FaPen />
-                                    </FormLabel>
-                                    <Input
-                                        type="file"
-                                        id="logo"
-                                        accept="image/*"
-                                        onChange={handleImageChange}
-                                        display='none'
-                                    />
+                                </>
+                                <HStack gap={4}>
+                                    <Text>Category Name: </Text>
+                                    <Text>{category.categoryName}</Text>
                                 </HStack>
-                            </FormControl>
-                            <FormControl id="categoryName" flex={2} isRequired>
-                                <FormLabel pl={1}>Category Name</FormLabel>
-                                <Input
-                                    type="text"
-                                    value={categoryNameUpdate}
-                                    onChange={(e) => setCategoryNameUpdate(e.target.value)}
-                                    placeholder="Enter category name"
-                                    required
-                                />
-                            </FormControl>
+                                <>
+                                    <Text>Category Services:</Text>
+                                    <UnorderedList pl={4}>
+                                        {category.services.map((service) => (
+                                            <ListItem>{service.serviceName}</ListItem>
+                                        ))}
+                                    </UnorderedList>
+                                </>
+                            </Stack>
+                        )}
+                    </ModalBody>
+                    <ModalFooter>
+                        {type !== 'detail' && (
+                            <Button
+                                colorScheme='blue'
+                                mr={3}
+                                onClick={handleClick}
+                                isDisabled={
+                                    type === 'create' ?
+                                        categoryName === '' ||
+                                        categoryImage === ''
+                                        :
+                                        categoryNameUpdate === '' ||
+                                        categoryImageUpdate === ''
+                                }
+                            >
+                                {type === 'create' ? 'Create' : 'Save'}
+                            </Button>
+                        )}
+                        <Button onClick={onClose}>{type === 'detail' ? 'Close' : 'Cancel'}</Button>
+                    </ModalFooter>
+                </ModalContent>
+            ) : (
+                <ModalContent>
+                    <ModalBody p={6}>
+                        <Stack h={170}>
+                            <Loading />
                         </Stack>
-                    )}
-
-                    {type === 'detail' && (
-                        <Stack gap={4}>
-                            <>
-                                <Text>Category Image: </Text>
-                                <Image
-                                    border='1px solid gainsboro'
-                                    borderRadius={5}
-                                    h={32}
-                                    w={72}
-                                    m={'auto'}
-                                    src={
-                                        category.categoryImage || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
-                                    }
-                                    alt='logo'
-                                    bgColor='white'
-                                />
-                            </>
-                            <HStack gap={4}>
-                                <Text>Category Name: </Text>
-                                <Text>{category.categoryName}</Text>
-                            </HStack>
-                            <>
-                                <Text>Category Services:</Text>
-                                <UnorderedList pl={4}>
-                                    {category.services.map((service) => (
-                                        <ListItem>{service.serviceName}</ListItem>
-                                    ))}
-                                </UnorderedList>
-                            </>
-                        </Stack>
-                    )}
-                </ModalBody>
-                <ModalFooter>
-                    {type !== 'detail' && (
-                        <Button
-                            colorScheme='blue'
-                            mr={3}
-                            onClick={handleClick}
-                            isDisabled={
-                                type === 'create' ?
-                                    categoryName === '' ||
-                                    categoryImage === ''
-                                    :
-                                    categoryNameUpdate === '' ||
-                                    categoryImageUpdate === ''
-                            }
-                        >
-                            {type === 'create' ? 'Create' : 'Save'}
-                        </Button>
-                    )}
-                    <Button onClick={onClose}>{type === 'detail' ? 'Close' : 'Cancel'}</Button>
-                </ModalFooter>
-            </ModalContent>
+                    </ModalBody>
+                </ModalContent>
+            )}
         </Modal >
     )
 }
