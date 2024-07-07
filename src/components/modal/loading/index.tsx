@@ -9,7 +9,14 @@ interface Props {
 const LoadingModal = ({ isOpen, onClose }: Props) => {
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="md" isCentered>
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            size="md"
+            isCentered
+            closeOnEsc={false}
+            closeOnOverlayClick={false}
+        >
             <ModalOverlay backdropFilter={'blur(5px)'} />
             <ModalContent>
                 <ModalBody p={6}>

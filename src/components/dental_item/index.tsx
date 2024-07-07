@@ -113,9 +113,7 @@ const DentalItem = () => {
             <AppointmentModal
                 isOpen={isOpenAppointment}
                 onClose={onCloseAppointment}
-                dentalData={dentalData}
-                dentistData={''}
-                locationData={''}
+                clinicName={'dentalData'}
             />
         </>
     )

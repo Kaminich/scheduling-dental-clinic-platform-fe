@@ -1,5 +1,5 @@
-import { Button, FormControl, FormLabel, HStack, Image, Input, Select, Stack, Textarea, useDisclosure, useToast } from "@chakra-ui/react"
-import { FormEvent, useEffect, useState } from "react";
+import { Button, Checkbox, FormControl, FormLabel, HStack, Image, Input, Select, Stack, Table, Tbody, Td, Textarea, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react"
+import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ApiClient from "../../services/apiClient";
 import { changeTabTitle } from "../../utils/changeTabTitle";
@@ -10,6 +10,9 @@ import useUserProfile from "../../hooks/useUserProfile";
 import BranchDetailResponse from "../../types/BranchDetailResponse";
 import useBranchByClinicId from "../../hooks/useBranchByClinicId";
 import LoadingModal from "../../components/modal/loading";
+import { DayInWeek } from "../../types/type.enum";
+import useWorkingHoursByClinicId from "../../hooks/useWorkingHoursByClinicId";
+import WorkingHoursResponse from "../../types/WorkingHoursResponse";
 
 const UpdateDentalDetailPage = () => {
     const [phone, setPhone] = useState<string | number>('');
@@ -21,12 +24,36 @@ const UpdateDentalDetailPage = () => {
     const [logoData, setLogoData] = useState<File | null>(null);
     const [clinicImage, setClinicImage] = useState<string>('');
     const [clinicImageData, setClinicImageData] = useState<File | null>(null);
+    const [startTimeMonday, setStartTimeMonday] = useState<string>('');
+    const [endTimeMonday, setEndTimeMonday] = useState<string>('');
+    const [isWorkingMonday, setIsWorkingMonday] = useState<boolean>(true);
+    const [startTimeTuesday, setStartTimeTuesday] = useState<string>('');
+    const [endTimeTuesday, setEndTimeTuesday] = useState<string>('');
+    const [isWorkingTuesday, setIsWorkingTuesday] = useState<boolean>(true);
+    const [startTimeWednesday, setStartTimeWednesday] = useState<string>('');
+    const [endTimeWednesday, setEndTimeWednesday] = useState<string>('');
+    const [isWorkingWednesday, setIsWorkingWednesday] = useState<boolean>(true);
+    const [startTimeThursday, setStartTimeThursday] = useState<string>('');
+    const [endTimeThursday, setEndTimeThursday] = useState<string>('');
+    const [isWorkingThursday, setIsWorkingThursday] = useState<boolean>(true);
+    const [startTimeFriday, setStartTimeFriday] = useState<string>('');
+    const [endTimeFriday, setEndTimeFriday] = useState<string>('');
+    const [isWorkingFriday, setIsWorkingFriday] = useState<boolean>(true);
+    const [startTimeSaturday, setStartTimeSaturday] = useState<string>('');
+    const [endTimeSaturday, setEndTimeSaturday] = useState<string>('');
+    const [isWorkingSaturday, setIsWorkingSaturday] = useState<boolean>(true);
+    const [startTimeSunday, setStartTimeSunday] = useState<string>('');
+    const [endTimeSunday, setEndTimeSunday] = useState<string>('');
+    const [isWorkingSunday, setIsWorkingSunday] = useState<boolean>(true);
+
     const param = useParams<{ id: string }>();
     const navigate = useNavigate();
     const toast = useToast();
     const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
+    const [workingHours, setWorkingHours] = useState<WorkingHoursResponse[]>([]);
     const { data: userData } = useUserProfile();
     const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
+    const { data: workingHoursData } = useWorkingHoursByClinicId({ clinicId: userData?.clinicId });
     const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
 
     // const getDentistDetailById = async (id: number) => {
@@ -134,28 +161,61 @@ const UpdateDentalDetailPage = () => {
             }
         }
 
-        const data = {
+        const dataWH = {
+
+        }
+
+        const dataUpdateDetail = {
 
         };
 
         try {
-            const response = await api.update(data);
-            console.log(response);
+            const apiWH = new ApiClient<any>('working-hours');
+            let responseWH;
+            if (workingHours.length === 0) {
+                responseWH = await apiWH.create(dataWH);
+            } else {
+                responseWH = await apiWH.update(dataWH);
+            }
+            if (responseWH.success) {
+                try {
+                    const response = await api.update(dataUpdateDetail);
+                    console.log(response);
 
-            if (response.success) {
-                toast({
-                    title: "Success",
-                    description: response.message,
-                    status: "success",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                });
-                navigate(`administrator/accounts/dentist/${param.id}`);
+                    if (response.success) {
+                        toast({
+                            title: "Success",
+                            description: response.message,
+                            status: "success",
+                            duration: 2500,
+                            position: 'top',
+                            isClosable: true,
+                        });
+                        navigate(`administrator/accounts/dentist/${param.id}`);
+                    } else {
+                        toast({
+                            title: "Error",
+                            description: response.message,
+                            status: "error",
+                            duration: 2500,
+                            position: 'top',
+                            isClosable: true,
+                        });
+                    }
+                } catch (error: any) {
+                    toast({
+                        title: "Error",
+                        description: error.response?.data?.message || "An error occurred",
+                        status: "error",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                }
             } else {
                 toast({
                     title: "Error",
-                    description: response.message,
+                    description: responseWH.message,
                     status: "error",
                     duration: 2500,
                     position: 'top',
@@ -196,8 +256,61 @@ const UpdateDentalDetailPage = () => {
         }
     }, [branchData]);
 
+    useEffect(() => {
+        if (workingHoursData) {
+            setWorkingHours(workingHoursData);
+        }
+    }, [workingHoursData]);
+
+    const renderRow = (
+        day: DayInWeek,
+        startTime: string,
+        setStartTime: Dispatch<SetStateAction<string>>,
+        endTime: string,
+        setEndTime: Dispatch<SetStateAction<string>>,
+        isWorking: boolean,
+        setIsWorking: Dispatch<SetStateAction<boolean>>
+    ) => (
+        <Tr key={day}>
+            <Th>{day}</Th>
+            {isWorking ? (
+                <>
+                    <Td textAlign={'center'}>
+                        <FormControl id={`startTime${day}`} isRequired>
+                            <Input
+                                type="time"
+                                value={startTime}
+                                onChange={(e) => setStartTime(e.target.value)}
+                                placeholder="Enter start time"
+                                required
+                            />
+                        </FormControl>
+                    </Td>
+                    <Td textAlign={'center'}>
+                        <FormControl id={`endTime${day}`} isRequired>
+                            <Input
+                                type="time"
+                                value={endTime}
+                                onChange={(e) => setEndTime(e.target.value)}
+                                placeholder="Enter end time"
+                                required
+                            />
+                        </FormControl>
+                    </Td>
+                </>
+            ) : (
+                <Td colSpan={2} textAlign={'center'} py={'26px'}>
+                    No Working
+                </Td>
+            )}
+            <Td textAlign={'center'}>
+                <Checkbox isChecked={!isWorking} onChange={() => setIsWorking(!isWorking)} />
+            </Td>
+        </Tr>
+    );
+
     return (
-        <Stack w={'6xl'} m={'auto'} mb={10}>
+        <Stack w={'7xl'} m={'auto'} mb={10}>
             <Stack w={'full'} pos={'relative'}>
                 <Image
                     alt={"Slider Image"}
@@ -205,24 +318,32 @@ const UpdateDentalDetailPage = () => {
                     borderRadius={10}
                     p={0}
                     src={
-                        "https://benhviencuadong.vn/wp-content/uploads/2022/08/kham-nha-khoa-3.jpg"
+                        clinicImage || "https://benhviencuadong.vn/wp-content/uploads/2022/08/kham-nha-khoa-3.jpg"
                     }
                 />
                 <FormLabel
                     htmlFor="avt"
                     cursor='pointer'
                     fontSize='md'
-                    pos={'absolute'} right={3} bottom={3}
+                    pos={'absolute'}
+                    right={3}
+                    bottom={3}
+                    display={'flex'}
+                    gap={3}
+                    alignItems={'center'}
+                    py={2}
+                    px={4}
+                    borderRadius={8}
+                    bg={'gainsboro'}
+                    _hover={{ bg: 'gray.300' }}
                 >
-                    <Button gap={3}>
-                        <FaCamera /> Update Clinic Image
-                    </Button>
+                    <FaCamera /> Update Clinic Image
                 </FormLabel>
                 <Input
                     type="file"
                     id="avt"
                     accept="image/*"
-                    onChange={handleLogoChange}
+                    onChange={handleClinicImageChange}
                     display='none'
                 />
             </Stack>
@@ -334,17 +455,27 @@ const UpdateDentalDetailPage = () => {
                     </FormControl>
                 </Stack>
                 <Stack gap={3} flex={1}>
-                    <FormControl id="description" isRequired>
-                        <FormLabel pl={1}>Description</FormLabel>
-                        <Textarea
-                            value={description}
-                            placeholder="Describe dentist description"
-                            focusBorderColor='#E2E8F0'
-                            resize={'none'}
-                            maxH={32}
-                            minH={32}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
+                    <FormControl id="workingHour" isRequired>
+                        <FormLabel pl={1}>Working Hours</FormLabel>
+                        <Table>
+                            <Thead>
+                                <Tr>
+                                    <Th w={24}></Th>
+                                    <Th textAlign={'center'} w={'264.5px'}>Start Time</Th>
+                                    <Th textAlign={'center'} w={'264.5px'}>End Time</Th>
+                                    <Th textAlign={'center'} w={'264.5px'}>No Working</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {renderRow(DayInWeek.MONDAY, startTimeMonday, setStartTimeMonday, endTimeMonday, setEndTimeMonday, isWorkingMonday, setIsWorkingMonday)}
+                                {renderRow(DayInWeek.TUESDAY, startTimeTuesday, setStartTimeTuesday, endTimeTuesday, setEndTimeTuesday, isWorkingTuesday, setIsWorkingTuesday)}
+                                {renderRow(DayInWeek.WEDNESDAY, startTimeWednesday, setStartTimeWednesday, endTimeWednesday, setEndTimeWednesday, isWorkingWednesday, setIsWorkingWednesday)}
+                                {renderRow(DayInWeek.THURSDAY, startTimeThursday, setStartTimeThursday, endTimeThursday, setEndTimeThursday, isWorkingThursday, setIsWorkingThursday)}
+                                {renderRow(DayInWeek.FRIDAY, startTimeFriday, setStartTimeFriday, endTimeFriday, setEndTimeFriday, isWorkingFriday, setIsWorkingFriday)}
+                                {renderRow(DayInWeek.SATURDAY, startTimeSaturday, setStartTimeSaturday, endTimeSaturday, setEndTimeSaturday, isWorkingSaturday, setIsWorkingSaturday)}
+                                {renderRow(DayInWeek.SUNDAY, startTimeSunday, setStartTimeSunday, endTimeSunday, setEndTimeSunday, isWorkingSunday, setIsWorkingSunday)}
+                            </Tbody>
+                        </Table>
                     </FormControl>
                 </Stack>
             </HStack>

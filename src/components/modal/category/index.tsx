@@ -211,7 +211,14 @@ const CategoryModal = ({ isOpen, onClose, id, type, refetch }: Props) => {
     }, [category])
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size={isLoading ? 'md' : 'xl'} isCentered>
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            size={isLoading ? 'md' : 'xl'}
+            isCentered
+            closeOnEsc={isLoading ? false : true}
+            closeOnOverlayClick={isLoading ? false : true}
+        >
             <ModalOverlay backdropFilter={'blur(5px)'} />
             {!isLoading ? (
                 <ModalContent>

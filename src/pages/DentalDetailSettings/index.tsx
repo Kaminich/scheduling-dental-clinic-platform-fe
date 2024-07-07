@@ -51,7 +51,9 @@ const DentalDetailSettingsPage = () => {
     return (
         <Stack>
             {role === 'Owner' && (
-                <HStack justify={'flex-end'} m={6} mb={-6}>
+                <HStack justify={'flex-end'} m={6} mb={-6} gap={4}>
+                    <Button colorScheme="red" onClick={() => { }}>Deactivate</Button>
+                    <Button colorScheme="green" onClick={() => { }}>Activate</Button>
                     <Button colorScheme="blue" onClick={() => navigate('update')}>Edit</Button>
                 </HStack>
             )}
