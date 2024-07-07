@@ -19,7 +19,7 @@ const ManageBlogPage = () => {
     }, []);
 
     return (
-        <Stack w={role === 'Customer' ? '7xl' : 'full'} align='center' mx='auto' my={5} gap={10}>
+        <Stack w={role === 'Staff' ? '7xl' : 'full'} align='center' mx='auto' my={5} gap={10}>
             <InputGroup>
                 <InputLeftElement children={<BsSearch />} />
                 <Input

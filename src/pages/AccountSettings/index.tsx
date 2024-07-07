@@ -40,9 +40,8 @@ const AccountSettingsPage = () => {
     const handleActivate = async () => {
         if (type === 'dentist') {
             try {
-                const api = new ApiClient<any>(`/dentist`);
+                const api = new ApiClient<any>(`/dentists/re-activate`);
                 const response = await api.updateWithId(id);
-                console.log(response);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -62,7 +61,6 @@ const AccountSettingsPage = () => {
                         position: 'top',
                         isClosable: true,
                     });
-
                 }
             } catch (error: any) {
                 toast({
@@ -74,13 +72,12 @@ const AccountSettingsPage = () => {
                     isClosable: true,
                 });
             } finally {
-                onCloseDeactivate();
+                onCloseActivate();
             }
         } else if (type === 'staff') {
             const api = new ApiClient<any>(`/staff`);
             try {
                 const response = await api.updateWithId(id);
-                console.log(response);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -100,7 +97,6 @@ const AccountSettingsPage = () => {
                         position: 'top',
                         isClosable: true,
                     });
-
                 }
             } catch (error: any) {
                 toast({
@@ -120,9 +116,8 @@ const AccountSettingsPage = () => {
     const handleDeactivate = async () => {
         if (type === 'dentist') {
             try {
-                const api = new ApiClient<any>(`/dentist`);
+                const api = new ApiClient<any>(`/dentists`);
                 const response = await api.delete(id);
-                console.log(response);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -142,7 +137,6 @@ const AccountSettingsPage = () => {
                         position: 'top',
                         isClosable: true,
                     });
-
                 }
             } catch (error: any) {
                 toast({
@@ -160,7 +154,6 @@ const AccountSettingsPage = () => {
             const api = new ApiClient<any>(`/staff`);
             try {
                 const response = await api.delete(id);
-                console.log(response);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -180,7 +173,6 @@ const AccountSettingsPage = () => {
                         position: 'top',
                         isClosable: true,
                     });
-
                 }
             } catch (error: any) {
                 toast({

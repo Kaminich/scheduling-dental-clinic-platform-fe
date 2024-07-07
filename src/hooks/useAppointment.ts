@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import ApiClient from "../services/apiClient";
 
-const useCategory = () => {
-    const api = new ApiClient<any>('/category');
+const useAppointment = () => {
+    const api = new ApiClient<any>('/appointment/manage');
     return useQuery({
-        queryKey: ["getCategory"],
+        queryKey: ["getAppointmentManage"],
         queryFn: () =>
-            api.getUnauthen()
+            api.getAuthen()
                 .then((data) => {
                     return data.data;
                 })
     });
 };
 
-export default useCategory;
+export default useAppointment;

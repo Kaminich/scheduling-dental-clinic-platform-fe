@@ -161,61 +161,45 @@ const UpdateDentalDetailPage = () => {
             }
         }
 
-        const dataWH = {
-
-        }
-
-        const dataUpdateDetail = {
-
+        const data = {
+            clinicId: 0,
+            clinicName: 'string',
+            address: 'string',
+            city: 'string',
+            phone: 'string',
+            email: 'string',
+            description: 'string',
+            websiteUrl: 'string',
+            logo: 'string',
+            clinicImage: 'string',
+            workingHours: [
+                {
+                    day: DayInWeek.MONDAY,
+                    startTime: startTimeMonday,
+                    endTime: endTimeMonday,
+                    clinicId: 0
+                }
+            ]
         };
 
         try {
-            const apiWH = new ApiClient<any>('working-hours');
-            let responseWH;
-            if (workingHours.length === 0) {
-                responseWH = await apiWH.create(dataWH);
-            } else {
-                responseWH = await apiWH.update(dataWH);
-            }
-            if (responseWH.success) {
-                try {
-                    const response = await api.update(dataUpdateDetail);
-                    console.log(response);
+            const response = await api.update(data);
+            console.log(response);
 
-                    if (response.success) {
-                        toast({
-                            title: "Success",
-                            description: response.message,
-                            status: "success",
-                            duration: 2500,
-                            position: 'top',
-                            isClosable: true,
-                        });
-                        navigate(`administrator/accounts/dentist/${param.id}`);
-                    } else {
-                        toast({
-                            title: "Error",
-                            description: response.message,
-                            status: "error",
-                            duration: 2500,
-                            position: 'top',
-                            isClosable: true,
-                        });
-                    }
-                } catch (error: any) {
-                    toast({
-                        title: "Error",
-                        description: error.response?.data?.message || "An error occurred",
-                        status: "error",
-                        duration: 2500,
-                        position: 'top',
-                        isClosable: true,
-                    });
-                }
+            if (response.success) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+                navigate(`administrator/accounts/dentist/${param.id}`);
             } else {
                 toast({
                     title: "Error",
-                    description: responseWH.message,
+                    description: response.message,
                     status: "error",
                     duration: 2500,
                     position: 'top',

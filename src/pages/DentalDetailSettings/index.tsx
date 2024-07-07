@@ -1,4 +1,4 @@
-import { Button, Card, Divider, HStack, Heading, Image, Stack, Text, useToast } from "@chakra-ui/react"
+import { Button, Card, Divider, HStack, Heading, Image, Stack, Tag, TagLabel, Text, useToast } from "@chakra-ui/react"
 import { Shadow } from "../../styles/styles"
 import WorkingHours from "../DentalDetail/components/working_hours"
 import DentalDetailBranch from "../DentalDetail/components/branch"
@@ -77,6 +77,12 @@ const DentalDetailSettingsPage = () => {
                             <Text>Created at: { }</Text>
                             <Text>Last Modified: { }</Text>
                             <Text>Last Modified By: { }</Text>
+                            <HStack>
+                                <Text>Status:</Text>
+                                <Tag colorScheme="green">
+                                    <TagLabel>ACTIVE</TagLabel>
+                                </Tag>
+                            </HStack>
                         </Stack>
                     </HStack>
                 </Stack>

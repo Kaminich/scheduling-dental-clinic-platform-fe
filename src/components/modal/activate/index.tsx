@@ -20,14 +20,23 @@ const ActivateModal = ({ isOpen, onClose, type, handleActivate }: Props) => {
                 {type === 'staff' && (
                     <ModalHeader fontSize='xl'>Activate Staff Account</ModalHeader>
                 )}
+                {(type === 'clinics' || type === 'clinic') && (
+                    <ModalHeader fontSize='xl'>Activate Dental Clinic</ModalHeader>
+                )}
                 <ModalCloseButton />
                 <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
                     {(type === 'dentist' || type === 'staff') && (
                         <Text fontSize='lg'>Are you sure you want to activate this account?</Text>
                     )}
+                    {type === 'clinics' && (
+                        <Text fontSize='lg'>Are you sure you want to activate this dental clinic?</Text>
+                    )}
+                    {type === 'clinic' && (
+                        <Text fontSize='lg'>Are you sure you want to activate your dental clinic?</Text>
+                    )}
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme='red' mr={3} onClick={handleActivate}>
+                    <Button colorScheme='green' mr={3} onClick={handleActivate}>
                         Activate
                     </Button>
                     <Button onClick={onClose}>Cancel</Button>

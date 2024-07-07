@@ -31,3 +31,9 @@ export enum ReportReason {
     DISCRIMINATION = 'Discrimination',
     VIOLATION_OF_TERMS = 'Violation of term'
 }
+
+export enum AppointmentStatus {
+    PENDING = "PENDING",
+    DONE = "DONE",
+    CANCELED = "CANCELED",
+}
