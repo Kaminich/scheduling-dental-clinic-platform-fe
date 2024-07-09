@@ -13,8 +13,11 @@ import LoadingModal from "../../components/modal/loading";
 import { DayInWeek } from "../../types/type.enum";
 import useWorkingHoursByClinicId from "../../hooks/useWorkingHoursByClinicId";
 import WorkingHoursResponse from "../../types/WorkingHoursResponse";
+import ClinicDetailResponse, { initialClinicDetailResponse } from "../../types/ClinicDetailResponse";
+import useClinicDetail from "../../hooks/useClinicDetail";
 
 const UpdateDentalDetailPage = () => {
+    const [clinicName, setClinicName] = useState<string>('');
     const [phone, setPhone] = useState<string | number>('');
     const [email, setEmail] = useState<string>('');
     const [city, setCity] = useState<string>('');
@@ -49,47 +52,27 @@ const UpdateDentalDetailPage = () => {
     const param = useParams<{ id: string }>();
     const navigate = useNavigate();
     const toast = useToast();
-    const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
     const [workingHours, setWorkingHours] = useState<WorkingHoursResponse[]>([]);
     const { data: userData } = useUserProfile();
-    const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
     const { data: workingHoursData } = useWorkingHoursByClinicId({ clinicId: userData?.clinicId });
+    const { data: clinicData } = useClinicDetail({ clinicId: userData?.clinicId });
+    const [clinic, setClinic] = useState<ClinicDetailResponse>(initialClinicDetailResponse);
     const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
 
-    // const getDentistDetailById = async (id: number) => {
-    //     try {
-    //         const api = new ApiClient<ApiResponse<DentistDetailResponse>>('/dentists');
-    //         const response = await api.getDetail(id);
-    //         console.log(response);
-    //         if (response.success) {
-    //             setDentist(response.data);
-    //         } else {
-    //             toast({
-    //                 title: "Error",
-    //                 description: response.message,
-    //                 status: "error",
-    //                 duration: 2500,
-    //                 position: 'top',
-    //                 isClosable: true,
-    //             });
-    //         }
-    //     } catch (error) {
-    //         navigate('/not-found');
-    //     }
-    // }
+    const api = new ApiClient<any>('/clinics');
 
-    const api = new ApiClient<any>('/dentists');
-
-    // const handleReset = () => {
-    //     setPhone(dentist.phone);
-    //     setEmail(dentist.email);
-    //     setAddress(dentist.address);
-    //     setDescription(dentist.description);
-    //     setLogo(dentist.Logo);
-    //     setLogoData(null);
-    //     setClinicImage(dentist.Logo);
-    //     setClinicImageData(null);
-    // }
+    const handleReset = () => {
+        setClinicName(clinic.clinicName);
+        setPhone(clinic.phone);
+        setCity(clinic.city)
+        setEmail(clinic.email);
+        setAddress(clinic.address);
+        setDescription(clinic.description);
+        setLogo(clinic.logo);
+        setLogoData(null);
+        setClinicImage(clinic.clinicImage);
+        setClinicImageData(null);
+    }
 
     const handleLogoChange = (e: any) => {
         const selectedFile = e.target.files[0];
@@ -162,7 +145,7 @@ const UpdateDentalDetailPage = () => {
         }
 
         const data = {
-            clinicId: 0,
+            clinicId: clinic.id,
             clinicName: 'string',
             address: 'string',
             city: 'string',
@@ -230,15 +213,15 @@ const UpdateDentalDetailPage = () => {
     //     }
     // }, [param.id]);
 
-    // useEffect(() => {
-    //     handleReset();
-    // }, [dentist]);
+    useEffect(() => {
+        handleReset();
+    }, [clinic]);
 
     useEffect(() => {
-        if (branchData) {
-            setBranches(branchData);
+        if (clinicData) {
+            setClinic(clinicData);
         }
-    }, [branchData]);
+    }, [clinicData]);
 
     useEffect(() => {
         if (workingHoursData) {
@@ -364,6 +347,16 @@ const UpdateDentalDetailPage = () => {
             </HStack>
             <HStack gap={20} align={'flex-start'} my={10}>
                 <Stack gap={3} flex={1}>
+                    <FormControl id="clinicName" isRequired>
+                        <FormLabel pl={1}>Clinic Name</FormLabel>
+                        <Input
+                            type="text"
+                            value={clinicName}
+                            onChange={(e) => setClinicName(e.target.value)}
+                            placeholder="Enter Clinic Name"
+                            required
+                        />
+                    </FormControl>
                     <FormControl id="email" isRequired>
                         <FormLabel pl={1}>Email</FormLabel>
                         <Input

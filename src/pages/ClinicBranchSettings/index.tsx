@@ -13,6 +13,7 @@ import Loading from "../../components/loading";
 import useBranchByClinicId from "../../hooks/useBranchByClinicId";
 import ChangeStatusModal from "../../components/modal/change_status";
 import ApiClient from "../../services/apiClient";
+import { formatDateTime } from "../../utils/formatDateTime";
 
 const ClinicBranchSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -202,7 +203,7 @@ const ClinicBranchSettingsPage = () => {
                                                             textAlign='center'
                                                             borderColor={'gainsboro'}
                                                         >
-                                                            {branch.modifiedDate}
+                                                            {formatDateTime(branch.modifiedDate)}
                                                         </Td>
                                                         <Td
                                                             textAlign='center'

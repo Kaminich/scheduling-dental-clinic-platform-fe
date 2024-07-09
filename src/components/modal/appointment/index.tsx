@@ -10,17 +10,20 @@ import useServiceByClinicId from "../../../hooks/useServiceByClinicId";
 import ServiceViewListResponse from "../../../types/ServiceViewListResponse";
 import Loading from "../../loading";
 import WorkingHoursDetailsResponse, { initialWorkingHoursDetailsResponse } from "../../../types/WorkingHoursDetailsResponse";
+import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
+import BranchSummaryResponse from "../../../types/BranchSummaryResponse";
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
+    clinicId?: number;
     clinicName?: string;
     dentistData?: DentistDetailResponse;
 }
 
 export const today = new Date().toISOString().split('T')[0];
 
-const AppointmentModal = ({ isOpen, onClose, clinicName, dentistData }: Props) => {
+const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }: Props) => {
     const [fullname, setFullname] = useState<string>('');
     const [dob, setDob] = useState<string>('');
     const [phone, setPhone] = useState<number | string>('');
@@ -37,8 +40,10 @@ const AppointmentModal = ({ isOpen, onClose, clinicName, dentistData }: Props) =
     const [userData, setUserData] = useState<Customer>(CustomerInit);
     const toast = useToast();
     const { data } = useUserProfile();
-    const { data: serviceData } = useServiceByClinicId({ clinicId: dentistData?.clinicId || 0 });
+    const { data: serviceData } = useServiceByClinicId({ clinicId: dentistData?.clinicId || (clinicId || 0) });
+    const { data: branchData } = useBranchByClinicId({ clinicId: clinicId || 0 });
     const [services, setServices] = useState<ServiceViewListResponse[]>([]);
+    const [branches, setBranches] = useState<BranchSummaryResponse[]>([]);
     const [slot, setSlot] = useState<WorkingHoursDetailsResponse>(initialWorkingHoursDetailsResponse);
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
@@ -60,7 +65,6 @@ const AppointmentModal = ({ isOpen, onClose, clinicName, dentistData }: Props) =
         } catch (error) {
             console.log(error);
         }
-
     }
 
     const handleMakeAppointment = async () => {
@@ -111,6 +115,12 @@ const AppointmentModal = ({ isOpen, onClose, clinicName, dentistData }: Props) =
             setServices(serviceData);
         }
     }, [serviceData]);
+
+    useEffect(() => {
+        if (branchData) {
+            setBranches(branchData);
+        }
+    }, [branchData]);
 
     useEffect(() => {
         if (clinicBranchId && date) {
@@ -233,7 +243,7 @@ const AppointmentModal = ({ isOpen, onClose, clinicName, dentistData }: Props) =
                                                 <FormLabel ml={1}>Dental</FormLabel>
                                                 <Input
                                                     type="text"
-                                                    value={dentistData?.clinicName}
+                                                    value={dentistData?.clinicName || clinicName}
                                                     readOnly
                                                 />
                                             </FormControl>
@@ -247,12 +257,11 @@ const AppointmentModal = ({ isOpen, onClose, clinicName, dentistData }: Props) =
                                                     onChange={(e) => setClinicBranchId(parseInt(e.target.value))}
                                                     placeholder={'Select branch'}
                                                 >
-                                                    <option value={1}>
-                                                        HCM
-                                                    </option>
-                                                    <option value="2">
-                                                        HN
-                                                    </option>
+                                                    {branches.map((branch) => (
+                                                        <option value={branch.branchId}>
+                                                            {branch.branchName} ({branch.city})
+                                                        </option>
+                                                    ))}
                                                 </Select>
                                             ) : (
                                                 <Input value={`${dentistData.branchName} (${dentistData.city})`} readOnly />

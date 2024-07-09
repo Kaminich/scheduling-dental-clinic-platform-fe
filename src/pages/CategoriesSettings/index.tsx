@@ -93,7 +93,7 @@ const CategoriesSettingsPage = () => {
                 <Input
                     ref={ref}
                     borderRadius={20}
-                    placeholder="Search clinic name..."
+                    placeholder="Search category name..."
                     variant="filled"
                     border='1px solid gainsboro'
                     onChange={(e) => {

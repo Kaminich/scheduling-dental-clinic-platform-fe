@@ -5,16 +5,16 @@ interface Prop {
     clinicId: number;
 }
 
-const useBranchByClinicId = ({ clinicId }: Prop) => {
-    const api = new ApiClient<any>('/branch/clinic');
+const useClinicDetail = ({ clinicId }: Prop) => {
+    const api = new ApiClient<any>('/clinics');
     return useQuery({
-        queryKey: ["getBranchByClinic", clinicId],
+        queryKey: ["getClinicDetail", clinicId],
         queryFn: () =>
-            api.getDetailUnauthen(clinicId)
+            api.getDetail(clinicId)
                 .then((data) => {
                     return data.data;
                 })
     });
 };
 
-export default useBranchByClinicId;
+export default useClinicDetail;

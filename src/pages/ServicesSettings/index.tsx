@@ -93,7 +93,7 @@ const ServicesSettingsPage = () => {
                 <Input
                     ref={ref}
                     borderRadius={20}
-                    placeholder="Search clinic name..."
+                    placeholder="Search service name..."
                     variant="filled"
                     border='1px solid gainsboro'
                     onChange={(e) => {

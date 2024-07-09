@@ -29,7 +29,7 @@ const UpdateProfilePage = () => {
     const [confirmPass, setConfirmPass] = useState<string>('');
     const [userData, setUserData] = useState<Customer>(CustomerInit);
     const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
-    const { data } = useUserProfile();
+    const { data, refetch } = useUserProfile();
     const toast = useToast();
     const param = useParams();
 
@@ -107,6 +107,7 @@ const UpdateProfilePage = () => {
                     isClosable: true,
                 });
             }
+            refetch && refetch();
             handleResetAllChanges();
         } catch (error: any) {
             toast({

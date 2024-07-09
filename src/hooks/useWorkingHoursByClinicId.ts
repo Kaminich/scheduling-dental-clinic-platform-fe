@@ -10,11 +10,7 @@ const useWorkingHoursByClinicId = ({ clinicId }: Prop) => {
     return useQuery({
         queryKey: ["getWorkingHoursByClinic", clinicId],
         queryFn: () =>
-            api.getAuthen({
-                params: {
-                    clinicId
-                }
-            })
+            api.getDetailUnauthen(clinicId)
                 .then((data) => {
                     return data.data;
                 })

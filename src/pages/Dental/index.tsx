@@ -1,13 +1,23 @@
 import { SimpleGrid } from "@chakra-ui/react"
 import DentalItem from "../../components/dental_item"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { changeTabTitle } from "../../utils/changeTabTitle";
+import useActiveClinics from "../../hooks/useActiveClinics";
+import ClinicListResponse from "../../types/ClinicListResponse";
 
 const DentalPage = () => {
+    const { data } = useActiveClinics();
+    const [clinics, setClinics] = useState<ClinicListResponse[]>([]);
 
     useEffect(() => {
         changeTabTitle('Dental Clinic');
     }, []);
+
+    useEffect(() => {
+        if (data?.content) {
+            setClinics(data.content);
+        }
+    }, [data?.content]);
 
     return (
         <SimpleGrid
@@ -19,12 +29,9 @@ const DentalPage = () => {
             mx={'auto'}
             py={8}
         >
-            <DentalItem />
-            <DentalItem />
-            <DentalItem />
-            <DentalItem />
-            <DentalItem />
-            <DentalItem />
+            {clinics.map((clinic) => (
+                <DentalItem dentalData={clinic} />
+            ))}
         </SimpleGrid>
     )
 }

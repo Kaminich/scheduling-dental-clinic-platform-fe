@@ -70,6 +70,12 @@ class ApiClient<T> {
             .then((res) => res.data)
     }
 
+    getDetailUnauthen = (id: number, config?: AxiosRequestConfig) => {
+        return axiosInstance
+            .get<T>(this.endpoint + '/' + id, config)
+            .then((res) => res.data)
+    }
+
     getDetail = (id: number, config?: AxiosRequestConfig) => {
         return axiosInstance
             .get<T>(this.endpoint + '/' + id, this.setAuthHeader(config))

@@ -1,8 +1,14 @@
 import { SimpleGrid, Text } from "@chakra-ui/react"
 import { Color } from "../../../../styles/styles"
 import DentistItem from "../../../../components/dentist_item"
+import useDentists from "../../../../hooks/useDentists";
 
-const DentalDentist = () => {
+interface Prop {
+    clinicId: number;
+}
+
+const DentalDentist = ({ clinicId }: Prop) => {
+    // const {data} = useDentists
     return (
         <>
             <Text

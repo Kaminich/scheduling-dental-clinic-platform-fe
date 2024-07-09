@@ -1,121 +1,101 @@
-import { TimeIcon } from "@chakra-ui/icons"
-import { Button, Card, CardBody, CardFooter, HStack, Heading, Image, Stack, Tag, TagLabel, Text, Tooltip, useDisclosure } from "@chakra-ui/react"
-import { FaLocationDot } from "react-icons/fa6"
-import { useState } from "react";
+import { Button, Card, CardBody, CardFooter, HStack, Heading, Image, Stack, Tag, TagLabel, Tooltip, useDisclosure } from "@chakra-ui/react"
+import { FaLocationDot, FaPhone } from "react-icons/fa6"
 import FeedbackModal from "../modal/feedback";
 import AppointmentModal from "../modal/appointment";
 import { useNavigate } from "react-router-dom";
 import { Color } from "../../styles/styles";
 import { useAuth } from "../../hooks/useAuth";
+import ClinicListResponse from "../../types/ClinicListResponse";
 
-const DentalItem = () => {
+interface Prop {
+    dentalData: ClinicListResponse;
+}
+
+const DentalItem = ({ dentalData }: Prop) => {
     const { isOpen: isOpenFeedback, onOpen: onOpenFeedback, onClose: onCloseFeedback } = useDisclosure();
     const { isOpen: isOpenAppointment, onOpen: onOpenAppointment, onClose: onCloseAppointment } = useDisclosure();
-
-    const [dentalData, setDentalData] = useState({
-        id: '1',
-        name: 'HCM'
-    });
-
     const { role } = useAuth();
-
     const navigate = useNavigate();
+    const navigateToDentalDetail = (name: string) => {
+        const hyphenatedName = name.replace(/ /g, '-');
+        navigate(`/dentals/${hyphenatedName}`);
+    };
 
     return (
-        <>
-            <Card bg={Color.blue_100}>
-                <CardBody pb={0}>
-                    <HStack align={'flex-start'}>
-                        <Image
-                            src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-                            alt='Green double couch with wooden legs'
-                            borderRadius='lg'
-                            w={0}
-                            flex={1}
-                        />
-                        <Heading
-                            flex={2}
-                            my={1}
-                            size='md'
-                            textAlign={'center'}
-                            noOfLines={3}
-                            _hover={{ color: Color.hoverBlue }}
-                            cursor={'pointer'}
-                            onClick={() => navigate('/dental-detail')}
+        <Card bg={Color.blue_100}>
+            <CardBody pb={0}>
+                <HStack align={'flex-start'}>
+                    <Image
+                        src={dentalData?.clinicName || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'}
+                        alt='Green double couch with wooden legs'
+                        borderRadius='full'
+                        w={16}
+                        h={16}
+                    />
+                    <Heading
+                        flex={2}
+                        my={1}
+                        size='md'
+                        textAlign={'center'}
+                        noOfLines={3}
+                        _hover={{ color: Color.hoverBlue }}
+                        cursor={'pointer'}
+                        onClick={() => navigateToDentalDetail(dentalData?.clinicName)}
+                    >
+                        {dentalData?.clinicName}
+                    </Heading>
+                </HStack>
+                <Stack mt={5} mx={2}>
+                    <HStack>
+                        <Tooltip label='Branch location'>
+                            <span>
+                                <FaLocationDot />
+                            </span>
+                        </Tooltip>
+                        <Tag
+                            size="md"
+                            borderRadius="full"
+                            variant="solid"
+                            colorScheme="orange"
                         >
-                            Living room Sofa
-                        </Heading>
+                            <TagLabel>{`${dentalData?.address} (${dentalData?.city})`}</TagLabel>
+                        </Tag>
                     </HStack>
-                    <Stack mt={5} mx={2}>
-                        <HStack>
-                            <Tooltip label='Branch location'>
-                                <span>
-                                    <FaLocationDot />
-                                </span>
-                            </Tooltip>
-                            <Tag
-                                size="md"
-                                borderRadius="full"
-                                variant="solid"
-                                colorScheme="orange"
-                            >
-                                <TagLabel>HN</TagLabel>
-                            </Tag>
-                            <Tag
-                                size="md"
-                                borderRadius="full"
-                                variant="solid"
-                                colorScheme="orange"
-                            >
-                                <TagLabel>HCM</TagLabel>
-                            </Tag>
-                        </HStack>
-                        <HStack>
-                            <Tooltip label='Working hours'>
-                                <TimeIcon />
-                            </Tooltip>
-                            <Tag
-                                size="md"
-                                borderRadius="full"
-                                variant="solid"
-                                colorScheme="red"
-                            >
-                                <TagLabel>
-                                    10:00
-                                </TagLabel>
-                            </Tag>
-                            <Text>-</Text>
-                            <Tag
-                                size="md"
-                                borderRadius="full"
-                                variant="solid"
-                                colorScheme="red"
-                            >
-                                <TagLabel>
-                                    20:00
-                                </TagLabel>
-                            </Tag>
-                        </HStack>
-                    </Stack>
-                </CardBody>
-                <CardFooter gap={4}>
-                    <Button variant='solid' colorScheme='blue' flex={1} onClick={onOpenFeedback}>
-                        Rating and Feedback
+                    <HStack>
+                        <Tooltip label='Phone Number'>
+                            <FaPhone />
+                        </Tooltip>
+                        <Tag
+                            size="md"
+                            borderRadius="full"
+                            variant="solid"
+                            colorScheme="red"
+                        >
+                            <TagLabel>
+                                {dentalData?.phone}
+                            </TagLabel>
+                        </Tag>
+                    </HStack>
+                </Stack>
+            </CardBody>
+            <CardFooter gap={4}>
+                <Button variant='solid' colorScheme='blue' flex={1} onClick={onOpenFeedback}>
+                    Rating and Feedback
+                </Button>
+                {(role !== 'Staff' && role !== 'Dentist') && (
+                    <Button variant='solid' colorScheme='green' flex={1} onClick={onOpenAppointment}>
+                        Make appointment
                     </Button>
-                    {(role !== 'Staff' && role !== 'Dentist') && (
-                        <Button variant='solid' colorScheme='green' flex={1} onClick={onOpenAppointment}>
-                            Make appointment
-                        </Button>
-                    )}
-                </CardFooter>
-            </Card>
+                )}
+            </CardFooter>
             <FeedbackModal isOpen={isOpenFeedback} onClose={onCloseFeedback} />
             <AppointmentModal
                 isOpen={isOpenAppointment}
                 onClose={onCloseAppointment}
-                clinicName={'dentalData'}
+                clinicId={dentalData?.clinicId}
+                clinicName={dentalData?.clinicName}
             />
-        </>
+        </Card>
     )
 }
 
