@@ -117,6 +117,7 @@ const FeedbackFormModal = ({ isOpen, onClose }: Prop) => {
                                 minH={32}
                                 borderColor={'gainsboro'}
                                 onChange={(e) => setFeedback(e.target.value)}
+                                required
                             />
                             {feedbackMissing && (
                                 <Text color={'red'} fontSize={14}>Describe your experience</Text>

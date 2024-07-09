@@ -157,6 +157,7 @@ const UpdateServicePage = () => {
                         maxH={32}
                         minH={32}
                         onChange={(e) => setDescription(e.target.value)}
+                        required
                     />
                 </FormControl>
                 <FormControl id="category" isRequired>

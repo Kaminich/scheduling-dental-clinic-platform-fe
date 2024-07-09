@@ -18,13 +18,19 @@ import ApiClient from '../../../services/apiClient';
 import LoadingModal from '../../../components/modal/loading';
 import { Border } from '../../../styles/styles';
 import { FaCamera } from 'react-icons/fa6';
+import { useParams } from 'react-router';
+import useBlogDetail from '../../../hooks/useBlogDetail';
+import BlogDetailResponse, { initialBlogDetailResponse } from '../../../types/BlogDetailResponse';
 
-const CreateBlogPage = () => {
+const UpdateBlogPage = () => {
     const [title, setTitle] = useState<string>('');
     const [content, setContent] = useState<string>('');
     const [image, setImage] = useState<string>('');
     const [imageData, setImageData] = useState<File | null>(null);
     const [summary, setSummary] = useState<string>('');
+    const [blog, setBlog] = useState<BlogDetailResponse>(initialBlogDetailResponse);
+    const { blogId } = useParams<{ blogId: string }>();
+    const { data } = useBlogDetail({ blogId: parseInt(blogId || '0') });
     const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
     const toast = useToast();
 
@@ -39,10 +45,10 @@ const CreateBlogPage = () => {
     };
 
     const handleReset = () => {
-        setTitle('');
-        setContent('');
-        setSummary('');
-        setImage('');
+        setTitle(blog.title);
+        setContent(blog.content);
+        setSummary(blog.summary);
+        setImage(blog.thumbnail);
         setImageData(null);
     }
 
@@ -85,6 +91,7 @@ const CreateBlogPage = () => {
         }
 
         const data = {
+            id: blog.id,
             content,
             title,
             thumbnail: imageUrl,
@@ -92,7 +99,7 @@ const CreateBlogPage = () => {
         };
 
         try {
-            const response = await api.create(data);
+            const response = await api.update(data);
             console.log(response);
 
             if (response.success) {
@@ -130,8 +137,18 @@ const CreateBlogPage = () => {
     };
 
     useEffect(() => {
-        changeTabTitle('Create Blog');
+        changeTabTitle('Update Blog');
     }, []);
+
+    useEffect(() => {
+        if (data) {
+            setBlog(data);
+        }
+    }, [data]);
+
+    useEffect(() => {
+        handleReset();
+    }, [blog])
 
     return (
         <Box p={8} maxWidth="600px" mx="auto">
@@ -255,4 +272,4 @@ const CreateBlogPage = () => {
     );
 };
 
-export default CreateBlogPage;
+export default UpdateBlogPage;

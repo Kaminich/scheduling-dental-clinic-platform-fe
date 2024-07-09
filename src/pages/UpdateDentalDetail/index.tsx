@@ -7,8 +7,6 @@ import { FaCamera, FaPen } from "react-icons/fa6";
 import axios from "axios";
 import { Border } from "../../styles/styles";
 import useUserProfile from "../../hooks/useUserProfile";
-import BranchDetailResponse from "../../types/BranchDetailResponse";
-import useBranchByClinicId from "../../hooks/useBranchByClinicId";
 import LoadingModal from "../../components/modal/loading";
 import { DayInWeek } from "../../types/type.enum";
 import useWorkingHoursByClinicId from "../../hooks/useWorkingHoursByClinicId";
@@ -428,6 +426,7 @@ const UpdateDentalDetailPage = () => {
                             maxH={32}
                             minH={32}
                             onChange={(e) => setDescription(e.target.value)}
+                            required
                         />
                     </FormControl>
                 </Stack>
