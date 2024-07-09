@@ -1,4 +1,4 @@
-import { Button, FormControl, FormLabel, HStack, Heading, Image, Input, Select, Stack, Textarea, useToast } from "@chakra-ui/react"
+import { Button, FormControl, FormLabel, HStack, Heading, Image, Input, Select, Stack, Textarea, useDisclosure, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react";
 import ApiClient from "../../../services/apiClient";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
@@ -9,6 +9,7 @@ import { Border } from "../../../styles/styles";
 import useUserProfile from "../../../hooks/useUserProfile";
 import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
 import BranchDetailResponse from "../../../types/BranchDetailResponse";
+import LoadingModal from "../../../components/modal/loading";
 
 const CreateDentistPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -26,7 +27,7 @@ const CreateDentistPage = () => {
     const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
     const { data: userData } = useUserProfile();
     const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
-
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
     const toast = useToast();
     const api = new ApiClient<any>('/dentists');
 
@@ -79,6 +80,7 @@ const CreateDentistPage = () => {
 
     const handleCreate = async (e: FormEvent) => {
         e.preventDefault();
+        onOpenLoading();
         let avatarUrl: string = '';
 
         if (avatarData) {
@@ -145,6 +147,8 @@ const CreateDentistPage = () => {
                 position: 'top',
                 isClosable: true,
             });
+        } finally {
+            onCloseLoading();
         }
     };
 
@@ -356,6 +360,10 @@ const CreateDentistPage = () => {
                     Create
                 </Button>
             </HStack>
+            <LoadingModal
+                isOpen={isOpenLoading}
+                onClose={onCloseLoading}
+            />
         </Stack>
     )
 }

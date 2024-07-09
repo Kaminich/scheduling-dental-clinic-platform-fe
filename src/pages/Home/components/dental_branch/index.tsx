@@ -1,17 +1,25 @@
 import { AbsoluteCenter, Box, Divider, SimpleGrid } from "@chakra-ui/react"
 import DentalItem from "../../../../components/dental_item"
 import { Link } from "react-router-dom"
+import useActiveClinics from "../../../../hooks/useActiveClinics";
+import { useEffect, useState } from "react";
+import ClinicListResponse from "../../../../types/ClinicListResponse";
 
 const DentalBranch = () => {
+    const { data } = useActiveClinics();
+    const [clinics, setClinics] = useState<ClinicListResponse[]>([]);
+
+    useEffect(() => {
+        if (data?.content) {
+            setClinics(data.content);
+        }
+    }, [data?.content]);
     return (
         <>
             <SimpleGrid columns={3} spacingX={3} spacingY={6}>
-                <DentalItem />
-                <DentalItem />
-                <DentalItem />
-                <DentalItem />
-                <DentalItem />
-                <DentalItem />
+                {clinics.map((clinic) => (
+                    <DentalItem dentalData={clinic} />
+                ))}
             </SimpleGrid>
             <Box position='relative' py={7} my={5}>
                 <Divider borderColor={'black'} w={'full'} />
@@ -27,7 +35,6 @@ const DentalBranch = () => {
                         See More
                     </AbsoluteCenter>
                 </Link>
-
             </Box >
         </>
     )

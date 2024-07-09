@@ -1,43 +1,106 @@
-import { Button, Card, Divider, HStack, Heading, Image, Stack, Text } from "@chakra-ui/react"
+import { Button, Card, Divider, HStack, Heading, Image, Link, Stack, Tag, TagLabel, Text } from "@chakra-ui/react"
 import { Shadow } from "../../styles/styles"
 import WorkingHours from "../DentalDetail/components/working_hours"
 import DentalDetailBranch from "../DentalDetail/components/branch"
 import { useAuth } from "../../hooks/useAuth"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { changeTabTitle } from "../../utils/changeTabTitle"
+import { useNavigate, useParams } from "react-router"
+import useUserProfile from "../../hooks/useUserProfile"
+import useClinicDetail from "../../hooks/useClinicDetail"
+import ClinicDetailResponse, { initialClinicDetailResponse } from "../../types/ClinicDetailResponse"
+import useWorkingHoursByClinicId from "../../hooks/useWorkingHoursByClinicId"
 
 const DentalDetailSettingsPage = () => {
     const { role } = useAuth();
+    const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
+    const { data: userData } = useUserProfile();
+    const { data: clinicData } = useClinicDetail({ clinicId: userData?.clinicId || parseInt(id || '0') });
+    const { data: clinicWHData } = useWorkingHoursByClinicId({ clinicId: userData?.clinicId || parseInt(id || '0') });
+    const [clinic, setClinic] = useState<ClinicDetailResponse>(initialClinicDetailResponse);
 
     useEffect(() => {
-        changeTabTitle('Clinic Dental Settings');
-    }, []);
+        if (clinic.clinicName) {
+            changeTabTitle(clinic.clinicName);
+        }
+    }, [clinic.clinicName]);
+
+    useEffect(() => {
+        if (clinicData) {
+            setClinic(clinicData);
+        }
+    }, [clinicData]);
+
+    console.log(clinicWHData);
+
 
     return (
         <Stack>
             {role === 'Owner' && (
-                <HStack justify={'flex-end'} m={6} mb={-6}>
-                    <Button colorScheme="blue">Edit</Button>
+                <HStack justify={'flex-end'} m={6} mb={-6} gap={4}>
+                    <Button colorScheme="blue" onClick={() => navigate('update')}>Edit</Button>
                 </HStack>
             )}
             <HStack align={'center'} mt={6}>
                 <Stack flex={1} align={'center'}>
-                    <Image src="/image0.svg" />
+                    <Image src={clinic.logo} />
                 </Stack>
                 <Stack flex={4}>
-                    <Heading fontSize={28}>F-Dental</Heading>
+                    <Heading fontSize={28}>{clinic.clinicName}</Heading>
                     <HStack mt={4} ml={4} align={'flex-start'}>
                         <Stack flex={1}>
-                            <Text>Owner: { }</Text>
-                            <Text>Phone Number: { }</Text>
-                            <Text>Email: { }</Text>
-                            <Text>Address: { }</Text>
-                            <Text>City: { }</Text>
+                            {role === 'Admin' && (
+                                <Text>Owner: {clinic.ownerName}</Text>
+                            )}
+                            <Text>Phone Number: {clinic.phone}</Text>
+                            <Text>Email: {clinic.email}</Text>
+                            <Text>Address: {clinic.address}</Text>
+                            <Text>City: {clinic.city}</Text>
                         </Stack>
                         <Stack flex={1}>
-                            <Text>Created at: { }</Text>
-                            <Text>Last Modified: { }</Text>
-                            <Text>Last Modified By: { }</Text>
+                            <HStack>
+                                <Text>Website Url:</Text>
+                                {clinic.websiteUrl ? (
+                                    <Link href={clinic.websiteUrl} isExternal>{clinic.websiteUrl}</Link>
+                                ) : (
+                                    <Text>-</Text>
+                                )}
+                            </HStack>
+                            <Text>Created Date: {clinic.createdDate}</Text>
+                            <Text>Modified Date: {clinic.modifiedDate}</Text>
+                            {clinic.status === 'ACTIVE' && (
+                                <HStack>
+                                    <Text>Status:</Text>
+                                    <Tag colorScheme="green">
+                                        <TagLabel>ACTIVE</TagLabel>
+                                    </Tag>
+                                </HStack>
+                            )}
+                            {clinic.status === 'INACTIVE' && (
+                                <HStack>
+                                    <Text>Status:</Text>
+                                    <Tag colorScheme="red">
+                                        <TagLabel>INACTIVE</TagLabel>
+                                    </Tag>
+                                </HStack>
+                            )}
+                            {clinic.status === 'PENDING' && (
+                                <HStack>
+                                    <Text>Status:</Text>
+                                    <Tag colorScheme="yellow">
+                                        <TagLabel>PENDING</TagLabel>
+                                    </Tag>
+                                </HStack>
+                            )}
+                            {clinic.status === 'APPROVED' && (
+                                <HStack>
+                                    <Text>Status:</Text>
+                                    <Tag colorScheme="cyan">
+                                        <TagLabel>APPROVED</TagLabel>
+                                    </Tag>
+                                </HStack>
+                            )}
                         </Stack>
                     </HStack>
                 </Stack>
@@ -59,7 +122,7 @@ const DentalDetailSettingsPage = () => {
                         </Text>
                         <Card mb={4} py={6} px={8} shadow={Shadow.cardShadow}>
                             <Text>
-                                The Scheduling Dental Clinics Platform presents a compelling business opportunity by addressing the problem of inefficient dental appointment scheduling. Existing methods are often manual, leading to scheduling conflicts and missed opportunities. In contrast, the platform offers a comprehensive solution with features like real-time scheduling, automated reminders, and integration with clinic management systems. By streamlining appointment scheduling, the platform improves productivity, reduces no-shows, and enhances patient satisfaction. This product aligns with market trends of digital healthcare solutions and supports corporate strategic goals by optimizing resource utilization and offering a user-friendly experience. Overall, it provides an efficient and user-friendly solution for dental clinics, improving productivity, patient satisfaction, and resource utilization
+                                {clinic.description}
                             </Text>
                         </Card>
                     </Stack>
@@ -89,7 +152,7 @@ const DentalDetailSettingsPage = () => {
                         >
                             Branch
                         </Text>
-                        <DentalDetailBranch />
+                        <DentalDetailBranch clinicId={userData?.clinicId || parseInt(id || '0')} />
                     </Stack>
                 </Stack>
             </Stack>

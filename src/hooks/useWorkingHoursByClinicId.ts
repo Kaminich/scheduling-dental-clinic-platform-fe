@@ -5,10 +5,10 @@ interface Prop {
     clinicId: number;
 }
 
-const useBranchByClinicId = ({ clinicId }: Prop) => {
-    const api = new ApiClient<any>('/branch/clinic');
+const useWorkingHoursByClinicId = ({ clinicId }: Prop) => {
+    const api = new ApiClient<any>('/working-hours');
     return useQuery({
-        queryKey: ["getBranchByClinic", clinicId],
+        queryKey: ["getWorkingHoursByClinic", clinicId],
         queryFn: () =>
             api.getDetailUnauthen(clinicId)
                 .then((data) => {
@@ -17,4 +17,4 @@ const useBranchByClinicId = ({ clinicId }: Prop) => {
     });
 };
 
-export default useBranchByClinicId;
+export default useWorkingHoursByClinicId;

@@ -21,14 +21,13 @@ const ApproveStaffPage = () => {
     const { isOpen: isOpenApprove, onClose: onCloseApprove, onOpen: onOpenApprove } = useDisclosure();
     const { isOpen: isOpenDetail, onClose: onCloseDetail, onOpen: onOpenDetail } = useDisclosure();
     const toast = useToast();
-    const api = new ApiClient<any>(`/staff/approval`);
 
     let filteredStaffs = staffs.filter((staff) => {
         return staff.fullName.toLowerCase().includes(keyword.toLowerCase())
     })
 
-
     const handleApprove = async () => {
+        const api = new ApiClient<any>(`/staff/approval`);
         try {
             const response = await api.createWithId(id, {
                 params: {

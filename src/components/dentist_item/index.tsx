@@ -1,11 +1,11 @@
-import { Avatar, Button, Card, CardBody, CardFooter, HStack, Heading, Image, Stack, Text, Tooltip, useDisclosure } from "@chakra-ui/react"
+import { Avatar, Card, CardBody, HStack, Heading, Image, Stack, Text, Tooltip } from "@chakra-ui/react"
 import { FaMapLocationDot, FaTooth } from "react-icons/fa6";
 import { useEffect, useState } from "react";
-import AppointmentModal from "../modal/appointment";
 import { Link, useNavigate } from "react-router-dom";
 import { Border, Color, Shadow } from "../../styles/styles";
 import { useAuth } from "../../hooks/useAuth";
 import DentistListResponse from "../../types/DentistListResponse";
+import DentistDetailResponse, { initialDentistDetailResponse } from "../../types/DentistDetailResponse";
 
 interface Props {
     type: number;
@@ -13,8 +13,8 @@ interface Props {
 }
 
 const DentistItem = ({ type, data }: Props) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
     const [dentists, setDentists] = useState<DentistListResponse[]>([]);
+    const [dentist, setDentist] = useState<DentistDetailResponse>(initialDentistDetailResponse);
     const { role } = useAuth();
     const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const DentistItem = ({ type, data }: Props) => {
                 <>
                     {dentists.map((dentist) => (
                         <Card maxW='sm' key={dentist.dentistId}>
-                            <CardBody pb={0}>
+                            <CardBody pb={6}>
                                 <Stack align={'center'}>
                                     <Avatar
                                         size='2xl'
@@ -52,7 +52,7 @@ const DentistItem = ({ type, data }: Props) => {
                                     >
                                         {dentist.fullName}
                                     </Heading>
-                                    <Text>Doctor</Text>
+                                    <Text>Dentist</Text>
                                 </Stack>
                                 <Stack mx={3} mt={4}>
                                     <HStack>
@@ -61,7 +61,7 @@ const DentistItem = ({ type, data }: Props) => {
                                                 <FaTooth />
                                             </span>
                                         </Tooltip>
-                                        <Text>{dentist.specialty}</Text>
+                                        <Text textTransform={'capitalize'}>{dentist.specialty}</Text>
                                     </HStack>
                                 </Stack>
                                 <Stack mx={3} mt={1}>
@@ -77,24 +77,8 @@ const DentistItem = ({ type, data }: Props) => {
                                     </HStack>
                                 </Stack>
                             </CardBody>
-                            {(role !== 'Staff' && role !== 'Dentist') ? (
-                                <CardFooter justify={'center'}>
-                                    <Button variant='solid' colorScheme='green' px={10} onClick={onOpen}>
-                                        Make appointment
-                                    </Button>
-                                </CardFooter>
-                            ) : (
-                                <CardFooter></CardFooter>
-                            )}
                         </Card>
                     ))}
-                    <AppointmentModal
-                        isOpen={isOpen}
-                        onClose={onClose}
-                        dentalData={'dentalData'}
-                        dentistData={'dentistData'}
-                        locationData={'locationData'}
-                    />
                 </>
             ) : (
                 <Card maxW='sm' shadow={Shadow.cardShadow}>
@@ -102,7 +86,7 @@ const DentistItem = ({ type, data }: Props) => {
                         <CardBody pb={4}>
                             <Stack align={'center'}>
                                 <Image
-                                    src='https://bit.ly/sage-adebayo'
+                                    src={dentist.avatar || 'https://bit.ly/sage-adebayo'}
                                     alt='Dentist image'
                                     borderRadius='lg'
                                 />
@@ -112,7 +96,7 @@ const DentistItem = ({ type, data }: Props) => {
                                     pb={0}
                                     _hover={{ color: Color.hoverBlue }}
                                 >
-                                    Segun Adebayo
+                                    {dentist.fullName}
                                 </Heading>
                                 <Text fontSize={18}>Dentist</Text>
                             </Stack>
@@ -123,7 +107,7 @@ const DentistItem = ({ type, data }: Props) => {
                                             <FaMapLocationDot />
                                         </span>
                                     </Tooltip>
-                                    <Text>HCM</Text>
+                                    <Text>{`${dentist.branchName} (${dentist.city})`}</Text>
                                 </HStack>
                             </Stack>
                         </CardBody>

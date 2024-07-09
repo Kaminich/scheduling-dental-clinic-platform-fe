@@ -1,21 +1,33 @@
 import { Avatar, HStack, Stack, Text, useDisclosure } from "@chakra-ui/react"
 import { Rate } from "antd"
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Color } from "../../../../styles/styles";
 import { FaFlag } from "react-icons/fa6";
 import ReportFeedbackModal from "../../../modal/report_feedback";
 import { useAuth } from "../../../../hooks/useAuth";
 
 interface Prop {
-    type: string,
+    type: string;
+    feedbackId: number;
+    branchName?: string;
+    city?: string;
+    comment: string;
+    avatar: string;
+    fullname: string;
+    rating: number;
+    clinicName?: string;
 }
 
-const FeedbackItem = ({ type }: Prop) => {
+const FeedbackItem = ({ type, avatar, branchName, city, comment, feedbackId, fullname, rating, clinicName }: Prop) => {
     const [showFullText, setShowFullText] = useState<boolean>(false);
-    const [feedbackId, setFeedbackId] = useState<number>(0);
     const { isOpen, onClose, onOpen } = useDisclosure();
     const { isAuthenticated } = useAuth();
+    const navigate = useNavigate();
+    const navigateToDetail = (name: string) => {
+        const hyphenatedName = name.replace(/ /g, '-');
+        navigate(`/dentals/${hyphenatedName}`);
+    };
 
     const toggleShowFullText = () => {
         setShowFullText(!showFullText);
@@ -31,29 +43,32 @@ const FeedbackItem = ({ type }: Prop) => {
                     color={'gray'}
                     _hover={{ color: 'gray.600' }}
                     cursor={'pointer'}
-                    onClick={() => {
-                        onOpen();
-                        setFeedbackId(0)
-                    }}
+                    onClick={onOpen}
                 >
                     <FaFlag />
                     <Text fontSize={14}>Report</Text>
                 </HStack>
             )}
             <HStack gap={4}>
-                <Avatar size={'md'} name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
+                <Avatar size={'md'} name='Segun Adebayo' src={avatar} />
                 <Stack gap={0}>
-                    <Text fontWeight={'medium'}>Segun Adebayo</Text>
+                    <Text fontWeight={'medium'}>{fullname}</Text>
                     {type === 'personal' ? (
-                        <Link to={'/dental-detail'}>
-                            <Text fontSize={16} color={'blue'} _hover={{ color: Color.hoverBlue }}>F-Dental</Text>
-                        </Link>
+                        <Text
+                            fontSize={16}
+                            color={'blue'}
+                            _hover={{ color: Color.hoverBlue }}
+                            onClick={() => navigateToDetail(clinicName || '')}
+                            cursor={'pointer'}
+                        >
+                            {clinicName}
+                        </Text>
                     ) : (
-                        <Text fontSize={16} color={'blue'}>F-Dental</Text>
+                        <Text fontSize={16} color={'blue'}>{branchName} ({city})</Text>
                     )}
                 </Stack>
             </HStack>
-            <Rate disabled allowHalf defaultValue={5} style={{ fontSize: '15px' }} />
+            <Rate disabled allowHalf defaultValue={rating} style={{ fontSize: '15px' }} />
             <Stack gap={0}>
                 <Text
                     noOfLines={!showFullText ? 3 : undefined}
@@ -75,6 +90,7 @@ const FeedbackItem = ({ type }: Prop) => {
                     Conclusion: In conclusion, the Smartwatch X2 is a solid choice for anyone looking for a reliable and affordable smartwatch. While it may not have all the bells and whistles of high-end models, it gets the job done without compromising on quality. I'd recommend it to anyone in the market for a budget-friendly wearable device.
 
                     Overall, I'm quite satisfied with my purchase and would give the Smartwatch X2 a solid 4 out of 5 stars.
+                    {comment}
                 </Text>
                 <Text
                     size="sm"
@@ -90,6 +106,7 @@ const FeedbackItem = ({ type }: Prop) => {
                 isOpen={isOpen}
                 onClose={onClose}
                 feedbackId={feedbackId}
+                reportedCustomer={fullname}
             />
         </Stack>
     )

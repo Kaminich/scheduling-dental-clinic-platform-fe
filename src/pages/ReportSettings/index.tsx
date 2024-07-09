@@ -1,4 +1,4 @@
-import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure } from "@chakra-ui/react";
+import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { FaCheck, FaEye, FaSliders, FaX } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
@@ -8,19 +8,97 @@ import useReports from "../../hooks/useReports";
 import Loading from "../../components/loading";
 import ReportApproveModal from "../../components/modal/report_approve";
 import ReportResponse from "../../types/ReportResponse";
+import ApiClient from "../../services/apiClient";
 
 const ReportSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
-    const [type, setType] = useState<string>('');
+    const [approve, setApprove] = useState<boolean>(false);
     const [id, setId] = useState<number>(0);
     const { data, isLoading } = useReports();
     const { isOpen: isOpenApprove, onClose: OnCloseApprove, onOpen: onOpenApprove } = useDisclosure();
     const [reports, setReports] = useState<ReportResponse[]>([]);
+    const toast = useToast();
 
     let filteredReports = reports.filter((report) => {
         return report.reportReason.toLowerCase().includes(keyword.toLowerCase())
     })
+
+    const handleApprove = async () => {
+        if (approve) {
+            const api = new ApiClient<any>(`/report/approve`);
+            try {
+                const response = await api.createWithId(id);
+                console.log(response);
+                if (response.success) {
+                    toast({
+                        title: "Success",
+                        description: response.message,
+                        status: "success",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                } else {
+                    toast({
+                        title: "Error",
+                        description: response.message,
+                        status: "error",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                }
+            } catch (error: any) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            } finally {
+                OnCloseApprove();
+            }
+        } else {
+            const api = new ApiClient<any>(`/report/decline`);
+            try {
+                const response = await api.createWithId(id);
+                console.log(response);
+                if (response.success) {
+                    toast({
+                        title: "Success",
+                        description: response.message,
+                        status: "success",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                } else {
+                    toast({
+                        title: "Error",
+                        description: response.message,
+                        status: "error",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                }
+            } catch (error: any) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            } finally {
+                OnCloseApprove();
+            }
+        }
+    }
 
     useEffect(() => {
         changeTabTitle('Report Settings');
@@ -117,7 +195,7 @@ const ReportSettingsPage = () => {
                                                                 colorScheme="green"
                                                                 variant='ghost'
                                                                 onClick={() => {
-                                                                    setType('approve');
+                                                                    setApprove(true);
                                                                     setId(0)
                                                                     onOpenApprove();
                                                                 }}
@@ -134,7 +212,7 @@ const ReportSettingsPage = () => {
                                                                 colorScheme="red"
                                                                 variant='ghost'
                                                                 onClick={() => {
-                                                                    setType('denied');
+                                                                    setApprove(false);
                                                                     setId(0);
                                                                     onOpenApprove();
                                                                 }}
@@ -172,8 +250,8 @@ const ReportSettingsPage = () => {
             <ReportApproveModal
                 isOpen={isOpenApprove}
                 onClose={OnCloseApprove}
-                id={id}
-                type={type}
+                approve={approve}
+                handleApprove={handleApprove}
             />
         </Stack >
     )

@@ -13,6 +13,7 @@ import ClinicStaffAndDentistResponse, { initialClinicStaffAndDentistResponse } f
 import Loading from "../../components/loading";
 import ApiClient from "../../services/apiClient";
 import DeleteModal from "../../components/modal/delete";
+import ActivateModal from "../../components/modal/activate";
 
 const AccountSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -22,8 +23,10 @@ const AccountSettingsPage = () => {
     const [clinicAccounts, setClinicAccounts] = useState<ClinicStaffAndDentistResponse>(initialClinicStaffAndDentistResponse);
     const { data: clinicAccountData, isLoading: isLoadingClinicAccount, refetch: refetchClinicAccount } = useClinicAccounts();
     const { isOpen: isOpenDeactivate, onClose: onCloseDeactivate, onOpen: onOpenDeactivate } = useDisclosure();
+    const { isOpen: isOpenActivate, onClose: onCloseActivate, onOpen: onOpenActivate } = useDisclosure();
     const navigate = useNavigate();
     const { role } = useAuth();
+    const toast = useToast();
 
     const filteredClinicAccounts = {
         staffList: clinicAccounts.staffList.filter((account) =>
@@ -34,14 +37,11 @@ const AccountSettingsPage = () => {
         ),
     };
 
-    const toast = useToast();
-
-    const handleDeactivate = async () => {
+    const handleActivate = async () => {
         if (type === 'dentist') {
             try {
-                const api = new ApiClient<any>(`/dentist`);
-                const response = await api.delete(id);
-                console.log(response);
+                const api = new ApiClient<any>(`/dentists/re-activate`);
+                const response = await api.updateWithId(id);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -61,7 +61,82 @@ const AccountSettingsPage = () => {
                         position: 'top',
                         isClosable: true,
                     });
+                }
+            } catch (error: any) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            } finally {
+                onCloseActivate();
+            }
+        } else if (type === 'staff') {
+            const api = new ApiClient<any>(`/staff`);
+            try {
+                const response = await api.updateWithId(id);
+                if (response.success) {
+                    toast({
+                        title: "Success",
+                        description: response.message,
+                        status: "success",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                    refetchClinicAccount && refetchClinicAccount();
+                } else {
+                    toast({
+                        title: "Error",
+                        description: response.message,
+                        status: "error",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                }
+            } catch (error: any) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            } finally {
+                onCloseActivate();
+            }
+        }
+    }
 
+    const handleDeactivate = async () => {
+        if (type === 'dentist') {
+            try {
+                const api = new ApiClient<any>(`/dentists`);
+                const response = await api.delete(id);
+                if (response.success) {
+                    toast({
+                        title: "Success",
+                        description: response.message,
+                        status: "success",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                    refetchClinicAccount && refetchClinicAccount();
+                } else {
+                    toast({
+                        title: "Error",
+                        description: response.message,
+                        status: "error",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
                 }
             } catch (error: any) {
                 toast({
@@ -79,7 +154,6 @@ const AccountSettingsPage = () => {
             const api = new ApiClient<any>(`/staff`);
             try {
                 const response = await api.delete(id);
-                console.log(response);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -99,7 +173,6 @@ const AccountSettingsPage = () => {
                         position: 'top',
                         isClosable: true,
                     });
-
                 }
             } catch (error: any) {
                 toast({
@@ -112,42 +185,6 @@ const AccountSettingsPage = () => {
                 });
             } finally {
                 onCloseDeactivate();
-            }
-        } else if (type === 'branch') {
-            const api = new ApiClient<any>(`/branch`);
-            try {
-                const response = await api.delete(id);
-                console.log(response);
-                if (response.success) {
-                    toast({
-                        title: "Success",
-                        description: response.message,
-                        status: "success",
-                        duration: 2500,
-                        position: 'top',
-                        isClosable: true,
-                    });
-
-                } else {
-                    toast({
-                        title: "Error",
-                        description: response.message,
-                        status: "error",
-                        duration: 2500,
-                        position: 'top',
-                        isClosable: true,
-                    });
-
-                }
-            } catch (error: any) {
-                toast({
-                    title: "Error",
-                    description: error.response?.data?.message || "An error occurred",
-                    status: "error",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                });
             }
         }
     }
@@ -302,6 +339,11 @@ const AccountSettingsPage = () => {
                                                                     px={3}
                                                                     colorScheme="green"
                                                                     variant='ghost'
+                                                                    onClick={() => {
+                                                                        setType('dentist');
+                                                                        setId(account.dentistId);
+                                                                        onOpenActivate();
+                                                                    }}
                                                                 >
                                                                     <Tooltip label='Activate user account'>
                                                                         <span>
@@ -407,6 +449,11 @@ const AccountSettingsPage = () => {
                                                                     px={3}
                                                                     colorScheme="green"
                                                                     variant='ghost'
+                                                                    onClick={() => {
+                                                                        setType('staff');
+                                                                        setId(account.id);
+                                                                        onOpenActivate();
+                                                                    }}
                                                                 >
                                                                     <Tooltip label='Activate user account'>
                                                                         <span>
@@ -466,6 +513,12 @@ const AccountSettingsPage = () => {
                 onClose={onCloseDeactivate}
                 type={type}
                 handleDeactivate={handleDeactivate}
+            />
+            <ActivateModal
+                isOpen={isOpenActivate}
+                onClose={onCloseActivate}
+                type={type}
+                handleActivate={handleActivate}
             />
         </Stack>
     )

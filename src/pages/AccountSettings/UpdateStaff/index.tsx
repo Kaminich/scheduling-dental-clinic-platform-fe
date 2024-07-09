@@ -1,4 +1,4 @@
-import { Button, FormControl, FormLabel, HStack, Image, Input, Select, Stack, useToast } from "@chakra-ui/react"
+import { Button, FormControl, FormLabel, HStack, Image, Input, Select, Stack, useDisclosure, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ApiClient from "../../../services/apiClient";
@@ -12,6 +12,7 @@ import { ApiResponse } from "../../../types/ApiResponse";
 import useUserProfile from "../../../hooks/useUserProfile";
 import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
 import BranchDetailResponse from "../../../types/BranchDetailResponse";
+import LoadingModal from "../../../components/modal/loading";
 
 const UpdateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -30,6 +31,7 @@ const UpdateStaffPage = () => {
     const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
     const { data: userData } = useUserProfile();
     const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
 
     const getStaffDetailById = async (id: number) => {
         try {
@@ -84,14 +86,13 @@ const UpdateStaffPage = () => {
 
     const handleUpdate = async (e: FormEvent) => {
         e.preventDefault();
-
+        onOpenLoading();
         let avatarUrl: string = '';
 
         if (avatarData !== null) {
             const formDataImage = new FormData();
             formDataImage.append("file", avatarData);
             formDataImage.append("upload_preset", "z5r1wkcn");
-
             try {
                 const response = await axios.post(
                     `https://api.cloudinary.com/v1_1/dy1t2fqsc/image/upload`,
@@ -149,6 +150,8 @@ const UpdateStaffPage = () => {
                 position: 'top',
                 isClosable: true,
             });
+        } finally {
+            onCloseLoading();
         }
     };
 
@@ -339,6 +342,10 @@ const UpdateStaffPage = () => {
                     Save
                 </Button>
             </HStack>
+            <LoadingModal
+                isOpen={isOpenLoading}
+                onClose={onCloseLoading}
+            />
         </Stack>
     )
 }

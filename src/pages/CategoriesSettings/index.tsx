@@ -93,7 +93,7 @@ const CategoriesSettingsPage = () => {
                 <Input
                     ref={ref}
                     borderRadius={20}
-                    placeholder="Search clinic name..."
+                    placeholder="Search category name..."
                     variant="filled"
                     border='1px solid gainsboro'
                     onChange={(e) => {
@@ -174,7 +174,7 @@ const CategoriesSettingsPage = () => {
                                                                     <Image
                                                                         src={category.categoryImage}
                                                                         w={100}
-                                                                        h={'auto'}
+                                                                        h={47}
                                                                         m={'auto'}
                                                                     />
                                                                 </>
@@ -252,7 +252,7 @@ const CategoriesSettingsPage = () => {
                                                             <Button
                                                                 borderRadius='full'
                                                                 px={3}
-                                                                colorScheme="blue"
+                                                                colorScheme={category.status ? 'red' : 'green'}
                                                                 variant='ghost'
                                                                 onClick={() => {
                                                                     setId(category.id);
@@ -260,7 +260,15 @@ const CategoriesSettingsPage = () => {
                                                                     onOpenChange();
                                                                 }}
                                                             >
-                                                                <Tooltip label='Change status'>
+                                                                <Tooltip
+                                                                    label={
+                                                                        category.status
+                                                                            ?
+                                                                            'Deactivate category'
+                                                                            :
+                                                                            'Activate category'
+                                                                    }
+                                                                >
                                                                     <span>
                                                                         <FaArrowRightArrowLeft />
                                                                     </span>
@@ -295,6 +303,7 @@ const CategoriesSettingsPage = () => {
                 onClose={onCloseCategory}
                 id={id}
                 type={type}
+                refetch={refetch}
             />
             <ChangeStatusModal
                 isOpen={isOpenChange}

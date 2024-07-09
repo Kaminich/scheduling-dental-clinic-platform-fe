@@ -50,6 +50,7 @@ import ServiceDetailPage from "../pages/ServicesSettings/ServiceDetail";
 import ClinicBranchDetailPage from "../pages/ClinicBranchSettings/ClinicBranchDetail";
 import AppointmentPage from "../pages/Appointment";
 import ReportSettingsPage from "../pages/ReportSettings";
+import UpdateDentalDetailPage from "../pages/UpdateDentalDetail";
 
 const routes = [
     {
@@ -73,8 +74,9 @@ const routes = [
             { path: "message", element: <MessagePage /> },
             { path: "manage-blog/blog-detail", element: <BlogDetailPage /> },
             { path: "manage-blog/create-blog", element: <CreateBlogPage /> },
-            { path: "administrator/dentals/manage-dental/dental-detail", element: <DentalDetailSettingsPage /> },
+            { path: "administrator/dentals/manage-dental/:id", element: <DentalDetailSettingsPage /> },
             { path: "administrator/dentals/dental-detail", element: <DentalDetailSettingsPage /> },
+            { path: "administrator/dentals/dental-detail/update", element: <UpdateDentalDetailPage /> },
             { path: "administrator/blogs/appprove-blog/blog-detail", element: <BlogDetailPage /> },
             { path: "administrator/blogs/manage-blog/blog-detail", element: <BlogDetailPage /> },
             { path: "administrator/blogs/blog-detail", element: <BlogDetailPage /> },
@@ -99,7 +101,7 @@ const routes = [
             { index: true, element: <HomePage /> },
             { path: "about", element: <AboutPage /> },
             { path: "dentals", element: <DentalPage /> },
-            { path: "dental-detail", element: <DentalDetailPage /> },
+            { path: "dentals/:name", element: <DentalDetailPage /> },
             { path: "dentists", element: <DentistPage /> },
             { path: "dentists/:name", element: <DentistDetailPage /> },
             { path: "services", element: <ServicePage /> },

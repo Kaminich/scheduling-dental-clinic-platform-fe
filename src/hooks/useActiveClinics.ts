@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import ApiClient from "../services/apiClient";
 
-const useCategory = () => {
-    const api = new ApiClient<any>('/category');
+const useActiveClinics = () => {
+    const api = new ApiClient<any>('/clinics/active');
     return useQuery({
-        queryKey: ["getCategory"],
+        queryKey: ["getActiveClinics"],
         queryFn: () =>
             api.getUnauthen()
                 .then((data) => {
@@ -13,4 +13,4 @@ const useCategory = () => {
     });
 };
 
-export default useCategory;
+export default useActiveClinics;

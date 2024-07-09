@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import ApiClient from "../services/apiClient";
 
-const useCategory = () => {
-    const api = new ApiClient<any>('/category');
+const useBlogs = () => {
+    const api = new ApiClient<any>('/blog');
     return useQuery({
-        queryKey: ["getCategory"],
+        queryKey: ["getBlogs"],
         queryFn: () =>
-            api.getUnauthen()
+            api.getAuthen()
                 .then((data) => {
                     return data.data;
                 })
     });
 };
 
-export default useCategory;
+export default useBlogs;

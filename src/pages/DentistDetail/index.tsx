@@ -6,7 +6,6 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import useDentists from "../../hooks/useDentists";
-import Dentist from "../../types/Dentist";
 import ApiClient from "../../services/apiClient";
 import DentistCarousel from "../../components/carousel/dentist";
 import DentistDetailResponse, { initialDentistDetailResponse } from "../../types/DentistDetailResponse";
@@ -65,7 +64,7 @@ const DentistDetailPage = () => {
 
     useEffect(() => {
         if (data?.content) {
-            const foundDentist = data.content.find((dentist: Dentist) => dentist.fullName === decodedName);
+            const foundDentist = data.content.find((dentist: DentistDetailResponse) => dentist.fullName === decodedName);
             if (foundDentist) {
                 setId(foundDentist.dentistId);
             }
@@ -151,7 +150,7 @@ const DentistDetailPage = () => {
             </Flex>
             <Stack mt={12} mb={4}>
                 <Text
-                    maxW={'2xl'}
+                    maxW={'xl'}
                     fontSize={20}
                     pl={4}
                     py={1}
@@ -160,15 +159,13 @@ const DentistDetailPage = () => {
                     borderRadius={'full'}
                     bgGradient={Color.headingGradientMd}
                 >
-                    Medical Team from {dentist.branchName} ({dentist.city}) Branch
+                    Medical Team from {dentist.branchName} ({dentist.city})
                 </Text>
                 <DentistCarousel dentistList={dentists} />
             </Stack>
             <AppointmentModal
-                dentalData={''}
-                dentistData={''}
+                dentistData={dentist}
                 isOpen={isOpen}
-                locationData={''}
                 onClose={onClose}
             />
         </Stack>
