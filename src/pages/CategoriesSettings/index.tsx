@@ -252,7 +252,7 @@ const CategoriesSettingsPage = () => {
                                                             <Button
                                                                 borderRadius='full'
                                                                 px={3}
-                                                                colorScheme="blue"
+                                                                colorScheme={category.status ? 'red' : 'green'}
                                                                 variant='ghost'
                                                                 onClick={() => {
                                                                     setId(category.id);
@@ -260,7 +260,15 @@ const CategoriesSettingsPage = () => {
                                                                     onOpenChange();
                                                                 }}
                                                             >
-                                                                <Tooltip label='Change status'>
+                                                                <Tooltip
+                                                                    label={
+                                                                        category.status
+                                                                            ?
+                                                                            'Deactivate category'
+                                                                            :
+                                                                            'Activate category'
+                                                                    }
+                                                                >
                                                                     <span>
                                                                         <FaArrowRightArrowLeft />
                                                                     </span>

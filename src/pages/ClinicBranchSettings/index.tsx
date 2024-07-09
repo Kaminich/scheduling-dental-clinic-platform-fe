@@ -14,6 +14,7 @@ import useBranchByClinicId from "../../hooks/useBranchByClinicId";
 import ChangeStatusModal from "../../components/modal/change_status";
 import ApiClient from "../../services/apiClient";
 import { formatDateTime } from "../../utils/formatDateTime";
+import { Status } from "../../types/type.enum";
 
 const ClinicBranchSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -229,7 +230,11 @@ const ClinicBranchSettingsPage = () => {
                                                             <Button
                                                                 borderRadius='full'
                                                                 px={3}
-                                                                colorScheme="blue"
+                                                                colorScheme={
+                                                                    branch.status === Status.ACTIVE
+                                                                        ? 'red'
+                                                                        : 'green'
+                                                                }
                                                                 variant='ghost'
                                                                 onClick={() => {
                                                                     setId(branch.branchId);
@@ -237,7 +242,14 @@ const ClinicBranchSettingsPage = () => {
                                                                     onOpenChange();
                                                                 }}
                                                             >
-                                                                <Tooltip label='Change status'>
+                                                                <Tooltip
+                                                                    label=
+                                                                    {
+                                                                        branch.status === Status.ACTIVE
+                                                                            ? 'Deactivate branch'
+                                                                            : 'Activate branch'
+                                                                    }
+                                                                >
                                                                     <span>
                                                                         <FaArrowRightArrowLeft />
                                                                     </span>

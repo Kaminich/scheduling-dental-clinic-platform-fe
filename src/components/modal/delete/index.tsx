@@ -23,6 +23,9 @@ const DeleteModal = ({ isOpen, onClose, type, handleDeactivate }: Props) => {
                 {(type === 'clinics' || type === 'clinic') && (
                     <ModalHeader fontSize='xl'>Deactivate Dental Clinic</ModalHeader>
                 )}
+                {type === 'blog' && (
+                    <ModalHeader fontSize='xl'>Deactivate Blog</ModalHeader>
+                )}
                 <ModalCloseButton />
                 <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
                     {(type === 'dentist' || type === 'staff') && (
@@ -33,6 +36,9 @@ const DeleteModal = ({ isOpen, onClose, type, handleDeactivate }: Props) => {
                     )}
                     {type === 'clinic' && (
                         <Text fontSize='lg'>Are you sure you want to deactivate your dental clinic?</Text>
+                    )}
+                    {type === 'blog' && (
+                        <Text fontSize='lg'>Are you sure you want to deactivate this blog?</Text>
                     )}
                 </ModalBody>
                 <ModalFooter>

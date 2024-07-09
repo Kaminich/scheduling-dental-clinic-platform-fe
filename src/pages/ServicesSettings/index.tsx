@@ -186,7 +186,7 @@ const ServicesSettingsPage = () => {
                                                             <Button
                                                                 borderRadius='full'
                                                                 px={3}
-                                                                colorScheme="blue"
+                                                                colorScheme={service.status ? 'red' : 'green'}
                                                                 variant='ghost'
                                                                 onClick={() => {
                                                                     setId(service.id);
@@ -194,7 +194,15 @@ const ServicesSettingsPage = () => {
                                                                     onOpenChange();
                                                                 }}
                                                             >
-                                                                <Tooltip label='Change status'>
+                                                                <Tooltip
+                                                                    label={
+                                                                        service.status
+                                                                            ?
+                                                                            'Deactivate service'
+                                                                            :
+                                                                            'Activate service'
+                                                                    }
+                                                                >
                                                                     <span>
                                                                         <FaArrowRightArrowLeft />
                                                                     </span>

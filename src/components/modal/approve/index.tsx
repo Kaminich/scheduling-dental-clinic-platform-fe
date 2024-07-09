@@ -25,6 +25,9 @@ const ApproveModal = ({ isOpen, onClose, type, approve, handleApprove }: Props) 
                     {type === 'clinic' && (
                         <ModalHeader fontSize='xl'>Approve Clinic Partner Registration</ModalHeader>
                     )}
+                    {type === 'blog' && (
+                        <ModalHeader fontSize='xl'>Approve Blog</ModalHeader>
+                    )}
                     <ModalCloseButton />
                     <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
                         {(type === 'dentist' || type === 'staff') && (
@@ -32,6 +35,9 @@ const ApproveModal = ({ isOpen, onClose, type, approve, handleApprove }: Props) 
                         )}
                         {type === 'clinic' && (
                             <Text fontSize='lg'>Are you sure you want to approve this registration?</Text>
+                        )}
+                        {type === 'blog' && (
+                            <Text fontSize='lg'>Are you sure you want to approve this blog?</Text>
                         )}
                     </ModalBody>
                     <ModalFooter>
