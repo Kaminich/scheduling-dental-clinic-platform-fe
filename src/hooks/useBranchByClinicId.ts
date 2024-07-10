@@ -10,7 +10,7 @@ const useBranchByClinicId = ({ clinicId }: Prop) => {
     return useQuery({
         queryKey: ["getBranchByClinic", clinicId],
         queryFn: () =>
-            api.getDetailUnauthen(clinicId)
+            api.getDetail(clinicId)
                 .then((data) => {
                     return data.data;
                 })

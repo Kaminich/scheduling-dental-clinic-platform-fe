@@ -4,7 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import { useNavigate, useParams } from "react-router";
-import useBlogs from "../../hooks/useBlogs";
+import useBlogs from "../../hooks/useAllBlogs";
 import BlogDetailResponse, { initialBlogDetailResponse } from "../../types/BlogDetailResponse";
 import ApiClient from "../../services/apiClient";
 import { formatDateTime } from "../../utils/formatDateTime";

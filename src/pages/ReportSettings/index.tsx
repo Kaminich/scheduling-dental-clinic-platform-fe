@@ -6,9 +6,10 @@ import { changeTabTitle } from "../../utils/changeTabTitle";
 import { Color, Shadow } from "../../styles/styles";
 import useReports from "../../hooks/useReports";
 import Loading from "../../components/loading";
-import ReportApproveModal from "../../components/modal/report_approve";
-import ReportResponse from "../../types/ReportResponse";
+import ReportResponse, { initialReportResponse } from "../../types/ReportResponse";
 import ApiClient from "../../services/apiClient";
+import ApproveModal from "../../components/modal/approve";
+import ReportDetailModal from "../../components/modal/report_detail";
 
 const ReportSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -17,11 +18,13 @@ const ReportSettingsPage = () => {
     const [id, setId] = useState<number>(0);
     const { data, isLoading } = useReports();
     const { isOpen: isOpenApprove, onClose: OnCloseApprove, onOpen: onOpenApprove } = useDisclosure();
+    const { isOpen: isOpenDetail, onClose: OnCloseDetail, onOpen: onOpenDetail } = useDisclosure();
     const [reports, setReports] = useState<ReportResponse[]>([]);
+    const [report, setReport] = useState<ReportResponse>(initialReportResponse);
     const toast = useToast();
 
     let filteredReports = reports.filter((report) => {
-        return report.reportReason.toLowerCase().includes(keyword.toLowerCase())
+        return report.branchName.toLowerCase().includes(keyword.toLowerCase())
     })
 
     const handleApprove = async () => {
@@ -119,7 +122,7 @@ const ReportSettingsPage = () => {
                 <Input
                     ref={ref}
                     borderRadius={20}
-                    placeholder="Search report reason..."
+                    placeholder="Search branch..."
                     variant="filled"
                     border='1px solid gainsboro'
                     onChange={(e) => {
@@ -141,9 +144,9 @@ const ReportSettingsPage = () => {
                             <Thead>
                                 <Tr>
                                     <Th textAlign='center' borderColor={'gainsboro'}>ID</Th>
-                                    <Th textAlign='center' borderColor={'gainsboro'}>Clinic Name</Th>
-                                    <Th textAlign='center' borderColor={'gainsboro'}>Owner</Th>
-                                    <Th textAlign='center' borderColor={'gainsboro'}>Status</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Branch</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Reported Customer</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Created Date</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Action</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'} minW={120}>Approve or Denied</Th>
                                 </Tr>
@@ -155,14 +158,10 @@ const ReportSettingsPage = () => {
                                             <>
                                                 {filteredReports.map((report) => (
                                                     <Tr _hover={{ bg: 'gray.100' }}>
-                                                        <Td textAlign="center" borderColor={'gainsboro'}>{'clinic.clinicId'}</Td>
-                                                        <Td textAlign="center" borderColor={'gainsboro'}>{'clinic.clinicName'}</Td>
-                                                        <Td textAlign='center' borderColor={'gainsboro'}>{'clinic.ownerName clinic.ownerName clinic.ownerName'}</Td>
-                                                        <Td textAlign='center' borderColor={'gainsboro'}>
-                                                            {/* <Tag size={'md'} variant='subtle' colorScheme='yellow'>
-                                                                <TagLabel>PENDING</TagLabel>
-                                                            </Tag>  */}
-                                                        </Td>
+                                                        <Td textAlign="center" borderColor={'gainsboro'}>{report.reportId}</Td>
+                                                        <Td textAlign="center" borderColor={'gainsboro'}>{`${report.branchName} (${report.city})`}</Td>
+                                                        <Td textAlign='center' borderColor={'gainsboro'}>{report.reportedCustomer}</Td>
+                                                        <Td textAlign='center' borderColor={'gainsboro'}>{report.createdDateTime}</Td>
                                                         <Td
                                                             p={1}
                                                             textAlign='center'
@@ -174,9 +173,12 @@ const ReportSettingsPage = () => {
                                                                 px={3}
                                                                 colorScheme="blue"
                                                                 variant='ghost'
-
+                                                                onClick={() => {
+                                                                    setReport(report);
+                                                                    onOpenDetail();
+                                                                }}
                                                             >
-                                                                <Tooltip label='Show user information'>
+                                                                <Tooltip label='Show report detail'>
                                                                     <span>
                                                                         <FaEye />
                                                                     </span>
@@ -247,11 +249,17 @@ const ReportSettingsPage = () => {
                     </TableContainer>
                 </Card >
             </Stack >
-            <ReportApproveModal
+            <ApproveModal
                 isOpen={isOpenApprove}
                 onClose={OnCloseApprove}
                 approve={approve}
+                type="report"
                 handleApprove={handleApprove}
+            />
+            <ReportDetailModal
+                isOpen={isOpenDetail}
+                onClose={OnCloseDetail}
+                report={report}
             />
         </Stack >
     )

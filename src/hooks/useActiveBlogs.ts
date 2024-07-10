@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import ApiClient from "../services/apiClient";
 
-const useAppointment = () => {
-    const api = new ApiClient<any>('/appointment/branch');
+const useActiveBlogs = () => {
+    const api = new ApiClient<any>('/blog/active');
     return useQuery({
-        queryKey: ["getAppointmentBranch"],
+        queryKey: ["getActiveBlogs"],
         queryFn: () =>
-            api.getAuthen()
+            api.getUnauthen()
                 .then((data) => {
                     return data.data;
                 })
     });
 };
 
-export default useAppointment;
+export default useActiveBlogs;

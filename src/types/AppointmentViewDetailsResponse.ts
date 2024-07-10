@@ -1,7 +1,7 @@
-import BranchSummaryResponse from "./BranchSummaryResponse";
-import DentistViewListResponse from "./DentistViewListResponse";
-import ServiceViewListResponse from "./ServiceViewListResponse";
-import SlotDetailsResponse from "./SlotDetailResponse";
+import BranchSummaryResponse, { initialBranchSummaryResponse } from "./BranchSummaryResponse";
+import DentistViewListResponse, { initialDentistViewListResponse } from "./DentistViewListResponse";
+import ServiceViewListResponse, { initialServiceViewListResponse } from "./ServiceViewListResponse";
+import SlotDetailsResponse, { initialSlotDetailsResponse } from "./SlotDetailResponse";
 
 export default interface AppointmentViewDetailsResponse {
     appointmentId: number;
@@ -21,4 +21,23 @@ export default interface AppointmentViewDetailsResponse {
     service: ServiceViewListResponse;
     createdDate: string;
 }
+
+export const initialAppointmentViewDetailsResponse: AppointmentViewDetailsResponse = {
+    appointmentId: 0,
+    appointmentStatus: '',
+    customerId: 0,
+    customerName: '',
+    customerAddress: '',
+    customerPhone: '',
+    dob: '',
+    customerAge: 0,
+    customerEmail: '',
+    appointmentDate: '',
+    duration: 0,
+    slot: initialSlotDetailsResponse,
+    clinicBranch: initialBranchSummaryResponse,
+    dentist: initialDentistViewListResponse,
+    service: initialServiceViewListResponse,
+    createdDate: ''
+};
 

@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import ApiClient from "../services/apiClient";
 
-const useBlogs = () => {
-    const api = new ApiClient<any>('/blog');
+const useCustomerAppointment = () => {
+    const api = new ApiClient<any>('/appointment');
     return useQuery({
-        queryKey: ["getBlogs"],
+        queryKey: ["getCustomerAppointment"],
         queryFn: () =>
             api.getAuthen()
                 .then((data) => {
@@ -13,4 +13,4 @@ const useBlogs = () => {
     });
 };
 
-export default useBlogs;
+export default useCustomerAppointment;

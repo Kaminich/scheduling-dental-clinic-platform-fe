@@ -7,7 +7,6 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
 import { Color, Shadow } from "../../../styles/styles";
 import { AddIcon } from "@chakra-ui/icons";
-import useBlogs from "../../../hooks/useBlogs";
 import BlogListResponse from "../../../types/BlogListResponse";
 import Loading from "../../../components/loading";
 import { Status } from "../../../types/type.enum";
@@ -16,6 +15,8 @@ import { formatDate } from "../../../utils/formatDate";
 import ApiClient from "../../../services/apiClient";
 import DeleteModal from "../../../components/modal/delete";
 import ActivateModal from "../../../components/modal/activate";
+import useAllBlogs from "../../../hooks/useAllBlogs";
+import BlogDetailResponse from "../../../types/BlogDetailResponse";
 
 const ManageBlogPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -23,8 +24,8 @@ const ManageBlogPage = () => {
     const [keyword, setKeyword] = useState<string>('');
     const [id, setId] = useState<number>(0);
     const { role } = useAuth();
-    const { data, isLoading, refetch } = useBlogs();
-    const [blogs, setBlogs] = useState<BlogListResponse[]>([]);
+    const { data, isLoading, refetch } = useAllBlogs();
+    const [blogs, setBlogs] = useState<BlogDetailResponse[]>([]);
     const { isOpen: isOpenDeactivate, onClose: onCloseDeactivate, onOpen: onOpenDeactivate } = useDisclosure();
     const { isOpen: isOpenActivate, onClose: onCloseActivate, onOpen: onOpenActivate } = useDisclosure();
     const toast = useToast();
