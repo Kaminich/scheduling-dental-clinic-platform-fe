@@ -7,7 +7,6 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
 import { Color, Shadow } from "../../../styles/styles";
 import { AddIcon } from "@chakra-ui/icons";
-import BlogListResponse from "../../../types/BlogListResponse";
 import Loading from "../../../components/loading";
 import { Status } from "../../../types/type.enum";
 import { formatDateTime } from "../../../utils/formatDateTime";
@@ -17,6 +16,8 @@ import DeleteModal from "../../../components/modal/delete";
 import ActivateModal from "../../../components/modal/activate";
 import useAllBlogs from "../../../hooks/useAllBlogs";
 import BlogDetailResponse from "../../../types/BlogDetailResponse";
+import useUserProfile from "../../../hooks/useUserProfile";
+import useBlogByClinicId from "../../../hooks/useBlogByClinicId";
 
 const ManageBlogPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -24,7 +25,9 @@ const ManageBlogPage = () => {
     const [keyword, setKeyword] = useState<string>('');
     const [id, setId] = useState<number>(0);
     const { role } = useAuth();
-    const { data, isLoading, refetch } = useAllBlogs();
+    const { data: userData } = useUserProfile();
+    const { data: blogData, isLoading: isLoadingBlog, refetch: refetchBlog } = useBlogByClinicId({ clinicId: userData?.clinicId });
+    const { data: allData, isLoading: isLoadingAll, refetch: refetchAll } = useAllBlogs();
     const [blogs, setBlogs] = useState<BlogDetailResponse[]>([]);
     const { isOpen: isOpenDeactivate, onClose: onCloseDeactivate, onOpen: onOpenDeactivate } = useDisclosure();
     const { isOpen: isOpenActivate, onClose: onCloseActivate, onOpen: onOpenActivate } = useDisclosure();
@@ -47,7 +50,8 @@ const ManageBlogPage = () => {
                     position: 'top',
                     isClosable: true,
                 });
-                refetch && refetch();
+                refetchAll && refetchAll();
+                refetchBlog && refetchBlog();
             } else {
                 toast({
                     title: "Error",
@@ -87,7 +91,8 @@ const ManageBlogPage = () => {
                     position: 'top',
                     isClosable: true,
                 });
-                refetch && refetch();
+                refetchAll && refetchAll();
+                refetchBlog && refetchBlog();
             } else {
                 toast({
                     title: "Error",
@@ -113,16 +118,22 @@ const ManageBlogPage = () => {
     }
 
     useEffect(() => {
-        changeTabTitle('Manage Blog');
+        if (role === 'Owner') {
+            changeTabTitle('Blogs Settings');
+        } else {
+            changeTabTitle('Manage Blog');
+        }
     }, []);
 
     useEffect(() => {
-        if (data?.content) {
-            setBlogs(data.content)
+        if (allData && role === 'Admin') {
+            setBlogs(allData.content)
+        } else if (blogData && role === 'Owner') {
+            setBlogs(blogData.content)
         }
-    }, [data?.content]);
+    }, [allData, blogData]);
 
-    console.log(data);
+    console.log(blogData);
 
 
     return (
@@ -167,7 +178,7 @@ const ManageBlogPage = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {!isLoading ? (
+                                {!isLoadingAll || !isLoadingBlog ? (
                                     <>
                                         {filteredBlogs.length !== 0 ? (
                                             <>
@@ -272,7 +283,7 @@ const ManageBlogPage = () => {
                                         ) : (
                                             <Tr>
                                                 <Td colSpan={8} textAlign="center">
-                                                    No pending blog
+                                                    No blog
                                                 </Td>
                                             </Tr>
                                         )}

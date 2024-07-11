@@ -105,7 +105,7 @@ const AppointmentPage = () => {
                                                                         <FormControl id="dob" flex={1}>
                                                                             <FormLabel ml={1}>Date of Birth</FormLabel>
                                                                             <Input
-                                                                                value={appointment.customerAge}
+                                                                                value={appointment.dob}
                                                                                 readOnly
                                                                             />
                                                                         </FormControl>
@@ -215,7 +215,10 @@ const AppointmentPage = () => {
                                                             }}>
                                                                 Appointment Detail
                                                             </Button>
-                                                            <Button onClick={onOpenFeedback}>
+                                                            <Button onClick={() => {
+                                                                setId(appointment.appointmentId);
+                                                                onOpenFeedback();
+                                                            }}>
                                                                 Give Rating and Feedback
                                                             </Button>
                                                         </HStack>
@@ -254,6 +257,7 @@ const AppointmentPage = () => {
                         <FeedbackFormModal
                             isOpen={isOpenFeedback}
                             onClose={onCloseFeedback}
+                            branchclinicId={id}
                         />
                     </TabPanel>
                 </TabPanels>

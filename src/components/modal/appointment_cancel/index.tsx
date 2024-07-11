@@ -24,7 +24,7 @@ const AppointmentCancelModal = ({ isOpen, onClose, type, id, refetch }: Props) =
                 cancelReason: reason
             }
             try {
-                const response = await api.delete(id);
+                const response = await api.create(data);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -64,8 +64,8 @@ const AppointmentCancelModal = ({ isOpen, onClose, type, id, refetch }: Props) =
             <ModalContent>
                 <ModalHeader fontSize='xl'>Cancel Appointment</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
-                    <Text fontSize='lg'>Why you want to cancel appointment?</Text>
+                <ModalBody py={6} borderY={Border.tableBorder}>
+                    <Text fontSize='lg' mb={5}>Why you want to cancel appointment?</Text>
                     <FormControl id="cancelReason" flex={2} isRequired>
                         <Textarea
                             value={reason}
@@ -81,7 +81,7 @@ const AppointmentCancelModal = ({ isOpen, onClose, type, id, refetch }: Props) =
                 </ModalBody>
                 <ModalFooter>
                     <Button colorScheme='red' mr={3} onClick={handleCancel}>
-                        Cancel
+                        Confirm
                     </Button>
                     <Button onClick={onClose}>Cancel</Button>
                 </ModalFooter>

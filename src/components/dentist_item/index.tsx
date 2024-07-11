@@ -1,11 +1,9 @@
 import { Avatar, Card, CardBody, HStack, Heading, Image, Stack, Text, Tooltip } from "@chakra-ui/react"
 import { FaMapLocationDot, FaTooth } from "react-icons/fa6";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Border, Color, Shadow } from "../../styles/styles";
-import { useAuth } from "../../hooks/useAuth";
 import DentistListResponse from "../../types/DentistListResponse";
-import DentistDetailResponse, { initialDentistDetailResponse } from "../../types/DentistDetailResponse";
 
 interface Props {
     type: number;
@@ -14,13 +12,16 @@ interface Props {
 
 const DentistItem = ({ type, data }: Props) => {
     const [dentists, setDentists] = useState<DentistListResponse[]>([]);
-    const [dentist, setDentist] = useState<DentistDetailResponse>(initialDentistDetailResponse);
-    const { role } = useAuth();
     const navigate = useNavigate();
 
     const navigateToDentistDetail = (name: string) => {
         const hyphenatedName = name.replace(/ /g, '-');
         navigate(`/dentists/${hyphenatedName}`);
+    };
+
+    const navigateToDentalDetail = (name: string) => {
+        const hyphenatedName = name.replace(/ /g, '-');
+        navigate(`/dentals/${hyphenatedName}`);
     };
 
     useEffect(() => {
@@ -66,14 +67,18 @@ const DentistItem = ({ type, data }: Props) => {
                                 </Stack>
                                 <Stack mx={3} mt={1}>
                                     <HStack>
-                                        <Tooltip label='Dental'>
+                                        <Tooltip label='Clinic'>
                                             <span>
                                                 <FaMapLocationDot />
                                             </span>
                                         </Tooltip>
-                                        <Link to={'/dental-detail'}>
-                                            <Text _hover={{ color: Color.hoverBlue }}>{dentist.clinicName}</Text>
-                                        </Link>
+                                        <Text
+                                            cursor={'pointer'}
+                                            _hover={{ color: Color.hoverBlue }}
+                                            onClick={() => navigateToDentalDetail(dentist.clinicName)}
+                                        >
+                                            {dentist.clinicName}
+                                        </Text>
                                     </HStack>
                                 </Stack>
                             </CardBody>
@@ -81,40 +86,46 @@ const DentistItem = ({ type, data }: Props) => {
                     ))}
                 </>
             ) : (
-                <Card maxW='sm' shadow={Shadow.cardShadow}>
-                    <Link to={'/dentist-detail'}>
-                        <CardBody pb={4}>
-                            <Stack align={'center'}>
-                                <Image
-                                    src={dentist.avatar || 'https://bit.ly/sage-adebayo'}
-                                    alt='Dentist image'
-                                    borderRadius='lg'
-                                />
-                                <Heading
-                                    size='md'
-                                    py={2}
-                                    pb={0}
-                                    _hover={{ color: Color.hoverBlue }}
-                                >
-                                    {dentist.fullName}
-                                </Heading>
-                                <Text fontSize={18}>Dentist</Text>
-                            </Stack>
-                            <Stack mx={3} mt={1}>
-                                <HStack>
-                                    <Tooltip label='Dental'>
-                                        <span>
-                                            <FaMapLocationDot />
-                                        </span>
-                                    </Tooltip>
-                                    <Text>{`${dentist.branchName} (${dentist.city})`}</Text>
-                                </HStack>
-                            </Stack>
-                        </CardBody>
-                    </Link>
-                </Card>
+                <>
+                    {dentists.map((dentist) => (
+                        <Card
+                            maxW='sm'
+                            shadow={Shadow.cardShadow}
+                            cursor={'pointer'}
+                            onClick={() => navigateToDentistDetail(dentist.fullName)}
+                        >
+                            <CardBody pb={4}>
+                                <Stack align={'center'}>
+                                    <Image
+                                        src={dentist.avatar || 'https://bit.ly/sage-adebayo'}
+                                        alt='Dentist image'
+                                        borderRadius='lg'
+                                    />
+                                    <Heading
+                                        size='md'
+                                        py={2}
+                                        pb={0}
+                                        _hover={{ color: Color.hoverBlue }}
+                                    >
+                                        {dentist.fullName}
+                                    </Heading>
+                                    <Text fontSize={18}>Dentist</Text>
+                                </Stack>
+                                <Stack mx={3} mt={1}>
+                                    <HStack>
+                                        <Tooltip label='Dental'>
+                                            <span>
+                                                <FaMapLocationDot />
+                                            </span>
+                                        </Tooltip>
+                                        <Text>{`${dentist.branchName} (${dentist.city})`}</Text>
+                                    </HStack>
+                                </Stack>
+                            </CardBody>
+                        </Card>
+                    ))}
+                </>
             )}
-
         </>
     )
 }

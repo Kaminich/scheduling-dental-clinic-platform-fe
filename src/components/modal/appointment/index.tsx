@@ -97,6 +97,7 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
             customerAddress: address,
             customerPhone: phone,
             customerDob: dob,
+            customerGender: gender,
             customerEmail: email,
             appointmentDate: date,
             slotId,
@@ -335,24 +336,32 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                                     min={today}
                                                     value={date}
                                                     onChange={(e) => setDate(e.target.value)}
-                                                    disabled={!clinicBranchId}
                                                 />
                                             </FormControl>
                                             <FormControl id="slot" flex={1}>
                                                 <FormLabel ml={1}>Slot</FormLabel>
-                                                <Select
-                                                    name="slot"
-                                                    value={slotId}
-                                                    onChange={(e) => setSlotId(parseInt(e.target.value))}
-                                                    placeholder={'Select slot'}
-                                                    disabled={!clinicBranchId || date === ''}
-                                                >
-                                                    {slot.slots.map((slot) => (
-                                                        <option key={slot.slotId} value={slot.slotId}>
-                                                            {slot.startTime} - {slot.endTime}
-                                                        </option>
-                                                    ))}
-                                                </Select>
+                                                {(!clinicBranchId || date === '') && dentistData === undefined ? (
+                                                    <Tooltip label={'Select date and clinic branch to choose'}>
+                                                        <Select
+                                                            placeholder={'Select slot'}
+                                                            borderColor={'gray.400'}
+                                                            disabled
+                                                        />
+                                                    </Tooltip>
+                                                ) : (
+                                                    <Select
+                                                        name="slot"
+                                                        value={slotId}
+                                                        onChange={(e) => setSlotId(parseInt(e.target.value))}
+                                                        placeholder={'Select slot'}
+                                                    >
+                                                        {slot.slots.map((slot) => (
+                                                            <option key={slot.slotId} value={slot.slotId}>
+                                                                {slot.startTime} - {slot.endTime}
+                                                            </option>
+                                                        ))}
+                                                    </Select>
+                                                )}
                                             </FormControl>
                                         </HStack>
                                         <FormControl id="dentist" flex={1.5}>

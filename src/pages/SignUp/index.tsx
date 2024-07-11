@@ -124,7 +124,7 @@ const SignUpPage = () => {
                         <Logo />
                     </Link>
                 </Box>
-                <Stack maxW={'md'} gap={1} m={'auto'} mt={8}>
+                <Stack maxW={'lg'} gap={1} m={'auto'} mt={8}>
                     <Heading
                         fontSize={"2xl"}
                         textAlign={'center'}
@@ -139,6 +139,7 @@ const SignUpPage = () => {
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
+                                placeholder="Username"
                                 required
                             />
                         </FormControl>
@@ -148,7 +149,7 @@ const SignUpPage = () => {
                                 name="gender"
                                 value={gender}
                                 onChange={(e) => setGender(e.target.value)}
-                                placeholder={'Select gender'}
+                                placeholder={'Gender'}
                             >
                                 <option value="Male">
                                     Male
@@ -169,6 +170,7 @@ const SignUpPage = () => {
                                 type="text"
                                 value={fullName}
                                 onChange={(e) => setFullName(e.target.value)}
+                                placeholder="Full Name"
                                 required
                             />
                         </FormControl>
@@ -189,6 +191,7 @@ const SignUpPage = () => {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Email"
                                 required
                             />
                         </FormControl>
@@ -198,6 +201,7 @@ const SignUpPage = () => {
                                 type="tel"
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
+                                placeholder="Phone"
                                 required
                             />
                         </FormControl>
@@ -208,6 +212,7 @@ const SignUpPage = () => {
                             type="text"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
+                            placeholder="Address"
                             required
                         />
                     </FormControl>
@@ -218,6 +223,7 @@ const SignUpPage = () => {
                                 type={showPass ? 'text' : 'password'}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Password"
                                 required
                             />
                             <InputRightElement width='3.5rem' cursor='pointer' onClick={() => setShowPass(!showPass)}>
@@ -232,6 +238,7 @@ const SignUpPage = () => {
                                 type={showConfirmPass ? 'text' : 'password'}
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
+                                placeholder="Confirm Password"
                                 required
                             />
                             <InputRightElement width='3.5rem' cursor='pointer' onClick={() => setShowConfirmPass(!showConfirmPass)}>

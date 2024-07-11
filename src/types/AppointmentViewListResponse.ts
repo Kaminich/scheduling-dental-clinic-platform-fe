@@ -5,4 +5,5 @@ export default interface AppointmentViewListResponse {
     appointmentDate: string;
     createdDate: string;
     appointmentStatus: AppointmentStatus;
+    clinicBranchId: number;
 }

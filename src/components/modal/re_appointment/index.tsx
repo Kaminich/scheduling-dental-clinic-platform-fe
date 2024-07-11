@@ -1,55 +1,27 @@
-import { Button, FormControl, FormLabel, HStack, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, useToast } from "@chakra-ui/react"
+import { Button, FormControl, FormLabel, HStack, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, Tooltip, useToast } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import Loading from "../../loading";
 import useAppointmentDetail from "../../../hooks/useAppoinmentDetail";
 import AppointmentViewDetailsResponse, { initialAppointmentViewDetailsResponse } from "../../../types/AppointmentViewDetailsResponse";
 import ApiClient from "../../../services/apiClient";
-import ServiceViewListResponse from "../../../types/ServiceViewListResponse";
 import WorkingHoursDetailsResponse, { initialWorkingHoursDetailsResponse } from "../../../types/WorkingHoursDetailsResponse";
 import { today } from "../appointment";
-import DentistViewListResponse from "../../../types/DentistViewListResponse";
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
     id: number;
+    followUpDate: string
 }
 
-const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
-    const [serviceId, setServiceId] = useState<number>(0);
+const ReAppointmentModal = ({ isOpen, onClose, id, followUpDate }: Props) => {
     const [date, setDate] = useState<string>('');
-    const [dentistId, setDentistId] = useState<number>(0);
     const [slotId, setSlotId] = useState<number>(0);
     const toast = useToast();
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [services, setServices] = useState<ServiceViewListResponse[]>([]);
     const [slot, setSlot] = useState<WorkingHoursDetailsResponse>(initialWorkingHoursDetailsResponse);
-    const [dentists, setDentists] = useState<DentistViewListResponse[]>([]);
     const { data: appointmentData, refetch } = useAppointmentDetail({ appointmentId: id });
     const [appointment, setAppointment] = useState<AppointmentViewDetailsResponse>(initialAppointmentViewDetailsResponse);
-
-    const getAppointmentDetail = () => {
-        setServiceId(appointment.service.id);
-        setDate(appointment.appointmentDate);
-        setDentistId(appointment.dentist.dentistId);
-        setSlotId(appointment.slot.slotId)
-    }
-
-    const getServiceByClinicId = async () => {
-        const api = new ApiClient<any>('service');
-        try {
-            const response = await api.getUnauthen({
-                params: {
-                    clinicId: appointment.service.clinicId
-                }
-            });
-            if (response.success) {
-                setServices(response.data);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     const getAvailableSlot = async () => {
         const api = new ApiClient<any>('/slot/available-by-date-updating');
@@ -71,32 +43,10 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
         }
     }
 
-    const getAvailableDentist = async () => {
-        const api = new ApiClient<any>('/dentists/available-updating');
-        try {
-            const response = await api.getUnauthen({
-                params: {
-                    appointmentId: id,
-                    branchId: appointment.clinicBranch.branchId,
-                    date,
-                    slotId
-                }
-            });
-            if (response.success) {
-                setDentists(response.data);
-            } else {
-                console.log(response.message);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const handleUpdateAppointment = async () => {
         setIsLoading(true);
         const api = new ApiClient<any>('/appointment');
         const data = {
-            appointmentId: id,
             customerName: appointment.customerName,
             customerAddress: appointment.customerAddress,
             customerPhone: appointment.customerPhone,
@@ -105,12 +55,12 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
             customerEmail: appointment.customerEmail,
             appointmentDate: date,
             slotId,
-            dentistId: dentistId,
-            serviceId,
+            dentistId: appointment.dentist.dentistId,
+            serviceId: appointment.service.id,
         }
 
         try {
-            const response = await api.update(data);
+            const response = await api.create(data);
             console.log(response);
             if (response.success) {
                 toast({
@@ -154,17 +104,8 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
     }, [appointmentData])
 
     useEffect(() => {
-        getAppointmentDetail();
-        getServiceByClinicId();
-    }, [appointment])
-
-    useEffect(() => {
         getAvailableSlot();
     }, [id, date])
-
-    useEffect(() => {
-        getAvailableDentist();
-    }, [id, date, slotId])
 
     return (
         <Modal
@@ -178,7 +119,7 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
             <ModalOverlay />
             {!isLoading ? (
                 <ModalContent>
-                    <ModalHeader textAlign={'center'}>Update Appointment</ModalHeader>
+                    <ModalHeader textAlign={'center'}>Re-Appointment</ModalHeader>
                     <ModalCloseButton borderRadius={'full'} />
                     <ModalBody maxH={'xl'} overflowY={'auto'} mx={5}>
                         <Stack gap={4}>
@@ -246,66 +187,60 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
                                     </FormControl>
                                     <FormControl id="service" flex={1}>
                                         <FormLabel ml={1}>Service</FormLabel>
-                                        <Select
-                                            name="service"
-                                            value={serviceId}
-                                            onChange={(e) => setServiceId(parseInt(e.target.value))}
-                                            placeholder={'Select service'}
-                                        >
-                                            {services.map((service) => (
-                                                <option key={service.id} value={service.id}>
-                                                    {service.serviceName}
-                                                </option>
-                                            ))}
-                                        </Select>
+                                        <Input
+                                            value={appointment.service.serviceName}
+                                            readOnly
+                                        />
                                     </FormControl>
                                     <HStack>
                                         <FormControl id="date" flex={1}>
                                             <FormLabel ml={1}>Date</FormLabel>
                                             <Input
                                                 type="date"
-                                                min={today}
+                                                min={followUpDate > today ? followUpDate : today}
                                                 value={date}
                                                 onChange={(e) => setDate(e.target.value)}
                                             />
                                         </FormControl>
                                         <FormControl id="slot" flex={1}>
                                             <FormLabel ml={1}>Slot</FormLabel>
-                                            <Select
-                                                name="slot"
-                                                value={slotId}
-                                                onChange={(e) => setSlotId(parseInt(e.target.value))}
-                                                placeholder={'Select slot'}
-                                            >
-                                                {slot.slots.map((slot) => (
-                                                    <option key={slot.slotId} value={slot.slotId}>
-                                                        {slot.startTime} - {slot.endTime}
-                                                    </option>
-                                                ))}
-                                            </Select>
+                                            {date === '' ? (
+                                                <Tooltip label={'Select date to choose'}>
+                                                    <Select
+                                                        placeholder={'Select slot'}
+                                                        borderColor={'gray.400'}
+                                                        disabled
+                                                    />
+                                                </Tooltip>
+                                            ) : (
+                                                <Select
+                                                    name="slot"
+                                                    value={slotId}
+                                                    onChange={(e) => setSlotId(parseInt(e.target.value))}
+                                                    placeholder={'Select slot'}
+                                                >
+                                                    {slot.slots.map((slot) => (
+                                                        <option key={slot.slotId} value={slot.slotId}>
+                                                            {slot.startTime} - {slot.endTime}
+                                                        </option>
+                                                    ))}
+                                                </Select>
+                                            )}
                                         </FormControl>
                                     </HStack>
                                     <FormControl id="dentist" flex={1.5}>
                                         <FormLabel ml={1}>Dentist</FormLabel>
-                                        <Select
-                                            name="dentist"
-                                            placeholder={'Select dentist'}
-                                            value={dentistId}
-                                            onChange={(e) => setDentistId(parseInt(e.target.value))}
-                                        >
-                                            {dentists.map((dentist) => (
-                                                <option key={dentist.dentistId} value={dentist.dentistId}>
-                                                    {dentist.dentistName}
-                                                </option>
-                                            ))}
-                                        </Select>
+                                        <Input
+                                            value={appointment.dentist.dentistName}
+                                            readOnly
+                                        />
                                     </FormControl>
                                 </Stack>
                             </HStack>
                         </Stack>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={handleUpdateAppointment}>Update</Button>
+                        <Button colorScheme='blue' mr={3} onClick={handleUpdateAppointment}>Confirm</Button>
                         <Button colorScheme='gray' mr={3} onClick={onClose}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
@@ -322,4 +257,4 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
     )
 }
 
-export default AppointmentUpdateModal
+export default ReAppointmentModal

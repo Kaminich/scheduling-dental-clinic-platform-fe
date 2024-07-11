@@ -41,12 +41,12 @@ const AppointmentDetailModal = ({ isOpen, onClose, id }: Props) => {
                                         </FormControl>
                                         <FormControl id="gender" flex={1}>
                                             <FormLabel ml={1}>Gender</FormLabel>
-                                            <Input value={appointment.customerName} readOnly />
+                                            <Input value={appointment.customerGender} readOnly />
                                         </FormControl>
                                     </HStack>
                                     <HStack>
-                                        <FormControl id="dob" flex={1}>
-                                            <FormLabel ml={1}>Date of Birth</FormLabel>
+                                        <FormControl id="age" flex={1}>
+                                            <FormLabel ml={1}>Age</FormLabel>
                                             <Input
                                                 value={appointment.customerAge}
                                                 readOnly

@@ -10,6 +10,7 @@ import ApiClient from "../../services/apiClient";
 import DentistCarousel from "../../components/carousel/dentist";
 import DentistDetailResponse, { initialDentistDetailResponse } from "../../types/DentistDetailResponse";
 import DentistListResponse from "../../types/DentistListResponse";
+import { FaCalendarDays } from "react-icons/fa6";
 
 const DentistDetailPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -143,7 +144,9 @@ const DentistDetailPage = () => {
                     </CardBody>
                     {(role !== 'Staff' && role !== 'Dentist') && (
                         <CardFooter>
-                            <Button colorScheme="green" onClick={onOpen}>Make Appointment</Button>
+                            <Button colorScheme={'green'} onClick={onOpen} gap={2}>
+                                <FaCalendarDays /> Make Appointment
+                            </Button>
                         </CardFooter>
                     )}
                 </Card>

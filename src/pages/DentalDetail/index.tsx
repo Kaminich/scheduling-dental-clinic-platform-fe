@@ -12,6 +12,7 @@ import ApiClient from "../../services/apiClient";
 import ClinicDetailResponse, { initialClinicDetailResponse } from "../../types/ClinicDetailResponse";
 import useActiveClinics from "../../hooks/useActiveClinics";
 import AppointmentModal from "../../components/modal/appointment";
+import { FaCalendarDays } from "react-icons/fa6";
 
 const DentalDetailPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -88,8 +89,10 @@ const DentalDetailPage = () => {
                 </Flex>
                 {(role !== 'Staff' && role !== 'Dentist') && (
                     <Flex justify={'center'} gap={4} mt={8}>
-                        <Button colorScheme={'blue'} variant={'outline'}>Chat with Dental</Button>
-                        <Button colorScheme={'green'} onClick={onOpen}>Make Appointment</Button>
+                        {/* <Button colorScheme={'blue'} variant={'outline'}>Chat with Dental</Button> */}
+                        <Button colorScheme={'green'} onClick={onOpen} gap={2}>
+                            <FaCalendarDays /> Make Appointment
+                        </Button>
                     </Flex>
                 )}
             </Flex>

@@ -1,94 +1,120 @@
-import { Card, CardBody, FormControl, FormLabel, HStack, Input, Stack, Text } from "@chakra-ui/react"
+import { Button, Card, CardBody, CardHeader, FormControl, FormLabel, HStack, Input, Stack, Textarea, Tooltip, useDisclosure } from "@chakra-ui/react"
 import { Shadow } from "../../styles/styles"
-import { useEffect } from "react";
-import { today } from "../../components/modal/appointment";
+import { useEffect, useState } from "react";
 import { changeTabTitle } from "../../utils/changeTabTitle";
+import useUserProfile from "../../hooks/useUserProfile";
+import useCustomerMedicalRecord from "../../hooks/useCustomerMedicalRecord";
+import TreatmentOutcomeResponse from "../../types/TreatmentOutcomeResponse";
+import { formatDate } from "../../utils/formatDate";
+import { FaCalendarDays } from "react-icons/fa6";
+import ReAppointmentModal from "../../components/modal/re_appointment";
 
 const MedicalRecordPage = () => {
+    const { data: userData } = useUserProfile();
+    const { data: medicalData } = useCustomerMedicalRecord({ username: userData?.username });
+    const [treatments, setTreatments] = useState<TreatmentOutcomeResponse[]>([]);
+    const [id, setId] = useState<number>(0);
+    const [followUpDate, setFollowUpDate] = useState<string>('');
+    const { isOpen: isOpenAppointment, onClose: onCloseAppointment, onOpen: onOpenAppointment } = useDisclosure();
+
+    console.log(medicalData);
+
 
     useEffect(() => {
         changeTabTitle('Medical Record');
     }, []);
+
+    useEffect(() => {
+        if (medicalData) {
+            setTreatments(medicalData);
+        }
+    }, [medicalData]);
+
     return (
         <Stack maxW={'7xl'} mx={'auto'} my={10}>
-            <Card shadow={Shadow.cardShadow} w={'xl'}>
-                <CardBody shadow={Shadow.cardShadow} py={7} px={8}>
-                    <Stack gap={5}>
-                        <Text>Appointment ID: </Text>
-                        <FormControl id="fullname" flex={2.5}>
-                            <FormLabel ml={1}>Full Name</FormLabel>
-                            <Input value={'fullname'} />
-                        </FormControl>
-                        <HStack>
-                            <FormControl id="gender" flex={1}>
-                                <FormLabel ml={1}>Gender</FormLabel>
-                                <Input value={'Male'} />
-                            </FormControl>
-                            <FormControl id="age" flex={0.6}>
-                                <FormLabel ml={1}>Age</FormLabel>
-                                <Input value={10} />
-                            </FormControl>
-                            {/* <FormControl id="phone" flex={1.5}>
-                        <FormLabel ml={1} pl={1}>Phone number</FormLabel>
-                        <Input
-                            type="tel"
-                            value={isPersonal ? '0912345678' : phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            required
-                            readOnly={isPersonal}
-                            placeholder="Enter phone number"
-                        />
-                    </FormControl> */}
+            {treatments.map((treatment) => (
+                <Card shadow={Shadow.cardShadow} w={'xl'}>
+                    <CardHeader mb={-5}>
+                        <HStack gap={0} justify={'flex-end'}>
+                            <Button
+                                borderRadius={'full'}
+                                px={3}
+                                colorScheme="blue"
+                                variant={'ghost'}
+                                onClick={() => {
+                                    setId(treatment.appointmentId);
+                                    setFollowUpDate(treatment.followUpDate)
+                                    onOpenAppointment();
+                                }}
+                            >
+                                <Tooltip label={'Make re-appointment'}>
+                                    <span>
+                                        <FaCalendarDays />
+                                    </span>
+                                </Tooltip>
+                            </Button>
                         </HStack>
-                        {/* <FormControl id="email" flex={2}>
-                    <FormLabel ml={1}>Email</FormLabel>
-                    <Input
-                        type="email"
-                        value={isPersonal ? 'email' : email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        readOnly={isPersonal}
-                        placeholder="Enter email"
-                    />
-                </FormControl> */}
-                        {/* <FormControl id="address" flex={2}> */}
-                        {/* <FormLabel ml={1}>Address</FormLabel>
-                    <Input
-                        type="text"
-                        value={isPersonal ? 'address' : address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        readOnly={isPersonal}
-                        placeholder="Enter Address"
-                    /> */}
-                        {/* </FormControl> */}
-                        <FormControl id="dental" flex={1.5}>
-                            <FormLabel ml={1}>Dental</FormLabel>
-                            <Input
-                                type="text"
-                                value={'dentalData.name'}
-                                readOnly
-                            />
-                        </FormControl>
-                        <FormControl id="location" flex={2}>
-                            <FormLabel ml={1}>Location</FormLabel>
-                            <Input value={'locationData.name'} readOnly />
-                        </FormControl>
-                        <HStack>
-                            <FormControl id="date" flex={1}>
-                                <FormLabel ml={1}>Date</FormLabel>
-                                <Input type="date" value={today} />
+                    </CardHeader>
+                    <CardBody py={7} px={8}>
+                        <Stack gap={5}>
+                            <HStack>
+                                <FormControl id="fullname" flex={2}>
+                                    <FormLabel ml={1}>Full Name</FormLabel>
+                                    <Input value={'fullname'} />
+                                </FormControl>
+                                <FormControl id="followUpDate" flex={1}>
+                                    <FormLabel ml={1}>Follow-up Date</FormLabel>
+                                    <Input
+                                        value={formatDate(treatment.followUpDate)}
+                                        readOnly
+                                    />
+                                </FormControl>
+                            </HStack>
+                            <FormControl id="diagnosis" flex={1.5}>
+                                <FormLabel ml={1} pl={1}>Diagnosis</FormLabel>
+                                <Input
+                                    value={treatment.diagnosis}
+                                    readOnly
+                                />
                             </FormControl>
-                            <FormControl id="time" flex={2.5}>
-                                <FormLabel ml={1}>Time</FormLabel>
-                                <Input value={'locationData.name'} readOnly />
+                            <FormControl id="prescription" flex={1.5}>
+                                <FormLabel ml={1}>Prescription</FormLabel>
+                                <Input
+                                    value={treatment.prescription}
+                                    readOnly
+                                />
                             </FormControl>
-                        </HStack>
-                        <FormControl id="dentist">
-                            <FormLabel ml={1}>Dentist</FormLabel>
-                            <Input value={'dentistData.name'} readOnly />
-                        </FormControl>
-                    </Stack>
-                </CardBody>
-            </Card>
+                            <FormControl id="recommendation" flex={1}>
+                                <FormLabel ml={1}>Recommendation</FormLabel>
+                                <Textarea
+                                    value={treatment.recommendations}
+                                    focusBorderColor='#E2E8F0'
+                                    resize={'none'}
+                                    maxH={32}
+                                    minH={32}
+                                />
+                            </FormControl>
+                            <FormControl id="treatmentPlan">
+                                <FormLabel ml={1}>Treatment Plan</FormLabel>
+                                <Textarea
+                                    value={treatment.treatmentPlan}
+                                    focusBorderColor='#E2E8F0'
+                                    resize={'none'}
+                                    maxH={32}
+                                    minH={32}
+                                    required
+                                />
+                            </FormControl>
+                        </Stack>
+                    </CardBody>
+                </Card>
+            ))}
+            <ReAppointmentModal
+                isOpen={isOpenAppointment}
+                onClose={onCloseAppointment}
+                id={id}
+                followUpDate={followUpDate}
+            />
         </Stack>
     )
 }

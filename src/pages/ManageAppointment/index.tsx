@@ -11,7 +11,7 @@ import AppointmentDetailModal from "../../components/modal/appointment_detail";
 import { formatDateTime } from "../../utils/formatDateTime";
 import { AppointmentStatus } from "../../types/type.enum";
 import ApiClient from "../../services/apiClient";
-import DeleteModal from "../../components/modal/delete";
+import AppointmentCancelModal from "../../components/modal/appointment_cancel";
 
 const ManageAppointmentPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -234,11 +234,11 @@ const ManageAppointmentPage = () => {
                 onClose={onCloseDetail}
                 id={id}
             />
-            <DeleteModal
+            <AppointmentCancelModal
                 isOpen={isOpenCancel}
                 onClose={onCloseCancel}
-                type="appointment"
-                handleDeactivate={handleCancel}
+                id={id}
+                refetch={refetch}
             />
         </Stack>
     )

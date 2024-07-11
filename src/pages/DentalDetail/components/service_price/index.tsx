@@ -88,32 +88,6 @@ const ServicePrice = ({ clinicId }: Prop) => {
                                 ))}
                             </>
                         ))}
-
-                        <Tr borderBottom={Border.tableBorder}>
-                            <Th textTransform={'capitalize'}>X-ray Scan</Th>
-                        </Tr>
-                        <Tr borderBottom={Border.tableBorder}>
-                            <Td>X-ray Scan</Td>
-                            <Td
-                                borderStart={Border.tableBorder}
-                                borderEnd={Border.tableBorder}
-                                textAlign={'center'}
-                            >
-                                1
-                            </Td>
-                            <Td textAlign={'center'}>200.000 - 400.000</Td>
-                        </Tr>
-                        <Tr borderBottom={Border.tableBorder}>
-                            <Td>X-ray Scan</Td>
-                            <Td
-                                borderStart={Border.tableBorder}
-                                borderEnd={Border.tableBorder}
-                                textAlign={'center'}
-                            >
-                                1
-                            </Td>
-                            <Td textAlign={'center'}>200.000 - 400.000</Td>
-                        </Tr>
                     </Tbody>
                 </Table>
             </Card>

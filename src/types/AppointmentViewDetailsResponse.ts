@@ -11,6 +11,7 @@ export default interface AppointmentViewDetailsResponse {
     customerAddress: string;
     customerPhone: string;
     dob: string;
+    customerGender: string;
     customerAge: number;
     customerEmail: string;
     appointmentDate: string;
@@ -29,6 +30,7 @@ export const initialAppointmentViewDetailsResponse: AppointmentViewDetailsRespon
     customerName: '',
     customerAddress: '',
     customerPhone: '',
+    customerGender: '',
     dob: '',
     customerAge: 0,
     customerEmail: '',

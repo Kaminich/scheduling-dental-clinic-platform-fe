@@ -10,6 +10,8 @@ import ApiClient from "../../services/apiClient";
 import DeleteModal from "../../components/modal/delete";
 import ActivateModal from "../../components/modal/activate";
 import { changeTabTitle } from "../../utils/changeTabTitle";
+import { formatDate } from "../../utils/formatDate";
+import { formatDateTime } from "../../utils/formatDateTime";
 
 const DentalClinicSettings = () => {
     const navigate = useNavigate();
@@ -171,8 +173,8 @@ const DentalClinicSettings = () => {
                                 </HStack>
                             </Stack>
                             <Stack flex={1}>
-                                <Text>Created Date: {clinic.createdDate}</Text>
-                                <Text>Modified Date: {clinic.modifiedDate}</Text>
+                                <Text>Created Date: {formatDate(clinic.createdDate)}</Text>
+                                <Text>Modified Date: {formatDateTime(clinic.modifiedDate)}</Text>
                                 {clinic.status === 'ACTIVE' && (
                                     <HStack>
                                         <Text>Status:</Text>
