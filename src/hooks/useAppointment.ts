@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import ApiClient from "../services/apiClient";
 
 const useAppointment = () => {
-    const api = new ApiClient<any>('/appointment/manage');
+    const api = new ApiClient<any>('/appointment/branch');
     return useQuery({
-        queryKey: ["getAppointmentManage"],
+        queryKey: ["getAppointmentBranch"],
         queryFn: () =>
             api.getAuthen()
                 .then((data) => {

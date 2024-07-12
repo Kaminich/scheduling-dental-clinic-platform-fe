@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 import {
     Box,
     Button,
@@ -8,60 +8,124 @@ import {
     Textarea,
     Stack,
     useToast,
+    useDisclosure,
+    HStack,
+    Image,
 } from '@chakra-ui/react';
 import { changeTabTitle } from '../../../utils/changeTabTitle';
+import axios from 'axios';
+import ApiClient from '../../../services/apiClient';
+import LoadingModal from '../../../components/modal/loading';
+import { Border } from '../../../styles/styles';
+import { FaCamera } from 'react-icons/fa6';
 
 const CreateBlogPage = () => {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [image, setImage] = useState<File | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [title, setTitle] = useState<string>('');
+    const [content, setContent] = useState<string>('');
+    const [image, setImage] = useState<string>('');
+    const [imageData, setImageData] = useState<File | null>(null);
+    const [summary, setSummary] = useState<string>('');
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
     const toast = useToast();
 
-    const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
-    const handleContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value);
-    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => setImage(e.target.files?.[0] || null);
-
-    const validateForm = () => {
-        if (!title || !content || !image) {
-            toast({
-                title: "Validation Error",
-                description: "All fields are required.",
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-            });
-            return false;
-        }
-        return true;
+    const areAllFieldsFilled = () => {
+        return (
+            content !== '' &&
+            title !== '' &&
+            summary !== '' &&
+            image !== '' &&
+            imageData !== null
+        );
     };
 
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        if (!validateForm()) return;
+    const handleReset = () => {
+        setTitle('');
+        setContent('');
+        setSummary('');
+        setImage('');
+        setImageData(null);
+    }
 
-        setIsSubmitting(true);
+    const handleImageChange = (e: any) => {
+        const selectedFile = e.target.files[0];
+        console.log(selectedFile);
+
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const imageUrl = URL.createObjectURL(selectedFile);
+                setImage(imageUrl);
+            };
+            reader.readAsDataURL(selectedFile);
+            setImageData(selectedFile);
+        }
+    }
+
+    const handleCreate = async (e: FormEvent) => {
+        e.preventDefault();
+        const api = new ApiClient<any>('/blog');
+        onOpenLoading();
+        let imageUrl: string = '';
+
+        if (imageData) {
+            const formDataImage = new FormData();
+            formDataImage.append("file", imageData);
+            formDataImage.append("upload_preset", "z5r1wkcn");
+
+            try {
+                const response = await axios.post(
+                    `https://api.cloudinary.com/v1_1/dy1t2fqsc/image/upload`,
+                    formDataImage
+                );
+                imageUrl = response.data.secure_url;
+                console.log("Cloudinary image URL:", imageUrl);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        const data = {
+            content,
+            title,
+            thumbnail: imageUrl,
+            summary
+        };
+
         try {
-            // Simulate an API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            console.log({ title, content, image });
+            const response = await api.create(data);
+            console.log(response);
+
+            if (response.success) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+                handleReset();
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            }
+        } catch (error: any) {
             toast({
-                title: "Blog created.",
-                description: "Your blog post has been successfully created.",
-                status: "success",
-                duration: 5000,
-                isClosable: true,
-            });
-        } catch (error) {
-            toast({
-                title: "An error occurred.",
-                description: "Unable to create blog post.",
+                title: "Error",
+                description: error.response?.data?.message || "An error occurred",
                 status: "error",
-                duration: 5000,
+                duration: 2500,
+                position: 'top',
                 isClosable: true,
             });
         } finally {
-            setIsSubmitting(false);
+            onCloseLoading();
         }
     };
 
@@ -72,35 +136,120 @@ const CreateBlogPage = () => {
     return (
         <Box p={8} maxWidth="600px" mx="auto">
             <Stack spacing={4}>
-                <FormControl isInvalid={!title}>
-                    <FormLabel htmlFor="title">Title</FormLabel>
+                <FormControl id="title" isRequired>
+                    <FormLabel pl={1}>Title</FormLabel>
                     <Input
-                        id="title"
+                        type='text'
                         placeholder="Enter the blog title"
                         value={title}
-                        onChange={handleTitleChange}
+                        onChange={(e) => setTitle(e.target.value)}
+                        required
                     />
                 </FormControl>
-                <FormControl isInvalid={!content}>
-                    <FormLabel htmlFor="content">Content</FormLabel>
-                    <Textarea
-                        id="content"
-                        placeholder="Enter the blog content"
-                        value={content}
-                        onChange={handleContentChange}
+                <Stack w={'full'} pos={'relative'}>
+                    <Image
+                        alt={"Slider Image"}
+                        h={'50vh'}
+                        borderRadius={10}
+                        p={0}
+                        src={
+                            image || "https://benhviencuadong.vn/wp-content/uploads/2022/08/kham-nha-khoa-3.jpg"
+                        }
                     />
-                </FormControl>
-                <FormControl isInvalid={!image}>
-                    <FormLabel htmlFor="image">Image</FormLabel>
+                    <FormLabel
+                        htmlFor="img"
+                        cursor='pointer'
+                        fontSize='md'
+                        pos={'absolute'}
+                        right={3}
+                        bottom={3}
+                        display={'flex'}
+                        gap={3}
+                        alignItems={'center'}
+                        py={2}
+                        px={4}
+                        borderRadius={8}
+                        bg={'gainsboro'}
+                        _hover={{ bg: 'gray.300' }}
+                    >
+                        <FaCamera /> Update Image
+                    </FormLabel>
                     <Input
-                        id="image"
                         type="file"
+                        id="img"
+                        accept="image/*"
                         onChange={handleImageChange}
+                        display='none'
+                    />
+                </Stack>
+                <FormControl id="summary" isRequired>
+                    <FormLabel pl={1}>Summary</FormLabel>
+                    <Textarea
+                        placeholder="Enter the blog summary"
+                        value={content}
+                        focusBorderColor='#E2E8F0'
+                        resize={'none'}
+                        maxH={32}
+                        minH={32}
+                        onChange={(e) => setContent(e.target.value)}
+                        required
                     />
                 </FormControl>
-                <Button type="submit" colorScheme="teal" isLoading={isSubmitting}>
-                    Create Blog
-                </Button>
+                <FormControl id="content" isRequired>
+                    <FormLabel pl={1}>Content</FormLabel>
+                    <Textarea
+                        value={content}
+                        placeholder="Enter the blog content"
+                        focusBorderColor='#E2E8F0'
+                        resize={'none'}
+                        maxH={32}
+                        minH={32}
+                        onChange={(e) => setContent(e.target.value)}
+                        required
+                    />
+                </FormControl>
+                <HStack
+                    pos={'fixed'}
+                    w={'99%'}
+                    bg={"blue.200"}
+                    left={2}
+                    right={2}
+                    bottom={2}
+                    justify={'flex-end'}
+                    gap={4}
+                >
+                    <Button
+                        bg={'white'}
+                        border={Border.tableBorder}
+                        variant={"solid"}
+                        fontSize={15}
+                        fontWeight={400}
+                        px={2}
+                        my={1}
+                        h={6}
+                        onClick={handleReset}
+                    >
+                        Reset
+                    </Button>
+                    <Button
+                        colorScheme={"blue"}
+                        variant={"solid"}
+                        fontSize={15}
+                        fontWeight={400}
+                        px={2}
+                        mr={6}
+                        my={1}
+                        h={6}
+                        onClick={handleCreate}
+                        isDisabled={!areAllFieldsFilled()}
+                    >
+                        Create
+                    </Button>
+                </HStack>
+                <LoadingModal
+                    isOpen={isOpenLoading}
+                    onClose={onCloseLoading}
+                />
             </Stack>
         </Box>
     );

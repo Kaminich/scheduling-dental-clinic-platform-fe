@@ -160,6 +160,7 @@ const LoginPage = () => {
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                            placeholder="Username"
                         />
                     </FormControl>
                     <FormControl id="password">
@@ -169,6 +170,7 @@ const LoginPage = () => {
                                 type={showPass ? 'text' : 'password'}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Password"
                             />
                             <InputRightElement width='3.5rem' cursor='pointer' onClick={() => setShowPass(!showPass)}>
                                 {!showPass ? <FaEye /> : <FaEyeSlash />}

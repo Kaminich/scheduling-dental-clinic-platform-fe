@@ -1,16 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import ApiClient from "../services/apiClient";
 
-const useBlogs = () => {
+interface Prop {
+    blogId: number;
+}
+
+const useBlogDetail = ({ blogId }: Prop) => {
     const api = new ApiClient<any>('/blog');
     return useQuery({
-        queryKey: ["getBlogs"],
+        queryKey: ["getBlogDetail", blogId],
         queryFn: () =>
-            api.getAuthen()
+            api.getDetail(blogId)
                 .then((data) => {
                     return data.data;
                 })
     });
 };
 
-export default useBlogs;
+export default useBlogDetail;

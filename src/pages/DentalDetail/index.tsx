@@ -9,23 +9,23 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import ApiClient from "../../services/apiClient";
-import ClinicListResponse from "../../types/ClinicListResponse";
 import ClinicDetailResponse, { initialClinicDetailResponse } from "../../types/ClinicDetailResponse";
 import useActiveClinics from "../../hooks/useActiveClinics";
+import AppointmentModal from "../../components/modal/appointment";
+import { FaCalendarDays } from "react-icons/fa6";
 
 const DentalDetailPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { name } = useParams<{ name: string }>();
     const decodedName = name ? name.replace(/-/g, ' ') : '';
     const [id, setId] = useState<number>(0);
-    const [dentals, setDentals] = useState<ClinicListResponse[]>([]);
     const [clinic, setClinic] = useState<ClinicDetailResponse>(initialClinicDetailResponse);
     const { data } = useActiveClinics();
-    const api = new ApiClient<any>('/clinics');
     const { role } = useAuth();
     const toast = useToast();
 
     const getDentalDetail = async () => {
+        const api = new ApiClient<any>('/clinics');
         try {
             const response = await api.getDetail(id);
             console.log(response);
@@ -89,8 +89,10 @@ const DentalDetailPage = () => {
                 </Flex>
                 {(role !== 'Staff' && role !== 'Dentist') && (
                     <Flex justify={'center'} gap={4} mt={8}>
-                        <Button colorScheme={'blue'} variant={'outline'}>Chat with Dental</Button>
-                        <Button colorScheme={'green'} onClick={onOpen}>Make Appointment</Button>
+                        {/* <Button colorScheme={'blue'} variant={'outline'}>Chat with Dental</Button> */}
+                        <Button colorScheme={'green'} onClick={onOpen} gap={2}>
+                            <FaCalendarDays /> Make Appointment
+                        </Button>
                     </Flex>
                 )}
             </Flex>
@@ -118,13 +120,12 @@ const DentalDetailPage = () => {
                     </TabPanel>
                 </TabPanels>
             </Tabs>
-            {/* <AppointmentModal
-                dentalData={''}
-                dentistData={''}
+            <AppointmentModal
+                clinicId={id}
+                clinicName={clinic.clinicName}
                 isOpen={isOpen}
-                locationData={''}
                 onClose={onClose}
-            /> */}
+            />
         </Stack>
     )
 }

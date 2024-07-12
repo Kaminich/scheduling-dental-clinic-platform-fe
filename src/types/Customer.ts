@@ -1,7 +1,3 @@
-import Appointment from "./Appointment";
-import Feedback from "./Feedback";
-import TreatmentOutcome from "./TreatmentOutcome";
-
 export default interface Customer {
     id?: number;
     username: string;
@@ -12,10 +8,6 @@ export default interface Customer {
     dob: string;
     gender: string;
     avatar?: string;
-    status?: boolean;
-    appointments?: Appointment[];
-    feedbacks?: Feedback[];
-    treatmentOutcomes?: TreatmentOutcome[];
 }
 
 export const CustomerInit: Customer = {

@@ -10,3 +10,14 @@ export default interface BranchSummaryResponse {
     status: Status;
     createdDate: string;
 }
+
+export const initialBranchSummaryResponse: BranchSummaryResponse = {
+    branchId: 0,
+    branchName: '',
+    clinicName: '',
+    address: '',
+    city: '',
+    phone: '',
+    status: Status.INACTIVE,
+    createdDate: '',
+};

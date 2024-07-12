@@ -7,9 +7,10 @@ import ApiClient from "../../../services/apiClient";
 interface Prop {
     isOpen: boolean;
     onClose: () => void;
+    branchclinicId: number;
 }
 
-const FeedbackFormModal = ({ isOpen, onClose }: Prop) => {
+const FeedbackFormModal = ({ isOpen, onClose, branchclinicId }: Prop) => {
     const [feedback, setFeedback] = useState<string>('');
     const [rating, setRating] = useState<number | undefined>(undefined);
     const [feedbackMissing, setFeedbackMissing] = useState<boolean>(false);
@@ -32,7 +33,8 @@ const FeedbackFormModal = ({ isOpen, onClose }: Prop) => {
         } else {
             const data = {
                 rating,
-                comment: feedback
+                comment: feedback,
+                branchclinicId
             }
             try {
                 const response = await api.create(data);
@@ -63,9 +65,9 @@ const FeedbackFormModal = ({ isOpen, onClose }: Prop) => {
                 }
             } catch (error: any) {
                 toast({
-                    title: "Success",
+                    title: "Error",
                     description: error.response?.data?.message || "An error occurred",
-                    status: "success",
+                    status: "error",
                     duration: 2500,
                     position: 'top',
                     isClosable: true,
@@ -117,6 +119,7 @@ const FeedbackFormModal = ({ isOpen, onClose }: Prop) => {
                                 minH={32}
                                 borderColor={'gainsboro'}
                                 onChange={(e) => setFeedback(e.target.value)}
+                                required
                             />
                             {feedbackMissing && (
                                 <Text color={'red'} fontSize={14}>Describe your experience</Text>

@@ -14,6 +14,7 @@ import ChangeStatusModal from "../../components/modal/change_status";
 import ApiClient from "../../services/apiClient";
 import { formatDate } from "../../utils/formatDate";
 import { formatDateTime } from "../../utils/formatDateTime";
+import LoadingModal from "../../components/modal/loading";
 
 const ServicesSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -25,6 +26,7 @@ const ServicesSettingsPage = () => {
     const { data: serviceData, isLoading, refetch } = useServiceByClinicId({ clinicId: userData?.clinicId });
     const navigate = useNavigate();
     const { isOpen: isOpenChange, onClose: onCloseChange, onOpen: onOpenChange } = useDisclosure();
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
     const toast = useToast();
 
 
@@ -32,9 +34,10 @@ const ServicesSettingsPage = () => {
         return service.serviceName.toLowerCase().includes(keyword.toLowerCase())
     })
 
-    const apiChange = new ApiClient<any>(`/service/change-status`);
-
     const handleChangeStatus = async () => {
+        onCloseChange();
+        onOpenLoading();
+        const apiChange = new ApiClient<any>(`/service/change-status`);
         const dataChange = {
             serviceId: id,
             serviceStatus: !status
@@ -72,7 +75,7 @@ const ServicesSettingsPage = () => {
                 isClosable: true,
             });
         } finally {
-            onCloseChange();
+            onCloseLoading();
         }
     }
 
@@ -245,6 +248,10 @@ const ServicesSettingsPage = () => {
                 onClose={onCloseChange}
                 type="service"
                 handleChangeStatus={handleChangeStatus}
+            />
+            <LoadingModal
+                isOpen={isOpenLoading}
+                onClose={onCloseLoading}
             />
         </Stack>
     )

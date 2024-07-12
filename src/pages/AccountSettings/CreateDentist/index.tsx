@@ -29,7 +29,6 @@ const CreateDentistPage = () => {
     const { data: branchData } = useBranchByClinicId({ clinicId: userData?.clinicId });
     const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
     const toast = useToast();
-    const api = new ApiClient<any>('/dentists');
 
     const areAllFieldsFilled = () => {
         return (
@@ -80,6 +79,7 @@ const CreateDentistPage = () => {
 
     const handleCreate = async (e: FormEvent) => {
         e.preventDefault();
+        const api = new ApiClient<any>('/dentists');
         onOpenLoading();
         let avatarUrl: string = '';
 
@@ -281,6 +281,7 @@ const CreateDentistPage = () => {
                             maxH={32}
                             minH={32}
                             onChange={(e) => setDescription(e.target.value)}
+                            required
                         />
                     </FormControl>
                     <FormControl id="branch" isRequired>
@@ -318,6 +319,7 @@ const CreateDentistPage = () => {
                             maxH={32}
                             minH={32}
                             onChange={(e) => setExperience(e.target.value)}
+                            required
                         />
                     </FormControl>
                 </Stack>

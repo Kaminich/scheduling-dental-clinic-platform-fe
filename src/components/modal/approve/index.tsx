@@ -28,6 +28,9 @@ const ApproveModal = ({ isOpen, onClose, type, approve, handleApprove }: Props) 
                     {type === 'blog' && (
                         <ModalHeader fontSize='xl'>Approve Blog</ModalHeader>
                     )}
+                    {type === 'report' && (
+                        <ModalHeader fontSize='xl'>Approve Report</ModalHeader>
+                    )}
                     <ModalCloseButton />
                     <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
                         {(type === 'dentist' || type === 'staff') && (
@@ -38,6 +41,9 @@ const ApproveModal = ({ isOpen, onClose, type, approve, handleApprove }: Props) 
                         )}
                         {type === 'blog' && (
                             <Text fontSize='lg'>Are you sure you want to approve this blog?</Text>
+                        )}
+                        {type === 'report' && (
+                            <Text fontSize='lg'>Are you sure you want to approve this report?</Text>
                         )}
                     </ModalBody>
                     <ModalFooter>
@@ -63,6 +69,12 @@ const ApproveModal = ({ isOpen, onClose, type, approve, handleApprove }: Props) 
                     {type === 'clinic' && (
                         <ModalHeader fontSize='xl'>Denied Clinic Partner Registration</ModalHeader>
                     )}
+                    {type === 'blog' && (
+                        <ModalHeader fontSize='xl'>Denied Blog</ModalHeader>
+                    )}
+                    {type === 'report' && (
+                        <ModalHeader fontSize='xl'>Denied Report</ModalHeader>
+                    )}
                     <ModalCloseButton />
                     <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
                         {(type === 'dentist' || type === 'staff') && (
@@ -70,6 +82,12 @@ const ApproveModal = ({ isOpen, onClose, type, approve, handleApprove }: Props) 
                         )}
                         {type === 'clinic' && (
                             <Text fontSize='lg'>Are you sure you want to denied this registration?</Text>
+                        )}
+                        {type === 'blog' && (
+                            <Text fontSize='lg'>Are you sure you want to denied this blog?</Text>
+                        )}
+                        {type === 'report' && (
+                            <Text fontSize='lg'>Are you sure you want to denied this report?</Text>
                         )}
                     </ModalBody>
                     <ModalFooter>

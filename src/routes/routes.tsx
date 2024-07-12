@@ -51,6 +51,7 @@ import ClinicBranchDetailPage from "../pages/ClinicBranchSettings/ClinicBranchDe
 import AppointmentPage from "../pages/Appointment";
 import ReportSettingsPage from "../pages/ReportSettings";
 import UpdateDentalDetailPage from "../pages/UpdateDentalDetail";
+import UpdateBlogPage from "../pages/BlogSettings/UpdateBlog";
 
 const routes = [
     {
@@ -72,14 +73,15 @@ const routes = [
             { path: "profile", element: <ProfilePage /> },
             { path: "update-profile/:type", element: <UpdateProfilePage /> },
             { path: "message", element: <MessagePage /> },
-            { path: "manage-blog/blog-detail", element: <BlogDetailPage /> },
+            { path: "manage-blog/:blogId", element: <BlogDetailPage /> },
             { path: "manage-blog/create-blog", element: <CreateBlogPage /> },
+            { path: "manage-blog/:blogId/update", element: <UpdateBlogPage /> },
             { path: "administrator/dentals/manage-dental/:id", element: <DentalDetailSettingsPage /> },
             { path: "administrator/dentals/dental-detail", element: <DentalDetailSettingsPage /> },
             { path: "administrator/dentals/dental-detail/update", element: <UpdateDentalDetailPage /> },
-            { path: "administrator/blogs/appprove-blog/blog-detail", element: <BlogDetailPage /> },
-            { path: "administrator/blogs/manage-blog/blog-detail", element: <BlogDetailPage /> },
-            { path: "administrator/blogs/blog-detail", element: <BlogDetailPage /> },
+            { path: "administrator/blogs/appprove-blog/:blogId", element: <BlogDetailPage /> },
+            { path: "administrator/blogs/manage-blog/:blogId", element: <BlogDetailPage /> },
+            { path: "administrator/blogs/:blogId", element: <BlogDetailPage /> },
             { path: "administrator/accounts/create-dentist", element: <CreateDentistPage /> },
             { path: "administrator/accounts/create-staff", element: <CreateStaffPage /> },
             { path: "administrator/accounts/dentist/:id", element: <DentistProfileDetailPage /> },

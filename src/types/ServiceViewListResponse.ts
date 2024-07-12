@@ -9,12 +9,12 @@ export default interface ServiceViewListResponse {
     clinicId: number;
 }
 
-// const initialServiceViewListResponse: ServiceViewListResponse = {
-//     id: 0,
-//     serviceName: "",
-//     createdDate: "",
-//     modifiedDate: "",
-//     categoryName: "",
-//     status: false,
-//     clinicId: 0
-// };
+export const initialServiceViewListResponse: ServiceViewListResponse = {
+    id: 0,
+    serviceName: "",
+    createdDate: "",
+    modifiedDate: "",
+    categoryName: "",
+    status: false,
+    clinicId: 0
+};

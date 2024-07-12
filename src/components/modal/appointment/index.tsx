@@ -12,6 +12,8 @@ import Loading from "../../loading";
 import WorkingHoursDetailsResponse, { initialWorkingHoursDetailsResponse } from "../../../types/WorkingHoursDetailsResponse";
 import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
 import BranchSummaryResponse from "../../../types/BranchSummaryResponse";
+import DentistViewListResponse from "../../../types/DentistViewListResponse";
+import { Status } from "../../../types/type.enum";
 
 interface Props {
     isOpen: boolean;
@@ -34,7 +36,7 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
     const [serviceId, setServiceId] = useState<number>(0);
     const [date, setDate] = useState<string>('');
     const [dentistId, setDentistId] = useState<number>(0);
-    const [value, setValue] = useState<string>('personal')
+    const [value, setValue] = useState<string>('personal');
     const [slotId, setSlotId] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [userData, setUserData] = useState<Customer>(CustomerInit);
@@ -44,6 +46,7 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
     const { data: branchData } = useBranchByClinicId({ clinicId: clinicId || 0 });
     const [services, setServices] = useState<ServiceViewListResponse[]>([]);
     const [branches, setBranches] = useState<BranchSummaryResponse[]>([]);
+    const [dentists, setDentists] = useState<DentistViewListResponse[]>([]);
     const [slot, setSlot] = useState<WorkingHoursDetailsResponse>(initialWorkingHoursDetailsResponse);
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
@@ -67,6 +70,26 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
         }
     }
 
+    const getAvailableDentist = async () => {
+        const api = new ApiClient<any>('/dentists/available');
+        try {
+            const response = await api.getUnauthen({
+                params: {
+                    branchId: clinicBranchId,
+                    date,
+                    slotId
+                }
+            });
+            if (response.success) {
+                setDentists(response.data);
+            } else {
+                console.log(response.message);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleMakeAppointment = async () => {
         setIsLoading(true);
         const api = new ApiClient<any>('/appointment');
@@ -75,6 +98,7 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
             customerAddress: address,
             customerPhone: phone,
             customerDob: dob,
+            customerGender: gender,
             customerEmail: email,
             appointmentDate: date,
             slotId,
@@ -96,9 +120,25 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                     position: 'top',
                     isClosable: true,
                 })
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                })
             }
-        } catch (error) {
-
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 2500,
+                position: 'top',
+                isClosable: true,
+            });
         } finally {
             setIsLoading(false);
         }
@@ -127,6 +167,13 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
             getAvailableSlot();
         }
     }, [clinicBranchId, date]);
+
+    useEffect(() => {
+        getAvailableDentist();
+    }, [clinicBranchId, date, slotId])
+
+    console.log(slot);
+
 
     return (
         <Modal
@@ -257,11 +304,13 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                                     onChange={(e) => setClinicBranchId(parseInt(e.target.value))}
                                                     placeholder={'Select branch'}
                                                 >
-                                                    {branches.map((branch) => (
-                                                        <option value={branch.branchId}>
-                                                            {branch.branchName} ({branch.city})
-                                                        </option>
-                                                    ))}
+                                                    {branches
+                                                        .filter((branch) => branch.status === Status.ACTIVE)
+                                                        .map((branch) => (
+                                                            <option value={branch.branchId}>
+                                                                {branch.branchName} ({branch.city})
+                                                            </option>
+                                                        ))}
                                                 </Select>
                                             ) : (
                                                 <Input value={`${dentistData.branchName} (${dentistData.city})`} readOnly />
@@ -275,11 +324,13 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                                 onChange={(e) => setServiceId(parseInt(e.target.value))}
                                                 placeholder={'Select service'}
                                             >
-                                                {services.map((service) => (
-                                                    <option key={service.id} value={service.id}>
-                                                        {service.serviceName}
-                                                    </option>
-                                                ))}
+                                                {services
+                                                    .filter((service) => service.status === true)
+                                                    .map((service) => (
+                                                        <option key={service.id} value={service.id}>
+                                                            {service.serviceName}
+                                                        </option>
+                                                    ))}
                                             </Select>
                                         </FormControl>
                                         <HStack>
@@ -294,18 +345,28 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                             </FormControl>
                                             <FormControl id="slot" flex={1}>
                                                 <FormLabel ml={1}>Slot</FormLabel>
-                                                <Select
-                                                    name="slot"
-                                                    value={slotId}
-                                                    onChange={(e) => setSlotId(parseInt(e.target.value))}
-                                                    placeholder={'Select slot'}
-                                                >
-                                                    {slot.slots.map((slot) => (
-                                                        <option key={slot.slotId} value={slot.slotId}>
-                                                            {slot.startTime} - {slot.endTime}
-                                                        </option>
-                                                    ))}
-                                                </Select>
+                                                {(!clinicBranchId || date === '') && dentistData === undefined ? (
+                                                    <Tooltip label={'Select date and clinic branch to choose'}>
+                                                        <Select
+                                                            placeholder={'Select slot'}
+                                                            borderColor={'gray.400'}
+                                                            disabled
+                                                        />
+                                                    </Tooltip>
+                                                ) : (
+                                                    <Select
+                                                        name="slot"
+                                                        value={slotId}
+                                                        onChange={(e) => setSlotId(parseInt(e.target.value))}
+                                                        placeholder={'Select slot'}
+                                                    >
+                                                        {slot.slots.map((slot) => (
+                                                            <option key={slot.slotId} value={slot.slotId}>
+                                                                {slot.startTime} - {slot.endTime}
+                                                            </option>
+                                                        ))}
+                                                    </Select>
+                                                )}
                                             </FormControl>
                                         </HStack>
                                         <FormControl id="dentist" flex={1.5}>
@@ -327,12 +388,12 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                                             value={dentistId}
                                                             onChange={(e) => setDentistId(parseInt(e.target.value))}
                                                         >
-                                                            <option value="1">
-                                                                Dentist 1
-                                                            </option>
-                                                            <option value="2">
-                                                                Dentist 2
-                                                            </option>
+                                                            {dentists
+                                                                .map((dentist) => (
+                                                                    <option key={dentist.dentistId} value={dentist.dentistId}>
+                                                                        {dentist.dentistName}
+                                                                    </option>
+                                                                ))}
                                                         </Select>
                                                     )}
                                                 </>

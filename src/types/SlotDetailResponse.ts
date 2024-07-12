@@ -5,3 +5,11 @@ export default interface SlotDetailsResponse {
     endTime: string;
     status: boolean;
 }
+
+export const initialSlotDetailsResponse: SlotDetailsResponse = {
+    slotId: 0,
+    slotNo: 0,
+    startTime: '',
+    endTime: '',
+    status: false
+};

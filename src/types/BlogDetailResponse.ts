@@ -1,7 +1,6 @@
-import ClinicStaff, { ClinicStaffInit } from "./ClinicStaff";
 import { Status } from "./type.enum";
 
-export default interface Blog {
+export default interface BlogDetailResponse {
     id: number;
     title: string;
     summary: string;
@@ -11,12 +10,12 @@ export default interface Blog {
     status: Status;
     createdBy: string;
     createdDate: string;
-    modifiedBy?: string;
-    modifiedDate?: string;
-    staff: ClinicStaff;
+    modifiedBy: string;
+    modifiedDate: string;
+    clinicName: string;
 }
 
-export const BlogInit: Blog = {
+export const initialBlogDetailResponse: BlogDetailResponse = {
     id: 0,
     title: '',
     summary: '',
@@ -28,5 +27,5 @@ export const BlogInit: Blog = {
     createdDate: '',
     modifiedBy: '',
     modifiedDate: '',
-    staff: ClinicStaffInit,
+    clinicName: ''
 };

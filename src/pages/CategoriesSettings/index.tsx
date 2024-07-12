@@ -14,6 +14,7 @@ import Loading from "../../components/loading";
 import ChangeStatusModal from "../../components/modal/change_status";
 import { formatDate } from "../../utils/formatDate";
 import { formatDateTime } from "../../utils/formatDateTime";
+import LoadingModal from "../../components/modal/loading";
 
 const CategoriesSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -27,15 +28,17 @@ const CategoriesSettingsPage = () => {
     const { data: categoryData, isLoading, refetch } = useCategoryByClinicId({ clinicId: userData?.clinicId });
     const { isOpen: isOpenCategory, onClose: onCloseCategory, onOpen: onOpenCategory } = useDisclosure();
     const { isOpen: isOpenChange, onClose: onCloseChange, onOpen: onOpenChange } = useDisclosure();
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
     const toast = useToast();
 
     let filteredCategories = categories.filter((category) => {
         return category.categoryName.toLowerCase().includes(keyword.toLowerCase())
     })
 
-    const apiChange = new ApiClient<any>(`/category/change-status`);
-
     const handleChangeStatus = async () => {
+        onCloseChange();
+        onOpenLoading();
+        const apiChange = new ApiClient<any>(`/category/change-status`);
         const dataChange = {
             categoryId: id,
             categoryStatus: !status
@@ -73,7 +76,7 @@ const CategoriesSettingsPage = () => {
                 isClosable: true,
             });
         } finally {
-            onCloseChange();
+            onCloseLoading();
         }
     }
 
@@ -310,6 +313,10 @@ const CategoriesSettingsPage = () => {
                 onClose={onCloseChange}
                 type="category"
                 handleChangeStatus={handleChangeStatus}
+            />
+            <LoadingModal
+                isOpen={isOpenLoading}
+                onClose={onCloseLoading}
             />
         </Stack>
     )

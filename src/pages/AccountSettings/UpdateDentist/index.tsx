@@ -37,6 +37,7 @@ const UpdateDentistPage = () => {
     const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
 
     const getDentistDetailById = async (id: number) => {
+        onOpenLoading();
         try {
             const api = new ApiClient<ApiResponse<DentistDetailResponse>>('/dentists');
             const response = await api.getDetail(id);
@@ -55,6 +56,8 @@ const UpdateDentistPage = () => {
             }
         } catch (error) {
             navigate('/not-found');
+        } finally {
+            onCloseLoading();
         }
     }
 
@@ -303,6 +306,7 @@ const UpdateDentistPage = () => {
                             maxH={32}
                             minH={32}
                             onChange={(e) => setDescription(e.target.value)}
+                            required
                         />
                     </FormControl>
                     <FormControl id="branch" isRequired>
@@ -339,6 +343,7 @@ const UpdateDentistPage = () => {
                             maxH={32}
                             minH={32}
                             onChange={(e) => setExperience(e.target.value)}
+                            required
                         />
                     </FormControl>
                 </Stack>
