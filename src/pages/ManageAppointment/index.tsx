@@ -1,5 +1,5 @@
-import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
-import { FaEye, FaSliders, FaTrashCan } from "react-icons/fa6";
+import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure } from "@chakra-ui/react";
+import { FaEye, FaLaptopMedical, FaSliders, FaTrashCan } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { changeTabTitle } from "../../utils/changeTabTitle";
@@ -10,8 +10,8 @@ import Loading from "../../components/loading";
 import AppointmentDetailModal from "../../components/modal/appointment_detail";
 import { formatDateTime } from "../../utils/formatDateTime";
 import { AppointmentStatus } from "../../types/type.enum";
-import ApiClient from "../../services/apiClient";
 import AppointmentCancelModal from "../../components/modal/appointment_cancel";
+import TreatmentOutcomeDetailModal from "../../components/modal/treatment_outcome_detail";
 
 const ManageAppointmentPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -20,50 +20,12 @@ const ManageAppointmentPage = () => {
     const { data, isLoading, refetch } = useAppointment();
     const [appointments, setAppointments] = useState<AppointmentBranchResponse[]>([]);
     const { isOpen: isOpenDetail, onClose: onCloseDetail, onOpen: onOpenDetail } = useDisclosure();
+    const { isOpen: isOpenDetailTO, onClose: onCloseDetailTO, onOpen: onOpenDetailTO } = useDisclosure();
     const { isOpen: isOpenCancel, onClose: onCloseCancel, onOpen: onOpenCancel } = useDisclosure();
-    const toast = useToast();
 
     let filteredAppointments = appointments.filter((appointment) => {
         return appointment.customerName.toLowerCase().includes(keyword.toLowerCase())
     })
-
-    const handleCancel = async () => {
-        const api = new ApiClient<any>('appointment');
-        try {
-            const response = await api.delete(id);
-            if (response.success) {
-                toast({
-                    title: "Success",
-                    description: response.message,
-                    status: "success",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                });
-                refetch && refetch();
-            } else {
-                toast({
-                    title: "Error",
-                    description: response.message,
-                    status: "error",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                });
-            }
-        } catch (error: any) {
-            toast({
-                title: "Error",
-                description: error.response?.data?.message || "An error occurred",
-                status: "error",
-                duration: 2500,
-                position: 'top',
-                isClosable: true,
-            });
-        } finally {
-            onCloseCancel();
-        }
-    }
 
     useEffect(() => {
         changeTabTitle('Manage Appointment');
@@ -74,9 +36,6 @@ const ManageAppointmentPage = () => {
             setAppointments(data);
         }
     }, [data]);
-
-    console.log(appointments);
-
 
     return (
         <Stack w={'7xl'} align='center' mx='auto' my={5} gap={10}>
@@ -180,7 +139,6 @@ const ManageAppointmentPage = () => {
                                                             textAlign='center'
                                                             borderColor={'gainsboro'}
                                                         >
-
                                                             <Button
                                                                 borderRadius='full'
                                                                 px={3}
@@ -191,20 +149,48 @@ const ManageAppointmentPage = () => {
                                                                     onOpenDetail();
                                                                 }}
                                                             >
-                                                                <FaEye />
+                                                                <Tooltip label='Show appointment detail'>
+                                                                    <span>
+                                                                        <FaEye />
+                                                                    </span>
+                                                                </Tooltip>
                                                             </Button>
-                                                            <Button
-                                                                borderRadius='full'
-                                                                px={3}
-                                                                colorScheme="red"
-                                                                variant='ghost'
-                                                                onClick={() => {
-                                                                    setId(appointment.appointmentId);
-                                                                    onOpenCancel();
-                                                                }}
-                                                            >
-                                                                <FaTrashCan />
-                                                            </Button>
+                                                            {appointment.appointmentStatus === AppointmentStatus.DONE && (
+                                                                <Button
+                                                                    borderRadius='full'
+                                                                    px={3}
+                                                                    colorScheme="green"
+                                                                    variant='ghost'
+                                                                    onClick={() => {
+                                                                        setId(appointment.appointmentId);
+                                                                        onOpenDetailTO();
+                                                                    }}
+                                                                >
+                                                                    <Tooltip label='Show treatment outcome detail'>
+                                                                        <span>
+                                                                            <FaLaptopMedical />
+                                                                        </span>
+                                                                    </Tooltip>
+                                                                </Button>
+                                                            )}
+                                                            {appointment.appointmentStatus === AppointmentStatus.PENDING && (
+                                                                <Button
+                                                                    borderRadius='full'
+                                                                    px={3}
+                                                                    colorScheme="red"
+                                                                    variant='ghost'
+                                                                    onClick={() => {
+                                                                        setId(appointment.appointmentId);
+                                                                        onOpenCancel();
+                                                                    }}
+                                                                >
+                                                                    <Tooltip label='Cancel appointment'>
+                                                                        <span>
+                                                                            <FaTrashCan />
+                                                                        </span>
+                                                                    </Tooltip>
+                                                                </Button>
+                                                            )}
                                                         </Td>
                                                     </Tr>
                                                 ))}
@@ -239,6 +225,11 @@ const ManageAppointmentPage = () => {
                 onClose={onCloseCancel}
                 id={id}
                 refetch={refetch}
+            />
+            <TreatmentOutcomeDetailModal
+                isOpen={isOpenDetailTO}
+                onClose={onCloseDetailTO}
+                id={id}
             />
         </Stack>
     )

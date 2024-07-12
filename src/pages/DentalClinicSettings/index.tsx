@@ -12,18 +12,23 @@ import ActivateModal from "../../components/modal/activate";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import { formatDate } from "../../utils/formatDate";
 import { formatDateTime } from "../../utils/formatDateTime";
+import LoadingModal from "../../components/modal/loading";
+import Loading from "../../components/loading";
 
 const DentalClinicSettings = () => {
     const navigate = useNavigate();
     const { data: userData } = useUserProfile();
-    const { data: clinicData, refetch } = useClinicDetail({ clinicId: userData?.clinicId });
+    const { data: clinicData, isLoading, refetch } = useClinicDetail({ clinicId: userData?.clinicId });
     const [clinic, setClinic] = useState<ClinicDetailResponse>(initialClinicDetailResponse);
     const { isOpen: isOpenDeactivate, onClose: onCloseDeactivate, onOpen: onOpenDeactivate } = useDisclosure();
     const { isOpen: isOpenActivate, onClose: onCloseActivate, onOpen: onOpenActivate } = useDisclosure();
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
     const toast = useToast();
     const [id, setId] = useState<number>(0);
 
     const handleActivate = async () => {
+        onCloseActivate();
+        onOpenLoading();
         try {
             const api = new ApiClient<any>(`/clinics/re-activate`);
             const response = await api.updateWithId(id);
@@ -57,11 +62,13 @@ const DentalClinicSettings = () => {
                 isClosable: true,
             });
         } finally {
-            onCloseActivate();
+            onCloseLoading();
         }
     }
 
     const handleDeactivate = async () => {
+        onCloseDeactivate();
+        onOpenLoading();
         try {
             const api = new ApiClient<any>(`/clinics`);
             const response = await api.delete(id);
@@ -97,7 +104,7 @@ const DentalClinicSettings = () => {
                 isClosable: true,
             });
         } finally {
-            onCloseDeactivate();
+            onCloseLoading();
         }
     }
 
@@ -116,94 +123,102 @@ const DentalClinicSettings = () => {
 
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
-            <Stack gap={6} w={'full'} >
+            <Stack gap={6} w={'full'}>
                 <Card shadow={Shadow.cardShadow} bg={Color.blue_100}>
-                    <CardBody>
-                        <HStack justify={'flex-end'}>
-                            {clinic.status === 'ACTIVE' && (
-                                <Button
-                                    colorScheme="red"
-                                    onClick={() => {
-                                        onOpenDeactivate();
-                                        setId(clinic.id);
-                                    }}
-                                >
-                                    Deactivate
-                                </Button>
-                            )}
-                            {clinic.status === 'INACTIVE' && (
-                                <Button
-                                    colorScheme="green"
-                                    onClick={() => {
-                                        onOpenActivate();
-                                        setId(clinic.id);
-                                    }}
-                                >
-                                    Activate
-                                </Button>
-                            )}
-                        </HStack>
-                        <Stack w={'full'} align={'center'} gap={4} mb={12}>
-                            <Image
-                                border='1px solid gainsboro'
-                                borderRadius='full'
-                                boxSize={'9rem'}
-                                src={
-                                    clinic.logo || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
-                                }
-                                alt='avatar'
-                                bgColor='white'
-                                objectFit={'cover'}
-                            />
-                            <Heading fontSize={32} fontWeight={600}>{clinic.clinicName}</Heading>
-                        </Stack>
-                        <HStack w={'5xl'} m={'auto'} align={'flex-start'}>
-                            <Stack flex={1}>
-                                <Text>Phone Number: {clinic.phone}</Text>
-                                <Text>Email: {clinic.email}</Text>
-                                <Text>Address: {clinic.address}</Text>
-                                <Text>City: {clinic.city}</Text>
-                                <HStack>
-                                    <Text>Website Url:</Text>
-                                    {clinic.websiteUrl ? (
-                                        <Link href={clinic.websiteUrl} isExternal>{clinic.websiteUrl}</Link>
-                                    ) : (
-                                        <Text>-</Text>
+                    {!isLoading ? (
+                        <>
+                            <CardBody>
+                                <HStack justify={'flex-end'}>
+                                    {clinic.status === 'ACTIVE' && (
+                                        <Button
+                                            colorScheme="red"
+                                            onClick={() => {
+                                                onOpenDeactivate();
+                                                setId(clinic.id);
+                                            }}
+                                        >
+                                            Deactivate
+                                        </Button>
+                                    )}
+                                    {clinic.status === 'INACTIVE' && (
+                                        <Button
+                                            colorScheme="green"
+                                            onClick={() => {
+                                                onOpenActivate();
+                                                setId(clinic.id);
+                                            }}
+                                        >
+                                            Activate
+                                        </Button>
                                     )}
                                 </HStack>
-                            </Stack>
-                            <Stack flex={1}>
-                                <Text>Created Date: {formatDate(clinic.createdDate)}</Text>
-                                <Text>Modified Date: {formatDateTime(clinic.modifiedDate)}</Text>
-                                {clinic.status === 'ACTIVE' && (
-                                    <HStack>
-                                        <Text>Status:</Text>
-                                        <Tag colorScheme="green">
-                                            <TagLabel>ACTIVE</TagLabel>
-                                        </Tag>
-                                    </HStack>
-                                )}
-                                {clinic.status === 'INACTIVE' && (
-                                    <HStack>
-                                        <Text>Status:</Text>
-                                        <Tag colorScheme="red">
-                                            <TagLabel>INACTIVE</TagLabel>
-                                        </Tag>
-                                    </HStack>
-                                )}
-                            </Stack>
-                        </HStack>
-                    </CardBody>
-                    <CardFooter>
-                        <HStack justify={'flex-end'} w={'full'}>
-                            <Button
-                                gap={4}
-                                onClick={() => navigate('dental-detail')}
-                            >
-                                More Detail <FaArrowRight />
-                            </Button>
-                        </HStack>
-                    </CardFooter>
+                                <Stack w={'full'} align={'center'} gap={4} mb={12}>
+                                    <Image
+                                        border='1px solid gainsboro'
+                                        borderRadius='full'
+                                        boxSize={'9rem'}
+                                        src={
+                                            clinic.logo || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
+                                        }
+                                        alt='avatar'
+                                        bgColor='white'
+                                        objectFit={'cover'}
+                                    />
+                                    <Heading fontSize={32} fontWeight={600}>{clinic.clinicName}</Heading>
+                                </Stack>
+                                <HStack w={'5xl'} m={'auto'} align={'flex-start'}>
+                                    <Stack flex={1}>
+                                        <Text>Phone Number: {clinic.phone}</Text>
+                                        <Text>Email: {clinic.email}</Text>
+                                        <Text>Address: {clinic.address}</Text>
+                                        <Text>City: {clinic.city}</Text>
+                                        <HStack>
+                                            <Text>Website Url:</Text>
+                                            {clinic.websiteUrl ? (
+                                                <Link href={clinic.websiteUrl} isExternal>{clinic.websiteUrl}</Link>
+                                            ) : (
+                                                <Text>-</Text>
+                                            )}
+                                        </HStack>
+                                    </Stack>
+                                    <Stack flex={1}>
+                                        <Text>Created Date: {formatDate(clinic.createdDate)}</Text>
+                                        <Text>Modified Date: {formatDateTime(clinic.modifiedDate)}</Text>
+                                        {clinic.status === 'ACTIVE' && (
+                                            <HStack>
+                                                <Text>Status:</Text>
+                                                <Tag colorScheme="green">
+                                                    <TagLabel>ACTIVE</TagLabel>
+                                                </Tag>
+                                            </HStack>
+                                        )}
+                                        {clinic.status === 'INACTIVE' && (
+                                            <HStack>
+                                                <Text>Status:</Text>
+                                                <Tag colorScheme="red">
+                                                    <TagLabel>INACTIVE</TagLabel>
+                                                </Tag>
+                                            </HStack>
+                                        )}
+                                    </Stack>
+                                </HStack>
+                            </CardBody>
+                            <CardFooter>
+                                <HStack justify={'flex-end'} w={'full'}>
+                                    <Button
+                                        gap={4}
+                                        onClick={() => navigate('dental-detail')}
+                                    >
+                                        More Detail <FaArrowRight />
+                                    </Button>
+                                </HStack>
+                            </CardFooter>
+                        </>
+                    ) : (
+                        <CardBody>
+                            <Loading />
+                        </CardBody>
+                    )}
                 </Card>
             </Stack>
             <DeleteModal
@@ -217,6 +232,10 @@ const DentalClinicSettings = () => {
                 onClose={onCloseActivate}
                 type={'clinic'}
                 handleActivate={handleActivate}
+            />
+            <LoadingModal
+                isOpen={isOpenLoading}
+                onClose={onCloseLoading}
             />
         </Stack>
     )

@@ -1,4 +1,4 @@
-import { Button, FormControl, FormLabel, HStack, Input, InputGroup, InputRightAddon, Select, Stack, Textarea, useToast } from "@chakra-ui/react"
+import { Button, FormControl, FormLabel, HStack, Input, InputGroup, InputRightAddon, Select, Stack, Textarea, useDisclosure, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ApiClient from "../../../services/apiClient";
@@ -9,6 +9,7 @@ import ServiceViewDetailsResponse, { initialServiceViewDetailsResponse } from ".
 import useUserProfile from "../../../hooks/useUserProfile";
 import useCategoryByClinicId from "../../../hooks/useCategoryByClinicId";
 import CategoryViewListResponse from "../../../types/CategoryViewListResponse";
+import LoadingModal from "../../../components/modal/loading";
 
 const UpdateServicePage = () => {
     const [service, setService] = useState<ServiceViewDetailsResponse>(initialServiceViewDetailsResponse);
@@ -22,13 +23,15 @@ const UpdateServicePage = () => {
     const [categoryId, setCategoryId] = useState<number>(0);
     const [categories, setCategories] = useState<CategoryViewListResponse[]>([]);
     const { data: userData } = useUserProfile();
-    const { data: categoryData } = useCategoryByClinicId({ clinicId: userData?.clinicId })
+    const { data: categoryData } = useCategoryByClinicId({ clinicId: userData?.clinicId });
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
 
     const param = useParams<{ id: string }>();
     const navigate = useNavigate();
     const toast = useToast();
 
     const getServiceDetailById = async (id: number) => {
+        onOpenLoading();
         try {
             const api = new ApiClient<ApiResponse<ServiceViewDetailsResponse>>('/service');
             const response = await api.getDetail(id);
@@ -47,6 +50,8 @@ const UpdateServicePage = () => {
             }
         } catch (error) {
             navigate('/not-found');
+        } finally {
+            onCloseLoading();
         }
     }
 
@@ -65,7 +70,7 @@ const UpdateServicePage = () => {
 
     const handleUpdate = async (e: FormEvent) => {
         e.preventDefault();
-
+        onOpenLoading();
         const data = {
             serviceId: parseInt(param.id || '0'),
             serviceName,
@@ -80,7 +85,6 @@ const UpdateServicePage = () => {
 
         try {
             const response = await api.update(data);
-            console.log(response);
 
             if (response.success) {
                 toast({
@@ -111,6 +115,8 @@ const UpdateServicePage = () => {
                 position: 'top',
                 isClosable: true,
             });
+        } finally {
+            onCloseLoading();
         }
     };
 
@@ -276,6 +282,10 @@ const UpdateServicePage = () => {
                     Save
                 </Button>
             </HStack>
+            <LoadingModal
+                isOpen={isOpenLoading}
+                onClose={onCloseLoading}
+            />
         </Stack>
     )
 }

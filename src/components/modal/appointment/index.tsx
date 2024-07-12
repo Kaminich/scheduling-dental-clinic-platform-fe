@@ -13,6 +13,7 @@ import WorkingHoursDetailsResponse, { initialWorkingHoursDetailsResponse } from 
 import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
 import BranchSummaryResponse from "../../../types/BranchSummaryResponse";
 import DentistViewListResponse from "../../../types/DentistViewListResponse";
+import { Status } from "../../../types/type.enum";
 
 interface Props {
     isOpen: boolean;
@@ -303,11 +304,13 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                                     onChange={(e) => setClinicBranchId(parseInt(e.target.value))}
                                                     placeholder={'Select branch'}
                                                 >
-                                                    {branches.map((branch) => (
-                                                        <option value={branch.branchId}>
-                                                            {branch.branchName} ({branch.city})
-                                                        </option>
-                                                    ))}
+                                                    {branches
+                                                        .filter((branch) => branch.status === Status.ACTIVE)
+                                                        .map((branch) => (
+                                                            <option value={branch.branchId}>
+                                                                {branch.branchName} ({branch.city})
+                                                            </option>
+                                                        ))}
                                                 </Select>
                                             ) : (
                                                 <Input value={`${dentistData.branchName} (${dentistData.city})`} readOnly />
@@ -321,11 +324,13 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                                 onChange={(e) => setServiceId(parseInt(e.target.value))}
                                                 placeholder={'Select service'}
                                             >
-                                                {services.map((service) => (
-                                                    <option key={service.id} value={service.id}>
-                                                        {service.serviceName}
-                                                    </option>
-                                                ))}
+                                                {services
+                                                    .filter((service) => service.status === true)
+                                                    .map((service) => (
+                                                        <option key={service.id} value={service.id}>
+                                                            {service.serviceName}
+                                                        </option>
+                                                    ))}
                                             </Select>
                                         </FormControl>
                                         <HStack>
@@ -383,11 +388,12 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                                             value={dentistId}
                                                             onChange={(e) => setDentistId(parseInt(e.target.value))}
                                                         >
-                                                            {dentists.map((dentist) => (
-                                                                <option key={dentist.dentistId} value={dentist.dentistId}>
-                                                                    {dentist.dentistName}
-                                                                </option>
-                                                            ))}
+                                                            {dentists
+                                                                .map((dentist) => (
+                                                                    <option key={dentist.dentistId} value={dentist.dentistId}>
+                                                                        {dentist.dentistName}
+                                                                    </option>
+                                                                ))}
                                                         </Select>
                                                     )}
                                                 </>

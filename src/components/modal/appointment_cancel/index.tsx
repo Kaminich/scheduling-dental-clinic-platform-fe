@@ -71,6 +71,7 @@ const AppointmentCancelModal = ({ isOpen, onClose, type, id, refetch }: Props) =
                             value={reason}
                             placeholder="Enter reason"
                             focusBorderColor='#E2E8F0'
+                            borderColor={'gray.400'}
                             resize={'none'}
                             maxH={32}
                             minH={32}

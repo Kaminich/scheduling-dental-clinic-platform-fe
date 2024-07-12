@@ -25,7 +25,7 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
     const [services, setServices] = useState<ServiceViewListResponse[]>([]);
     const [slot, setSlot] = useState<WorkingHoursDetailsResponse>(initialWorkingHoursDetailsResponse);
     const [dentists, setDentists] = useState<DentistViewListResponse[]>([]);
-    const { data: appointmentData, refetch } = useAppointmentDetail({ appointmentId: id });
+    const { data: appointmentData, isLoading: isLoadingAppointment, refetch } = useAppointmentDetail({ appointmentId: id });
     const [appointment, setAppointment] = useState<AppointmentViewDetailsResponse>(initialAppointmentViewDetailsResponse);
 
     const getAppointmentDetail = () => {
@@ -176,7 +176,7 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
             closeOnOverlayClick={isLoading ? false : true}
         >
             <ModalOverlay />
-            {!isLoading ? (
+            {!isLoading && !isLoadingAppointment ? (
                 <ModalContent>
                     <ModalHeader textAlign={'center'}>Update Appointment</ModalHeader>
                     <ModalCloseButton borderRadius={'full'} />
@@ -252,11 +252,13 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
                                             onChange={(e) => setServiceId(parseInt(e.target.value))}
                                             placeholder={'Select service'}
                                         >
-                                            {services.map((service) => (
-                                                <option key={service.id} value={service.id}>
-                                                    {service.serviceName}
-                                                </option>
-                                            ))}
+                                            {services
+                                                .filter((service) => service.status === true)
+                                                .map((service) => (
+                                                    <option key={service.id} value={service.id}>
+                                                        {service.serviceName}
+                                                    </option>
+                                                ))}
                                         </Select>
                                     </FormControl>
                                     <HStack>

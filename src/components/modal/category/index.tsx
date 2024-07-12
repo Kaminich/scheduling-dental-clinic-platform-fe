@@ -46,6 +46,7 @@ const CategoryModal = ({ isOpen, onClose, id, type, refetch }: Props) => {
     }
 
     const getCategoryDetail = async (id: number) => {
+        setIsLoading(true);
         const api = new ApiClient<any>(`/category`);
         try {
             const response = await api.getDetail(id);
@@ -70,6 +71,8 @@ const CategoryModal = ({ isOpen, onClose, id, type, refetch }: Props) => {
                 position: 'top',
                 isClosable: true,
             });
+        } finally {
+            setIsLoading(false);
         }
     }
 

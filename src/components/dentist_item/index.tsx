@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Border, Color, Shadow } from "../../styles/styles";
 import DentistListResponse from "../../types/DentistListResponse";
+import { Status } from "../../types/type.enum";
 
 interface Props {
     type: number;
@@ -30,100 +31,106 @@ const DentistItem = ({ type, data }: Props) => {
         }
     }, [data])
 
+    console.log(data);
+
+
     return (
         <>
             {type === 1 ? (
                 <>
-                    {dentists.map((dentist) => (
-                        <Card maxW='sm' key={dentist.dentistId}>
-                            <CardBody pb={6}>
-                                <Stack align={'center'}>
-                                    <Avatar
-                                        size='2xl'
-                                        name='Segun Adebayo'
-                                        src={dentist.avatar || ''}
-                                        border={Border.tableBorder}
-                                    />
-                                    <Heading
-                                        size='md'
-                                        mt={4}
-                                        _hover={{ color: Color.hoverBlue }}
-                                        cursor={'pointer'}
-                                        onClick={() => navigateToDentistDetail(dentist.fullName)}
-                                    >
-                                        {dentist.fullName}
-                                    </Heading>
-                                    <Text>Dentist</Text>
-                                </Stack>
-                                <Stack mx={3} mt={4}>
-                                    <HStack>
-                                        <Tooltip label='Specialty'>
-                                            <span>
-                                                <FaTooth />
-                                            </span>
-                                        </Tooltip>
-                                        <Text textTransform={'capitalize'}>{dentist.specialty}</Text>
-                                    </HStack>
-                                </Stack>
-                                <Stack mx={3} mt={1}>
-                                    <HStack>
-                                        <Tooltip label='Clinic'>
-                                            <span>
-                                                <FaMapLocationDot />
-                                            </span>
-                                        </Tooltip>
-                                        <Text
-                                            cursor={'pointer'}
+                    {dentists
+                        .filter((dentist) => dentist.status === Status.ACTIVE)
+                        .map((dentist) => (
+                            <Card maxW='sm' key={dentist.dentistId}>
+                                <CardBody pb={6}>
+                                    <Stack align={'center'}>
+                                        <Avatar
+                                            size='2xl'
+                                            name='Segun Adebayo'
+                                            src={dentist.avatar || ''}
+                                            border={Border.tableBorder}
+                                        />
+                                        <Heading
+                                            size='md'
+                                            mt={4}
                                             _hover={{ color: Color.hoverBlue }}
-                                            onClick={() => navigateToDentalDetail(dentist.clinicName)}
+                                            cursor={'pointer'}
+                                            onClick={() => navigateToDentistDetail(dentist.fullName)}
                                         >
-                                            {dentist.clinicName}
-                                        </Text>
-                                    </HStack>
-                                </Stack>
-                            </CardBody>
-                        </Card>
-                    ))}
+                                            {dentist.fullName}
+                                        </Heading>
+                                        <Text>Dentist</Text>
+                                    </Stack>
+                                    <Stack mx={3} mt={4}>
+                                        <HStack>
+                                            <Tooltip label='Specialty'>
+                                                <span>
+                                                    <FaTooth />
+                                                </span>
+                                            </Tooltip>
+                                            <Text textTransform={'capitalize'}>{dentist.specialty}</Text>
+                                        </HStack>
+                                    </Stack>
+                                    <Stack mx={3} mt={1}>
+                                        <HStack>
+                                            <Tooltip label='Clinic'>
+                                                <span>
+                                                    <FaMapLocationDot />
+                                                </span>
+                                            </Tooltip>
+                                            <Text
+                                                cursor={'pointer'}
+                                                _hover={{ color: Color.hoverBlue }}
+                                                onClick={() => navigateToDentalDetail(dentist.clinicName)}
+                                            >
+                                                {dentist.clinicName}
+                                            </Text>
+                                        </HStack>
+                                    </Stack>
+                                </CardBody>
+                            </Card>
+                        ))}
                 </>
             ) : (
                 <>
-                    {dentists.map((dentist) => (
-                        <Card
-                            maxW='sm'
-                            shadow={Shadow.cardShadow}
-                            cursor={'pointer'}
-                            onClick={() => navigateToDentistDetail(dentist.fullName)}
-                        >
-                            <CardBody pb={4}>
-                                <Stack align={'center'}>
-                                    <Image
-                                        src={dentist.avatar || 'https://bit.ly/sage-adebayo'}
-                                        alt='Dentist image'
-                                        borderRadius='lg'
-                                    />
-                                    <Heading
-                                        size='md'
-                                        py={2}
-                                        pb={0}
-                                        _hover={{ color: Color.hoverBlue }}
-                                    >
-                                        {dentist.fullName}
-                                    </Heading>
-                                    <Text fontSize={18}>Dentist</Text>
-                                </Stack>
-                                <Stack mx={3} mt={1}>
-                                    <HStack>
-                                        <Tooltip label='Dental'>
-                                            <span>
-                                                <FaMapLocationDot />
-                                            </span>
-                                        </Tooltip>
-                                        <Text>{`${dentist.branchName} (${dentist.city})`}</Text>
-                                    </HStack>
-                                </Stack>
-                            </CardBody>
-                        </Card>
-                    ))}
+                    {dentists
+                        .filter((dentist) => dentist.status === Status.ACTIVE)
+                        .map((dentist) => (
+                            <Card
+                                maxW='sm'
+                                shadow={Shadow.cardShadow}
+                                cursor={'pointer'}
+                                onClick={() => navigateToDentistDetail(dentist.fullName)}
+                            >
+                                <CardBody pb={4}>
+                                    <Stack align={'center'}>
+                                        <Image
+                                            src={dentist.avatar || 'https://bit.ly/sage-adebayo'}
+                                            alt='Dentist image'
+                                            borderRadius='lg'
+                                        />
+                                        <Heading
+                                            size='md'
+                                            py={2}
+                                            pb={0}
+                                            _hover={{ color: Color.hoverBlue }}
+                                        >
+                                            {dentist.fullName}
+                                        </Heading>
+                                    </Stack>
+                                    <Stack mx={3} mt={3}>
+                                        <HStack>
+                                            <Tooltip label='Dental'>
+                                                <span>
+                                                    <FaMapLocationDot />
+                                                </span>
+                                            </Tooltip>
+                                            <Text>{dentist.city}</Text>
+                                        </HStack>
+                                    </Stack>
+                                </CardBody>
+                            </Card>
+                        ))}
                 </>
             )}
         </>

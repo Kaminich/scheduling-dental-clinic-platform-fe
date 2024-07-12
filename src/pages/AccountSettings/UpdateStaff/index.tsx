@@ -34,6 +34,7 @@ const UpdateStaffPage = () => {
     const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
 
     const getStaffDetailById = async (id: number) => {
+        onOpenLoading();
         try {
             const api = new ApiClient<ApiResponse<StaffDetailResponse>>('/staff');
             const response = await api.getDetail(id);
@@ -52,6 +53,8 @@ const UpdateStaffPage = () => {
             }
         } catch (error) {
             navigate('/not-found');
+        } finally {
+            onCloseLoading();
         }
     }
 

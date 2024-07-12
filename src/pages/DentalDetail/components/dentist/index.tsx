@@ -10,6 +10,9 @@ interface Prop {
 const DentalDentist = ({ clinicId }: Prop) => {
     const { data } = useDentistByClinicId({ clinicId: clinicId });
 
+    console.log(data);
+
+
     return (
         <>
             <Text
@@ -25,7 +28,7 @@ const DentalDentist = ({ clinicId }: Prop) => {
                 Medical Team
             </Text>
             <SimpleGrid columns={4} spacing={6} mb={6}>
-                <DentistItem type={2} data={data} />
+                <DentistItem type={2} data={data?.content} />
             </SimpleGrid>
         </>
     )

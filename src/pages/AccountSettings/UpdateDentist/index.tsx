@@ -37,6 +37,7 @@ const UpdateDentistPage = () => {
     const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
 
     const getDentistDetailById = async (id: number) => {
+        onOpenLoading();
         try {
             const api = new ApiClient<ApiResponse<DentistDetailResponse>>('/dentists');
             const response = await api.getDetail(id);
@@ -55,6 +56,8 @@ const UpdateDentistPage = () => {
             }
         } catch (error) {
             navigate('/not-found');
+        } finally {
+            onCloseLoading();
         }
     }
 
