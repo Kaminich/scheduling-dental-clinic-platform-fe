@@ -6,6 +6,7 @@ import { FaUpload } from "react-icons/fa6";
 import axios from "axios";
 import ApiClient from "../../services/apiClient";
 import LoadingModal from "../../components/modal/loading";
+import { VietnamCities } from "../../types/type.enum";
 
 const PartnerRegisterPage = () => {
     const [clinicName, setClinicName] = useState<string>('');
@@ -232,15 +233,11 @@ const PartnerRegisterPage = () => {
                                         placeholder={'Select city'}
                                         required
                                     >
-                                        <option value="Male">
-                                            Male
-                                        </option>
-                                        <option value="Female">
-                                            Female
-                                        </option>
-                                        <option value="Other">
-                                            Other
-                                        </option>
+                                        {Object.values(VietnamCities).sort((a, b) => a.localeCompare(b)).map((city) => (
+                                            <option key={city} value={city}>
+                                                {city}
+                                            </option>
+                                        ))}
                                     </Select>
                                 </FormControl>
                                 <FormControl id="clinicphone" flex={1} isRequired>
@@ -372,7 +369,6 @@ const PartnerRegisterPage = () => {
                                     address === '' ||
                                     city === '' ||
                                     clinicRegistration === null ||
-                                    clinicImageData === null ||
                                     fullName === '' ||
                                     phone === '' ||
                                     email === ''

@@ -14,6 +14,8 @@ const DentalBranch = () => {
             setClinics(data.content);
         }
     }, [data?.content]);
+    console.log(clinics);
+
     return (
         <>
             <SimpleGrid columns={3} spacingX={3} spacingY={6}>

@@ -3,6 +3,7 @@ import { FormEvent, useEffect, useState } from "react";
 import ApiClient from "../../../services/apiClient";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { Border } from "../../../styles/styles";
+import { VietnamCities } from "../../../types/type.enum";
 
 const CreateClinicBranchPage = () => {
     const [branchName, setBranchName] = useState<string>('');
@@ -110,15 +111,11 @@ const CreateClinicBranchPage = () => {
                             onChange={(e) => setCity(e.target.value)}
                             placeholder={'Select city'}
                         >
-                            <option value="Male">
-                                Male
-                            </option>
-                            <option value="Female">
-                                Female
-                            </option>
-                            <option value="Other">
-                                Other
-                            </option>
+                            {Object.values(VietnamCities).sort((a, b) => a.localeCompare(b)).map((city) => (
+                                <option key={city} value={city}>
+                                    {city}
+                                </option>
+                            ))}
                         </Select>
                     </FormControl>
                     <FormControl id="phone" flex={1.5} isRequired>

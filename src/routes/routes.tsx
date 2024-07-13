@@ -108,7 +108,7 @@ const routes = [
             { path: "dentists/:name", element: <DentistDetailPage /> },
             { path: "services", element: <ServicePage /> },
             { path: "blogs", element: <BlogPage /> },
-            { path: "blog-detail", element: <BlogDetailPage /> },
+            { path: "blogs/:name", element: <BlogDetailPage /> },
             { path: "partner-register", element: <PartnerRegisterPage /> },
             { path: "appointment", element: <AppointmentPage /> },
             { path: "medical-record", element: <MedicalRecordPage /> },

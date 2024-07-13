@@ -72,7 +72,6 @@ const DentalClinicSettings = () => {
         try {
             const api = new ApiClient<any>(`/clinics`);
             const response = await api.delete(id);
-            console.log(response);
 
             if (response.success) {
                 toast({
@@ -118,9 +117,6 @@ const DentalClinicSettings = () => {
         }
     }, [clinicData])
 
-    console.log(clinic);
-
-
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
             <Stack gap={6} w={'full'}>
@@ -134,7 +130,7 @@ const DentalClinicSettings = () => {
                                             colorScheme="red"
                                             onClick={() => {
                                                 onOpenDeactivate();
-                                                setId(clinic.id);
+                                                setId(clinic.clinicId);
                                             }}
                                         >
                                             Deactivate
@@ -145,7 +141,7 @@ const DentalClinicSettings = () => {
                                             colorScheme="green"
                                             onClick={() => {
                                                 onOpenActivate();
-                                                setId(clinic.id);
+                                                setId(clinic.clinicId);
                                             }}
                                         >
                                             Activate

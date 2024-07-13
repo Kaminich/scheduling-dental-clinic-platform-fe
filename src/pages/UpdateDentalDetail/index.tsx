@@ -8,7 +8,7 @@ import axios from "axios";
 import { Border } from "../../styles/styles";
 import useUserProfile from "../../hooks/useUserProfile";
 import LoadingModal from "../../components/modal/loading";
-import { DayInWeek } from "../../types/type.enum";
+import { DayInWeek, VietnamCities } from "../../types/type.enum";
 import useWorkingHoursByClinicId from "../../hooks/useWorkingHoursByClinicId";
 import WorkingHoursResponse from "../../types/WorkingHoursResponse";
 import ClinicDetailResponse, { initialClinicDetailResponse } from "../../types/ClinicDetailResponse";
@@ -22,6 +22,7 @@ const UpdateDentalDetailPage = () => {
     const [city, setCity] = useState<string>('');
     const [address, setAddress] = useState<string>('');
     const [description, setDescription] = useState<string>('');
+    const [websiteUrl, setWebsiteUrl] = useState<string>('');
     const [logo, setLogo] = useState<string>('');
     const [logoData, setLogoData] = useState<File | null>(null);
     const [clinicImage, setClinicImage] = useState<string>('');
@@ -67,6 +68,7 @@ const UpdateDentalDetailPage = () => {
         setEmail(clinic.email);
         setAddress(clinic.address);
         setDescription(clinic.description);
+        setWebsiteUrl(clinic.websiteUrl);
         setLogo(clinic.logo);
         setLogoData(null);
         setClinicImage(clinic.clinicImage);
@@ -145,15 +147,15 @@ const UpdateDentalDetailPage = () => {
 
         const data = {
             clinicId: clinic.id,
-            clinicName: 'string',
-            address: 'string',
-            city: 'string',
-            phone: 'string',
-            email: 'string',
-            description: 'string',
-            websiteUrl: 'string',
-            logo: 'string',
-            clinicImage: 'string',
+            clinicName,
+            address,
+            city,
+            phone,
+            email,
+            description,
+            websiteUrl,
+            logo,
+            clinicImage,
             workingHours: [
                 {
                     day: DayInWeek.MONDAY,
@@ -388,15 +390,11 @@ const UpdateDentalDetailPage = () => {
                                         placeholder={'Select city'}
                                         required
                                     >
-                                        <option value="Male">
-                                            Male
-                                        </option>
-                                        <option value="Female">
-                                            Female
-                                        </option>
-                                        <option value="Other">
-                                            Other
-                                        </option>
+                                        {Object.values(VietnamCities).sort((a, b) => a.localeCompare(b)).map((city) => (
+                                            <option key={city} value={city}>
+                                                {city}
+                                            </option>
+                                        ))}
                                     </Select>
                                 </FormControl>
                                 <FormControl id="phone" flex={1} isRequired>
@@ -414,8 +412,8 @@ const UpdateDentalDetailPage = () => {
                                 <FormLabel pl={1}>Website Url</FormLabel>
                                 <Input
                                     type="url"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={websiteUrl}
+                                    onChange={(e) => setWebsiteUrl(e.target.value)}
                                     placeholder="Enter website url"
                                 />
                             </FormControl>
@@ -477,7 +475,7 @@ const UpdateDentalDetailPage = () => {
                             px={2}
                             my={1}
                             h={6}
-                        // onClick={handleReset}
+                            onClick={handleReset}
                         >
                             Reset
                         </Button>

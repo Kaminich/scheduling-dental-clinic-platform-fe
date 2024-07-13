@@ -1,7 +1,6 @@
-import { Button, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, Textarea, useToast } from "@chakra-ui/react"
+import { Button, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, Textarea } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import Loading from "../../loading";
-import ApiClient from "../../../services/apiClient";
 import useTreatmentOutcomeDetail from "../../../hooks/useTreatmentOutcomeDetail";
 import TreatmentOutcomeResponse, { initialTreatmentOutcomeResponse } from "../../../types/TreatmentOutcomeResponse";
 import { formatDate } from "../../../utils/formatDate";
@@ -11,55 +10,13 @@ interface Props {
     isOpen: boolean;
     onClose: () => void;
     id: number;
+    handleRemove: () => void;
 }
 
-const TreatmentOutcomeDetailModal = ({ isOpen, onClose, id }: Props) => {
-    const toast = useToast();
+const TreatmentOutcomeDetailModal = ({ isOpen, onClose, id, handleRemove }: Props) => {
     const [type, setType] = useState<string>('detail');
-    const [deleteId, setDeleteId] = useState<number>(0);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const { data: treatmentData, refetch } = useTreatmentOutcomeDetail({ appointmentId: id });
+    const { data: treatmentData, isLoading } = useTreatmentOutcomeDetail({ appointmentId: id });
     const [treatment, setTreatment] = useState<TreatmentOutcomeResponse>(initialTreatmentOutcomeResponse);
-
-    const handleRemove = async () => {
-        setIsLoading(true);
-        const api = new ApiClient<any>('treatment-outcome');
-        try {
-            const response = await api.delete(deleteId);
-            if (response.success) {
-                toast({
-                    title: "Success",
-                    description: response.message,
-                    status: "success",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                })
-                refetch && refetch();
-            } else {
-                toast({
-                    title: "Error",
-                    description: response.message,
-                    status: "error",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                })
-            }
-        } catch (error: any) {
-            toast({
-                title: "Error",
-                description: error.response?.data?.message || "An error occurred",
-                status: "error",
-                duration: 2500,
-                position: 'top',
-                isClosable: true,
-            });
-        } finally {
-            setIsLoading(false);
-            onClose();
-        }
-    }
 
     useEffect(() => {
         if (treatmentData) {
@@ -93,7 +50,6 @@ const TreatmentOutcomeDetailModal = ({ isOpen, onClose, id }: Props) => {
                                                 colorScheme="red"
                                                 variant='ghost'
                                                 onClick={() => {
-                                                    setDeleteId(treatment.id);
                                                     setType('remove');
                                                 }}
                                             >

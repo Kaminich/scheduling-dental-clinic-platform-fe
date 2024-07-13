@@ -10,4 +10,5 @@ export default interface AppointmentDentistResponse {
     customerName: string;
     service: string;
     status: AppointmentStatus;
+    treatmentOutcomeId: number;
 }

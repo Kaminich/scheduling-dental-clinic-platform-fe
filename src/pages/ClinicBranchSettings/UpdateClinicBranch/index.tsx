@@ -8,6 +8,7 @@ import { ApiResponse } from "../../../types/ApiResponse";
 import BranchDetailResponse, { initialBranchDetailResponse } from "../../../types/BranchDetailResponse";
 import Loading from "../../../components/loading";
 import LoadingModal from "../../../components/modal/loading";
+import { VietnamCities } from "../../../types/type.enum";
 
 const UpdateClinicBranchPage = () => {
     const [branchName, setBranchName] = useState<string>('');
@@ -160,15 +161,11 @@ const UpdateClinicBranchPage = () => {
                                     onChange={(e) => setCity(e.target.value)}
                                     placeholder={'Select city'}
                                 >
-                                    <option value="Male">
-                                        Male
-                                    </option>
-                                    <option value="Female">
-                                        Female
-                                    </option>
-                                    <option value="Other">
-                                        Other
-                                    </option>
+                                    {Object.values(VietnamCities).sort((a, b) => a.localeCompare(b)).map((city) => (
+                                        <option key={city} value={city}>
+                                            {city}
+                                        </option>
+                                    ))}
                                 </Select>
                             </FormControl>
                             <FormControl id="phone" flex={1.5} isRequired>

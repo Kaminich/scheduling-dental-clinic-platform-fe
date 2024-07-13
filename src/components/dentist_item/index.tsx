@@ -99,21 +99,23 @@ const DentistItem = ({ type, data }: Props) => {
                             <Card
                                 maxW='sm'
                                 shadow={Shadow.cardShadow}
-                                cursor={'pointer'}
-                                onClick={() => navigateToDentistDetail(dentist.fullName)}
                             >
                                 <CardBody pb={4}>
                                     <Stack align={'center'}>
                                         <Image
                                             src={dentist.avatar || 'https://bit.ly/sage-adebayo'}
-                                            alt='Dentist image'
+                                            alt={dentist.fullName}
                                             borderRadius='lg'
+                                            w={222}
+                                            h={222}
                                         />
                                         <Heading
                                             size='md'
                                             py={2}
                                             pb={0}
                                             _hover={{ color: Color.hoverBlue }}
+                                            cursor={'pointer'}
+                                            onClick={() => navigateToDentistDetail(dentist.fullName)}
                                         >
                                             {dentist.fullName}
                                         </Heading>
