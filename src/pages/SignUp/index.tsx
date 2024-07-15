@@ -124,7 +124,11 @@ const SignUpPage = () => {
                         <Logo />
                     </Link>
                 </Box>
-                <Stack maxW={'lg'} gap={1} m={'auto'} mt={8}>
+                <Stack maxW={'lg'} gap={1} m={'auto'} mt={8} onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        handleSignUp(e);
+                    }
+                }}>
                     <Heading
                         fontSize={"2xl"}
                         textAlign={'center'}

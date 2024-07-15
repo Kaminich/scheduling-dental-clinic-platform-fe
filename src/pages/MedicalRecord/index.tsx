@@ -18,9 +18,6 @@ const MedicalRecordPage = () => {
     const [followUpDate, setFollowUpDate] = useState<string>('');
     const { isOpen: isOpenAppointment, onClose: onCloseAppointment, onOpen: onOpenAppointment } = useDisclosure();
 
-    console.log(medicalData);
-
-
     useEffect(() => {
         changeTabTitle('Medical Record');
     }, []);
@@ -61,14 +58,27 @@ const MedicalRecordPage = () => {
                             <CardBody py={7} px={8}>
                                 <Stack gap={5}>
                                     <HStack>
-                                        <FormControl id="fullname" flex={2}>
-                                            <FormLabel ml={1}>Full Name</FormLabel>
-                                            <Input value={'fullname'} readOnly />
+                                        <FormControl id="customer" flex={2}>
+                                            <FormLabel ml={1}>Customer</FormLabel>
+                                            <Input value={treatment.customerName} readOnly />
                                         </FormControl>
                                         <FormControl id="followUpDate" flex={1}>
                                             <FormLabel ml={1}>Follow-up Date</FormLabel>
                                             <Input
                                                 value={formatDate(treatment.followUpDate)}
+                                                readOnly
+                                            />
+                                        </FormControl>
+                                    </HStack>
+                                    <HStack>
+                                        <FormControl id="dentist" flex={1}>
+                                            <FormLabel ml={1}>Dentist</FormLabel>
+                                            <Input value={treatment.dentistName} readOnly />
+                                        </FormControl>
+                                        <FormControl id="branch" flex={1}>
+                                            <FormLabel ml={1}>Clinic Branch</FormLabel>
+                                            <Input
+                                                value={treatment.clinicBranchName}
                                                 readOnly
                                             />
                                         </FormControl>

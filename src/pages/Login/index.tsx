@@ -11,7 +11,7 @@ import { AxiosError } from "axios";
 import { jwtDecode } from "jwt-decode";
 import { formatRoleString } from "../../utils/formatRoleString";
 import { FcGoogle } from "react-icons/fc";
-import { Border } from "../../styles/styles";
+import { Border, Color } from "../../styles/styles";
 
 interface DecodeJWTRole {
     role: string;
@@ -152,9 +152,13 @@ const LoginPage = () => {
                         <Logo />
                     </Link>
                 </Box>
-                <Stack maxW={'md'} gap={5} m={'auto'}>
+                <Stack maxW={'md'} gap={5} m={'auto'} onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        handleLogin(e);
+                    }
+                }}>
                     <Heading fontSize={"2xl"} textAlign={'center'} mb={10}>Login to F-Dental</Heading>
-                    <FormControl id="email">
+                    <FormControl id="username">
                         <FormLabel pl={1}>Username</FormLabel>
                         <Input
                             type="text"
@@ -163,21 +167,34 @@ const LoginPage = () => {
                             placeholder="Username"
                         />
                     </FormControl>
-                    <FormControl id="password">
-                        <FormLabel pl={1}>Password</FormLabel>
-                        <InputGroup>
-                            <Input
-                                type={showPass ? 'text' : 'password'}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Password"
-                            />
-                            <InputRightElement width='3.5rem' cursor='pointer' onClick={() => setShowPass(!showPass)}>
-                                {!showPass ? <FaEye /> : <FaEyeSlash />}
-                            </InputRightElement>
-                        </InputGroup>
-                    </FormControl>
-                    <Stack spacing={6} mt={5}>
+                    <Stack gap={1}>
+                        <FormControl id="password">
+                            <FormLabel pl={1}>Password</FormLabel>
+                            <InputGroup>
+                                <Input
+                                    type={showPass ? 'text' : 'password'}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Password"
+                                />
+                                <InputRightElement width='3.5rem' cursor='pointer' onClick={() => setShowPass(!showPass)}>
+                                    {!showPass ? <FaEye /> : <FaEyeSlash />}
+                                </InputRightElement>
+                            </InputGroup>
+                        </FormControl>
+                        <Text
+                            ml={2}
+                            fontSize={12}
+                            cursor={'pointer'}
+                            onClick={() => navigate('/forgot-password')}
+                            maxW={28}
+                            color={'gray'}
+                            _hover={{ color: Color.hoverBlue }}
+                        >
+                            Forgot password?
+                        </Text>
+                    </Stack>
+                    <Stack spacing={6} mt={3}>
                         <Button
                             colorScheme={"blue"}
                             variant={"solid"}

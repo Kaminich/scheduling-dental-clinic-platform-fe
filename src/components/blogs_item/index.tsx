@@ -15,10 +15,10 @@ const BlogsItem = ({ blog }: Prop) => {
     };
 
     return (
-        <Card maxW={320} bgColor={Color.blue_100} onClick={() => navigateToDetail(blog.title)}>
+        <Card maxW={320} bgColor={Color.blue_100} cursor={'pointer'} onClick={() => navigateToDetail(blog.title)}>
             <CardBody>
                 <Image
-                    src={'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'}
+                    src={blog.thumbnail || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'}
                     alt={blog.title}
                     borderRadius='lg'
                     h={155}

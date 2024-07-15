@@ -9,6 +9,10 @@ export default interface TreatmentOutcomeResponse {
     modifiedBy: string;
     appointmentId: number;
     customerId: number;
+    customerName: string;
+    dentistName: string;
+    clinicBranchName: string;
+
 }
 
 export const initialTreatmentOutcomeResponse: TreatmentOutcomeResponse = {
@@ -21,5 +25,8 @@ export const initialTreatmentOutcomeResponse: TreatmentOutcomeResponse = {
     createdBy: '',
     modifiedBy: '',
     appointmentId: 0,
-    customerId: 0
+    customerId: 0,
+    customerName: '',
+    dentistName: '',
+    clinicBranchName: ''
 };
