@@ -10,6 +10,8 @@ import { changeTabTitle } from "../../utils/changeTabTitle";
 import ApiClient from "../../services/apiClient";
 import axios from "axios";
 import LoadingModal from "../../components/modal/loading";
+import NotFoundPage from "../NotFound";
+import { useAuth } from "../../hooks/useAuth";
 
 const UpdateProfilePage = () => {
     const [username, setUsername] = useState<string>('');
@@ -32,6 +34,11 @@ const UpdateProfilePage = () => {
     const { data, refetch } = useUserProfile();
     const toast = useToast();
     const param = useParams();
+    const { role } = useAuth();
+
+    if (role !== 'Owner' && role !== 'Dentist' && role !== 'Staff' && role !== 'Customer') {
+        return <NotFoundPage />
+    }
 
     const handleAvatarChange = (e: any) => {
         const selectedFile = e.target.files[0];

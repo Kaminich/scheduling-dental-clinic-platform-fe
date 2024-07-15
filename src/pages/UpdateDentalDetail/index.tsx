@@ -284,7 +284,7 @@ const UpdateDentalDetailPage = () => {
     };
 
     useEffect(() => {
-        changeTabTitle('Update Dentist Profile');
+        changeTabTitle('Update Dental Clinic');
     }, []);
 
     useEffect(() => {
@@ -350,7 +350,11 @@ const UpdateDentalDetailPage = () => {
                 </Td>
             )}
             <Td textAlign={'center'}>
-                <Checkbox isChecked={!isWorking} onChange={() => setIsWorking(!isWorking)} />
+                <Checkbox isChecked={!isWorking} onChange={() => {
+                    setIsWorking(!isWorking);
+                    setStartTime('');
+                    setEndTime('');
+                }} />
             </Td>
         </Tr>
     );

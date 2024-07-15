@@ -134,7 +134,7 @@ const CreateBlogPage = () => {
     }, []);
 
     return (
-        <Box p={8} maxWidth="600px" mx="auto">
+        <Box p={8} w={'4xl'} mx="auto" mb={10}>
             <Stack spacing={4}>
                 <FormControl id="title" isRequired>
                     <FormLabel pl={1}>Title</FormLabel>
@@ -172,7 +172,7 @@ const CreateBlogPage = () => {
                         bg={'gainsboro'}
                         _hover={{ bg: 'gray.300' }}
                     >
-                        <FaCamera /> Update Image
+                        <FaCamera /> Upload Image
                     </FormLabel>
                     <Input
                         type="file"

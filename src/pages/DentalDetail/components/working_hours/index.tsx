@@ -37,41 +37,6 @@ const WorkingHours = ({ clinicId }: Prop) => {
                             <Td textAlign={'center'}>{formatTime(workingHour.endTime)}</Td>
                         </Tr>
                     ))}
-                    <Tr>
-                        <Th>Monday</Th>
-                        <Td textAlign={'center'}>millimetres (mm)</Td>
-                        <Td textAlign={'center'}>25.4</Td>
-                    </Tr>
-                    <Tr>
-                        <Th>Tuesday</Th>
-                        <Td textAlign={'center'}>centimetres (cm)</Td>
-                        <Td textAlign={'center'}>30.48</Td>
-                    </Tr>
-                    <Tr>
-                        <Th>Wednesday</Th>
-                        <Td textAlign={'center'}>metres (m)</Td>
-                        <Td textAlign={'center'}>0.91444</Td>
-                    </Tr>
-                    <Tr>
-                        <Th>Thursday</Th>
-                        <Td textAlign={'center'}>metres (m)</Td>
-                        <Td textAlign={'center'}>0.91444</Td>
-                    </Tr>
-                    <Tr>
-                        <Th>Friday</Th>
-                        <Td textAlign={'center'}>metres (m)</Td>
-                        <Td textAlign={'center'}>0.91444</Td>
-                    </Tr>
-                    <Tr>
-                        <Th>Saturday</Th>
-                        <Td textAlign={'center'}>metres (m)</Td>
-                        <Td textAlign={'center'}>0.91444</Td>
-                    </Tr>
-                    <Tr>
-                        <Th>Sunday</Th>
-                        <Td textAlign={'center'}>metres (m)</Td>
-                        <Td textAlign={'center'}>0.91444</Td>
-                    </Tr>
                 </Tbody>
             </Table>
         </Card>

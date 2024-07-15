@@ -35,7 +35,7 @@ import CreateStaffPage from "../pages/AccountSettings/CreateStaff";
 import CreateBlogPage from "../pages/BlogSettings/CreateBlog";
 import UpdateDentistPage from "../pages/AccountSettings/UpdateDentist";
 import UpdateStaffPage from "../pages/AccountSettings/UpdateStaff";
-import DentalClinicSettings from "../pages/DentalClinicSettings";
+import DentalClinicSettingsPage from "../pages/DentalClinicSettings";
 import DentalDetailSettingsPage from "../pages/DentalDetailSettings";
 import DentistProfileDetailPage from "../pages/AccountSettings/DentistProfileDetail";
 import StaffProfileDetailPage from "../pages/AccountSettings/StaffProfileDetail";
@@ -52,6 +52,8 @@ import AppointmentPage from "../pages/Appointment";
 import ReportSettingsPage from "../pages/ReportSettings";
 import UpdateDentalDetailPage from "../pages/UpdateDentalDetail";
 import UpdateBlogPage from "../pages/BlogSettings/UpdateBlog";
+import ForgotPasswordPage from "../pages/ForgotPassword";
+import PrivateRoute from "./PrivateRoute";
 
 const routes = [
     {
@@ -67,33 +69,100 @@ const routes = [
         element: <SignUpPage />,
     },
     {
+        path: "/forgot-password",
+        element: <ForgotPasswordPage />,
+    },
+    {
         path: "/",
         element: <SystemLayout />,
         children: [
             { path: "profile", element: <ProfilePage /> },
             { path: "update-profile/:type", element: <UpdateProfilePage /> },
             { path: "message", element: <MessagePage /> },
-            { path: "manage-blog/:blogId", element: <BlogDetailPage /> },
-            { path: "manage-blog/create-blog", element: <CreateBlogPage /> },
-            { path: "manage-blog/:blogId/update", element: <UpdateBlogPage /> },
-            { path: "administrator/dentals/manage-dental/:id", element: <DentalDetailSettingsPage /> },
-            { path: "administrator/dentals/dental-detail", element: <DentalDetailSettingsPage /> },
-            { path: "administrator/dentals/dental-detail/update", element: <UpdateDentalDetailPage /> },
-            { path: "administrator/blogs/appprove-blog/:blogId", element: <BlogDetailPage /> },
-            { path: "administrator/blogs/manage-blog/:blogId", element: <BlogDetailPage /> },
-            { path: "administrator/blogs/:blogId", element: <BlogDetailPage /> },
-            { path: "administrator/accounts/create-dentist", element: <CreateDentistPage /> },
-            { path: "administrator/accounts/create-staff", element: <CreateStaffPage /> },
-            { path: "administrator/accounts/dentist/:id", element: <DentistProfileDetailPage /> },
-            { path: "administrator/accounts/staff/:id", element: <StaffProfileDetailPage /> },
-            { path: "administrator/accounts/dentist/:id/update", element: <UpdateDentistPage /> },
-            { path: "administrator/accounts/staff/:id/update", element: <UpdateStaffPage /> },
-            { path: "administrator/branches/create", element: <CreateClinicBranchPage /> },
-            { path: "administrator/branches/:id", element: <ClinicBranchDetailPage /> },
-            { path: "administrator/branches/:id/update", element: <UpdateClinicBranchPage /> },
-            { path: "administrator/services/create", element: <CreateServicePage /> },
-            { path: "administrator/services/:id", element: <ServiceDetailPage /> },
-            { path: "administrator/services/:id/update", element: <UpdateServicePage /> },
+            {
+                path: "manage-blog/:blogId",
+                element: <PrivateRoute roleAuth="Staff" element={<BlogDetailPage />} />
+            },
+            {
+                path: "manage-blog/create",
+                element: <PrivateRoute roleAuth="Staff" element={<CreateBlogPage />} />
+            },
+            {
+                path: "manage-blog/:blogId/update",
+                element: <PrivateRoute roleAuth="Staff" element={<UpdateBlogPage />} />
+            },
+            {
+                path: "administrator/dentals/manage-dental/:id",
+                element: <PrivateRoute roleAuth="Admin" element={<DentalDetailSettingsPage />} />
+            },
+            {
+                path: "administrator/dentals/dental-detail",
+                element: <PrivateRoute roleAuth="Owner" element={<DentalDetailSettingsPage />} />
+            },
+            {
+                path: "administrator/dentals/dental-detail/update",
+                element: <PrivateRoute roleAuth="Owner" element={<UpdateDentalDetailPage />} />
+            },
+            {
+                path: "administrator/blogs/appprove-blog/:blogId",
+                element: <PrivateRoute roleAuth="Admin" element={<BlogDetailPage />} />
+            },
+            {
+                path: "administrator/blogs/manage-blog/:blogId",
+                element: <PrivateRoute roleAuth="Admin" element={<BlogDetailPage />} />
+            },
+            {
+                path: "administrator/blogs/:blogId",
+                element: <PrivateRoute roleAuth="Owner" element={<BlogDetailPage />} />
+            },
+            {
+                path: "administrator/accounts/create-dentist",
+                element: <PrivateRoute roleAuth="Owner" element={<CreateDentistPage />} />
+            },
+            {
+                path: "administrator/accounts/create-staff",
+                element: <PrivateRoute roleAuth="Owner" element={<CreateStaffPage />} />
+            },
+            {
+                path: "administrator/accounts/dentist/:id",
+                element: <PrivateRoute roleAuth="Owner" element={<DentistProfileDetailPage />} />
+            },
+            {
+                path: "administrator/accounts/staff/:id",
+                element: <PrivateRoute roleAuth="Owner" element={<StaffProfileDetailPage />} />
+            },
+            {
+                path: "administrator/accounts/dentist/:id/update",
+                element: <PrivateRoute roleAuth="Owner" element={<UpdateDentistPage />} />
+            },
+            {
+                path: "administrator/accounts/staff/:id/update",
+                element: <PrivateRoute roleAuth="Owner" element={<UpdateStaffPage />} />
+            },
+            {
+                path: "administrator/branches/create",
+                element: <PrivateRoute roleAuth="Owner" element={<CreateClinicBranchPage />} />
+            },
+            {
+                path: "administrator/branches/:id",
+                element: <PrivateRoute roleAuth="Owner" element={<ClinicBranchDetailPage />} />
+            },
+            {
+                path: "administrator/branches/:id/update",
+                element: <PrivateRoute roleAuth="Owner" element={<UpdateClinicBranchPage />} />
+            },
+            {
+                path: "administrator/services/create",
+                element: <PrivateRoute roleAuth="Owner" element={<CreateServicePage />} />
+            },
+            {
+                path: "administrator/services/:id",
+                element: <PrivateRoute roleAuth="Owner" element={<ServiceDetailPage />} />
+            },
+            {
+                path: "administrator/services/:id/update",
+                element: <PrivateRoute roleAuth="Owner" element={<UpdateServicePage />} />
+            },
         ],
     },
     {
@@ -110,12 +179,30 @@ const routes = [
             { path: "blogs", element: <BlogPage /> },
             { path: "blogs/:name", element: <BlogDetailPage /> },
             { path: "partner-register", element: <PartnerRegisterPage /> },
-            { path: "appointment", element: <AppointmentPage /> },
-            { path: "medical-record", element: <MedicalRecordPage /> },
-            { path: "rating-feedback", element: <RatingFeedbackPage /> },
-            { path: "manage-appointment", element: <ManageAppointmentPage /> },
-            { path: "manage-blog", element: <ManageBlogPage /> },
-            { path: "view-schedule", element: <ViewSchedulePage /> },
+            {
+                path: "appointment",
+                element: <PrivateRoute roleAuth="Customer" element={<AppointmentPage />} />
+            },
+            {
+                path: "medical-record",
+                element: <PrivateRoute roleAuth="Customer" element={<MedicalRecordPage />} />
+            },
+            {
+                path: "rating-feedback",
+                element: <RatingFeedbackPage />
+            },
+            {
+                path: "manage-appointment",
+                element: <PrivateRoute roleAuth="Staff" element={<ManageAppointmentPage />} />
+            },
+            {
+                path: "manage-blog",
+                element: <PrivateRoute roleAuth="Staff" element={<ManageBlogPage />} />
+            },
+            {
+                path: "view-schedule",
+                element: <PrivateRoute roleAuth="Dentist" element={<ViewSchedulePage />} />
+            },
         ],
     },
     {
@@ -125,18 +212,54 @@ const routes = [
             { index: true, element: <Navigate to={'dashboard'} /> },
             { path: "dashboard", element: <Dashboard /> },
             { path: "accounts", element: <AccountSettingsPage /> },
-            { path: "dentals/approve-dental", element: <ApproveDentalClinicPage /> },
-            { path: "dentals/manage-dental", element: <ManageDentalClinicPage /> },
-            { path: "dentals/approve-dentist", element: <ApproveDentistPage /> },
-            { path: "dentals/approve-staff", element: <ApproveStaffPage /> },
-            { path: "reports", element: <ReportSettingsPage /> },
-            { path: "blogs/approve-blog", element: <ApproveBlogPage /> },
-            { path: "blogs/manage-blog", element: <ManageBlogPage /> },
-            { path: "dentals", element: <DentalClinicSettings /> },
-            { path: "branches", element: <ClinicBranchSettingsPage /> },
-            { path: "categories", element: <CategoriesSettingsPage /> },
-            { path: "services", element: <ServicesSettingsPage /> },
-            { path: "blogs", element: <ManageBlogPage /> },
+            {
+                path: "dentals/approve-dental",
+                element: <PrivateRoute roleAuth="Admin" element={<ApproveDentalClinicPage />} />
+            },
+            {
+                path: "dentals/manage-dental",
+                element: <PrivateRoute roleAuth="Admin" element={<ManageDentalClinicPage />} />
+            },
+            {
+                path: "dentals/approve-dentist",
+                element: <PrivateRoute roleAuth="Admin" element={<ApproveDentistPage />} />
+            },
+            {
+                path: "dentals/approve-staff",
+                element: <PrivateRoute roleAuth="Admin" element={<ApproveStaffPage />} />
+            },
+            {
+                path: "reports",
+                element: <PrivateRoute roleAuth="Admin" element={<ReportSettingsPage />} />
+            },
+            {
+                path: "blogs/approve-blog",
+                element: <PrivateRoute roleAuth="Admin" element={<ApproveBlogPage />} />
+            },
+            {
+                path: "blogs/manage-blog",
+                element: <PrivateRoute roleAuth="Admin" element={<ManageBlogPage />} />
+            },
+            {
+                path: "dentals",
+                element: <PrivateRoute roleAuth="Owner" element={<DentalClinicSettingsPage />} />
+            },
+            {
+                path: "branches",
+                element: <PrivateRoute roleAuth="Owner" element={<ClinicBranchSettingsPage />} />
+            },
+            {
+                path: "categories",
+                element: <PrivateRoute roleAuth="Owner" element={<CategoriesSettingsPage />} />
+            },
+            {
+                path: "services",
+                element: <PrivateRoute roleAuth="Owner" element={<ServicesSettingsPage />} />
+            },
+            {
+                path: "blogs",
+                element: <PrivateRoute roleAuth="Owner" element={<ManageBlogPage />} />
+            },
         ],
     },
 ];

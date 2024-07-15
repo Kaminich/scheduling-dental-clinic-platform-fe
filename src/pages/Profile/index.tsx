@@ -5,11 +5,17 @@ import useUserProfile from "../../hooks/useUserProfile";
 import { formatDate } from "../../utils/formatDate";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import UserInformationResponse, { initialUserInformationResponse } from "../../types/UserInformationResponse";
+import { useAuth } from "../../hooks/useAuth";
+import NotFoundPage from "../NotFound";
 
 const ProfilePage = () => {
     const [userData, setUserData] = useState<UserInformationResponse>(initialUserInformationResponse);
-
     const { data } = useUserProfile();
+    const { role } = useAuth();
+
+    if (role !== 'Owner' && role !== 'Dentist' && role !== 'Staff' && role !== 'Customer') {
+        return <NotFoundPage />
+    }
 
     useEffect(() => {
         changeTabTitle('Profile');

@@ -13,7 +13,6 @@ import { formatDateTime } from "../../../utils/formatDateTime";
 import { formatDate } from "../../../utils/formatDate";
 import ApiClient from "../../../services/apiClient";
 import DeleteModal from "../../../components/modal/delete";
-import ActivateModal from "../../../components/modal/activate";
 import useAllBlogs from "../../../hooks/useAllBlogs";
 import BlogDetailResponse from "../../../types/BlogDetailResponse";
 import useUserProfile from "../../../hooks/useUserProfile";
@@ -30,7 +29,6 @@ const ManageBlogPage = () => {
     const { data: allData, isLoading: isLoadingAll, refetch: refetchAll } = useAllBlogs();
     const [blogs, setBlogs] = useState<BlogDetailResponse[]>([]);
     const { isOpen: isOpenDeactivate, onClose: onCloseDeactivate, onOpen: onOpenDeactivate } = useDisclosure();
-    const { isOpen: isOpenActivate, onClose: onCloseActivate, onOpen: onOpenActivate } = useDisclosure();
     const toast = useToast();
 
     let filteredBlogs = blogs.filter((blog) => {
@@ -118,7 +116,7 @@ const ManageBlogPage = () => {
                     <CardHeader py={3}>
                         <HStack w={'full'} justify={'flex-end'} gap={5}>
                             {role !== 'Admin' && (
-                                <Button leftIcon={<AddIcon />} colorScheme="green">Create</Button>
+                                <Button leftIcon={<AddIcon />} colorScheme="green" onClick={() => navigate('create')}>Create</Button>
                             )}
                             <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
                         </HStack>
@@ -198,27 +196,7 @@ const ManageBlogPage = () => {
                                                                     }}
                                                                 >
                                                                     <Tooltip
-                                                                        label={'Deactivate blog'}
-                                                                    >
-                                                                        <span>
-                                                                            <FaArrowRightArrowLeft />
-                                                                        </span>
-                                                                    </Tooltip>
-                                                                </Button>
-                                                            )}
-                                                            {blog.status === Status.INACTIVE && (
-                                                                <Button
-                                                                    borderRadius='full'
-                                                                    px={3}
-                                                                    colorScheme="green"
-                                                                    variant='ghost'
-                                                                    onClick={() => {
-                                                                        setId(blog.id);
-                                                                        onOpenActivate();
-                                                                    }}
-                                                                >
-                                                                    <Tooltip
-                                                                        label={'Activate blog'}
+                                                                        label={'Remove blog'}
                                                                     >
                                                                         <span>
                                                                             <FaArrowRightArrowLeft />

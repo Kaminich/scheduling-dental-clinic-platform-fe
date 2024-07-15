@@ -1,7 +1,7 @@
 import { Button, Card, CardBody, CardHeader, FormControl, FormLabel, Heading, HStack, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useDisclosure } from "@chakra-ui/react"
 import { Color, Shadow } from "../../styles/styles"
 import { useEffect, useState } from "react";
-import { FaPenToSquare, FaTrashCan } from "react-icons/fa6";
+import { FaEye, FaPenToSquare, FaTrashCan } from "react-icons/fa6";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import FeedbackFormModal from "../../components/modal/feedback_form";
 import AppointmentDetailModal from "../../components/modal/appointment_detail";
@@ -209,13 +209,13 @@ const AppointmentPage = () => {
                                                             <Text fontSize={16}>Appointment Date: {appointment.createdDate}</Text>
                                                         </Stack>
                                                         <HStack justify={'flex-end'} gap={5}>
-                                                            <Button onClick={() => {
+                                                            <Button colorScheme="green" gap={2} onClick={() => {
                                                                 setId(appointment.appointmentId);
                                                                 onOpenDetail();
                                                             }}>
-                                                                Appointment Detail
+                                                                <FaEye /> Appointment Detail
                                                             </Button>
-                                                            <Button onClick={() => {
+                                                            <Button colorScheme="blue" gap={2} onClick={() => {
                                                                 setId(appointment.appointmentId);
                                                                 onOpenFeedback();
                                                             }}>

@@ -16,7 +16,7 @@ import LoadingModal from "../../components/modal/loading";
 import Loading from "../../components/loading";
 import { Status } from "../../types/type.enum";
 
-const DentalClinicSettings = () => {
+const DentalClinicSettingsPage = () => {
     const navigate = useNavigate();
     const { data: userData } = useUserProfile();
     const { data: clinicData, isLoading, refetch } = useClinicDetail({ clinicId: userData?.clinicId });
@@ -283,4 +283,4 @@ const DentalClinicSettings = () => {
     )
 }
 
-export default DentalClinicSettings
+export default DentalClinicSettingsPage
