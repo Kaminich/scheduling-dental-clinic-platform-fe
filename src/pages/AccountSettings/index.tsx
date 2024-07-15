@@ -242,32 +242,34 @@ const AccountSettingsPage = () => {
                 <Card shadow={Shadow.cardShadow} bg={Color.blue_100}>
                     <CardHeader py={3}>
                         <HStack w={'full'} justify={'flex-end'} gap={5}>
-                            <Menu autoSelect={false} isLazy>
-                                <MenuButton
-                                    leftIcon={<AddIcon />}
-                                    as={Button}
-                                    fontSize={16}
-                                    colorScheme="green"
-                                >
-                                    Create
-                                </MenuButton>
-                                <MenuList minW={36}>
-                                    <MenuItem
-                                        as={Link}
-                                        to={'create-dentist'}
-                                        gap={4}
+                            {role === 'Owner' && (
+                                <Menu autoSelect={false} isLazy>
+                                    <MenuButton
+                                        leftIcon={<AddIcon />}
+                                        as={Button}
+                                        fontSize={16}
+                                        colorScheme="green"
                                     >
-                                        <FaUserDoctor /> Dentist
-                                    </MenuItem>
-                                    <MenuItem
-                                        as={Link}
-                                        to={'create-staff'}
-                                        gap={4}
-                                    >
-                                        <FaUserNurse /> Staff
-                                    </MenuItem>
-                                </MenuList>
-                            </Menu>
+                                        Create
+                                    </MenuButton>
+                                    <MenuList minW={36}>
+                                        <MenuItem
+                                            as={Link}
+                                            to={'create-dentist'}
+                                            gap={4}
+                                        >
+                                            <FaUserDoctor /> Dentist
+                                        </MenuItem>
+                                        <MenuItem
+                                            as={Link}
+                                            to={'create-staff'}
+                                            gap={4}
+                                        >
+                                            <FaUserNurse /> Staff
+                                        </MenuItem>
+                                    </MenuList>
+                                </Menu>
+                            )}
                             <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
                         </HStack>
                     </CardHeader>

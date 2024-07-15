@@ -1,5 +1,5 @@
-import { Button, Card, CardBody, CardFooter, Heading, HStack, Image, Link, Stack, Tag, TagLabel, Text, useDisclosure, useToast } from "@chakra-ui/react";
-import { FaArrowRight } from "react-icons/fa6";
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Card, CardBody, CardFooter, Heading, HStack, Image, Link, Stack, Tag, TagLabel, Text, useDisclosure, useToast } from "@chakra-ui/react";
+import { FaArrowRight, FaPenToSquare } from "react-icons/fa6";
 import { Color, Shadow } from "../../styles/styles";
 import { useNavigate } from "react-router";
 import useUserProfile from "../../hooks/useUserProfile";
@@ -14,6 +14,7 @@ import { formatDate } from "../../utils/formatDate";
 import { formatDateTime } from "../../utils/formatDateTime";
 import LoadingModal from "../../components/modal/loading";
 import Loading from "../../components/loading";
+import { Status } from "../../types/type.enum";
 
 const DentalClinicSettings = () => {
     const navigate = useNavigate();
@@ -120,6 +121,51 @@ const DentalClinicSettings = () => {
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
             <Stack gap={6} w={'full'}>
+                {clinic.status === Status.APPROVED && (
+                    <Alert status='info' alignItems={'flex-start'} borderRadius={5}>
+                        <AlertIcon />
+                        <Box>
+                            <AlertTitle>Note!</AlertTitle>
+                            <AlertDescription>
+                                <HStack>
+                                    <Text fontSize={16}>Please update all required informations of</Text>
+                                    <Text fontSize={16} fontWeight={600}>{clinic.clinicName}</Text>
+                                    <Text fontSize={16}>to visible on our platform.</Text>
+                                </HStack>
+                                <HStack>
+                                    <Text fontSize={16}>In order to do it, click on</Text>
+                                    <HStack>
+                                        <Text fontSize={16} fontWeight={600}>More Detail</Text>
+                                        <FaArrowRight />
+                                    </HStack>
+                                    <Text fontSize={16}>&#8594;</Text>
+                                    <HStack>
+                                        <FaPenToSquare />
+                                        <Text fontSize={16} fontWeight={600}>Edit</Text>
+                                    </HStack>
+                                    <Text fontSize={16}>&#8594;</Text>
+                                    <Text fontSize={16} fontWeight={600}>Update all required informations</Text>
+                                    <Text fontSize={16}>&#8594;</Text>
+                                    <Text fontSize={16} fontWeight={600}>Save</Text>
+                                    <Text fontSize={16}>.</Text>
+                                </HStack>
+                                <HStack>
+                                    <Text fontSize={16}>After saving,</Text>
+                                    <Text fontSize={16} fontWeight={600}>{clinic.clinicName}</Text>
+                                    <Text fontSize={16}>status will change from</Text>
+                                    <Tag colorScheme="cyan">
+                                        <TagLabel>APPROVED</TagLabel>
+                                    </Tag>
+                                    <Text fontSize={16}>to</Text>
+                                    <Tag colorScheme="green">
+                                        <TagLabel>ACTIVE</TagLabel>
+                                    </Tag>
+                                    <Text fontSize={16}>and it will be visible on our platform.</Text>
+                                </HStack>
+                            </AlertDescription>
+                        </Box>
+                    </Alert>
+                )}
                 <Card shadow={Shadow.cardShadow} bg={Color.blue_100}>
                     {!isLoading ? (
                         <>
@@ -130,7 +176,7 @@ const DentalClinicSettings = () => {
                                             colorScheme="red"
                                             onClick={() => {
                                                 onOpenDeactivate();
-                                                setId(clinic.clinicId);
+                                                setId(clinic.id);
                                             }}
                                         >
                                             Deactivate
@@ -141,7 +187,7 @@ const DentalClinicSettings = () => {
                                             colorScheme="green"
                                             onClick={() => {
                                                 onOpenActivate();
-                                                setId(clinic.clinicId);
+                                                setId(clinic.id);
                                             }}
                                         >
                                             Activate
@@ -202,7 +248,7 @@ const DentalClinicSettings = () => {
                             <CardFooter>
                                 <HStack justify={'flex-end'} w={'full'}>
                                     <Button
-                                        gap={4}
+                                        gap={2}
                                         onClick={() => navigate('dental-detail')}
                                     >
                                         More Detail <FaArrowRight />

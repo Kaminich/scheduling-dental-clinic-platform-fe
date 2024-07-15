@@ -13,7 +13,6 @@ interface Prop {
 
 const DentalAbout = ({ clinic }: Prop) => {
     const [page, setPage] = useState<number>(0);
-    console.log(clinic.id);
 
     return (
         <HStack align={'flex-start'} gap={10}>
@@ -50,7 +49,7 @@ const DentalAbout = ({ clinic }: Prop) => {
                     >
                         Working Hours
                     </Text>
-                    <WorkingHours />
+                    <WorkingHours clinicId={clinic.id} />
                 </Stack>
                 <Stack>
                     <Text

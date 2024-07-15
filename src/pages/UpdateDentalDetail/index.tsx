@@ -1,6 +1,6 @@
 import { Button, Checkbox, FormControl, FormLabel, HStack, Image, Input, Select, Stack, Table, Tbody, Td, Textarea, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react"
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ApiClient from "../../services/apiClient";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import { FaCamera, FaPen } from "react-icons/fa6";
@@ -49,7 +49,6 @@ const UpdateDentalDetailPage = () => {
     const [endTimeSunday, setEndTimeSunday] = useState<string>('');
     const [isWorkingSunday, setIsWorkingSunday] = useState<boolean>(true);
 
-    const param = useParams<{ id: string }>();
     const navigate = useNavigate();
     const toast = useToast();
     const [workingHours, setWorkingHours] = useState<WorkingHoursResponse[]>([]);
@@ -154,15 +153,51 @@ const UpdateDentalDetailPage = () => {
             email,
             description,
             websiteUrl,
-            logo,
-            clinicImage,
+            logo: logoUrl === '' ? logo : logoUrl,
+            clinicImage: clinicImageUrl === '' ? clinicImage : clinicImageUrl,
             workingHours: [
                 {
                     day: DayInWeek.MONDAY,
                     startTime: startTimeMonday,
                     endTime: endTimeMonday,
-                    clinicId: 0
-                }
+                    clinicId: clinic.id
+                },
+                {
+                    day: DayInWeek.TUESDAY,
+                    startTime: startTimeTuesday,
+                    endTime: endTimeTuesday,
+                    clinicId: clinic.id
+                },
+                {
+                    day: DayInWeek.WEDNESDAY,
+                    startTime: startTimeWednesday,
+                    endTime: endTimeWednesday,
+                    clinicId: clinic.id
+                },
+                {
+                    day: DayInWeek.THURSDAY,
+                    startTime: startTimeThursday,
+                    endTime: endTimeThursday,
+                    clinicId: clinic.id
+                },
+                {
+                    day: DayInWeek.FRIDAY,
+                    startTime: startTimeFriday,
+                    endTime: endTimeFriday,
+                    clinicId: clinic.id
+                },
+                {
+                    day: DayInWeek.SATURDAY,
+                    startTime: startTimeSaturday,
+                    endTime: endTimeSaturday,
+                    clinicId: clinic.id
+                },
+                {
+                    day: DayInWeek.SUNDAY,
+                    startTime: startTimeSunday,
+                    endTime: endTimeSunday,
+                    clinicId: clinic.id
+                },
             ]
         };
 
@@ -179,7 +214,7 @@ const UpdateDentalDetailPage = () => {
                     position: 'top',
                     isClosable: true,
                 });
-                navigate(`administrator/accounts/dentist/${param.id}`);
+                navigate(-1);
             } else {
                 toast({
                     title: "Error",
@@ -191,6 +226,8 @@ const UpdateDentalDetailPage = () => {
                 });
             }
         } catch (error: any) {
+            console.log(error);
+
             toast({
                 title: "Error",
                 description: error.response?.data?.message || "An error occurred",
@@ -204,18 +241,59 @@ const UpdateDentalDetailPage = () => {
         }
     };
 
+    const updateWorkingHours = () => {
+        workingHours.forEach((wh) => {
+            switch (wh.day) {
+                case DayInWeek.MONDAY:
+                    setStartTimeMonday(wh.startTime);
+                    setEndTimeMonday(wh.endTime);
+                    setIsWorkingMonday(wh.status);
+                    break;
+                case DayInWeek.TUESDAY:
+                    setStartTimeTuesday(wh.startTime);
+                    setEndTimeTuesday(wh.endTime);
+                    setIsWorkingTuesday(wh.status);
+                    break;
+                case DayInWeek.WEDNESDAY:
+                    setStartTimeWednesday(wh.startTime);
+                    setEndTimeWednesday(wh.endTime);
+                    setIsWorkingWednesday(wh.status);
+                    break;
+                case DayInWeek.THURSDAY:
+                    setStartTimeThursday(wh.startTime);
+                    setEndTimeThursday(wh.endTime);
+                    setIsWorkingThursday(wh.status);
+                    break;
+                case DayInWeek.FRIDAY:
+                    setStartTimeFriday(wh.startTime);
+                    setEndTimeFriday(wh.endTime);
+                    setIsWorkingFriday(wh.status);
+                    break;
+                case DayInWeek.SATURDAY:
+                    setStartTimeSaturday(wh.startTime);
+                    setEndTimeSaturday(wh.endTime);
+                    setIsWorkingSaturday(wh.status);
+                    break;
+                case DayInWeek.SUNDAY:
+                    setStartTimeSunday(wh.startTime);
+                    setEndTimeSunday(wh.endTime);
+                    setIsWorkingSunday(wh.status);
+                    break;
+            }
+        });
+    };
+
     useEffect(() => {
         changeTabTitle('Update Dentist Profile');
     }, []);
 
-    // useEffect(() => {
-    //     if (param.id) {
-    //         getDentistDetailById(parseInt(param.id));
-    //     }
-    // }, [param.id]);
+    useEffect(() => {
+        updateWorkingHours();
+    }, [workingHours]);
 
     useEffect(() => {
         handleReset();
+        updateWorkingHours();
     }, [clinic]);
 
     useEffect(() => {
@@ -277,6 +355,9 @@ const UpdateDentalDetailPage = () => {
         </Tr>
     );
 
+    console.log(workingHours);
+
+
     return (
         <>
             {!isLoading ? (
@@ -292,7 +373,7 @@ const UpdateDentalDetailPage = () => {
                             }
                         />
                         <FormLabel
-                            htmlFor="avt"
+                            htmlFor="img"
                             cursor='pointer'
                             fontSize='md'
                             pos={'absolute'}
@@ -311,7 +392,7 @@ const UpdateDentalDetailPage = () => {
                         </FormLabel>
                         <Input
                             type="file"
-                            id="avt"
+                            id="img"
                             accept="image/*"
                             onChange={handleClinicImageChange}
                             display='none'
@@ -421,7 +502,7 @@ const UpdateDentalDetailPage = () => {
                                 <FormLabel pl={1}>Description</FormLabel>
                                 <Textarea
                                     value={description}
-                                    placeholder="Describe dentist description"
+                                    placeholder="Enter description"
                                     focusBorderColor='#E2E8F0'
                                     resize={'none'}
                                     maxH={32}
@@ -490,10 +571,21 @@ const UpdateDentalDetailPage = () => {
                             h={6}
                             onClick={handleUpdate}
                             isDisabled={
-                                phone === '' ||
+                                clinicName === '' ||
                                 email === '' ||
                                 address === '' ||
-                                description === ''
+                                city === '' ||
+                                phone === '' ||
+                                description === '' ||
+                                logo === '' ||
+                                clinicImage === '' ||
+                                (isWorkingMonday && (startTimeMonday === '' || endTimeMonday === '')) ||
+                                (isWorkingTuesday && (startTimeTuesday === '' || endTimeTuesday === '')) ||
+                                (isWorkingWednesday && (startTimeWednesday === '' || endTimeWednesday === '')) ||
+                                (isWorkingThursday && (startTimeThursday === '' || endTimeThursday === '')) ||
+                                (isWorkingFriday && (startTimeFriday === '' || endTimeFriday === '')) ||
+                                (isWorkingSaturday && (startTimeSaturday === '' || endTimeSaturday === '')) ||
+                                (isWorkingSunday && (startTimeSunday === '' || endTimeSunday === ''))
                             }
                         >
                             Save

@@ -11,6 +11,9 @@ import useClinicDetail from "../../hooks/useClinicDetail"
 import ClinicDetailResponse, { initialClinicDetailResponse } from "../../types/ClinicDetailResponse"
 import useWorkingHoursByClinicId from "../../hooks/useWorkingHoursByClinicId"
 import Loading from "../../components/loading"
+import { FaPenToSquare } from "react-icons/fa6"
+import { formatDate } from "../../utils/formatDate"
+import { formatDateTime } from "../../utils/formatDateTime"
 
 const DentalDetailSettingsPage = () => {
     const { role } = useAuth();
@@ -42,7 +45,9 @@ const DentalDetailSettingsPage = () => {
                 <Stack>
                     {role === 'Owner' && (
                         <HStack justify={'flex-end'} m={6} mb={-6} gap={4}>
-                            <Button colorScheme="blue" onClick={() => navigate('update')}>Edit</Button>
+                            <Button colorScheme="blue" gap={2} onClick={() => navigate('update')}>
+                                <FaPenToSquare /> Edit
+                            </Button>
                         </HStack>
                     )}
                     <HStack align={'center'} mt={6}>
@@ -70,8 +75,8 @@ const DentalDetailSettingsPage = () => {
                                             <Text>-</Text>
                                         )}
                                     </HStack>
-                                    <Text>Created Date: {clinic.createdDate}</Text>
-                                    <Text>Modified Date: {clinic.modifiedDate}</Text>
+                                    <Text>Created Date: {formatDate(clinic.createdDate)}</Text>
+                                    <Text>Modified Date: {formatDateTime(clinic.modifiedDate)}</Text>
                                     {clinic.status === 'ACTIVE' && (
                                         <HStack>
                                             <Text>Status:</Text>
@@ -141,7 +146,7 @@ const DentalDetailSettingsPage = () => {
                                 >
                                     Working Hours
                                 </Text>
-                                <WorkingHours />
+                                <WorkingHours clinicId={clinic.id} />
                             </Stack>
                             <Stack>
                                 <Text

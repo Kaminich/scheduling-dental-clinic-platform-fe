@@ -90,7 +90,7 @@ const DentalDetailPage = () => {
                         <Flex align={'center'} gap={5}>
                             <Avatar
                                 name={clinic.clinicName}
-                                src={clinic.clinicImage}
+                                src={clinic.logo}
                                 w={36}
                                 h={36}
                                 bg={'white'}
