@@ -10,7 +10,7 @@ const useBlogDetail = ({ blogId }: Prop) => {
     return useQuery({
         queryKey: ["getBlogDetail", blogId],
         queryFn: () =>
-            api.getDetail(blogId)
+            api.getDetailUnauthen(blogId)
                 .then((data) => {
                     return data.data;
                 })

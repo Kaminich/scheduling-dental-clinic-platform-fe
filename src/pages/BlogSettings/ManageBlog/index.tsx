@@ -37,45 +37,6 @@ const ManageBlogPage = () => {
         return blog.title.toLowerCase().includes(keyword.toLowerCase())
     })
 
-    const handleActivate = async () => {
-        try {
-            const api = new ApiClient<any>(`/blog/re-activate`);
-            const response = await api.updateWithId(id);
-            if (response.success) {
-                toast({
-                    title: "Success",
-                    description: response.message,
-                    status: "success",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                });
-                refetchAll && refetchAll();
-                refetchBlog && refetchBlog();
-            } else {
-                toast({
-                    title: "Error",
-                    description: response.message,
-                    status: "error",
-                    duration: 2500,
-                    position: 'top',
-                    isClosable: true,
-                });
-            }
-        } catch (error: any) {
-            toast({
-                title: "Error",
-                description: error.response?.data?.message || "An error occurred",
-                status: "error",
-                duration: 2500,
-                position: 'top',
-                isClosable: true,
-            });
-        } finally {
-            onCloseActivate();
-        }
-    }
-
     const handleDeactivate = async () => {
         try {
             const api = new ApiClient<any>(`/blog`);
@@ -305,12 +266,6 @@ const ManageBlogPage = () => {
                 onClose={onCloseDeactivate}
                 type={'blog'}
                 handleDeactivate={handleDeactivate}
-            />
-            <ActivateModal
-                isOpen={isOpenActivate}
-                onClose={onCloseActivate}
-                type={'blog'}
-                handleActivate={handleActivate}
             />
         </Stack>
     )

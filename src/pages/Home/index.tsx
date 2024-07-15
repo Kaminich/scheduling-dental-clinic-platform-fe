@@ -5,15 +5,25 @@ import DentalBranch from './components/dental_branch';
 import MedicalTeam from './components/medical_team';
 import { Color } from '../../styles/styles';
 import BlogsItem from '../../components/blogs_item';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { changeTabTitle } from '../../utils/changeTabTitle';
 import ServiceCarousel from '../../components/carousel/service';
+import useActiveBlogs from '../../hooks/useActiveBlogs';
+import BlogDetailResponse from '../../types/BlogDetailResponse';
 
 const HomePage = () => {
+    const { data } = useActiveBlogs();
+    const [blogs, setBlogs] = useState<BlogDetailResponse[]>([]);
 
     useEffect(() => {
         changeTabTitle('F-Dental');
     }, []);
+
+    useEffect(() => {
+        if (data) {
+            setBlogs(data?.content);
+        }
+    }, [data]);
 
     return (
         <>
@@ -163,9 +173,9 @@ const HomePage = () => {
                     Highlight Blogs
                 </Heading>
                 <SimpleGrid columns={3} spacingX={7} spacingY={8}>
-                    <BlogsItem />
-                    <BlogsItem />
-                    <BlogsItem />
+                    {blogs.slice(0, 3).map((blog) => (
+                        <BlogsItem blog={blog} />
+                    ))}
                 </SimpleGrid>
             </Stack>
         </>

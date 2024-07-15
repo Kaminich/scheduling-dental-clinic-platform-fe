@@ -20,16 +20,13 @@ const DentalItem = ({ dentalData }: Prop) => {
         navigate(`/dentals/${hyphenatedName}`);
     };
 
-    console.log(dentalData);
-
-
     return (
         <Card bg={Color.blue_100} minW={376}>
             <CardBody pb={0}>
                 <HStack align={'flex-start'}>
                     <Image
-                        src={dentalData?.clinicName || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'}
-                        alt='Green double couch with wooden legs'
+                        src={dentalData?.logo || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'}
+                        alt={dentalData?.clinicName}
                         borderRadius='full'
                         w={16}
                         h={16}
@@ -83,8 +80,8 @@ const DentalItem = ({ dentalData }: Prop) => {
                             <Text fontWeight={500} fontSize={16}>{dentalData?.phone}</Text>
                         </HStack>
                         <HStack flex={1}>
-                            <Rate style={{ fontSize: '16px' }} defaultValue={4.5} allowHalf disabled />
-                            <Text fontWeight={500} fontSize={16}>({233})</Text>
+                            <Rate style={{ fontSize: '16px' }} defaultValue={dentalData?.totalRating} allowHalf disabled />
+                            <Text fontWeight={500} fontSize={16}>({dentalData?.feedbackCount})</Text>
                         </HStack>
                     </HStack>
                 </Stack>

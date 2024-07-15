@@ -13,6 +13,7 @@ interface Prop {
 
 const DentalAbout = ({ clinic }: Prop) => {
     const [page, setPage] = useState<number>(0);
+
     return (
         <HStack align={'flex-start'} gap={10}>
             <Stack flex={2} gap={8}>
@@ -48,7 +49,7 @@ const DentalAbout = ({ clinic }: Prop) => {
                     >
                         Working Hours
                     </Text>
-                    <WorkingHours />
+                    <WorkingHours clinicId={clinic.id} />
                 </Stack>
                 <Stack>
                     <Text
@@ -80,9 +81,9 @@ const DentalAbout = ({ clinic }: Prop) => {
                     News
                 </Text>
                 <Stack gap={6} align={'center'}>
+                    {/* <BlogsItem />
                     <BlogsItem />
-                    <BlogsItem />
-                    <BlogsItem />
+                    <BlogsItem /> */}
                     <Pagination
                         defaultPageSize={3}
                         current={page}

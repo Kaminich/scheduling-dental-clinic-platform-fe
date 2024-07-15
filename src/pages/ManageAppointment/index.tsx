@@ -1,4 +1,4 @@
-import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure } from "@chakra-ui/react";
+import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { FaEye, FaLaptopMedical, FaSliders, FaTrashCan } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
@@ -12,6 +12,7 @@ import { formatDateTime } from "../../utils/formatDateTime";
 import { AppointmentStatus } from "../../types/type.enum";
 import AppointmentCancelModal from "../../components/modal/appointment_cancel";
 import TreatmentOutcomeDetailModal from "../../components/modal/treatment_outcome_detail";
+import ApiClient from "../../services/apiClient";
 
 const ManageAppointmentPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -22,10 +23,49 @@ const ManageAppointmentPage = () => {
     const { isOpen: isOpenDetail, onClose: onCloseDetail, onOpen: onOpenDetail } = useDisclosure();
     const { isOpen: isOpenDetailTO, onClose: onCloseDetailTO, onOpen: onOpenDetailTO } = useDisclosure();
     const { isOpen: isOpenCancel, onClose: onCloseCancel, onOpen: onOpenCancel } = useDisclosure();
+    const toast = useToast();
 
     let filteredAppointments = appointments.filter((appointment) => {
         return appointment.customerName.toLowerCase().includes(keyword.toLowerCase())
     })
+
+    const handleRemove = async () => {
+        const api = new ApiClient<any>('treatment-outcome');
+        try {
+            const response = await api.delete(id);
+            if (response.success) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                })
+                refetch && refetch();
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                })
+            }
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 2500,
+                position: 'top',
+                isClosable: true,
+            });
+        } finally {
+            onOpenDetailTO();
+        }
+    }
 
     useEffect(() => {
         changeTabTitle('Manage Appointment');
@@ -230,6 +270,7 @@ const ManageAppointmentPage = () => {
                 isOpen={isOpenDetailTO}
                 onClose={onCloseDetailTO}
                 id={id}
+                handleRemove={handleRemove}
             />
         </Stack>
     )

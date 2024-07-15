@@ -92,10 +92,10 @@ const SignUpPage = () => {
                     isClosable: true,
                 });
             }
-        } catch (error) {
+        } catch (error: any) {
             toast({
                 title: "Error",
-                description: "An error occurred. Please try again.",
+                description: error.response.data.message || "An error occurred. Please try again.",
                 status: "error",
                 duration: 2500,
                 position: 'top',

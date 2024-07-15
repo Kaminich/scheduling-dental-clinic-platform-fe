@@ -19,7 +19,7 @@ const DentalDetailBranch = ({ clinicId }: Prop) => {
         }
     }, [data]);
 
-    console.log(branches);
+    console.log(clinicId);
 
     return (
         <Card mb={4} py={6} px={8} shadow={Shadow.cardShadow}>

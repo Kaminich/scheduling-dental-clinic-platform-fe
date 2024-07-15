@@ -6,11 +6,10 @@ import ApiClient from "../../services/apiClient";
 import { useEffect, useState } from "react";
 
 interface Prop {
-    isModal: boolean;
     clinicId: number;
 }
 
-const RatingAndFeedback = ({ isModal, clinicId }: Prop) => {
+const RatingAndFeedback = ({ clinicId }: Prop) => {
     const [feedbacks, setFeedbacks] = useState([]);
 
     const getFeedbackByClinicId = async () => {
@@ -43,34 +42,34 @@ const RatingAndFeedback = ({ isModal, clinicId }: Prop) => {
             >
                 Overview
             </Text>
-            <Card py={10} px={isModal ? 5 : 8} pl={isModal ? 10 : 20}>
-                <HStack maxW={'full'} gap={isModal ? 0 : 10}>
+            <Card py={10} px={8} pl={20}>
+                <HStack maxW={'full'} gap={10}>
                     <Stack flex={2.5} gap={1}>
-                        <Flex align={'center'} gap={isModal ? 0 : 4}>
+                        <Flex align={'center'} gap={4}>
                             <Text>5</Text>
                             <Container ml={2} minW={'full'}>
                                 <Progress colorScheme='yellow' value={20} borderRadius={10} />
                             </Container>
                         </Flex>
-                        <Flex align={'center'} gap={isModal ? 0 : 4}>
+                        <Flex align={'center'} gap={4}>
                             <Text>4</Text>
                             <Container ml={2} minW={'full'}>
                                 <Progress colorScheme='yellow' value={20} borderRadius={10} />
                             </Container>
                         </Flex>
-                        <Flex align={'center'} gap={isModal ? 0 : 4}>
+                        <Flex align={'center'} gap={4}>
                             <Text>3</Text>
                             <Container ml={2} minW={'full'}>
                                 <Progress colorScheme='yellow' value={20} borderRadius={10} />
                             </Container>
                         </Flex>
-                        <Flex align={'center'} gap={isModal ? 0 : 4}>
+                        <Flex align={'center'} gap={4}>
                             <Text>2</Text>
                             <Container ml={2} minW={'full'}>
                                 <Progress colorScheme='yellow' value={20} borderRadius={10} />
                             </Container>
                         </Flex>
-                        <Flex align={'center'} gap={isModal ? 0 : 4}>
+                        <Flex align={'center'} gap={4}>
                             <Text>1</Text>
                             <Container ml={2} minW={'full'}>
                                 <Progress colorScheme='yellow' value={20} borderRadius={10} />

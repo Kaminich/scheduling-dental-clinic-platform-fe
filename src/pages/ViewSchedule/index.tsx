@@ -10,6 +10,7 @@ import { AppointmentStatus } from '../../types/type.enum';
 import CreateTreatmentOutcomeModal from '../../components/modal/treatment_outcome_create';
 import UpdateTreatmentOutcomeModal from '../../components/modal/treatment_outcome_update';
 import Loading from '../../components/loading';
+import CompleteModal from '../../components/modal/complete';
 
 const ViewSchedulePage = () => {
     const [weeks, setWeeks] = useState<{ startDate: string, endDate: string }[]>([]);
@@ -20,9 +21,9 @@ const ViewSchedulePage = () => {
     const [appointments, setAppointments] = useState<AppointmentDentistViewListResponse[]>([]);
     const [id, setId] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [treatmentOutcome, setTreatmentOutcome] = useState<any>(null);
     const { isOpen: isOpenCreate, onClose: onCloseCreate, onOpen: onOpenCreate } = useDisclosure();
     const { isOpen: isOpenUpdate, onClose: onCloseUpdate, onOpen: onOpenUpdate } = useDisclosure();
+    const { isOpen: isOpenComplete, onClose: onCloseComplete, onOpen: onOpenComplete } = useDisclosure();
     const toast = useToast();
 
     const getSchedule = async (startDate: string, endDate: string) => {
@@ -101,9 +102,44 @@ const ViewSchedulePage = () => {
 
             startDate.setDate(startDate.getDate() + 7);
         }
-
         setWeeks(weeks);
     };
+
+    const handleComplete = async () => {
+        const api = new ApiClient<any>('/complete');
+        try {
+            const response = await api.createWithId(id);
+            if (response.success) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                })
+                getSchedule(selectedWeek.startDate, selectedWeek.endDate);
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                })
+            }
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 2500,
+                position: 'top',
+                isClosable: true,
+            });
+        }
+    }
 
     useEffect(() => {
         changeTabTitle('View Schedule');
@@ -180,14 +216,17 @@ const ViewSchedulePage = () => {
                                                         gap={2}
                                                         mt={5}
                                                         w={'full'}
-                                                    // onClick={() => setDone}
+                                                        onClick={() => {
+                                                            setId(a.appointmentId);
+                                                            onOpenComplete();
+                                                        }}
                                                     >
                                                         <FaCheckToSlot /> Treatment done
                                                     </Button>
                                                 )}
                                                 {a.appointmentStatus === AppointmentStatus.DONE && (
                                                     <>
-                                                        {treatmentOutcome ? (
+                                                        {a.treatmentOutcomeId ? (
                                                             <Button
                                                                 colorScheme='yellow'
                                                                 gap={2}
@@ -247,6 +286,11 @@ const ViewSchedulePage = () => {
                     />
                 </>
             )}
+            <CompleteModal
+                isOpen={isOpenComplete}
+                onClose={onCloseComplete}
+                handleComplete={handleComplete}
+            />
         </Stack>
     );
 }
