@@ -158,44 +158,44 @@ const UpdateDentalDetailPage = () => {
             workingHours: [
                 {
                     day: DayInWeek.MONDAY,
-                    startTime: startTimeMonday,
-                    endTime: endTimeMonday,
+                    startTime: isWorkingMonday ? startTimeMonday : null,
+                    endTime: isWorkingMonday ? endTimeMonday : null,
                     clinicId: clinic.id
                 },
                 {
                     day: DayInWeek.TUESDAY,
-                    startTime: startTimeTuesday,
-                    endTime: endTimeTuesday,
+                    startTime: isWorkingTuesday ? startTimeTuesday : null,
+                    endTime: isWorkingTuesday ? endTimeTuesday : null,
                     clinicId: clinic.id
                 },
                 {
                     day: DayInWeek.WEDNESDAY,
-                    startTime: startTimeWednesday,
-                    endTime: endTimeWednesday,
+                    startTime: isWorkingWednesday ? startTimeWednesday : null,
+                    endTime: isWorkingWednesday ? endTimeWednesday : null,
                     clinicId: clinic.id
                 },
                 {
                     day: DayInWeek.THURSDAY,
-                    startTime: startTimeThursday,
-                    endTime: endTimeThursday,
+                    startTime: isWorkingThursday ? startTimeThursday : null,
+                    endTime: isWorkingThursday ? endTimeThursday : null,
                     clinicId: clinic.id
                 },
                 {
                     day: DayInWeek.FRIDAY,
-                    startTime: startTimeFriday,
-                    endTime: endTimeFriday,
+                    startTime: isWorkingFriday ? startTimeFriday : null,
+                    endTime: isWorkingFriday ? endTimeFriday : null,
                     clinicId: clinic.id
                 },
                 {
                     day: DayInWeek.SATURDAY,
-                    startTime: startTimeSaturday,
-                    endTime: endTimeSaturday,
+                    startTime: isWorkingSaturday ? startTimeSaturday : null,
+                    endTime: isWorkingSaturday ? endTimeSaturday : null,
                     clinicId: clinic.id
                 },
                 {
                     day: DayInWeek.SUNDAY,
-                    startTime: startTimeSunday,
-                    endTime: endTimeSunday,
+                    startTime: isWorkingSunday ? startTimeSunday : null,
+                    endTime: isWorkingSunday ? endTimeSunday : null,
                     clinicId: clinic.id
                 },
             ]
@@ -350,11 +350,7 @@ const UpdateDentalDetailPage = () => {
                 </Td>
             )}
             <Td textAlign={'center'}>
-                <Checkbox isChecked={!isWorking} onChange={() => {
-                    setIsWorking(!isWorking);
-                    setStartTime('');
-                    setEndTime('');
-                }} />
+                <Checkbox isChecked={!isWorking} onChange={() => setIsWorking(!isWorking)} />
             </Td>
         </Tr>
     );

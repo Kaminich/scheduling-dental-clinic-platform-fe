@@ -11,6 +11,7 @@ import CreateTreatmentOutcomeModal from '../../components/modal/treatment_outcom
 import UpdateTreatmentOutcomeModal from '../../components/modal/treatment_outcome_update';
 import Loading from '../../components/loading';
 import CompleteModal from '../../components/modal/complete';
+import LoadingModal from '../../components/modal/loading';
 
 const ViewSchedulePage = () => {
     const [weeks, setWeeks] = useState<{ startDate: string, endDate: string }[]>([]);
@@ -24,6 +25,7 @@ const ViewSchedulePage = () => {
     const { isOpen: isOpenCreate, onClose: onCloseCreate, onOpen: onOpenCreate } = useDisclosure();
     const { isOpen: isOpenUpdate, onClose: onCloseUpdate, onOpen: onOpenUpdate } = useDisclosure();
     const { isOpen: isOpenComplete, onClose: onCloseComplete, onOpen: onOpenComplete } = useDisclosure();
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
     const toast = useToast();
 
     const getSchedule = async (startDate: string, endDate: string) => {
@@ -106,7 +108,9 @@ const ViewSchedulePage = () => {
     };
 
     const handleComplete = async () => {
-        const api = new ApiClient<any>('/complete');
+        onCloseComplete();
+        onOpenLoading();
+        const api = new ApiClient<any>('/appointment/complete');
         try {
             const response = await api.createWithId(id);
             if (response.success) {
@@ -138,6 +142,8 @@ const ViewSchedulePage = () => {
                 position: 'top',
                 isClosable: true,
             });
+        } finally {
+            onCloseLoading();
         }
     }
 
@@ -208,7 +214,7 @@ const ViewSchedulePage = () => {
                                                 </HStack>
                                                 <Stack align="start">
                                                     <Text>Patient: {a.customerName}</Text>
-                                                    <Text>Treatment: {a.service}</Text>
+                                                    <Text>Service: {a.service}</Text>
                                                 </Stack>
                                                 {a.appointmentStatus === AppointmentStatus.PENDING && (
                                                     <Button
@@ -272,24 +278,28 @@ const ViewSchedulePage = () => {
                     </Stack>
                 )}
             </Tabs>
-            {id !== 0 && (
-                <>
-                    <CreateTreatmentOutcomeModal
-                        isOpen={isOpenCreate}
-                        onClose={onCloseCreate}
-                        id={id}
-                    />
-                    <UpdateTreatmentOutcomeModal
-                        isOpen={isOpenUpdate}
-                        onClose={onCloseUpdate}
-                        id={id}
-                    />
-                </>
+            {isOpenCreate && (
+                <CreateTreatmentOutcomeModal
+                    isOpen={isOpenCreate}
+                    onClose={onCloseCreate}
+                    id={id}
+                />
+            )}
+            {isOpenUpdate && (
+                <UpdateTreatmentOutcomeModal
+                    isOpen={isOpenUpdate}
+                    onClose={onCloseUpdate}
+                    id={id}
+                />
             )}
             <CompleteModal
                 isOpen={isOpenComplete}
                 onClose={onCloseComplete}
                 handleComplete={handleComplete}
+            />
+            <LoadingModal
+                isOpen={isOpenLoading}
+                onClose={onCloseLoading}
             />
         </Stack>
     );

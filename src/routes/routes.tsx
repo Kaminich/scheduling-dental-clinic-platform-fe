@@ -13,7 +13,6 @@ import BlogPage from "../pages/Blog";
 import PartnerRegisterPage from "../pages/PartnerRegister";
 import ProfilePage from "../pages/Profile";
 import UpdateProfilePage from "../pages/UpdateProfile";
-import RatingFeedbackPage from "../pages/RatingFeedback";
 import ServicePage from "../pages/Service";
 import AdminLayout from "../components/layout/admin";
 import NotFoundPage from "../pages/NotFound";
@@ -186,10 +185,6 @@ const routes = [
             {
                 path: "medical-record",
                 element: <PrivateRoute roleAuth="Customer" element={<MedicalRecordPage />} />
-            },
-            {
-                path: "rating-feedback",
-                element: <RatingFeedbackPage />
             },
             {
                 path: "manage-appointment",

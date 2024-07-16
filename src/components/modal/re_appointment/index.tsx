@@ -26,10 +26,10 @@ const ReAppointmentModal = ({ isOpen, onClose, id, followUpDate }: Props) => {
     const getAvailableSlot = async () => {
         const api = new ApiClient<any>('/slot/available-by-date-updating');
         try {
-            const response = await api.getUnauthen({
+            const response = await api.getAuthen({
                 params: {
                     appointmentId: id,
-                    branchId: appointment.clinicBranch.branchId,
+                    clinicBranchId: appointment.clinicBranch.branchId,
                     date
                 }
             });
@@ -104,7 +104,9 @@ const ReAppointmentModal = ({ isOpen, onClose, id, followUpDate }: Props) => {
     }, [appointmentData])
 
     useEffect(() => {
-        getAvailableSlot();
+        if (id && date) {
+            getAvailableSlot();
+        }
     }, [id, date])
 
     return (
@@ -199,7 +201,10 @@ const ReAppointmentModal = ({ isOpen, onClose, id, followUpDate }: Props) => {
                                                 type="date"
                                                 min={followUpDate > today ? followUpDate : today}
                                                 value={date}
-                                                onChange={(e) => setDate(e.target.value)}
+                                                onChange={(e) => {
+                                                    setDate(e.target.value)
+                                                    setSlotId(0);
+                                                }}
                                             />
                                         </FormControl>
                                         <FormControl id="slot" flex={1}>

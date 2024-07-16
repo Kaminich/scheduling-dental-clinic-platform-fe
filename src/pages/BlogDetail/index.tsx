@@ -27,7 +27,6 @@ const BlogDetailPage = () => {
         const api = new ApiClient<any>('/blog');
         try {
             const response = await api.getDetailUnauthen(id || parseInt(blogId || '0'));
-            console.log(response);
 
             if (response.success) {
                 setBlog(response.data);
@@ -92,7 +91,7 @@ const BlogDetailPage = () => {
                             </Heading>
                             <SimpleGrid columns={3}>
                                 {data?.content.map((blog: BlogDetailResponse) => (
-                                    <BlogsItem blog={blog} />
+                                    <BlogsItem key={blog.id} blog={blog} />
                                 ))}
                             </SimpleGrid>
                         </Stack>

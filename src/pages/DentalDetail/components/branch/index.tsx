@@ -19,13 +19,11 @@ const DentalDetailBranch = ({ clinicId }: Prop) => {
         }
     }, [data]);
 
-    console.log(clinicId);
-
     return (
         <Card mb={4} py={6} px={8} shadow={Shadow.cardShadow}>
             <Accordion defaultIndex={[0]} allowToggle>
                 {branches.map((branch) => (
-                    <AccordionItem py={2}>
+                    <AccordionItem py={2} key={branch.branchId}>
                         <AccordionButton>
                             <Flex flex={1} align={'center'} gap={2} fontWeight={'bold'}>
                                 <FaHospitalUser />

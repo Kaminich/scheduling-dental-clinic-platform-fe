@@ -18,6 +18,8 @@ const DentistCarousel = ({ dentistList }: Prop) => {
     const navigate = useNavigate();
     const navigateToDetail = (name: string) => {
         const hyphenatedName = name.replace(/ /g, '-');
+        console.log(hyphenatedName);
+
         navigate(`/dentists/${hyphenatedName}`);
     };
 
@@ -45,8 +47,6 @@ const DentistCarousel = ({ dentistList }: Prop) => {
                         <Card
                             maxW='sm'
                             shadow={Shadow.cardShadow}
-                            onClick={() => navigateToDetail(dentist.fullName)}
-                            cursor={'pointer'}
                         >
                             <CardBody pb={4}>
                                 <Stack align={'center'}>
@@ -63,6 +63,8 @@ const DentistCarousel = ({ dentistList }: Prop) => {
                                         py={2}
                                         pb={0}
                                         _hover={{ color: Color.hoverBlue }}
+                                        onClick={() => navigateToDetail(dentist.fullName)}
+                                        cursor={'pointer'}
                                     >
                                         {dentist.fullName}
                                     </Heading>

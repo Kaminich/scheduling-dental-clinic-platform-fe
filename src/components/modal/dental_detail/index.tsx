@@ -32,9 +32,6 @@ const DentalDetailModal = ({ isOpen, onClose, id }: Props) => {
         }
     }, [id]);
 
-    console.log(dentalDetail);
-
-
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
             <ModalOverlay backdropFilter={'blur(5px)'} />

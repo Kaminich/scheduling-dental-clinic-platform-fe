@@ -171,11 +171,13 @@ const DentistDetailPage = () => {
                         </Text>
                         <DentistCarousel dentistList={dentists} />
                     </Stack>
-                    <AppointmentModal
-                        dentistData={dentist}
-                        isOpen={isOpen}
-                        onClose={onClose}
-                    />
+                    {isOpen && (
+                        <AppointmentModal
+                            dentistData={dentist}
+                            isOpen={isOpen}
+                            onClose={onClose}
+                        />
+                    )}
                 </Stack>
             ) : (
                 <Stack m={'auto'}>

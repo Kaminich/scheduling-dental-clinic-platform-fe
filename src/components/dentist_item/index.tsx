@@ -31,9 +31,6 @@ const DentistItem = ({ type, data }: Props) => {
         }
     }, [data])
 
-    console.log(data);
-
-
     return (
         <>
             {type === 1 ? (
@@ -96,10 +93,7 @@ const DentistItem = ({ type, data }: Props) => {
                     {dentists
                         .filter((dentist) => dentist.status === Status.ACTIVE)
                         .map((dentist) => (
-                            <Card
-                                maxW='sm'
-                                shadow={Shadow.cardShadow}
-                            >
+                            <Card maxW='sm' shadow={Shadow.cardShadow} key={dentist.dentistId}>
                                 <CardBody pb={4}>
                                     <Stack align={'center'}>
                                         <Image

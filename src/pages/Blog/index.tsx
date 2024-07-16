@@ -25,7 +25,7 @@ const BlogPage = () => {
             {!isLoading ? (
                 <SimpleGrid columns={3} spacingX={7} spacingY={8} w={'6xl'} m={'auto'} my={10}>
                     {blogs.map((blog) => (
-                        <BlogsItem blog={blog} />
+                        <BlogsItem key={blog.id} blog={blog} />
                     ))}
                 </SimpleGrid>
             ) : (

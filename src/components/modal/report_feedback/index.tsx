@@ -99,7 +99,7 @@ const ReportFeedbackModal = ({ isOpen, onClose, feedbackId, reportedCustomer }: 
                 </ModalBody>
                 <ModalFooter>
                     <Button
-                        colorScheme="blue"
+                        colorScheme="red"
                         mr={3}
                         isDisabled={selectedReasons.size === 0}
                         onClick={handleReport}>

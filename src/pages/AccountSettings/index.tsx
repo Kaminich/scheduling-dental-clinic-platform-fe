@@ -124,12 +124,84 @@ const AccountSettingsPage = () => {
             } finally {
                 onCloseLoading();
             }
+        } else if (type === 'owner') {
+            const api = new ApiClient<any>(`/accounts/owner/activate-deactivate`);
+            try {
+                const response = await api.updateWithId(id);
+                if (response.success) {
+                    toast({
+                        title: "Success",
+                        description: response.message,
+                        status: "success",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                    refetchAccount && refetchAccount();
+                } else {
+                    toast({
+                        title: "Error",
+                        description: response.message,
+                        status: "error",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                }
+            } catch (error: any) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            } finally {
+                onCloseLoading();
+            }
+        } else if (type === 'customer') {
+            const api = new ApiClient<any>(`/accounts/customer/activate-deactivate`);
+            try {
+                const response = await api.updateWithId(id);
+                if (response.success) {
+                    toast({
+                        title: "Success",
+                        description: response.message,
+                        status: "success",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                    refetchAccount && refetchAccount();
+                } else {
+                    toast({
+                        title: "Error",
+                        description: response.message,
+                        status: "error",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                }
+            } catch (error: any) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            } finally {
+                onCloseLoading();
+            }
         }
     }
 
     const handleDeactivate = async () => {
         onOpenLoading();
-        onCloseActivate();
+        onCloseDeactivate();
         if (type === 'dentist') {
             try {
                 const api = new ApiClient<any>(`/dentists`);
@@ -204,6 +276,78 @@ const AccountSettingsPage = () => {
             } finally {
                 onCloseLoading();
             }
+        } else if (type === 'owner') {
+            const api = new ApiClient<any>(`/accounts/owner/activate-deactivate`);
+            try {
+                const response = await api.updateWithId(id);
+                if (response.success) {
+                    toast({
+                        title: "Success",
+                        description: response.message,
+                        status: "success",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                    refetchAccount && refetchAccount();
+                } else {
+                    toast({
+                        title: "Error",
+                        description: response.message,
+                        status: "error",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                }
+            } catch (error: any) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            } finally {
+                onCloseLoading();
+            }
+        } else if (type === 'customer') {
+            const api = new ApiClient<any>(`/accounts/customer/activate-deactivate`);
+            try {
+                const response = await api.updateWithId(id);
+                if (response.success) {
+                    toast({
+                        title: "Success",
+                        description: response.message,
+                        status: "success",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                    refetchAccount && refetchAccount();
+                } else {
+                    toast({
+                        title: "Error",
+                        description: response.message,
+                        status: "error",
+                        duration: 2500,
+                        position: 'top',
+                        isClosable: true,
+                    });
+                }
+            } catch (error: any) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            } finally {
+                onCloseLoading();
+            }
         }
     }
 
@@ -218,9 +362,6 @@ const AccountSettingsPage = () => {
             setAccounts(accountData.content);
         }
     }, [clinicAccountData, accountData]);
-
-    console.log(accountData);
-
 
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
@@ -553,13 +694,6 @@ const AccountSettingsPage = () => {
                                                                         </TagLabel>
                                                                     </Tag>
                                                                 )}
-                                                                {account.status === Status.PENDING && (
-                                                                    <Tag colorScheme="yellow">
-                                                                        <TagLabel>
-                                                                            {account.status}
-                                                                        </TagLabel>
-                                                                    </Tag>
-                                                                )}
                                                             </Td>
                                                             {account.roleName === 'OWNER' && (
                                                                 <>
@@ -588,7 +722,7 @@ const AccountSettingsPage = () => {
                                                                                 colorScheme="red"
                                                                                 variant='ghost'
                                                                                 onClick={() => {
-                                                                                    setType('dentist');
+                                                                                    setType('owner');
                                                                                     setId(account.id);
                                                                                     onOpenDeactivate();
                                                                                 }}
@@ -607,7 +741,7 @@ const AccountSettingsPage = () => {
                                                                                 colorScheme="green"
                                                                                 variant='ghost'
                                                                                 onClick={() => {
-                                                                                    setType('dentist');
+                                                                                    setType('owner');
                                                                                     setId(account.id);
                                                                                     onOpenActivate();
                                                                                 }}
@@ -615,20 +749,6 @@ const AccountSettingsPage = () => {
                                                                                 <Tooltip label='Activate user account'>
                                                                                     <span>
                                                                                         <FaUserCheck />
-                                                                                    </span>
-                                                                                </Tooltip>
-                                                                            </Button>
-                                                                        )}
-                                                                        {account.status === Status.PENDING && (
-                                                                            <Button
-                                                                                borderRadius='full'
-                                                                                px={3}
-                                                                                colorScheme="red"
-                                                                                variant='ghost'
-                                                                            >
-                                                                                <Tooltip label='Remove user account'>
-                                                                                    <span>
-                                                                                        <FaTrashCan />
                                                                                     </span>
                                                                                 </Tooltip>
                                                                             </Button>
@@ -671,7 +791,7 @@ const AccountSettingsPage = () => {
                                                                                 colorScheme="red"
                                                                                 variant='ghost'
                                                                                 onClick={() => {
-                                                                                    setType('dentist');
+                                                                                    setType('customer');
                                                                                     setId(account.id);
                                                                                     onOpenDeactivate();
                                                                                 }}
@@ -690,7 +810,7 @@ const AccountSettingsPage = () => {
                                                                                 colorScheme="green"
                                                                                 variant='ghost'
                                                                                 onClick={() => {
-                                                                                    setType('dentist');
+                                                                                    setType('customer');
                                                                                     setId(account.id);
                                                                                     onOpenActivate();
                                                                                 }}
@@ -698,20 +818,6 @@ const AccountSettingsPage = () => {
                                                                                 <Tooltip label='Activate user account'>
                                                                                     <span>
                                                                                         <FaUserCheck />
-                                                                                    </span>
-                                                                                </Tooltip>
-                                                                            </Button>
-                                                                        )}
-                                                                        {account.status === Status.PENDING && (
-                                                                            <Button
-                                                                                borderRadius='full'
-                                                                                px={3}
-                                                                                colorScheme="red"
-                                                                                variant='ghost'
-                                                                            >
-                                                                                <Tooltip label='Remove user account'>
-                                                                                    <span>
-                                                                                        <FaTrashCan />
                                                                                     </span>
                                                                                 </Tooltip>
                                                                             </Button>
@@ -785,20 +891,6 @@ const AccountSettingsPage = () => {
                                                                                 </Tooltip>
                                                                             </Button>
                                                                         )}
-                                                                        {account.status === Status.PENDING && (
-                                                                            <Button
-                                                                                borderRadius='full'
-                                                                                px={3}
-                                                                                colorScheme="red"
-                                                                                variant='ghost'
-                                                                            >
-                                                                                <Tooltip label='Remove user account'>
-                                                                                    <span>
-                                                                                        <FaTrashCan />
-                                                                                    </span>
-                                                                                </Tooltip>
-                                                                            </Button>
-                                                                        )}
                                                                     </Td>
                                                                     <Td
                                                                         textAlign='center'
@@ -864,20 +956,6 @@ const AccountSettingsPage = () => {
                                                                                 <Tooltip label='Activate user account'>
                                                                                     <span>
                                                                                         <FaUserCheck />
-                                                                                    </span>
-                                                                                </Tooltip>
-                                                                            </Button>
-                                                                        )}
-                                                                        {account.status === Status.PENDING && (
-                                                                            <Button
-                                                                                borderRadius='full'
-                                                                                px={3}
-                                                                                colorScheme="red"
-                                                                                variant='ghost'
-                                                                            >
-                                                                                <Tooltip label='Remove user account'>
-                                                                                    <span>
-                                                                                        <FaTrashCan />
                                                                                     </span>
                                                                                 </Tooltip>
                                                                             </Button>

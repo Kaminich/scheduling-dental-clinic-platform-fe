@@ -32,7 +32,6 @@ const DentalDetailPage = () => {
         const api = new ApiClient<any>('/clinics');
         try {
             const response = await api.getDetailUnauthen(id);
-            console.log(response);
 
             if (response.success) {
                 setClinic(response.data);
@@ -69,9 +68,6 @@ const DentalDetailPage = () => {
             getDentalDetail();
         }
     }, [id]);
-
-    console.log(clinic);
-
 
     return (
         <>
@@ -131,12 +127,14 @@ const DentalDetailPage = () => {
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
-                    <AppointmentModal
-                        clinicId={id}
-                        clinicName={clinic.clinicName}
-                        isOpen={isOpen}
-                        onClose={onClose}
-                    />
+                    {isOpen && (
+                        <AppointmentModal
+                            clinicId={id}
+                            clinicName={clinic.clinicName}
+                            isOpen={isOpen}
+                            onClose={onClose}
+                        />
+                    )}
                 </Stack>
             ) : (
                 <Stack m={'auto'}>

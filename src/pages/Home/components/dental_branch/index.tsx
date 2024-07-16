@@ -14,13 +14,12 @@ const DentalBranch = () => {
             setClinics(data.content);
         }
     }, [data?.content]);
-    console.log(clinics);
 
     return (
         <>
             <SimpleGrid columns={3} spacingX={3} spacingY={6}>
                 {clinics.map((clinic) => (
-                    <DentalItem dentalData={clinic} />
+                    <DentalItem key={clinic.clinicId} dentalData={clinic} />
                 ))}
             </SimpleGrid>
             <Box position='relative' py={7} my={5}>

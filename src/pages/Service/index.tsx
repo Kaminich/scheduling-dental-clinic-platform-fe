@@ -20,9 +20,6 @@ const ServicePage = () => {
         }
     }, [data]);
 
-    console.log(categories);
-
-
     return (
         <>
             {!isLoading ? (

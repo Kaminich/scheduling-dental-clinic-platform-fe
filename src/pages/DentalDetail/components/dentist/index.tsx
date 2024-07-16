@@ -11,9 +11,6 @@ interface Prop {
 const DentalDentist = ({ clinicId }: Prop) => {
     const { data, isLoading } = useDentistByClinicId({ clinicId: clinicId });
 
-    console.log(data);
-
-
     return (
         <>
             {!isLoading ? (

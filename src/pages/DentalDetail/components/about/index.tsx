@@ -49,7 +49,9 @@ const DentalAbout = ({ clinic }: Prop) => {
                     >
                         Working Hours
                     </Text>
-                    <WorkingHours clinicId={clinic.id} />
+                    {clinic.id && (
+                        <WorkingHours clinicId={clinic.id} />
+                    )}
                 </Stack>
                 <Stack>
                     <Text
@@ -64,10 +66,12 @@ const DentalAbout = ({ clinic }: Prop) => {
                     >
                         Branch
                     </Text>
-                    <DentalDetailBranch clinicId={clinic.id} />
+                    {clinic.id && (
+                        <DentalDetailBranch clinicId={clinic.id} />
+                    )}
                 </Stack>
             </Stack>
-            <Stack flex={1}>
+            {/* <Stack flex={1}>
                 <Text
                     maxW={'sm'}
                     fontSize={20}
@@ -81,9 +85,9 @@ const DentalAbout = ({ clinic }: Prop) => {
                     News
                 </Text>
                 <Stack gap={6} align={'center'}>
-                    {/* <BlogsItem />
+                     <BlogsItem />
                     <BlogsItem />
-                    <BlogsItem /> */}
+                    <BlogsItem /> 
                     <Pagination
                         defaultPageSize={3}
                         current={page}
@@ -92,8 +96,8 @@ const DentalAbout = ({ clinic }: Prop) => {
                         onChange={(value: number) => setPage(value)}
                         total={300}
                     />
-                </Stack>
-            </Stack>
+                </Stack> 
+            </Stack>*/}
         </HStack>
     )
 }

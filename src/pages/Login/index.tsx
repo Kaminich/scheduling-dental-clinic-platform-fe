@@ -27,11 +27,9 @@ const LoginPage = () => {
     const { setIsAuthenticated, setRole } = useAuth();
     const googleLogin = useGoogleLogin({
         onSuccess: (token) => {
-            console.log(token.access_token);
             handleGoogleLogin(token.access_token);
         },
-        onError: (error) => {
-            console.log(error);
+        onError: () => {
             toast({
                 title: "Sign In Error",
                 description: "Sign in by Google failed. Try again!!!",
@@ -51,14 +49,12 @@ const LoginPage = () => {
 
         try {
             const response = await api.postUnauthen(data);
-            console.log(response);
 
             if (response.success) {
                 localStorage.setItem('access_token', response.data.token);
                 localStorage.setItem('refresh_token', response.data.refreshToken);
                 const decoded = jwtDecode<DecodeJWTRole>(response.data.token);
                 const decodedRole = formatRoleString(decoded.role[0]);
-                console.log(decodedRole);
 
                 setIsAuthenticated(true);
                 setRole(decodedRole);
@@ -102,7 +98,6 @@ const LoginPage = () => {
 
         try {
             const response = await api.postUnauthen(data);
-            console.log(response.data);
 
             if (response.data.success === false) {
                 toast({
