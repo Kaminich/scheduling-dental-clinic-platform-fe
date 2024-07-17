@@ -4,6 +4,7 @@ import ApiClient from "../../../services/apiClient";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
 import { Border } from "../../../styles/styles";
 import { VietnamCities } from "../../../types/type.enum";
+import { trimAll } from "../../../utils/trimAll";
 
 const CreateClinicBranchPage = () => {
     const [branchName, setBranchName] = useState<string>('');
@@ -16,10 +17,10 @@ const CreateClinicBranchPage = () => {
 
     const areAllFieldsFilled = () => {
         return (
-            branchName !== '' &&
+            branchName.trim() !== '' &&
             city !== '' &&
-            phone !== '' &&
-            address !== ''
+            phone.trim() !== '' &&
+            address.trim() !== ''
         );
     };
 
@@ -34,15 +35,14 @@ const CreateClinicBranchPage = () => {
         e.preventDefault();
 
         const data = {
-            branchName,
+            branchName: trimAll(branchName),
             city,
-            phone,
-            address,
+            phone: phone.trim(),
+            address: trimAll(address),
         };
 
         try {
             const response = await api.create(data);
-            console.log(response);
 
             if (response.success) {
                 toast({

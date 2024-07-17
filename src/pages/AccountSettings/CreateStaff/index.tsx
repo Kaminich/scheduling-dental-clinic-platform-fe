@@ -10,6 +10,7 @@ import useUserProfile from "../../../hooks/useUserProfile";
 import BranchDetailResponse from "../../../types/BranchDetailResponse";
 import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
 import LoadingModal from "../../../components/modal/loading";
+import { trimAll } from "../../../utils/trimAll";
 
 const CreateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -31,12 +32,12 @@ const CreateStaffPage = () => {
 
     const areAllFieldsFilled = () => {
         return (
-            fullName !== '' &&
+            fullName.trim() !== '' &&
             dob !== '' &&
             gender !== '' &&
-            phone !== '' &&
-            email !== '' &&
-            address !== '' &&
+            phone.trim() !== '' &&
+            email.trim() !== '' &&
+            address.trim() !== '' &&
             avatar !== '' &&
             avatarData !== null &&
             clinicBranchId !== 0
@@ -57,7 +58,6 @@ const CreateStaffPage = () => {
 
     const handleAvatarChange = (e: any) => {
         const selectedFile = e.target.files[0];
-        console.log(selectedFile);
 
         if (selectedFile) {
             const reader = new FileReader();
@@ -92,12 +92,12 @@ const CreateStaffPage = () => {
         }
 
         const data = {
-            fullName,
+            fullName: trimAll(fullName),
             dob,
             gender,
-            phone,
-            email,
-            address,
+            phone: phone.trim(),
+            email: email.trim(),
+            address: trimAll(address),
             avatar: avatarUrl,
             clinicBranchId
         };

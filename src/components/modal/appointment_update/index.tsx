@@ -8,14 +8,16 @@ import ServiceViewListResponse from "../../../types/ServiceViewListResponse";
 import WorkingHoursDetailsResponse, { initialWorkingHoursDetailsResponse } from "../../../types/WorkingHoursDetailsResponse";
 import { today } from "../appointment";
 import DentistViewListResponse from "../../../types/DentistViewListResponse";
+import { QueryObserverResult } from "@tanstack/react-query";
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
     id: number;
+    refetch: () => Promise<QueryObserverResult<any, Error>>;
 }
 
-const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
+const AppointmentUpdateModal = ({ isOpen, onClose, id, refetch }: Props) => {
     const [serviceId, setServiceId] = useState<number>(0);
     const [date, setDate] = useState<string>('');
     const [dentistId, setDentistId] = useState<number>(0);
@@ -25,7 +27,7 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
     const [services, setServices] = useState<ServiceViewListResponse[]>([]);
     const [slot, setSlot] = useState<WorkingHoursDetailsResponse>(initialWorkingHoursDetailsResponse);
     const [dentists, setDentists] = useState<DentistViewListResponse[]>([]);
-    const { data: appointmentData, isLoading: isLoadingAppointment, refetch } = useAppointmentDetail({ appointmentId: id });
+    const { data: appointmentData, isLoading: isLoadingAppointment } = useAppointmentDetail({ appointmentId: id });
     const [appointment, setAppointment] = useState<AppointmentViewDetailsResponse>(initialAppointmentViewDetailsResponse);
 
     const getAppointmentDetail = () => {
@@ -204,7 +206,7 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
                                         <FormControl id="dob" flex={1}>
                                             <FormLabel ml={1}>Date of Birth</FormLabel>
                                             <Input
-                                                value={appointment.customerAge}
+                                                value={appointment.dob}
                                                 readOnly
                                             />
                                         </FormControl>

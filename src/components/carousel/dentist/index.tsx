@@ -18,8 +18,6 @@ const DentistCarousel = ({ dentistList }: Prop) => {
     const navigate = useNavigate();
     const navigateToDetail = (name: string) => {
         const hyphenatedName = name.replace(/ /g, '-');
-        console.log(hyphenatedName);
-
         navigate(`/dentists/${hyphenatedName}`);
     };
 

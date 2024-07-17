@@ -17,7 +17,6 @@ const DentistDetailModal = ({ isOpen, onClose, id }: Props) => {
         try {
             const api = new ApiClient<any>('/dentists');
             const response = await api.getDetail(id);
-            console.log(response);
             if (response.success) {
                 setDentist(response.data);
             }

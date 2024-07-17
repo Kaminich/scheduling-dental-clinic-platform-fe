@@ -14,6 +14,7 @@ import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
 import BranchSummaryResponse from "../../../types/BranchSummaryResponse";
 import DentistViewListResponse from "../../../types/DentistViewListResponse";
 import { Status } from "../../../types/type.enum";
+import { trimAll } from "../../../utils/trimAll";
 
 interface Props {
     isOpen: boolean;
@@ -28,7 +29,7 @@ export const today = new Date().toISOString().split('T')[0];
 const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }: Props) => {
     const [fullname, setFullname] = useState<string>('');
     const [dob, setDob] = useState<string>('');
-    const [phone, setPhone] = useState<number | string>('');
+    const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [address, setAddress] = useState<string>('');
     const [gender, setGender] = useState<string>('');
@@ -95,12 +96,12 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
         setIsLoading(true);
         const api = new ApiClient<any>('/appointment');
         const data = {
-            customerName: fullname,
-            customerAddress: address,
-            customerPhone: phone,
-            customerDob: dob,
-            customerGender: gender,
-            customerEmail: email,
+            customerName: value === 'personal' ? userData.fullName : trimAll(fullname),
+            customerAddress: value === 'personal' ? userData.address : trimAll(address),
+            customerPhone: value === 'personal' ? userData.phone : phone.trim(),
+            customerDob: value === 'personal' ? userData.dob : dob,
+            customerGender: value === 'personal' ? userData.gender : gender,
+            customerEmail: value === 'personal' ? userData.email : email.trim(),
             appointmentDate: date,
             slotId,
             clinicBranchId: dentistData?.branchId || clinicBranchId,
@@ -111,7 +112,6 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
 
         try {
             const response = await api.create(data);
-            console.log(response);
             if (response.success) {
                 toast({
                     title: "Success",
@@ -121,6 +121,10 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                     position: 'top',
                     isClosable: true,
                 })
+                setSlotId(0);
+                setClinicBranchId(0);
+                setDentistId(0);
+                setServiceId(0);
             } else {
                 toast({
                     title: "Error",
@@ -164,7 +168,7 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
     }, [branchData]);
 
     useEffect(() => {
-        if (clinicBranchId && date) {
+        if ((clinicBranchId || dentistData?.branchId) && date) {
             getAvailableSlot();
         }
     }, [clinicBranchId, date]);

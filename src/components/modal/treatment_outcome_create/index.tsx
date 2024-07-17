@@ -5,14 +5,16 @@ import useAppointmentDetail from "../../../hooks/useAppoinmentDetail";
 import AppointmentViewDetailsResponse, { initialAppointmentViewDetailsResponse } from "../../../types/AppointmentViewDetailsResponse";
 import ApiClient from "../../../services/apiClient";
 import { today } from "../appointment";
+import { trimAll } from "../../../utils/trimAll";
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
     id: number;
+    refetch: () => void;
 }
 
-const CreateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
+const CreateTreatmentOutcomeModal = ({ isOpen, onClose, id, refetch }: Props) => {
     const [diagnosis, setDiagnosis] = useState<string>("");
     const [treatmentPlan, setTreatmentPlan] = useState<string>("");
     const [prescription, setPrescription] = useState<string>("");
@@ -20,24 +22,23 @@ const CreateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
     const [followUpDate, setFollowUpDate] = useState<string>("");
     const toast = useToast();
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const { data: appointmentData, refetch } = useAppointmentDetail({ appointmentId: id });
+    const { data: appointmentData } = useAppointmentDetail({ appointmentId: id });
     const [appointment, setAppointment] = useState<AppointmentViewDetailsResponse>(initialAppointmentViewDetailsResponse);
 
     const handleCreateAppointment = async () => {
         setIsLoading(true);
-        const api = new ApiClient<any>('/appointment');
+        const api = new ApiClient<any>('/treatment-outcomes');
         const data = {
-            diagnosis: "",
-            treatmentPlan: "",
-            prescription: "",
-            recommendations: "",
-            followUpDate: "",
+            diagnosis: trimAll(diagnosis),
+            treatmentPlan: treatmentPlan.trim(),
+            prescription: prescription.trim(),
+            recommendations: recommendations.trim(),
+            followUpDate,
             appointmentId: appointment.appointmentId
         }
 
         try {
             const response = await api.create(data);
-            console.log(response);
             if (response.success) {
                 toast({
                     title: "Success",
@@ -47,7 +48,7 @@ const CreateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
                     position: 'top',
                     isClosable: true,
                 })
-                refetch && refetch();
+                refetch();
             } else {
                 toast({
                     title: "Error",
@@ -168,10 +169,10 @@ const CreateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
                             onClick={handleCreateAppointment}
                             isDisabled={
                                 followUpDate === '' ||
-                                diagnosis === '' ||
-                                prescription === '' ||
-                                recommendations === '' ||
-                                treatmentPlan === ''
+                                diagnosis.trim() === '' ||
+                                prescription.trim() === '' ||
+                                recommendations.trim() === '' ||
+                                treatmentPlan.trim() === ''
                             }
                         >
                             Create

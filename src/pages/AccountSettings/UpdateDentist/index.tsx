@@ -13,12 +13,13 @@ import useUserProfile from "../../../hooks/useUserProfile";
 import BranchDetailResponse from "../../../types/BranchDetailResponse";
 import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
 import LoadingModal from "../../../components/modal/loading";
+import { trimAll } from "../../../utils/trimAll";
 
 const UpdateDentistPage = () => {
     const [fullName, setFullName] = useState<string>('');
     const [dob, setDob] = useState<string>('');
     const [gender, setGender] = useState<string>('');
-    const [phone, setPhone] = useState<string | number>('');
+    const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [address, setAddress] = useState<string>('');
     const [description, setDescription] = useState<string>('');
@@ -79,7 +80,6 @@ const UpdateDentistPage = () => {
 
     const handleAvatarChange = (e: any) => {
         const selectedFile = e.target.files[0];
-        console.log(selectedFile);
 
         if (selectedFile) {
             const reader = new FileReader();
@@ -115,21 +115,20 @@ const UpdateDentistPage = () => {
 
         const data = {
             id: parseInt(param.id || '0'),
-            fullName,
-            email,
+            fullName: trimAll(fullName),
+            email: email.trim(),
             gender,
             dob,
-            address,
-            description,
-            specialty,
-            experience,
+            address: trimAll(address),
+            description: description.trim(),
+            specialty: trimAll(specialty),
+            experience: experience.trim(),
             avatar: avatarUrl === '' ? avatar : avatarUrl,
             branchId
         };
 
         try {
             const response = await api.update(data);
-            console.log(response);
 
             if (response.success) {
                 toast({
@@ -380,15 +379,15 @@ const UpdateDentistPage = () => {
                     h={6}
                     onClick={handleUpdate}
                     isDisabled={
-                        fullName === '' ||
+                        fullName.trim() === '' ||
                         dob === '' ||
                         gender === '' ||
-                        phone === '' ||
-                        email === '' ||
-                        address === '' ||
-                        description === '' ||
-                        specialty === '' ||
-                        experience === '' ||
+                        phone.trim() === '' ||
+                        email.trim() === '' ||
+                        address.trim() === '' ||
+                        description.trim() === '' ||
+                        specialty.trim() === '' ||
+                        experience.trim() === '' ||
                         avatar === '' ||
                         avatarData === null ||
                         branchId === 0

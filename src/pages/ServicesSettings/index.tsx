@@ -44,7 +44,6 @@ const ServicesSettingsPage = () => {
         }
         try {
             const response = await apiChange.update(dataChange);
-            console.log(response);
             if (response.success) {
                 toast({
                     title: "Success",

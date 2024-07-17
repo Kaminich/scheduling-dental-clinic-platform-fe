@@ -9,6 +9,8 @@ export default interface BranchSummaryResponse {
     phone: string;
     status: Status;
     createdDate: string;
+    modifiedDate: string;
+    main: boolean;
 }
 
 export const initialBranchSummaryResponse: BranchSummaryResponse = {
@@ -20,4 +22,6 @@ export const initialBranchSummaryResponse: BranchSummaryResponse = {
     phone: '',
     status: Status.INACTIVE,
     createdDate: '',
+    modifiedDate: '',
+    main: false
 };

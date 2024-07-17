@@ -1,23 +1,12 @@
 import { useState, FormEvent, useEffect } from 'react';
-import {
-    Box,
-    Button,
-    FormControl,
-    FormLabel,
-    Input,
-    Textarea,
-    Stack,
-    useToast,
-    useDisclosure,
-    HStack,
-    Image,
-} from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Input, Textarea, Stack, useToast, useDisclosure, HStack, Image } from '@chakra-ui/react';
 import { changeTabTitle } from '../../../utils/changeTabTitle';
 import axios from 'axios';
 import ApiClient from '../../../services/apiClient';
 import LoadingModal from '../../../components/modal/loading';
 import { Border } from '../../../styles/styles';
 import { FaCamera } from 'react-icons/fa6';
+import { trimAll } from '../../../utils/trimAll';
 
 const CreateBlogPage = () => {
     const [title, setTitle] = useState<string>('');
@@ -30,9 +19,9 @@ const CreateBlogPage = () => {
 
     const areAllFieldsFilled = () => {
         return (
-            content !== '' &&
-            title !== '' &&
-            summary !== '' &&
+            content.trim() !== '' &&
+            title.trim() !== '' &&
+            summary.trim() !== '' &&
             image !== '' &&
             imageData !== null
         );
@@ -48,7 +37,6 @@ const CreateBlogPage = () => {
 
     const handleImageChange = (e: any) => {
         const selectedFile = e.target.files[0];
-        console.log(selectedFile);
 
         if (selectedFile) {
             const reader = new FileReader();
@@ -84,10 +72,10 @@ const CreateBlogPage = () => {
         }
 
         const data = {
-            content,
-            title,
+            content: content.trim(),
+            title: trimAll(title),
             thumbnail: imageUrl,
-            summary
+            summary: summary.trim()
         };
 
         try {
@@ -215,6 +203,7 @@ const CreateBlogPage = () => {
                     bottom={2}
                     justify={'flex-end'}
                     gap={4}
+                    zIndex={10}
                 >
                     <Button
                         bg={'white'}

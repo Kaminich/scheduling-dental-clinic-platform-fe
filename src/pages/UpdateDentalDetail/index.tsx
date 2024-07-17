@@ -76,7 +76,6 @@ const UpdateDentalDetailPage = () => {
 
     const handleLogoChange = (e: any) => {
         const selectedFile = e.target.files[0];
-        console.log(selectedFile);
 
         if (selectedFile) {
             const reader = new FileReader();
@@ -91,7 +90,6 @@ const UpdateDentalDetailPage = () => {
 
     const handleClinicImageChange = (e: any) => {
         const selectedFile = e.target.files[0];
-        console.log(selectedFile);
 
         if (selectedFile) {
             const reader = new FileReader();

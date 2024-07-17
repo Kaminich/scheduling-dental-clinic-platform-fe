@@ -27,7 +27,6 @@ const CustomerProfileDetailPage = () => {
         try {
             const api = new ApiClient<ApiResponse<CustomerViewResponse>>('/customers');
             const response = await api.getDetail(id);
-            console.log(response);
             if (response.success) {
                 setCustomer(response.data);
             } else {

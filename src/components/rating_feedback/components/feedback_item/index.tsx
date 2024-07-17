@@ -5,6 +5,7 @@ import { FaFlag } from "react-icons/fa6";
 import ReportFeedbackModal from "../../../modal/report_feedback";
 import { useAuth } from "../../../../hooks/useAuth";
 import SendFeedbackResponse from "../../../../types/SendFeedbackResponse";
+import useUserProfile from "../../../../hooks/useUserProfile";
 
 interface Prop {
     feedback: SendFeedbackResponse;
@@ -16,6 +17,7 @@ const FeedbackItem = ({ feedback }: Prop) => {
     const { isAuthenticated } = useAuth();
     const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
     const textRef = useRef<HTMLDivElement>(null);
+    const { data } = useUserProfile();
 
     const toggleShowFullText = () => {
         setShowFullText(!showFullText);
@@ -29,7 +31,7 @@ const FeedbackItem = ({ feedback }: Prop) => {
 
     return (
         <Stack gap={4} mb={3} pos={'relative'} w={'full'}>
-            {isAuthenticated && (
+            {(isAuthenticated && data?.fullName !== feedback.customerFullName) && (
                 <HStack
                     pos={'absolute'}
                     right={-2}

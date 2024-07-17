@@ -16,7 +16,7 @@ const useCustomerMedicalRecord = ({ username }: Prop) => {
                 }
             })
                 .then((data) => {
-                    return data;
+                    return data.data;
                 })
     });
 };

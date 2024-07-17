@@ -215,7 +215,7 @@ const AppointmentPage = () => {
                                                                 <FaEye /> Appointment Detail
                                                             </Button>
                                                             <Button colorScheme="blue" gap={2} onClick={() => {
-                                                                setId(appointment.appointmentId);
+                                                                setId(appointment.clinicBranchId);
                                                                 onOpenFeedback();
                                                             }}>
                                                                 <FaStar /> Give Rating and Feedback

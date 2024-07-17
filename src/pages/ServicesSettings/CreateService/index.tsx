@@ -1,4 +1,4 @@
-import { Button, FormControl, FormLabel, HStack, Input, InputGroup, InputRightAddon, Select, Stack, Textarea, useToast } from "@chakra-ui/react"
+import { Button, FormControl, FormLabel, HStack, Input, InputGroup, InputRightAddon, Select, Stack, Textarea, useDisclosure, useToast } from "@chakra-ui/react"
 import { FormEvent, useEffect, useState } from "react";
 import ApiClient from "../../../services/apiClient";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
@@ -6,6 +6,8 @@ import { Border } from "../../../styles/styles";
 import useUserProfile from "../../../hooks/useUserProfile";
 import useCategoryByClinicId from "../../../hooks/useCategoryByClinicId";
 import CategoryViewListResponse from "../../../types/CategoryViewListResponse";
+import LoadingModal from "../../../components/modal/loading";
+import { trimAll } from "../../../utils/trimAll";
 
 const CreateServicePage = () => {
     const [serviceName, setServiceName] = useState<string>('');
@@ -19,16 +21,17 @@ const CreateServicePage = () => {
     const [categories, setCategories] = useState<CategoryViewListResponse[]>([]);
     const toast = useToast();
     const { data: userData } = useUserProfile();
-    const { data: categoryData } = useCategoryByClinicId({ clinicId: userData?.clinicId })
+    const { data: categoryData } = useCategoryByClinicId({ clinicId: userData?.clinicId });
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
 
     const api = new ApiClient<any>('/service');
 
     const areAllFieldsFilled = () => {
         return (
-            serviceName !== '' &&
-            description !== '' &&
-            unitOfPrice !== '' &&
-            serviceType !== '' &&
+            serviceName.trim() !== '' &&
+            description.trim() !== '' &&
+            unitOfPrice.trim() !== '' &&
+            serviceType.trim() !== '' &&
             minimumPrice !== undefined &&
             maximumPrice !== undefined &&
             duration !== undefined &&
@@ -49,21 +52,20 @@ const CreateServicePage = () => {
 
     const handleCreate = async (e: FormEvent) => {
         e.preventDefault();
-
+        onOpenLoading();
         const data = {
-            serviceName,
-            description,
-            unitOfPrice,
+            serviceName: trimAll(serviceName),
+            description: description.trim(),
+            unitOfPrice: trimAll(unitOfPrice),
             minimumPrice,
             maximumPrice,
             duration,
-            serviceType,
+            serviceType: trimAll(serviceType),
             categoryId
         };
 
         try {
             const response = await api.create(data);
-            console.log(response);
 
             if (response.success) {
                 toast({
@@ -94,6 +96,8 @@ const CreateServicePage = () => {
                 position: 'top',
                 isClosable: true,
             });
+        } finally {
+            onCloseLoading();
         }
     };
 
@@ -250,6 +254,10 @@ const CreateServicePage = () => {
                     Create
                 </Button>
             </HStack>
+            <LoadingModal
+                isOpen={isOpenLoading}
+                onClose={onCloseLoading}
+            />
         </Stack>
     )
 }

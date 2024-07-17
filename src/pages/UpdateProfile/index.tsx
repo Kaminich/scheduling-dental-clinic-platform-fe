@@ -12,6 +12,7 @@ import axios from "axios";
 import LoadingModal from "../../components/modal/loading";
 import NotFoundPage from "../NotFound";
 import { useAuth } from "../../hooks/useAuth";
+import { trimAll } from "../../utils/trimAll";
 
 const UpdateProfilePage = () => {
     const [username, setUsername] = useState<string>('');
@@ -42,7 +43,6 @@ const UpdateProfilePage = () => {
 
     const handleAvatarChange = (e: any) => {
         const selectedFile = e.target.files[0];
-        console.log(selectedFile);
 
         if (selectedFile) {
             const reader = new FileReader();
@@ -90,19 +90,18 @@ const UpdateProfilePage = () => {
 
         const api = new ApiClient<any>('/auth/user-information');
         const data: Customer = {
-            username,
-            fullName,
-            email,
+            username: username.trim(),
+            fullName: trimAll(fullName),
+            email: email.trim(),
             gender,
-            phone,
+            phone: phone.trim(),
             dob,
-            address,
+            address: trimAll(address),
             avatar: imageUrl === '' ? avatar : imageUrl
         }
 
         try {
             const response = await api.update(data);
-            console.log(response);
             if (response.status) {
                 toast({
                     title: "Success",
@@ -151,7 +150,6 @@ const UpdateProfilePage = () => {
 
         try {
             const response: any = await api.create(data);
-            console.log(response);
             if (response.status) {
                 toast({
                     title: "Success",
@@ -335,6 +333,16 @@ const UpdateProfilePage = () => {
                                 colorScheme={"blue"}
                                 variant={"solid"}
                                 flex={1}
+                                isDisabled={
+                                    username.trim() === '' ||
+                                    fullName.trim() === '' ||
+                                    gender === '' ||
+                                    dob === '' ||
+                                    phone.trim() === '' ||
+                                    email.trim() === '' ||
+                                    address.trim() === '' ||
+                                    avatar === ''
+                                }
                                 onClick={handleUpdateProfile}
                             >
                                 Save changes
@@ -406,6 +414,7 @@ const UpdateProfilePage = () => {
                             colorScheme={"blue"}
                             variant={"solid"}
                             flex={1}
+
                             onClick={handleUpdatePassword}
                         >
                             Save change

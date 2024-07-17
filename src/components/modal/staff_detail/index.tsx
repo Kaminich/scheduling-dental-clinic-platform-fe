@@ -18,7 +18,6 @@ const StaffDetailModal = ({ isOpen, onClose, id }: Props) => {
         try {
             const api = new ApiClient<any>('/staff');
             const response = await api.getDetail(id);
-            console.log(response);
             if (response.success) {
                 setStaff(response.data);
             }

@@ -10,6 +10,7 @@ import useUserProfile from "../../../hooks/useUserProfile";
 import useCategoryByClinicId from "../../../hooks/useCategoryByClinicId";
 import CategoryViewListResponse from "../../../types/CategoryViewListResponse";
 import LoadingModal from "../../../components/modal/loading";
+import { trimAll } from "../../../utils/trimAll";
 
 const UpdateServicePage = () => {
     const [service, setService] = useState<ServiceViewDetailsResponse>(initialServiceViewDetailsResponse);
@@ -29,6 +30,19 @@ const UpdateServicePage = () => {
     const param = useParams<{ id: string }>();
     const navigate = useNavigate();
     const toast = useToast();
+
+    const areAllFieldsFilled = () => {
+        return (
+            serviceName.trim() !== '' &&
+            description.trim() !== '' &&
+            unitOfPrice.trim() !== '' &&
+            serviceType.trim() !== '' &&
+            minimumPrice !== undefined &&
+            maximumPrice !== undefined &&
+            duration !== undefined &&
+            categoryId !== 0
+        );
+    };
 
     const getServiceDetailById = async (id: number) => {
         onOpenLoading();
@@ -72,13 +86,13 @@ const UpdateServicePage = () => {
         onOpenLoading();
         const data = {
             serviceId: parseInt(param.id || '0'),
-            serviceName,
-            description,
-            unitOfPrice,
+            serviceName: trimAll(serviceName),
+            description: description.trim(),
+            unitOfPrice: trimAll(unitOfPrice),
             minimumPrice,
             maximumPrice,
             duration,
-            serviceType,
+            serviceType: trimAll(serviceType),
             categoryId
         };
 
@@ -276,6 +290,7 @@ const UpdateServicePage = () => {
                     mr={6}
                     my={1}
                     h={6}
+                    isDisabled={!areAllFieldsFilled()}
                     onClick={handleUpdate}
                 >
                     Save

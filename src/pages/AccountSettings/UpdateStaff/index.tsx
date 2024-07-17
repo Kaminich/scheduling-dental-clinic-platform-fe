@@ -73,7 +73,6 @@ const UpdateStaffPage = () => {
 
     const handleAvatarChange = (e: any) => {
         const selectedFile = e.target.files[0];
-        console.log(selectedFile);
 
         if (selectedFile) {
             const reader = new FileReader();
@@ -120,7 +119,6 @@ const UpdateStaffPage = () => {
 
         try {
             const response = await api.update(data);
-            console.log(response);
 
             if (response.success) {
                 toast({

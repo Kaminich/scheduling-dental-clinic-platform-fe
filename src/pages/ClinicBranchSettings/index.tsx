@@ -7,7 +7,6 @@ import { useNavigate } from "react-router";
 import { Color, Shadow } from "../../styles/styles";
 import { AddIcon } from "@chakra-ui/icons";
 import useUserProfile from "../../hooks/useUserProfile";
-import BranchDetailResponse from "../../types/BranchDetailResponse";
 import { formatDate } from "../../utils/formatDate";
 import Loading from "../../components/loading";
 import useBranchByClinicId from "../../hooks/useBranchByClinicId";
@@ -15,13 +14,14 @@ import ChangeStatusModal from "../../components/modal/change_status";
 import ApiClient from "../../services/apiClient";
 import { formatDateTime } from "../../utils/formatDateTime";
 import { Status } from "../../types/type.enum";
+import BranchSummaryResponse from "../../types/BranchSummaryResponse";
 
 const ClinicBranchSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
     const [id, setId] = useState<number>(0);
     const [status, setStatus] = useState<string>('');
-    const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
+    const [branches, setBranches] = useState<BranchSummaryResponse[]>([]);
     const { data: userData } = useUserProfile();
     const { data: branchData, isLoading, refetch } = useBranchByClinicId({ clinicId: userData?.clinicId })
     const { isOpen: isOpenChange, onClose: onCloseChange, onOpen: onOpenChange } = useDisclosure();
@@ -37,7 +37,6 @@ const ClinicBranchSettingsPage = () => {
         if (status === 'INACTIVE') {
             try {
                 const response = await api.updateWithId(id);
-                console.log(response);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -73,7 +72,6 @@ const ClinicBranchSettingsPage = () => {
         } else {
             try {
                 const response = await api.delete(id);
-                console.log(response);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -157,8 +155,9 @@ const ClinicBranchSettingsPage = () => {
                                     <Th textAlign='center' borderColor={'gainsboro'}>ID</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Branch name</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>City</Th>
-                                    <Th textAlign='center' borderColor={'gainsboro'}>Create Date</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Created Date</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Modified Date</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Main Branch</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Status</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Action</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}></Th>
@@ -199,58 +198,90 @@ const ClinicBranchSettingsPage = () => {
                                                             textAlign='center'
                                                             borderColor={'gainsboro'}
                                                         >
-                                                            {formatDateTime(branch.modifiedDate)}
+                                                            {branch.modifiedDate ? formatDateTime(branch.modifiedDate) : '-'}
                                                         </Td>
                                                         <Td
                                                             textAlign='center'
                                                             borderColor={'gainsboro'}
                                                         >
-                                                            <Tag
-                                                                colorScheme={
-                                                                    branch.status === 'ACTIVE'
-                                                                        ? 'green'
-                                                                        : 'red'
-                                                                }
-                                                            >
-                                                                <TagLabel>
-                                                                    {branch.status}
-                                                                </TagLabel>
-                                                            </Tag>
+                                                            {branch.main}
                                                         </Td>
-                                                        <Td
-                                                            textAlign='center'
-                                                            borderColor={'gainsboro'}
-                                                            p={1}
-                                                        >
-                                                            <Button
-                                                                borderRadius='full'
-                                                                px={3}
-                                                                colorScheme={
-                                                                    branch.status === Status.ACTIVE
-                                                                        ? 'red'
-                                                                        : 'green'
-                                                                }
-                                                                variant='ghost'
-                                                                onClick={() => {
-                                                                    setId(branch.branchId);
-                                                                    setStatus(branch.status)
-                                                                    onOpenChange();
-                                                                }}
-                                                            >
-                                                                <Tooltip
-                                                                    label=
-                                                                    {
-                                                                        branch.status === Status.ACTIVE
-                                                                            ? 'Deactivate branch'
-                                                                            : 'Activate branch'
-                                                                    }
+                                                        {branch.status !== Status.APPROVED ? (
+                                                            <>
+                                                                <Td
+                                                                    textAlign='center'
+                                                                    borderColor={'gainsboro'}
                                                                 >
-                                                                    <span>
-                                                                        <FaArrowRightArrowLeft />
-                                                                    </span>
-                                                                </Tooltip>
-                                                            </Button>
-                                                        </Td>
+                                                                    <Tag
+                                                                        colorScheme={
+                                                                            branch.status === 'ACTIVE'
+                                                                                ? 'green'
+                                                                                : 'red'
+                                                                        }
+                                                                    >
+                                                                        <TagLabel>
+                                                                            {branch.status}
+                                                                        </TagLabel>
+                                                                    </Tag>
+                                                                </Td>
+                                                                <Td
+                                                                    textAlign='center'
+                                                                    borderColor={'gainsboro'}
+                                                                    p={1}
+                                                                >
+                                                                    <Button
+                                                                        borderRadius='full'
+                                                                        px={3}
+                                                                        colorScheme={
+                                                                            branch.status === Status.ACTIVE
+                                                                                ? 'red'
+                                                                                : 'green'
+                                                                        }
+                                                                        variant='ghost'
+                                                                        onClick={() => {
+                                                                            setId(branch.branchId);
+                                                                            setStatus(branch.status)
+                                                                            onOpenChange();
+                                                                        }}
+                                                                    >
+                                                                        <Tooltip
+                                                                            label=
+                                                                            {
+                                                                                branch.status === Status.ACTIVE
+                                                                                    ? 'Deactivate branch'
+                                                                                    : 'Activate branch'
+                                                                            }
+                                                                        >
+                                                                            <span>
+                                                                                <FaArrowRightArrowLeft />
+                                                                            </span>
+                                                                        </Tooltip>
+                                                                    </Button>
+                                                                </Td>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Td
+                                                                    textAlign='center'
+                                                                    borderColor={'gainsboro'}
+                                                                >
+                                                                    <Tag
+                                                                        colorScheme={'cyan'}
+                                                                    >
+                                                                        <TagLabel>
+                                                                            {branch.status}
+                                                                        </TagLabel>
+                                                                    </Tag>
+                                                                </Td>
+                                                                <Td
+                                                                    textAlign='center'
+                                                                    borderColor={'gainsboro'}
+                                                                    p={1}
+                                                                >
+                                                                    -
+                                                                </Td>
+                                                            </>
+                                                        )}
                                                         <Td
                                                             textAlign='center'
                                                             borderColor={'gainsboro'}
@@ -264,7 +295,7 @@ const ClinicBranchSettingsPage = () => {
                                             </>
                                         ) : (
                                             <Tr>
-                                                <Td colSpan={8} textAlign="center">
+                                                <Td colSpan={9} textAlign="center">
                                                     No branch
                                                 </Td>
                                             </Tr>
@@ -272,7 +303,7 @@ const ClinicBranchSettingsPage = () => {
                                     </>
                                 ) : (
                                     <Tr>
-                                        <Td colSpan={8} textAlign="center">
+                                        <Td colSpan={9} textAlign="center">
                                             <Loading />
                                         </Td>
                                     </Tr>
