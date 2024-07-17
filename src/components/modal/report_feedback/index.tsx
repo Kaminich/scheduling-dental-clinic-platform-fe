@@ -28,8 +28,6 @@ const ReportFeedbackModal = ({ isOpen, onClose, feedbackId, reportedCustomer }: 
     };
 
     const handleReport = async () => {
-        console.log(Array.from(selectedReasons));
-
         const data = {
             feedbackId: feedbackId,
             reportReason: Array.from(selectedReasons),
@@ -61,8 +59,6 @@ const ReportFeedbackModal = ({ isOpen, onClose, feedbackId, reportedCustomer }: 
                 });
             }
         } catch (error: any) {
-            console.log(error);
-
             toast({
                 title: "Error",
                 description: error.response?.data?.message || "An error occurred",

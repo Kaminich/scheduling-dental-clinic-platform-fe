@@ -104,7 +104,6 @@ class ApiClient<T> {
         return axiosInstance
             .put<T>(this.endpoint, data, this.setAuthHeader(config))
             .then((res) => res.data)
-            .catch((err) => console.log(err))
     }
 
     updateWithId = (id: number, config?: AxiosRequestConfig) => {

@@ -37,7 +37,6 @@ const ClinicBranchSettingsPage = () => {
         if (status === 'INACTIVE') {
             try {
                 const response = await api.updateWithId(id);
-                console.log(response);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -73,7 +72,6 @@ const ClinicBranchSettingsPage = () => {
         } else {
             try {
                 const response = await api.delete(id);
-                console.log(response);
                 if (response.success) {
                     toast({
                         title: "Success",

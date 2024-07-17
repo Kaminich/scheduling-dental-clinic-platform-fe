@@ -43,7 +43,6 @@ const CreateClinicBranchPage = () => {
 
         try {
             const response = await api.create(data);
-            console.log(response);
 
             if (response.success) {
                 toast({

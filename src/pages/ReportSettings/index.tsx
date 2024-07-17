@@ -114,8 +114,6 @@ const ReportSettingsPage = () => {
         }
     }, [data]);
 
-    console.log(data);
-
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
             <InputGroup>

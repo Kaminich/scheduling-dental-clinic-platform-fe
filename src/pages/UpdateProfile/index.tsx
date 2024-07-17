@@ -102,7 +102,6 @@ const UpdateProfilePage = () => {
 
         try {
             const response = await api.update(data);
-            console.log(response);
             if (response.status) {
                 toast({
                     title: "Success",
@@ -151,7 +150,6 @@ const UpdateProfilePage = () => {
 
         try {
             const response: any = await api.create(data);
-            console.log(response);
             if (response.status) {
                 toast({
                     title: "Success",

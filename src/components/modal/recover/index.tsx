@@ -30,7 +30,6 @@ const RecoverModal = ({ isOpen, onClose, email }: Props) => {
 
         try {
             const response = await api.postUnauthen(data);
-            console.log(response);
 
             if (response.success) {
                 toast({
@@ -66,9 +65,6 @@ const RecoverModal = ({ isOpen, onClose, email }: Props) => {
             }
         }
     };
-
-    console.log(verificationCode);
-
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>

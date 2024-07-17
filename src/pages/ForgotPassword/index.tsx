@@ -22,7 +22,6 @@ const ForgotPasswordPage = () => {
 
         try {
             const response = await api.postUnauthen(data);
-            console.log(response);
 
             if (response.success === false) {
                 toast({

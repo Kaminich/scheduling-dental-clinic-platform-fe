@@ -49,8 +49,6 @@ const BlogDetailPage = () => {
 
     useEffect(() => {
         if (id || parseInt(blogId || '0')) {
-            console.log(parseInt(blogId || '0'));
-
             getBlogDetail();
         }
     }, [id, blogId]);

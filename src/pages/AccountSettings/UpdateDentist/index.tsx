@@ -129,7 +129,6 @@ const UpdateDentistPage = () => {
 
         try {
             const response = await api.update(data);
-            console.log(response);
 
             if (response.success) {
                 toast({
