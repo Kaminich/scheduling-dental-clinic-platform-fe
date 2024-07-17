@@ -103,15 +103,15 @@ const DentistDetailPage = () => {
                     >
                         {dentist.fullName}
                     </Text>
-                    <Flex my={2} align={'center'}>
+                    <Flex my={2} w={'full'} justify={'space-between'} align={'center'}>
                         <Flex flex={1} justify={'center'}>
                             <Image
-                                alt={"Dentist avatar"}
+                                alt={dentist.fullName}
                                 h={'50vh'}
                                 borderRadius={10}
                                 p={0}
                                 src={
-                                    dentist.avatar || "https://bit.ly/sage-adebayo"
+                                    dentist.avatar || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
                                 }
                             />
                         </Flex>

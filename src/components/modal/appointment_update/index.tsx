@@ -204,7 +204,7 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
                                         <FormControl id="dob" flex={1}>
                                             <FormLabel ml={1}>Date of Birth</FormLabel>
                                             <Input
-                                                value={appointment.customerAge}
+                                                value={appointment.dob}
                                                 readOnly
                                             />
                                         </FormControl>
