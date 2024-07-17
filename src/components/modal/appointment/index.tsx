@@ -43,7 +43,7 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
     const toast = useToast();
     const { data } = useUserProfile();
     const { data: serviceData } = useServiceByClinicId({ clinicId: dentistData?.clinicId || (clinicId || 0) });
-    const { data: branchData } = useBranchByClinicId({ clinicId: clinicId || 0 });
+    const { data: branchData } = useBranchByClinicId({ clinicId: dentistData?.clinicId || (clinicId || 0) });
     const [services, setServices] = useState<ServiceViewListResponse[]>([]);
     const [branches, setBranches] = useState<BranchSummaryResponse[]>([]);
     const [dentists, setDentists] = useState<DentistViewListResponse[]>([]);
@@ -54,12 +54,13 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
     const getAvailableSlot = async () => {
         const api = new ApiClient<any>('/slot/available-by-date');
         try {
-            const response = await api.getUnauthen({
+            const response = await api.getAuthen({
                 params: {
-                    branchId: clinicBranchId,
+                    clinicBranchId,
                     date
                 }
             });
+
             if (response.success) {
                 setSlot(response.data);
             } else {
@@ -169,11 +170,10 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
     }, [clinicBranchId, date]);
 
     useEffect(() => {
-        getAvailableDentist();
-    }, [clinicBranchId, date, slotId])
-
-    console.log(slot);
-
+        if (clinicBranchId && slotId) {
+            getAvailableDentist();
+        }
+    }, [clinicBranchId, slotId])
 
     return (
         <Modal
@@ -307,7 +307,7 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                                     {branches
                                                         .filter((branch) => branch.status === Status.ACTIVE)
                                                         .map((branch) => (
-                                                            <option value={branch.branchId}>
+                                                            <option key={branch.branchId} value={branch.branchId}>
                                                                 {branch.branchName} ({branch.city})
                                                             </option>
                                                         ))}
@@ -340,7 +340,10 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                                     type="date"
                                                     min={today}
                                                     value={date}
-                                                    onChange={(e) => setDate(e.target.value)}
+                                                    onChange={(e) => {
+                                                        setDate(e.target.value)
+                                                        setSlotId(0);
+                                                    }}
                                                 />
                                             </FormControl>
                                             <FormControl id="slot" flex={1}>
@@ -373,7 +376,7 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                             <FormLabel ml={1}>Dentist</FormLabel>
                                             {dentistData === undefined ? (
                                                 <>
-                                                    {(clinicBranchId === 0 || serviceId === 0 || date === '') ? (
+                                                    {(clinicBranchId === 0 || serviceId === 0 || date === '' || slotId === 0) ? (
                                                         <Tooltip label={'Fill all fields above to choose'}>
                                                             <Select
                                                                 placeholder={'Select dentist'}

@@ -41,7 +41,6 @@ const UpdateDentistPage = () => {
         try {
             const api = new ApiClient<ApiResponse<DentistDetailResponse>>('/dentists');
             const response = await api.getDetail(id);
-            console.log(response);
             if (response.success) {
                 setDentist(response.data);
             } else {
@@ -109,7 +108,6 @@ const UpdateDentistPage = () => {
                     formDataImage
                 );
                 avatarUrl = response.data.secure_url;
-                console.log("Cloudinary image URL:", avatarUrl);
             } catch (error) {
                 console.error(error);
             }

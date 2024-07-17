@@ -1,4 +1,4 @@
-import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useToast } from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, HStack, Input, InputGroup, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, PinInput, PinInputField, Stack, useToast } from "@chakra-ui/react";
 import { Border } from "../../../styles/styles";
 import { FormEvent, useState } from "react";
 import ApiClient from "../../../services/apiClient";
@@ -42,7 +42,7 @@ const RecoverModal = ({ isOpen, onClose, email }: Props) => {
                     isClosable: true,
                 });
                 onClose();
-                navigate('login');
+                navigate('/login');
             } else {
                 toast({
                     title: "Error",
@@ -67,36 +67,46 @@ const RecoverModal = ({ isOpen, onClose, email }: Props) => {
         }
     };
 
+    console.log(verificationCode);
+
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
+        <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
             <ModalOverlay backdropFilter={'blur(5px)'} />
             <ModalContent>
                 <ModalHeader fontSize='xl'>Recover Password</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
-                    <FormControl id="verificationCode">
-                        <FormLabel pl={1}>Verification Code</FormLabel>
-                        <Input
-                            type="text"
-                            value={verificationCode}
-                            onChange={(e) => setVerificationCode(e.target.value)}
-                            placeholder="Verification code"
-                        />
-                    </FormControl>
-                    <FormControl id="password">
-                        <FormLabel pl={1}>Password</FormLabel>
-                        <InputGroup>
-                            <Input
-                                type={showPass ? 'text' : 'password'}
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                placeholder="Password"
-                            />
-                            <InputRightElement width='3.5rem' cursor='pointer' onClick={() => setShowPass(!showPass)}>
-                                {!showPass ? <FaEye /> : <FaEyeSlash />}
-                            </InputRightElement>
-                        </InputGroup>
-                    </FormControl>
+                    <Stack gap={6}>
+                        <FormControl id="verificationCode">
+                            <FormLabel pl={1}>Verification Code</FormLabel>
+                            <HStack w={'full'} justify={'space-evenly'}>
+                                <PinInput size={'lg'} value={verificationCode} onChange={setVerificationCode}>
+                                    <PinInputField borderColor={'black'} _hover={{ borderColor: 'gray' }} />
+                                    <PinInputField borderColor={'black'} _hover={{ borderColor: 'gray' }} />
+                                    <PinInputField borderColor={'black'} _hover={{ borderColor: 'gray' }} />
+                                    <PinInputField borderColor={'black'} _hover={{ borderColor: 'gray' }} />
+                                    <PinInputField borderColor={'black'} _hover={{ borderColor: 'gray' }} />
+                                    <PinInputField borderColor={'black'} _hover={{ borderColor: 'gray' }} />
+                                </PinInput>
+                            </HStack>
+                        </FormControl>
+                        <FormControl id="newPassword">
+                            <FormLabel pl={1}>New Password</FormLabel>
+                            <InputGroup>
+                                <Input
+                                    type={showPass ? 'text' : 'password'}
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    placeholder="New Password"
+                                    borderColor={'gainsboro'}
+                                />
+                                <InputRightElement width='3.5rem' cursor='pointer' onClick={() => setShowPass(!showPass)}>
+                                    {!showPass ? <FaEye /> : <FaEyeSlash />}
+                                </InputRightElement>
+                            </InputGroup>
+                        </FormControl>
+                    </Stack>
                 </ModalBody>
                 <ModalFooter>
                     <Button colorScheme='green' mr={3} onClick={handleRecover}>

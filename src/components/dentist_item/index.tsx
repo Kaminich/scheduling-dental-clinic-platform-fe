@@ -31,9 +31,6 @@ const DentistItem = ({ type, data }: Props) => {
         }
     }, [data])
 
-    console.log(data);
-
-
     return (
         <>
             {type === 1 ? (
@@ -46,8 +43,7 @@ const DentistItem = ({ type, data }: Props) => {
                                     <Stack align={'center'}>
                                         <Avatar
                                             size='2xl'
-                                            name='Segun Adebayo'
-                                            src={dentist.avatar || ''}
+                                            src={dentist.avatar || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'}
                                             border={Border.tableBorder}
                                         />
                                         <Heading
@@ -96,14 +92,11 @@ const DentistItem = ({ type, data }: Props) => {
                     {dentists
                         .filter((dentist) => dentist.status === Status.ACTIVE)
                         .map((dentist) => (
-                            <Card
-                                maxW='sm'
-                                shadow={Shadow.cardShadow}
-                            >
+                            <Card maxW='sm' shadow={Shadow.cardShadow} key={dentist.dentistId}>
                                 <CardBody pb={4}>
                                     <Stack align={'center'}>
                                         <Image
-                                            src={dentist.avatar || 'https://bit.ly/sage-adebayo'}
+                                            src={dentist.avatar || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'}
                                             alt={dentist.fullName}
                                             borderRadius='lg'
                                             w={222}

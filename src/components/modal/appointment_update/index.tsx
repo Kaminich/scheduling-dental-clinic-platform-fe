@@ -54,10 +54,10 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
     const getAvailableSlot = async () => {
         const api = new ApiClient<any>('/slot/available-by-date-updating');
         try {
-            const response = await api.getUnauthen({
+            const response = await api.getAuthen({
                 params: {
                     appointmentId: id,
-                    branchId: appointment.clinicBranch.branchId,
+                    clinicBranchId: appointment.clinicBranch.branchId,
                     date
                 }
             });
@@ -74,7 +74,7 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
     const getAvailableDentist = async () => {
         const api = new ApiClient<any>('/dentists/available-updating');
         try {
-            const response = await api.getUnauthen({
+            const response = await api.getAuthen({
                 params: {
                     appointmentId: id,
                     branchId: appointment.clinicBranch.branchId,
@@ -111,7 +111,6 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
 
         try {
             const response = await api.update(data);
-            console.log(response);
             if (response.success) {
                 toast({
                     title: "Success",
@@ -155,16 +154,22 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
 
     useEffect(() => {
         getAppointmentDetail();
-        getServiceByClinicId();
+        if (appointment.service.clinicId) {
+            getServiceByClinicId();
+        }
     }, [appointment])
 
     useEffect(() => {
-        getAvailableSlot();
+        if (id && date) {
+            getAvailableSlot();
+        }
     }, [id, date])
 
     useEffect(() => {
-        getAvailableDentist();
-    }, [id, date, slotId])
+        if (id && slotId) {
+            getAvailableDentist();
+        }
+    }, [id, slotId])
 
     return (
         <Modal
@@ -268,7 +273,10 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id }: Props) => {
                                                 type="date"
                                                 min={today}
                                                 value={date}
-                                                onChange={(e) => setDate(e.target.value)}
+                                                onChange={(e) => {
+                                                    setDate(e.target.value)
+                                                    setSlotId(0);
+                                                }}
                                             />
                                         </FormControl>
                                         <FormControl id="slot" flex={1}>

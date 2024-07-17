@@ -94,7 +94,6 @@ const CreateDentistPage = () => {
                     formDataImage
                 );
                 avatarUrl = response.data.secure_url;
-                console.log("Cloudinary image URL:", avatarUrl);
             } catch (error) {
                 console.error(error);
             }
@@ -116,7 +115,6 @@ const CreateDentistPage = () => {
 
         try {
             const response = await api.create(data);
-            console.log(response);
 
             if (response.success) {
                 toast({

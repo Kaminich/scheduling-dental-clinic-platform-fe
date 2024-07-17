@@ -1,8 +1,9 @@
 import { Avatar, Button, HStack, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, Textarea, useToast } from "@chakra-ui/react"
 import { Rate } from "antd"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useUserProfile from "../../../hooks/useUserProfile";
 import ApiClient from "../../../services/apiClient";
+import BranchDetailResponse, { initialBranchDetailResponse } from "../../../types/BranchDetailResponse";
 
 interface Prop {
     isOpen: boolean;
@@ -15,10 +16,23 @@ const FeedbackFormModal = ({ isOpen, onClose, branchclinicId }: Prop) => {
     const [rating, setRating] = useState<number | undefined>(undefined);
     const [feedbackMissing, setFeedbackMissing] = useState<boolean>(false);
     const [ratingMissing, setRatingMissing] = useState<boolean>(false);
+    const [branch, setBranch] = useState<BranchDetailResponse>(initialBranchDetailResponse);
     const toast = useToast();
     const { data } = useUserProfile();
 
-    const api = new ApiClient<any>('/feedback');
+    const getBranchDetail = async () => {
+        const api = new ApiClient<any>('branch');
+        try {
+            const response = await api.getDetail(branchclinicId);
+            if (response.success) {
+                setBranch(response.data);
+            } else {
+                console.log(response.message);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const handlePost = async () => {
         if (!feedback && !rating) {
@@ -31,6 +45,7 @@ const FeedbackFormModal = ({ isOpen, onClose, branchclinicId }: Prop) => {
             setRatingMissing(true);
             setFeedbackMissing(false);
         } else {
+            const api = new ApiClient<any>('/feedback');
             const data = {
                 rating,
                 comment: feedback,
@@ -76,6 +91,12 @@ const FeedbackFormModal = ({ isOpen, onClose, branchclinicId }: Prop) => {
         }
     }
 
+    useEffect(() => {
+        if (branchclinicId) {
+            getBranchDetail();
+        }
+    }, [branchclinicId])
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered size={'xl'}>
             <ModalOverlay />
@@ -91,10 +112,10 @@ const FeedbackFormModal = ({ isOpen, onClose, branchclinicId }: Prop) => {
                         F-Dental
                     </Heading>
                     <HStack gap={4} align={'flex-start'} mb={6}>
-                        <Avatar size={'md'} name={data?.fullName} src='https://bit.ly/sage-adebayo' />
+                        <Avatar size={'md'} src={data?.avatar || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'} />
                         <Stack gap={0}>
                             <Text fontWeight={500}>{data?.fullName}</Text>
-                            <Text fontSize={14} color={'blue.500'}>Clinic Branch</Text>
+                            <Text fontSize={14} color={'blue.500'}>{`${branch.branchName} (${branch.city})`}</Text>
                         </Stack>
                     </HStack>
                     <Stack align={'center'} gap={8}>

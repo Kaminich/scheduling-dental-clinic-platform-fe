@@ -39,8 +39,7 @@ const UpdateBlogPage = () => {
             content !== '' &&
             title !== '' &&
             summary !== '' &&
-            image !== '' &&
-            imageData !== null
+            image !== ''
         );
     };
 
@@ -67,7 +66,7 @@ const UpdateBlogPage = () => {
         }
     }
 
-    const handleCreate = async (e: FormEvent) => {
+    const handleUpdate = async (e: FormEvent) => {
         e.preventDefault();
         const api = new ApiClient<any>('/blog');
         onOpenLoading();
@@ -84,7 +83,6 @@ const UpdateBlogPage = () => {
                     formDataImage
                 );
                 imageUrl = response.data.secure_url;
-                console.log("Cloudinary image URL:", imageUrl);
             } catch (error) {
                 console.error(error);
             }
@@ -100,7 +98,6 @@ const UpdateBlogPage = () => {
 
         try {
             const response = await api.update(data);
-            console.log(response);
 
             if (response.success) {
                 toast({
@@ -151,7 +148,7 @@ const UpdateBlogPage = () => {
     }, [blog])
 
     return (
-        <Box p={8} maxWidth="600px" mx="auto">
+        <Box p={8} w="4xl" mx="auto">
             <Stack spacing={4}>
                 <FormControl id="title" isRequired>
                     <FormLabel pl={1}>Title</FormLabel>
@@ -257,10 +254,10 @@ const UpdateBlogPage = () => {
                         mr={6}
                         my={1}
                         h={6}
-                        onClick={handleCreate}
+                        onClick={handleUpdate}
                         isDisabled={!areAllFieldsFilled()}
                     >
-                        Create
+                        Update
                     </Button>
                 </HStack>
                 <LoadingModal

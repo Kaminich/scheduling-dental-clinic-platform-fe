@@ -1,4 +1,4 @@
-import { SimpleGrid, Stack } from "@chakra-ui/react"
+import { SimpleGrid, Stack, Text } from "@chakra-ui/react"
 import BlogsItem from "../../components/blogs_item"
 import { useEffect, useState } from "react";
 import { changeTabTitle } from "../../utils/changeTabTitle";
@@ -23,11 +23,19 @@ const BlogPage = () => {
     return (
         <>
             {!isLoading ? (
-                <SimpleGrid columns={3} spacingX={7} spacingY={8} w={'6xl'} m={'auto'} my={10}>
-                    {blogs.map((blog) => (
-                        <BlogsItem blog={blog} />
-                    ))}
-                </SimpleGrid>
+                <>
+                    {blogs.length !== 0 ? (
+                        <SimpleGrid columns={3} spacingX={7} spacingY={8} w={'6xl'} m={'auto'} my={10}>
+                            {blogs.map((blog) => (
+                                <BlogsItem key={blog.id} blog={blog} />
+                            ))}
+                        </SimpleGrid>
+                    ) : (
+                        <Stack m={'auto'}>
+                            <Text>No blog available</Text>
+                        </Stack>
+                    )}
+                </>
             ) : (
                 <Stack m={'auto'}>
                     <Loading />

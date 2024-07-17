@@ -33,7 +33,7 @@ const MedicalRecordPage = () => {
             {!isLoading ? (
                 <Stack maxW={'7xl'} mx={'auto'} my={10}>
                     {treatments.map((treatment) => (
-                        <Card shadow={Shadow.cardShadow} w={'xl'}>
+                        <Card shadow={Shadow.cardShadow} w={'xl'} key={treatment.id}>
                             <CardHeader mb={-5}>
                                 <HStack gap={0} justify={'flex-end'}>
                                     <Button
@@ -105,6 +105,7 @@ const MedicalRecordPage = () => {
                                             resize={'none'}
                                             maxH={32}
                                             minH={32}
+                                            readOnly
                                         />
                                     </FormControl>
                                     <FormControl id="treatmentPlan">
@@ -115,19 +116,21 @@ const MedicalRecordPage = () => {
                                             resize={'none'}
                                             maxH={32}
                                             minH={32}
-                                            required
+                                            readOnly
                                         />
                                     </FormControl>
                                 </Stack>
                             </CardBody>
                         </Card>
                     ))}
-                    <ReAppointmentModal
-                        isOpen={isOpenAppointment}
-                        onClose={onCloseAppointment}
-                        id={id}
-                        followUpDate={followUpDate}
-                    />
+                    {id && (
+                        <ReAppointmentModal
+                            isOpen={isOpenAppointment}
+                            onClose={onCloseAppointment}
+                            id={id}
+                            followUpDate={followUpDate}
+                        />
+                    )}
                 </Stack>
             ) : (
                 <Stack m={'auto'}>

@@ -68,7 +68,6 @@ const PartnerRegisterPage = () => {
                     formDataImage
                 );
                 imageUrl = response.data.secure_url;
-                console.log("Cloudinary image URL:", imageUrl);
             } catch (error) {
                 console.error(error);
             }
@@ -86,7 +85,6 @@ const PartnerRegisterPage = () => {
                     formDataFile
                 );
                 fileUrl = response.data.secure_url;
-                console.log("Cloudinary file URL:", fileUrl);
             } catch (error) {
                 console.error(error);
             }

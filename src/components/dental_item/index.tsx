@@ -73,7 +73,9 @@ const DentalItem = ({ dentalData }: Prop) => {
                             >
                                 <TagLabel>
                                     <Tooltip label='Phone Number'>
-                                        <FaPhone />
+                                        <span>
+                                            <FaPhone />
+                                        </span>
                                     </Tooltip>
                                 </TagLabel>
                             </Tag>
@@ -93,12 +95,14 @@ const DentalItem = ({ dentalData }: Prop) => {
                     </Button>
                 )}
             </CardFooter>
-            <AppointmentModal
-                isOpen={isOpenAppointment}
-                onClose={onCloseAppointment}
-                clinicId={dentalData?.clinicId}
-                clinicName={dentalData?.clinicName}
-            />
+            {isOpenAppointment && (
+                <AppointmentModal
+                    isOpen={isOpenAppointment}
+                    onClose={onCloseAppointment}
+                    clinicId={dentalData?.clinicId}
+                    clinicName={dentalData?.clinicName}
+                />
+            )}
         </Card>
     )
 }

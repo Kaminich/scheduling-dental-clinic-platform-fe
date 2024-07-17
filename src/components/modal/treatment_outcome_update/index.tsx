@@ -33,13 +33,13 @@ const UpdateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
 
     const handleUpdate = async () => {
         setIsLoading(true);
-        const api = new ApiClient<any>('/appointment');
+        const api = new ApiClient<any>('/treatment-outcomes');
         const data = {
-            diagnosis: "",
-            treatmentPlan: "",
-            prescription: "",
-            recommendations: "",
-            followUpDate: "",
+            diagnosis,
+            treatmentPlan,
+            prescription,
+            recommendations,
+            followUpDate,
             appointmentId: id
         }
 
@@ -111,7 +111,7 @@ const UpdateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
                                 <Stack flex={1} gap={2}>
                                     <FormControl id="fullname" flex={2}>
                                         <FormLabel ml={1}>Full Name</FormLabel>
-                                        <Input value={'appointment.customerName'} readOnly />
+                                        <Input value={treatment.customerName} readOnly />
                                     </FormControl>
                                     <FormControl id="followUpDate" flex={1} isRequired>
                                         <FormLabel ml={1}>Follow-up Date</FormLabel>

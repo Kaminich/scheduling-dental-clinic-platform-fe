@@ -34,7 +34,6 @@ const ApproveStaffPage = () => {
                     isApproved: approve
                 }
             });
-            console.log(response);
             if (response.success) {
                 toast({
                     title: "Success",
@@ -121,7 +120,7 @@ const ApproveStaffPage = () => {
                                         {filteredStaffs.length !== 0 ? (
                                             <>
                                                 {filteredStaffs.map((staff) => (
-                                                    <Tr _hover={{ bg: 'gray.100' }}>
+                                                    <Tr _hover={{ bg: 'gray.100' }} key={staff.id}>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{staff.id}</Td>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{staff.fullName}</Td>
                                                         <Td textAlign='center' borderColor={'gainsboro'}>{staff.clinicBranchName}</Td>

@@ -1,7 +1,6 @@
 import { Box, Button, HStack } from "@chakra-ui/react";
 import Logo from "../../../logo";
 import { Link, useNavigate } from "react-router-dom";
-import Notification from "../notification";
 import PersonalMenu from "../personal_menu";
 import { Color } from "../../../../styles/styles";
 import { FaChevronLeft } from "react-icons/fa6";
@@ -45,7 +44,6 @@ const AdminNavbar = ({ type }: Prop) => {
                 </HStack>
                 {type === 'admin' && (
                     <HStack mr={20}>
-                        {/* <Notification /> */}
                         <PersonalMenu />
                     </HStack>
                 )}

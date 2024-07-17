@@ -7,54 +7,53 @@ import ApiClient from "../../../services/apiClient";
 interface Props {
     isOpen: boolean;
     onClose: () => void;
-    type?: string;
     id: number;
     refetch: () => Promise<QueryObserverResult<any, Error>>;
 }
 
-const AppointmentCancelModal = ({ isOpen, onClose, type, id, refetch }: Props) => {
+const AppointmentCancelModal = ({ isOpen, onClose, id, refetch }: Props) => {
     const [reason, setReason] = useState<string>('');
     const api = new ApiClient<any>('appointment');
     const toast = useToast();
 
     const handleCancel = async () => {
-        if (type === 'staff') {
-            const data = {
-                appointmentId: id,
-                cancelReason: reason
-            }
-            try {
-                const response = await api.create(data);
-                if (response.success) {
-                    toast({
-                        title: "Success",
-                        description: response.message,
-                        status: "success",
-                        duration: 2500,
-                        position: 'top',
-                        isClosable: true,
-                    });
-                    refetch && refetch();
-                } else {
-                    toast({
-                        title: "Error",
-                        description: response.message,
-                        status: "error",
-                        duration: 2500,
-                        position: 'top',
-                        isClosable: true,
-                    });
-                }
-            } catch (error: any) {
+        const data = {
+            appointmentId: id,
+            cancelReason: reason
+        }
+        try {
+            const response = await api.create(data);
+            if (response.success) {
+                toast({
+                    title: "Success",
+                    description: response.message,
+                    status: "success",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+                refetch && refetch();
+            } else {
                 toast({
                     title: "Error",
-                    description: error.response?.data?.message || "An error occurred",
+                    description: response.message,
                     status: "error",
                     duration: 2500,
                     position: 'top',
                     isClosable: true,
                 });
             }
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.response?.data?.message || "An error occurred",
+                status: "error",
+                duration: 2500,
+                position: 'top',
+                isClosable: true,
+            });
+        } finally {
+            onClose();
         }
     }
 

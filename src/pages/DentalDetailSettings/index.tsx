@@ -9,7 +9,6 @@ import { useNavigate, useParams } from "react-router"
 import useUserProfile from "../../hooks/useUserProfile"
 import useClinicDetail from "../../hooks/useClinicDetail"
 import ClinicDetailResponse, { initialClinicDetailResponse } from "../../types/ClinicDetailResponse"
-import useWorkingHoursByClinicId from "../../hooks/useWorkingHoursByClinicId"
 import Loading from "../../components/loading"
 import { FaPenToSquare } from "react-icons/fa6"
 import { formatDate } from "../../utils/formatDate"
@@ -21,7 +20,6 @@ const DentalDetailSettingsPage = () => {
     const navigate = useNavigate();
     const { data: userData } = useUserProfile();
     const { data: clinicData, isLoading } = useClinicDetail({ clinicId: userData?.clinicId || parseInt(id || '0') });
-    const { data: clinicWHData } = useWorkingHoursByClinicId({ clinicId: userData?.clinicId || parseInt(id || '0') });
     const [clinic, setClinic] = useState<ClinicDetailResponse>(initialClinicDetailResponse);
 
     useEffect(() => {
@@ -35,9 +33,6 @@ const DentalDetailSettingsPage = () => {
             setClinic(clinicData);
         }
     }, [clinicData]);
-
-    console.log(clinicWHData);
-
 
     return (
         <>
@@ -146,7 +141,9 @@ const DentalDetailSettingsPage = () => {
                                 >
                                     Working Hours
                                 </Text>
-                                <WorkingHours clinicId={clinic.id} />
+                                {clinic.id && (
+                                    <WorkingHours clinicId={clinic.id} />
+                                )}
                             </Stack>
                             <Stack>
                                 <Text
@@ -160,7 +157,9 @@ const DentalDetailSettingsPage = () => {
                                 >
                                     Branch
                                 </Text>
-                                <DentalDetailBranch clinicId={userData?.clinicId || parseInt(id || '0')} />
+                                {clinic.id && (
+                                    <DentalDetailBranch clinicId={clinic.id} />
+                                )}
                             </Stack>
                         </Stack>
                     </Stack>

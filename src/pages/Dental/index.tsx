@@ -33,7 +33,7 @@ const DentalPage = () => {
                     py={8}
                 >
                     {clinics.map((clinic) => (
-                        <DentalItem dentalData={clinic} />
+                        <DentalItem key={clinic.clinicId} dentalData={clinic} />
                     ))}
                 </SimpleGrid>
             ) : (

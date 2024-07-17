@@ -20,12 +20,18 @@ const ActivateModal = ({ isOpen, onClose, type, handleActivate }: Props) => {
                 {type === 'staff' && (
                     <ModalHeader fontSize='xl'>Activate Staff Account</ModalHeader>
                 )}
+                {type === 'owner' && (
+                    <ModalHeader fontSize='xl'>Activate Owner Account</ModalHeader>
+                )}
+                {type === 'customer' && (
+                    <ModalHeader fontSize='xl'>Activate Customer Account</ModalHeader>
+                )}
                 {(type === 'clinics' || type === 'clinic') && (
                     <ModalHeader fontSize='xl'>Activate Dental Clinic</ModalHeader>
                 )}
                 <ModalCloseButton />
                 <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
-                    {(type === 'dentist' || type === 'staff') && (
+                    {(type === 'dentist' || type === 'staff' || type === 'owner' || type === 'customer') && (
                         <Text fontSize='lg'>Are you sure you want to activate this account?</Text>
                     )}
                     {type === 'clinics' && (

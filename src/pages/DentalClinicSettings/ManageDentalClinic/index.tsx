@@ -72,7 +72,6 @@ const ManageDentalClinicPage = () => {
         try {
             const api = new ApiClient<any>(`/clinics`);
             const response = await api.delete(id);
-            console.log(response);
 
             if (response.success) {
                 toast({
@@ -162,7 +161,7 @@ const ManageDentalClinicPage = () => {
                                         {filteredClinics.length !== 0 ? (
                                             <>
                                                 {filteredClinics.map((clinic) => (
-                                                    <Tr _hover={{ bg: 'gray.100' }}>
+                                                    <Tr _hover={{ bg: 'gray.100' }} key={clinic.clinicId}>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{clinic.clinicId}</Td>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{clinic.clinicName}</Td>
                                                         <Td textAlign='center' borderColor={'gainsboro'}>{clinic.ownerName}</Td>

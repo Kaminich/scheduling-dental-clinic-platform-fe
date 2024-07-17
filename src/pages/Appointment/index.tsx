@@ -1,7 +1,7 @@
 import { Button, Card, CardBody, CardHeader, FormControl, FormLabel, Heading, HStack, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useDisclosure } from "@chakra-ui/react"
 import { Color, Shadow } from "../../styles/styles"
 import { useEffect, useState } from "react";
-import { FaEye, FaPenToSquare, FaTrashCan } from "react-icons/fa6";
+import { FaCalendarXmark, FaEye, FaPenToSquare, FaStar } from "react-icons/fa6";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import FeedbackFormModal from "../../components/modal/feedback_form";
 import AppointmentDetailModal from "../../components/modal/appointment_detail";
@@ -11,6 +11,7 @@ import { formatDateMonth } from "../../utils/formatDateMonth";
 import Loading from "../../components/loading";
 import AppointmentUpdateModal from "../../components/modal/appointment_update";
 import AppointmentCancelModal from "../../components/modal/appointment_cancel";
+import { formatDateTime } from "../../utils/formatDateTime";
 
 const AppointmentPage = () => {
     const [id, setId] = useState<number>(0);
@@ -31,8 +32,6 @@ const AppointmentPage = () => {
         }
     }, [data]);
 
-    console.log(data);
-
     return (
         <Stack w={'6xl'} mx={'auto'} mb={10}>
             <Tabs isFitted variant='enclosed'>
@@ -47,7 +46,7 @@ const AppointmentPage = () => {
                                 {appointments["Current Appointment"].length !== 0 ? (
                                     <Stack gap={10}>
                                         {appointments["Current Appointment"].map((appointment) => (
-                                            <Stack gap={10}>
+                                            <Stack gap={10} key={appointment.appointmentId}>
                                                 <Text textAlign={'center'} bg={Color.headingGradientLg}>{formatDateMonth(appointment.createdDate)}</Text>
                                                 <Card shadow={Shadow.cardShadow} w={'5xl'} m={'auto'}>
                                                     <CardHeader mb={-5}>
@@ -80,7 +79,7 @@ const AppointmentPage = () => {
                                                             >
                                                                 <Tooltip label={'Cancel appointment'}>
                                                                     <span>
-                                                                        <FaTrashCan />
+                                                                        <FaCalendarXmark />
                                                                     </span>
                                                                 </Tooltip>
                                                             </Button>
@@ -98,7 +97,7 @@ const AppointmentPage = () => {
                                                                         </FormControl>
                                                                         <FormControl id="gender" flex={1}>
                                                                             <FormLabel ml={1}>Gender</FormLabel>
-                                                                            <Input value={appointment.customerName} readOnly />
+                                                                            <Input value={appointment.customerGender} readOnly />
                                                                         </FormControl>
                                                                     </HStack>
                                                                     <HStack>
@@ -202,11 +201,11 @@ const AppointmentPage = () => {
                                     {appointments["Appointment History"].length !== 0 ? (
                                         <>
                                             {appointments["Appointment History"].map((appointment) => (
-                                                <Card>
+                                                <Card key={appointment.appointmentId}>
                                                     <CardBody>
                                                         <Stack gap={0}>
                                                             <Text>Appointment ID: {appointment.appointmentId}</Text>
-                                                            <Text fontSize={16}>Appointment Date: {appointment.createdDate}</Text>
+                                                            <Text fontSize={16}>Appointment Date: {formatDateTime(appointment.createdDate)}</Text>
                                                         </Stack>
                                                         <HStack justify={'flex-end'} gap={5}>
                                                             <Button colorScheme="green" gap={2} onClick={() => {
@@ -219,7 +218,7 @@ const AppointmentPage = () => {
                                                                 setId(appointment.appointmentId);
                                                                 onOpenFeedback();
                                                             }}>
-                                                                Give Rating and Feedback
+                                                                <FaStar /> Give Rating and Feedback
                                                             </Button>
                                                         </HStack>
                                                     </CardBody>
@@ -238,27 +237,35 @@ const AppointmentPage = () => {
                                 </Stack>
                             )}
                         </Stack>
-                        <AppointmentDetailModal
-                            isOpen={isOpenDetail}
-                            onClose={onCloseDetail}
-                            id={id}
-                        />
-                        <AppointmentUpdateModal
-                            isOpen={isOpenUpdate}
-                            onClose={onCloseUpdate}
-                            id={id}
-                        />
-                        <AppointmentCancelModal
-                            isOpen={isOpenCancel}
-                            onClose={onCloseCancel}
-                            id={id}
-                            refetch={refetch}
-                        />
-                        <FeedbackFormModal
-                            isOpen={isOpenFeedback}
-                            onClose={onCloseFeedback}
-                            branchclinicId={id}
-                        />
+                        {isOpenDetail && (
+                            <AppointmentDetailModal
+                                isOpen={isOpenDetail}
+                                onClose={onCloseDetail}
+                                id={id}
+                            />
+                        )}
+                        {isOpenUpdate && (
+                            <AppointmentUpdateModal
+                                isOpen={isOpenUpdate}
+                                onClose={onCloseUpdate}
+                                id={id}
+                            />
+                        )}
+                        {isOpenCancel && (
+                            <AppointmentCancelModal
+                                isOpen={isOpenCancel}
+                                onClose={onCloseCancel}
+                                id={id}
+                                refetch={refetch}
+                            />
+                        )}
+                        {isOpenFeedback && (
+                            <FeedbackFormModal
+                                isOpen={isOpenFeedback}
+                                onClose={onCloseFeedback}
+                                branchclinicId={id}
+                            />
+                        )}
                     </TabPanel>
                 </TabPanels>
             </Tabs>

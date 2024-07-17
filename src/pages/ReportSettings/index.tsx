@@ -10,13 +10,14 @@ import ReportResponse, { initialReportResponse } from "../../types/ReportRespons
 import ApiClient from "../../services/apiClient";
 import ApproveModal from "../../components/modal/approve";
 import ReportDetailModal from "../../components/modal/report_detail";
+import { formatDateMonth } from "../../utils/formatDateMonth";
 
 const ReportSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
     const [approve, setApprove] = useState<boolean>(false);
     const [id, setId] = useState<number>(0);
-    const { data, isLoading } = useReports();
+    const { data, isLoading, refetch } = useReports();
     const { isOpen: isOpenApprove, onClose: OnCloseApprove, onOpen: onOpenApprove } = useDisclosure();
     const { isOpen: isOpenDetail, onClose: OnCloseDetail, onOpen: onOpenDetail } = useDisclosure();
     const [reports, setReports] = useState<ReportResponse[]>([]);
@@ -32,7 +33,6 @@ const ReportSettingsPage = () => {
             const api = new ApiClient<any>(`/report/approve`);
             try {
                 const response = await api.createWithId(id);
-                console.log(response);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -42,6 +42,7 @@ const ReportSettingsPage = () => {
                         position: 'top',
                         isClosable: true,
                     });
+                    refetch && refetch();
                 } else {
                     toast({
                         title: "Error",
@@ -68,7 +69,6 @@ const ReportSettingsPage = () => {
             const api = new ApiClient<any>(`/report/decline`);
             try {
                 const response = await api.createWithId(id);
-                console.log(response);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -78,6 +78,7 @@ const ReportSettingsPage = () => {
                         position: 'top',
                         isClosable: true,
                     });
+                    refetch && refetch();
                 } else {
                     toast({
                         title: "Error",
@@ -146,6 +147,7 @@ const ReportSettingsPage = () => {
                                     <Th textAlign='center' borderColor={'gainsboro'}>ID</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Branch</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Reported Customer</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Reporter</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Created Date</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Action</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'} minW={120}>Approve or Denied</Th>
@@ -161,7 +163,8 @@ const ReportSettingsPage = () => {
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{report.reportId}</Td>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{`${report.branchName} (${report.city})`}</Td>
                                                         <Td textAlign='center' borderColor={'gainsboro'}>{report.reportedCustomer}</Td>
-                                                        <Td textAlign='center' borderColor={'gainsboro'}>{report.createdDateTime}</Td>
+                                                        <Td textAlign='center' borderColor={'gainsboro'}>{report.reporter}</Td>
+                                                        <Td textAlign='center' borderColor={'gainsboro'}>{report.createdDateTime ? formatDateMonth(report.createdDateTime) : '-'}</Td>
                                                         <Td
                                                             p={1}
                                                             textAlign='center'
@@ -198,7 +201,7 @@ const ReportSettingsPage = () => {
                                                                 variant='ghost'
                                                                 onClick={() => {
                                                                     setApprove(true);
-                                                                    setId(0)
+                                                                    setId(report.reportId)
                                                                     onOpenApprove();
                                                                 }}
                                                             >
@@ -215,7 +218,7 @@ const ReportSettingsPage = () => {
                                                                 variant='ghost'
                                                                 onClick={() => {
                                                                     setApprove(false);
-                                                                    setId(0);
+                                                                    setId(report.reportId);
                                                                     onOpenApprove();
                                                                 }}
                                                             >
@@ -231,7 +234,7 @@ const ReportSettingsPage = () => {
                                             </>
                                         ) : (
                                             <Tr>
-                                                <Td colSpan={6} textAlign="center">
+                                                <Td colSpan={7} textAlign="center">
                                                     No report
                                                 </Td>
                                             </Tr>
@@ -239,7 +242,7 @@ const ReportSettingsPage = () => {
                                     </>
                                 ) : (
                                     <Tr>
-                                        <Td colSpan={6} textAlign="center">
+                                        <Td colSpan={7} textAlign="center">
                                             <Loading />
                                         </Td>
                                     </Tr>

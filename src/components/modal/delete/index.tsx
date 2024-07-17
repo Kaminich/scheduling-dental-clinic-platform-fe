@@ -20,6 +20,12 @@ const DeleteModal = ({ isOpen, onClose, type, handleDeactivate }: Props) => {
                 {type === 'staff' && (
                     <ModalHeader fontSize='xl'>Deactivate Staff Account</ModalHeader>
                 )}
+                {type === 'owner' && (
+                    <ModalHeader fontSize='xl'>Deactivate Owner Account</ModalHeader>
+                )}
+                {type === 'customer' && (
+                    <ModalHeader fontSize='xl'>Deactivate Customer Account</ModalHeader>
+                )}
                 {(type === 'clinics' || type === 'clinic') && (
                     <ModalHeader fontSize='xl'>Deactivate Dental Clinic</ModalHeader>
                 )}
@@ -28,7 +34,7 @@ const DeleteModal = ({ isOpen, onClose, type, handleDeactivate }: Props) => {
                 )}
                 <ModalCloseButton />
                 <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
-                    {(type === 'dentist' || type === 'staff') && (
+                    {(type === 'dentist' || type === 'staff' || type === 'owner' || type === 'customer') && (
                         <Text fontSize='lg'>Are you sure you want to deactivate this account?</Text>
                     )}
                     {type === 'clinics' && (

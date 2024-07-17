@@ -1,5 +1,5 @@
 import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
-import { FaEye, FaLaptopMedical, FaSliders, FaTrashCan } from "react-icons/fa6";
+import { FaCalendarXmark, FaEye, FaLaptopMedical, FaSliders } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { changeTabTitle } from "../../utils/changeTabTitle";
@@ -120,7 +120,7 @@ const ManageAppointmentPage = () => {
                                         {filteredAppointments.length !== 0 ? (
                                             <>
                                                 {filteredAppointments.map((appointment) => (
-                                                    <Tr>
+                                                    <Tr key={appointment.appointmentId}>
                                                         <Td
                                                             textAlign="center"
                                                             borderColor={'gainsboro'}
@@ -226,7 +226,7 @@ const ManageAppointmentPage = () => {
                                                                 >
                                                                     <Tooltip label='Cancel appointment'>
                                                                         <span>
-                                                                            <FaTrashCan />
+                                                                            <FaCalendarXmark />
                                                                         </span>
                                                                     </Tooltip>
                                                                 </Button>
@@ -255,23 +255,29 @@ const ManageAppointmentPage = () => {
                     </TableContainer>
                 </Card>
             </Stack>
-            <AppointmentDetailModal
-                isOpen={isOpenDetail}
-                onClose={onCloseDetail}
-                id={id}
-            />
-            <AppointmentCancelModal
-                isOpen={isOpenCancel}
-                onClose={onCloseCancel}
-                id={id}
-                refetch={refetch}
-            />
-            <TreatmentOutcomeDetailModal
-                isOpen={isOpenDetailTO}
-                onClose={onCloseDetailTO}
-                id={id}
-                handleRemove={handleRemove}
-            />
+            {isOpenDetail && (
+                <AppointmentDetailModal
+                    isOpen={isOpenDetail}
+                    onClose={onCloseDetail}
+                    id={id}
+                />
+            )}
+            {isOpenCancel && (
+                <AppointmentCancelModal
+                    isOpen={isOpenCancel}
+                    onClose={onCloseCancel}
+                    id={id}
+                    refetch={refetch}
+                />
+            )}
+            {isOpenDetailTO && (
+                <TreatmentOutcomeDetailModal
+                    isOpen={isOpenDetailTO}
+                    onClose={onCloseDetailTO}
+                    id={id}
+                    handleRemove={handleRemove}
+                />
+            )}
         </Stack>
     )
 }

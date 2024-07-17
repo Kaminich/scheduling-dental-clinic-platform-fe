@@ -11,6 +11,7 @@ import ApiClient from "../../../services/apiClient";
 import ApproveModal from "../../../components/modal/approve";
 import { formatDate } from "../../../utils/formatDate";
 import { formatDateTime } from "../../../utils/formatDateTime";
+import { useNavigate } from "react-router";
 
 const ApproveBlogPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -21,6 +22,7 @@ const ApproveBlogPage = () => {
     const [id, setId] = useState<number>(0);
     const { isOpen: isOpenApprove, onClose: onCloseApprove, onOpen: onOpenApprove } = useDisclosure();
     const toast = useToast();
+    const navigate = useNavigate();
 
     let filteredBlogs = blogs.filter((blog) => {
         return blog.title.toLowerCase().includes(keyword.toLowerCase())
@@ -34,7 +36,6 @@ const ApproveBlogPage = () => {
                     isApproved: approve
                 }
             });
-            console.log(response);
             if (response.success) {
                 toast({
                     title: "Success",
@@ -78,9 +79,6 @@ const ApproveBlogPage = () => {
             setBlogs(data.content)
         }
     }, [data?.content]);
-
-    console.log(data);
-
 
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
@@ -126,7 +124,7 @@ const ApproveBlogPage = () => {
                                         {filteredBlogs.length !== 0 ? (
                                             <>
                                                 {filteredBlogs.map((blog) => (
-                                                    <Tr _hover={{ bg: 'gray.100' }}>
+                                                    <Tr _hover={{ bg: 'gray.100' }} key={blog.id}>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{blog.id}</Td>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{blog.clinicName}</Td>
                                                         <Td textAlign='center' borderColor={'gainsboro'}>{blog.title}</Td>
@@ -178,7 +176,12 @@ const ApproveBlogPage = () => {
                                                                 </Tooltip>
                                                             </Button>
                                                         </Td>
-                                                        <Td textAlign='center' borderColor={'gainsboro'} cursor={'pointer'}>
+                                                        <Td
+                                                            textAlign='center'
+                                                            borderColor={'gainsboro'}
+                                                            cursor={'pointer'}
+                                                            onClick={() => navigate(blog.id.toString())}
+                                                        >
                                                             <FaChevronRight />
                                                         </Td>
                                                     </Tr>

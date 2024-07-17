@@ -78,7 +78,6 @@ const CreateBlogPage = () => {
                     formDataImage
                 );
                 imageUrl = response.data.secure_url;
-                console.log("Cloudinary image URL:", imageUrl);
             } catch (error) {
                 console.error(error);
             }
@@ -93,7 +92,6 @@ const CreateBlogPage = () => {
 
         try {
             const response = await api.create(data);
-            console.log(response);
 
             if (response.success) {
                 toast({
@@ -186,12 +184,12 @@ const CreateBlogPage = () => {
                     <FormLabel pl={1}>Summary</FormLabel>
                     <Textarea
                         placeholder="Enter the blog summary"
-                        value={content}
+                        value={summary}
                         focusBorderColor='#E2E8F0'
                         resize={'none'}
                         maxH={32}
                         minH={32}
-                        onChange={(e) => setContent(e.target.value)}
+                        onChange={(e) => setSummary(e.target.value)}
                         required
                     />
                 </FormControl>

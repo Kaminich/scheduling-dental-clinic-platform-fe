@@ -8,8 +8,6 @@ const useAccount = () => {
         queryFn: () =>
             api.getAuthen()
                 .then((data) => {
-                    console.log(data);
-
                     return data.data;
                 })
     });

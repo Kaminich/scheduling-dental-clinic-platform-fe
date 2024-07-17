@@ -1,5 +1,5 @@
 import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Text, Th, Thead, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
-import { FaArrowRightArrowLeft, FaChevronRight, FaSliders } from "react-icons/fa6";
+import { FaChevronRight, FaSliders, FaTrashCan } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
@@ -13,10 +13,10 @@ import { formatDateTime } from "../../../utils/formatDateTime";
 import { formatDate } from "../../../utils/formatDate";
 import ApiClient from "../../../services/apiClient";
 import DeleteModal from "../../../components/modal/delete";
-import useAllBlogs from "../../../hooks/useAllBlogs";
 import BlogDetailResponse from "../../../types/BlogDetailResponse";
 import useUserProfile from "../../../hooks/useUserProfile";
 import useBlogByClinicId from "../../../hooks/useBlogByClinicId";
+import useActiveBlogs from "../../../hooks/useActiveBlogs";
 
 const ManageBlogPage = () => {
     const ref = useRef<HTMLInputElement>(null);
@@ -26,7 +26,7 @@ const ManageBlogPage = () => {
     const { role } = useAuth();
     const { data: userData } = useUserProfile();
     const { data: blogData, isLoading: isLoadingBlog, refetch: refetchBlog } = useBlogByClinicId({ clinicId: userData?.clinicId });
-    const { data: allData, isLoading: isLoadingAll, refetch: refetchAll } = useAllBlogs();
+    const { data: allData, isLoading: isLoadingAll, refetch: refetchAll } = useActiveBlogs();
     const [blogs, setBlogs] = useState<BlogDetailResponse[]>([]);
     const { isOpen: isOpenDeactivate, onClose: onCloseDeactivate, onOpen: onOpenDeactivate } = useDisclosure();
     const toast = useToast();
@@ -39,7 +39,6 @@ const ManageBlogPage = () => {
         try {
             const api = new ApiClient<any>(`/blog`);
             const response = await api.delete(id);
-            console.log(response);
 
             if (response.success) {
                 toast({
@@ -87,13 +86,10 @@ const ManageBlogPage = () => {
     useEffect(() => {
         if (allData && role === 'Admin') {
             setBlogs(allData.content)
-        } else if (blogData && role === 'Owner') {
+        } else if (blogData) {
             setBlogs(blogData.content)
         }
     }, [allData, blogData]);
-
-    console.log(blogData);
-
 
     return (
         <Stack w={role === 'Staff' ? '7xl' : 'full'} align='center' mx='auto' my={5} gap={10}>
@@ -142,7 +138,7 @@ const ManageBlogPage = () => {
                                         {filteredBlogs.length !== 0 ? (
                                             <>
                                                 {filteredBlogs.map((blog) => (
-                                                    <Tr _hover={{ bg: 'gray.100' }}>
+                                                    <Tr _hover={{ bg: 'gray.100' }} key={blog.id}>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{blog.id}</Td>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{blog.clinicName}</Td>
                                                         <Td textAlign='center' borderColor={'gainsboro'}>{blog.title}</Td>
@@ -199,7 +195,7 @@ const ManageBlogPage = () => {
                                                                         label={'Remove blog'}
                                                                     >
                                                                         <span>
-                                                                            <FaArrowRightArrowLeft />
+                                                                            <FaTrashCan />
                                                                         </span>
                                                                     </Tooltip>
                                                                 </Button>

@@ -35,7 +35,6 @@ const ApproveDentalClinicPage = () => {
                     isApproved: approve
                 }
             });
-            console.log(response);
             if (response.success) {
                 toast({
                     title: "Success",
@@ -80,8 +79,6 @@ const ApproveDentalClinicPage = () => {
         }
     }, [data?.content]);
 
-    console.log(filteredClinics);
-
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
             <InputGroup>
@@ -124,7 +121,7 @@ const ApproveDentalClinicPage = () => {
                                         {filteredClinics.length !== 0 ? (
                                             <>
                                                 {filteredClinics.map((clinic) => (
-                                                    <Tr _hover={{ bg: 'gray.100' }}>
+                                                    <Tr _hover={{ bg: 'gray.100' }} key={clinic.clinicId}>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{clinic.clinicId}</Td>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{clinic.clinicName}</Td>
                                                         <Td textAlign='center' borderColor={'gainsboro'}>{clinic.ownerName}</Td>

@@ -8,6 +8,8 @@ import DentistDetailResponse, { initialDentistDetailResponse } from "../../../ty
 import { formatDate } from "../../../utils/formatDate";
 import { FaPenToSquare } from "react-icons/fa6";
 import Loading from "../../../components/loading";
+import { useAuth } from "../../../hooks/useAuth";
+import NotFoundPage from "../../NotFound";
 
 const DentistProfileDetailPage = () => {
     const [dentist, setDentist] = useState<DentistDetailResponse>(initialDentistDetailResponse);
@@ -15,13 +17,17 @@ const DentistProfileDetailPage = () => {
     const navigate = useNavigate();
     const toast = useToast();
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const { role } = useAuth();
+
+    if (role !== 'Admin' && role !== 'Owner') {
+        return <NotFoundPage />
+    }
 
     const getDentistDetailById = async (id: number) => {
         setIsLoading(true);
         try {
             const api = new ApiClient<ApiResponse<DentistDetailResponse>>('/dentists');
             const response = await api.getDetail(id);
-            console.log(response);
             if (response.success) {
                 setDentist(response.data);
             } else {
@@ -55,9 +61,11 @@ const DentistProfileDetailPage = () => {
         <>
             {!isLoading ? (
                 <Stack w={'6xl'} m={'auto'}>
-                    <HStack pos={'fixed'} right={20} mt={-4}>
-                        <Button leftIcon={<FaPenToSquare />} colorScheme="blue" onClick={() => navigate('update')}>Edit</Button>
-                    </HStack>
+                    {role === 'Owner' && (
+                        <HStack pos={'fixed'} right={20} mt={-4}>
+                            <Button leftIcon={<FaPenToSquare />} colorScheme="blue" onClick={() => navigate('update')}>Edit</Button>
+                        </HStack>
+                    )}
                     <HStack gap={20} align={'flex-start'}>
                         <Stack gap={3} flex={1}>
                             <Heading fontSize={24} fontWeight={600} mb={4}>Personal Information</Heading>

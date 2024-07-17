@@ -20,8 +20,6 @@ const AppointmentDetailModal = ({ isOpen, onClose, id }: Props) => {
         }
     }, [appointmentData])
 
-    console.log(appointmentData);
-
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered size={'5xl'}>
             <ModalOverlay />

@@ -3,7 +3,7 @@ import { Border, Color, Shadow } from "../../../../styles/styles"
 import ApiClient from "../../../../services/apiClient"
 import { ApiResponse } from "../../../../types/ApiResponse";
 import CategoryViewResponse from "../../../../types/CategoryViewResponse";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import CategoryResponse from "../../../../types/CategoryResponse";
 
 interface Prop {
@@ -21,7 +21,6 @@ const ServicePrice = ({ clinicId }: Prop) => {
                     clinicId
                 }
             })
-            console.log(response.data["Categories by clinic"]);
             if (response.success) {
                 setCategories(response.data["Categories by clinic"])
             }
@@ -67,12 +66,12 @@ const ServicePrice = ({ clinicId }: Prop) => {
                     </Thead>
                     <Tbody>
                         {categories.map((category) => (
-                            <>
+                            <Fragment key={category.id}>
                                 <Tr borderBottom={Border.tableBorder}>
                                     <Th textTransform={'capitalize'}>{category.categoryName}</Th>
                                 </Tr>
                                 {category.services.map((service) => (
-                                    <Tr borderBottom={Border.tableBorder}>
+                                    <Tr key={service.id} borderBottom={Border.tableBorder}>
                                         <Td>{service.serviceName}</Td>
                                         <Td
                                             borderStart={Border.tableBorder}
@@ -86,7 +85,7 @@ const ServicePrice = ({ clinicId }: Prop) => {
                                         </Td>
                                     </Tr>
                                 ))}
-                            </>
+                            </Fragment>
                         ))}
                     </Tbody>
                 </Table>

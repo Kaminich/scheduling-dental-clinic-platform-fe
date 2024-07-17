@@ -9,6 +9,14 @@ import ApiClient from "../../services/apiClient";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import { FcGoogle } from "react-icons/fc";
 import { Border } from "../../styles/styles";
+import { jwtDecode } from "jwt-decode";
+import { formatRoleString } from "../../utils/formatRoleString";
+import { AxiosError } from "axios";
+import { useAuth } from "../../hooks/useAuth";
+
+interface DecodeJWTRole {
+    role: string;
+}
 
 const SignUpPage = () => {
     const [username, setUsername] = useState<string>('');
@@ -23,12 +31,14 @@ const SignUpPage = () => {
     const toast = useToast();
     const [showPass, setShowPass] = useState<boolean>(false);
     const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
+    const { setIsAuthenticated, setRole } = useAuth();
     const googleSignup = useGoogleLogin({
-        onSuccess: (token) => console.log(token),
-        onError: (error) => {
-            console.log(error);
+        onSuccess: (token) => {
+            handleGoogleLogin(token.access_token);
+        },
+        onError: () => {
             toast({
-                title: "Sign Up Error",
+                title: "Sign In Error",
                 description: "Sign up by Google failed. Try again!!!",
                 status: "error",
                 duration: 2500,
@@ -37,6 +47,53 @@ const SignUpPage = () => {
             });
         }
     })
+
+    const handleGoogleLogin = async (token: string) => {
+        const api = new ApiClient<any>('/auth/login-google');
+        const data = {
+            token
+        };
+
+        try {
+            const response = await api.postUnauthen(data);
+
+            if (response.success) {
+                localStorage.setItem('access_token', response.data.token);
+                localStorage.setItem('refresh_token', response.data.refreshToken);
+                const decoded = jwtDecode<DecodeJWTRole>(response.data.token);
+                const decodedRole = formatRoleString(decoded.role[0]);
+
+                setIsAuthenticated(true);
+                setRole(decodedRole);
+                if (decodedRole === 'Customer') {
+                    navigate('/');
+                } else {
+                    return;
+                }
+            } else {
+                toast({
+                    title: "Error",
+                    description: response.message,
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            }
+        } catch (error) {
+
+            if (error instanceof AxiosError) {
+                toast({
+                    title: "Error",
+                    description: error.response?.data?.message || "An error occurred",
+                    status: "error",
+                    duration: 2500,
+                    position: 'top',
+                    isClosable: true,
+                });
+            }
+        }
+    };
 
     const navigate = useNavigate();
 
@@ -70,8 +127,6 @@ const SignUpPage = () => {
 
         try {
             const response = await api.postUnauthen(data);
-            console.log(response);
-
             if (response.success) {
                 toast({
                     title: "Success",

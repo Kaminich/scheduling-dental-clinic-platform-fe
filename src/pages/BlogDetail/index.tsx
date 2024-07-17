@@ -26,7 +26,7 @@ const BlogDetailPage = () => {
         setIsLoading(true);
         const api = new ApiClient<any>('/blog');
         try {
-            const response = await api.getDetailUnauthen(id || parseInt(blogId || '0'));
+            const response = await api.getDetailUnauthen(parseInt(blogId || '0') || id);
             console.log(response);
 
             if (response.success) {
@@ -50,6 +50,8 @@ const BlogDetailPage = () => {
 
     useEffect(() => {
         if (id || parseInt(blogId || '0')) {
+            console.log(parseInt(blogId || '0'));
+
             getBlogDetail();
         }
     }, [id, blogId]);
@@ -92,7 +94,7 @@ const BlogDetailPage = () => {
                             </Heading>
                             <SimpleGrid columns={3}>
                                 {data?.content.map((blog: BlogDetailResponse) => (
-                                    <BlogsItem blog={blog} />
+                                    <BlogsItem key={blog.id} blog={blog} />
                                 ))}
                             </SimpleGrid>
                         </Stack>

@@ -174,7 +174,7 @@ const HomePage = () => {
                 </Heading>
                 <SimpleGrid columns={3} spacingX={7} spacingY={8}>
                     {blogs.slice(0, 3).map((blog) => (
-                        <BlogsItem blog={blog} />
+                        <BlogsItem key={blog.id} blog={blog} />
                     ))}
                 </SimpleGrid>
             </Stack>

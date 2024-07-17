@@ -1,7 +1,7 @@
 import { Card, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
 import { Shadow } from "../../../../styles/styles"
 import useWorkingHoursByClinicId from "../../../../hooks/useWorkingHoursByClinicId";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import WorkingHoursResponse from "../../../../types/WorkingHoursResponse";
 import { formatTime } from "../../../../utils/formatTime";
 
@@ -12,7 +12,6 @@ const WorkingHours = ({ clinicId }: Prop) => {
     const { data } = useWorkingHoursByClinicId({ clinicId: clinicId });
     const [workingHours, setWorkingHours] = useState<WorkingHoursResponse[]>([]);
 
-    console.log(data);
     useEffect(() => {
         if (data) {
             setWorkingHours(data);
@@ -30,12 +29,22 @@ const WorkingHours = ({ clinicId }: Prop) => {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {workingHours.map((workingHour) => (
-                        <Tr>
-                            <Th>{workingHour.day}</Th>
-                            <Td textAlign={'center'}>{formatTime(workingHour.startTime)}</Td>
-                            <Td textAlign={'center'}>{formatTime(workingHour.endTime)}</Td>
-                        </Tr>
+                    {workingHours.map((workingHour, index) => (
+                        <Fragment key={index}>
+                            {workingHour.status ? (
+                                <Tr>
+                                    <Th>{workingHour.day}</Th>
+                                    <Td textAlign={'center'}>{formatTime(workingHour.startTime)}</Td>
+                                    <Td textAlign={'center'}>{formatTime(workingHour.endTime)}</Td>
+                                </Tr>
+                            ) : (
+                                <Tr>
+                                    <Th>{workingHour.day}</Th>
+                                    <Td textAlign={'center'} colSpan={2}>No working</Td>
+                                </Tr>
+                            )}
+
+                        </Fragment>
                     ))}
                 </Tbody>
             </Table>
