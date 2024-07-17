@@ -20,7 +20,7 @@ const ReAppointmentModal = ({ isOpen, onClose, id, followUpDate }: Props) => {
     const toast = useToast();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [slot, setSlot] = useState<WorkingHoursDetailsResponse>(initialWorkingHoursDetailsResponse);
-    const { data: appointmentData, refetch } = useAppointmentDetail({ appointmentId: id });
+    const { data: appointmentData, isLoading: isLoadingAppointment, refetch } = useAppointmentDetail({ appointmentId: id });
     const [appointment, setAppointment] = useState<AppointmentViewDetailsResponse>(initialAppointmentViewDetailsResponse);
 
     const getAvailableSlot = async () => {
@@ -120,7 +120,7 @@ const ReAppointmentModal = ({ isOpen, onClose, id, followUpDate }: Props) => {
             closeOnOverlayClick={isLoading ? false : true}
         >
             <ModalOverlay />
-            {!isLoading ? (
+            {!isLoading || !isLoadingAppointment ? (
                 <ModalContent>
                     <ModalHeader textAlign={'center'}>Re-Appointment</ModalHeader>
                     <ModalCloseButton borderRadius={'full'} />

@@ -1,4 +1,4 @@
-import { HStack, Heading, Stack, Text } from "@chakra-ui/react";
+import { HStack, Stack, Text } from "@chakra-ui/react";
 import Logo from "../../../logo";
 
 const Footer = () => {
@@ -17,27 +17,16 @@ const Footer = () => {
             <HStack py="10px" justifyContent="space-evenly" maxW={'full'} mb={1}>
                 <Stack justify={'flex-start'} fontSize='20px' fontWeight='300'>
                     <Logo />
-                    <Text>Address: </Text>
-                    <Text>Email: </Text>
+                    <Text>Address: Lưu Hữu Phước, Đông Hoà, Dĩ An, Bình Dương</Text>
+                    <Text>Email: fdental@gmail.com</Text>
                 </Stack>
-                <Stack gap={4} fontSize='16px' fontWeight='300'>
-                    <Heading fontSize={'20px'}>Home</Heading>
-                    <Text>Menu</Text>
-                    <Text>Order</Text>
-                    <Text>Contact</Text>
-                </Stack>
-                <Stack gap={4} fontSize='16px' fontWeight='300'>
-                    <Heading fontSize={'20px'}>Home</Heading>
-                    <Text>Menu</Text>
-                    <Text>Order</Text>
-                    <Text>Contact</Text>
-                </Stack>
-                <Stack gap={4} fontSize='16px' fontWeight='300'>
-                    <Heading fontSize={'20px'}>Home</Heading>
-                    <Text>Menu</Text>
-                    <Text>Order</Text>
-                    <Text>Contact</Text>
-                </Stack>
+                <HStack gap={8} fontSize='16px' fontWeight='300'>
+                    <Text>About</Text>
+                    <Text>Dental Clinic</Text>
+                    <Text>Dentist</Text>
+                    <Text>Service</Text>
+                    <Text>Blog</Text>
+                </HStack>
             </HStack>
             <Text textAlign='center' fontSize='18px' fontWeight='400'>Copyright &#169; 2024 Dental Clinic</Text>
         </Stack>

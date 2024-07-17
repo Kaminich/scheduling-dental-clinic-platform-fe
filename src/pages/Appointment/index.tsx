@@ -249,6 +249,7 @@ const AppointmentPage = () => {
                                 isOpen={isOpenUpdate}
                                 onClose={onCloseUpdate}
                                 id={id}
+                                refetch={refetch}
                             />
                         )}
                         {isOpenCancel && (

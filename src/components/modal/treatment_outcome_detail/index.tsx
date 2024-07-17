@@ -5,18 +5,20 @@ import useTreatmentOutcomeDetail from "../../../hooks/useTreatmentOutcomeDetail"
 import TreatmentOutcomeResponse, { initialTreatmentOutcomeResponse } from "../../../types/TreatmentOutcomeResponse";
 import { formatDate } from "../../../utils/formatDate";
 import { FaTrashCan } from "react-icons/fa6";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
     id: number;
-    handleRemove: () => void;
+    handleRemove?: () => void;
 }
 
 const TreatmentOutcomeDetailModal = ({ isOpen, onClose, id, handleRemove }: Props) => {
     const [type, setType] = useState<string>('detail');
     const { data: treatmentData, isLoading } = useTreatmentOutcomeDetail({ appointmentId: id });
     const [treatment, setTreatment] = useState<TreatmentOutcomeResponse>(initialTreatmentOutcomeResponse);
+    const { role } = useAuth();
 
     useEffect(() => {
         if (treatmentData) {
@@ -29,7 +31,7 @@ const TreatmentOutcomeDetailModal = ({ isOpen, onClose, id, handleRemove }: Prop
             isOpen={isOpen}
             onClose={onClose}
             isCentered
-            size={'5xl'}
+            size={'2xl'}
             closeOnEsc={isLoading ? false : true}
             closeOnOverlayClick={isLoading ? false : true}
         >
@@ -38,28 +40,30 @@ const TreatmentOutcomeDetailModal = ({ isOpen, onClose, id, handleRemove }: Prop
                 <ModalContent>
                     <ModalHeader textAlign={'center'}>Treatment Outcome Detail</ModalHeader>
                     <ModalCloseButton borderRadius={'full'} />
-                    <ModalBody maxH={'xl'} overflowY={'auto'} mx={5}>
+                    <ModalBody maxH={'lg'} overflowY={'auto'} mx={5}>
                         {treatmentData ? (
                             <>
                                 {type === 'detail' && (
                                     <Stack gap={4}>
-                                        <HStack justify={'flex-end'}>
-                                            <Button
-                                                borderRadius='full'
-                                                px={3}
-                                                colorScheme="red"
-                                                variant='ghost'
-                                                onClick={() => {
-                                                    setType('remove');
-                                                }}
-                                            >
-                                                <FaTrashCan />
-                                            </Button>
-                                        </HStack>
+                                        {role !== 'Customer' && (
+                                            <HStack justify={'flex-end'}>
+                                                <Button
+                                                    borderRadius='full'
+                                                    px={3}
+                                                    colorScheme="red"
+                                                    variant='ghost'
+                                                    onClick={() => {
+                                                        setType('remove');
+                                                    }}
+                                                >
+                                                    <FaTrashCan />
+                                                </Button>
+                                            </HStack>
+                                        )}
                                         <Stack flex={1} gap={2}>
                                             <FormControl id="fullname" flex={2}>
                                                 <FormLabel ml={1}>Full Name</FormLabel>
-                                                <Input value={'appointment.customerName'} readOnly />
+                                                <Input value={treatment.customerName} readOnly />
                                             </FormControl>
                                             <FormControl id="followUpDate" flex={1}>
                                                 <FormLabel ml={1}>Follow-up Date</FormLabel>
@@ -121,7 +125,7 @@ const TreatmentOutcomeDetailModal = ({ isOpen, onClose, id, handleRemove }: Prop
                     </ModalBody>
                     <ModalFooter>
                         {type === 'remove' && (
-                            <Button colorScheme='blue' mr={3} onClick={handleRemove}>Remove</Button>
+                            <Button colorScheme='red' mr={3} onClick={handleRemove}>Remove</Button>
                         )}
                         <Button
                             colorScheme='gray'

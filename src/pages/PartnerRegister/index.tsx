@@ -179,14 +179,14 @@ const PartnerRegisterPage = () => {
                 <Stack maxW={'3xl'} mx={20}>
                     <Heading fontSize={32}>Become a partner of F-Dental</Heading>
                     <Divider my={4} />
-                    <Text fontSize={24}>Description</Text>
+                    <Text fontSize={24}>Are you a dental clinic looking to enhance your practice and connect with more patients? Partner with us and join our cutting-edge dental clinic platform designed to revolutionize patient care and streamline your clinic operations.</Text>
                 </Stack>
             </Stack>
             <HStack w={'7xl'} m={'auto'} my={8} align={'flex-start'} justify={'space-between'}>
                 <Stack flex={1} mt={5}>
                     <Heading fontSize={32}>Become a partner of F-Dental</Heading>
                     <Text fontSize={24}>Please fill this form</Text>
-                    <Text fontSize={72}>{'->'}</Text>
+                    <Text fontSize={72}>&#8594;</Text>
                 </Stack>
                 <Card flex={1} shadow={Shadow.cardShadow}>
                     <CardBody py={12}>

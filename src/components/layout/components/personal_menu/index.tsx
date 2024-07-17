@@ -1,6 +1,6 @@
 import { Avatar, Button, Card, Divider, Flex, Heading, Menu, MenuButton, MenuItem, MenuList, Stack, Text, useToast } from "@chakra-ui/react";
 import { useState } from "react";
-import { FaArrowLeft, FaCalendarCheck, FaCalendarDays, FaChevronRight, FaDoorOpen, FaGear, FaGlobe, FaLaptopMedical, FaNewspaper, FaUserGear, FaUserPen } from "react-icons/fa6";
+import { FaArrowLeft, FaCalendarCheck, FaCalendarDays, FaChevronRight, FaDoorOpen, FaGear, FaLaptopMedical, FaNewspaper, FaUserGear, FaUserPen } from "react-icons/fa6";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../../../hooks/useAuth";
 import useUserProfile from "../../../../hooks/useUserProfile";
@@ -8,7 +8,7 @@ import ApiClient from "../../../../services/apiClient";
 
 const PersonalMenu = () => {
     const [subMenu, setSubMenu] = useState<boolean>(false);
-    const [isVN, setIsVN] = useState<boolean>(false);
+    // const [isVN, setIsVN] = useState<boolean>(false);
 
     const api = new ApiClient<any>('/auth/logout');
 
@@ -308,7 +308,7 @@ const PersonalMenu = () => {
                             </Button>
                             Update Password
                         </MenuItem>
-                        <Flex
+                        {/* <Flex
                             maxW={'95%'}
                             borderRadius={10}
                             p={3}
@@ -348,7 +348,7 @@ const PersonalMenu = () => {
                                     EN
                                 </Button>
                             </Flex>
-                        </Flex>
+                        </Flex> */}
                     </Stack>
                 )}
             </MenuList>
