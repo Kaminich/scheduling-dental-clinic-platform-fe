@@ -283,6 +283,7 @@ const ViewSchedulePage = () => {
                     isOpen={isOpenCreate}
                     onClose={onCloseCreate}
                     id={id}
+                    refetch={() => getSchedule(selectedWeek.startDate, selectedWeek.endDate)}
                 />
             )}
             {isOpenUpdate && (

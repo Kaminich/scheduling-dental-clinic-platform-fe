@@ -11,9 +11,10 @@ interface Props {
     isOpen: boolean;
     onClose: () => void;
     id: number;
+    refetch: () => void;
 }
 
-const CreateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
+const CreateTreatmentOutcomeModal = ({ isOpen, onClose, id, refetch }: Props) => {
     const [diagnosis, setDiagnosis] = useState<string>("");
     const [treatmentPlan, setTreatmentPlan] = useState<string>("");
     const [prescription, setPrescription] = useState<string>("");
@@ -21,7 +22,7 @@ const CreateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
     const [followUpDate, setFollowUpDate] = useState<string>("");
     const toast = useToast();
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const { data: appointmentData, refetch } = useAppointmentDetail({ appointmentId: id });
+    const { data: appointmentData } = useAppointmentDetail({ appointmentId: id });
     const [appointment, setAppointment] = useState<AppointmentViewDetailsResponse>(initialAppointmentViewDetailsResponse);
 
     const handleCreateAppointment = async () => {
@@ -47,7 +48,7 @@ const CreateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
                     position: 'top',
                     isClosable: true,
                 })
-                refetch && refetch();
+                refetch();
             } else {
                 toast({
                     title: "Error",
