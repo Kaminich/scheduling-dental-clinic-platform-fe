@@ -96,12 +96,12 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
         setIsLoading(true);
         const api = new ApiClient<any>('/appointment');
         const data = {
-            customerName: trimAll(fullname),
-            customerAddress: trimAll(address),
-            customerPhone: phone.trim(),
-            customerDob: dob,
-            customerGender: gender,
-            customerEmail: email.trim(),
+            customerName: value === 'personal' ? userData.fullName : trimAll(fullname),
+            customerAddress: value === 'personal' ? userData.address : trimAll(address),
+            customerPhone: value === 'personal' ? userData.phone : phone.trim(),
+            customerDob: value === 'personal' ? userData.dob : dob,
+            customerGender: value === 'personal' ? userData.gender : gender,
+            customerEmail: value === 'personal' ? userData.email : email.trim(),
             appointmentDate: date,
             slotId,
             clinicBranchId: dentistData?.branchId || clinicBranchId,
