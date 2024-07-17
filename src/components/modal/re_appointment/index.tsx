@@ -219,18 +219,31 @@ const ReAppointmentModal = ({ isOpen, onClose, id, followUpDate }: Props) => {
                                                     />
                                                 </Tooltip>
                                             ) : (
-                                                <Select
-                                                    name="slot"
-                                                    value={slotId}
-                                                    onChange={(e) => setSlotId(parseInt(e.target.value))}
-                                                    placeholder={'Select slot'}
-                                                >
-                                                    {slot.slots.map((slot) => (
-                                                        <option key={slot.slotId} value={slot.slotId}>
-                                                            {slot.startTime} - {slot.endTime}
-                                                        </option>
-                                                    ))}
-                                                </Select>
+                                                <>
+                                                    {slot.slots.length !== 0 ? (
+                                                        <Select
+                                                            name="slot"
+                                                            value={slotId}
+                                                            onChange={(e) => setSlotId(parseInt(e.target.value))}
+                                                            placeholder={'Select slot'}
+                                                        >
+                                                            {slot.slots.map((slot) => (
+                                                                <option key={slot.slotId} value={slot.slotId}>
+                                                                    {slot.startTime} - {slot.endTime}
+                                                                </option>
+                                                            ))}
+                                                        </Select>
+                                                    ) : (
+                                                        <Select
+                                                            name="slot"
+                                                            placeholder={'Select slot'}
+                                                        >
+                                                            <option disabled>
+                                                                No slot available
+                                                            </option>
+                                                        </Select>
+                                                    )}
+                                                </>
                                             )}
                                         </FormControl>
                                     </HStack>
