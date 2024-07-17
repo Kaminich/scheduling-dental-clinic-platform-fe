@@ -174,6 +174,9 @@ const CategoryModal = ({ isOpen, onClose, id, type, refetch }: Props) => {
                         isClosable: true,
                     });
                     refetch && refetch();
+                    setCategoryImage('');
+                    setCategoryImageData(null);
+                    setCategoryName('');
                 } else {
                     toast({
                         title: "Error",

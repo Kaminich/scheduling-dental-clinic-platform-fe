@@ -157,7 +157,7 @@ const ClinicBranchSettingsPage = () => {
                                     <Th textAlign='center' borderColor={'gainsboro'}>ID</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Branch name</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>City</Th>
-                                    <Th textAlign='center' borderColor={'gainsboro'}>Create Date</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Created Date</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Modified Date</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Main Branch</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Status</Th>
@@ -200,7 +200,7 @@ const ClinicBranchSettingsPage = () => {
                                                             textAlign='center'
                                                             borderColor={'gainsboro'}
                                                         >
-                                                            {formatDateTime(branch.modifiedDate)}
+                                                            {branch.modifiedDate ? formatDateTime(branch.modifiedDate) : '-'}
                                                         </Td>
                                                         <Td
                                                             textAlign='center'
