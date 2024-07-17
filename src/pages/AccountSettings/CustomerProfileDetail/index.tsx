@@ -1,18 +1,17 @@
-import { Button, FormControl, FormLabel, HStack, Image, Input, Stack, useToast } from "@chakra-ui/react"
+import { FormControl, FormLabel, HStack, Image, Input, Stack, useToast } from "@chakra-ui/react"
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
-import StaffDetailResponse, { initialStaffDetailResponse } from "../../../types/StaffDetailResponse";
 import ApiClient from "../../../services/apiClient";
 import { ApiResponse } from "../../../types/ApiResponse";
 import { formatDate } from "../../../utils/formatDate";
-import { FaPenToSquare } from "react-icons/fa6";
 import Loading from "../../../components/loading";
 import { useAuth } from "../../../hooks/useAuth";
 import NotFoundPage from "../../NotFound";
+import CustomerViewResponse, { initialCustomerViewResponse } from "../../../types/CustomerViewResponse";
 
-const StaffProfileDetailPage = () => {
-    const [staff, setStaff] = useState<StaffDetailResponse>(initialStaffDetailResponse);
+const CustomerProfileDetailPage = () => {
+    const [customer, setCustomer] = useState<CustomerViewResponse>(initialCustomerViewResponse);
     const param = useParams<{ id: string }>();
     const navigate = useNavigate();
     const toast = useToast();
@@ -23,13 +22,14 @@ const StaffProfileDetailPage = () => {
         return <NotFoundPage />
     }
 
-    const getStaffDetailById = async (id: number) => {
+    const getCustomerDetailById = async (id: number) => {
         setIsLoading(true);
         try {
-            const api = new ApiClient<ApiResponse<StaffDetailResponse>>('/staff');
+            const api = new ApiClient<ApiResponse<CustomerViewResponse>>('/customers');
             const response = await api.getDetail(id);
+            console.log(response);
             if (response.success) {
-                setStaff(response.data);
+                setCustomer(response.data);
             } else {
                 toast({
                     title: "Error",
@@ -48,12 +48,12 @@ const StaffProfileDetailPage = () => {
     }
 
     useEffect(() => {
-        changeTabTitle(staff.fullName);
-    }, [staff.fullName]);
+        changeTabTitle(customer.fullName);
+    }, [customer.fullName]);
 
     useEffect(() => {
         if (param.id) {
-            getStaffDetailById(parseInt(param.id));
+            getCustomerDetailById(parseInt(param.id));
         }
     }, [param.id]);
 
@@ -61,11 +61,6 @@ const StaffProfileDetailPage = () => {
         <>
             {!isLoading ? (
                 <Stack w={'2xl'} m={'auto'}>
-                    {role === 'Owner' && (
-                        <HStack pos={'fixed'} top={128} right={20} mt={-4}>
-                            <Button leftIcon={<FaPenToSquare />} colorScheme="blue" onClick={() => navigate('update')}>Edit</Button>
-                        </HStack>
-                    )}
                     <Stack gap={2} minW={'lg'}>
                         <HStack w={'full'} justify={'center'} align={'flex-end'}>
                             <Image
@@ -73,7 +68,7 @@ const StaffProfileDetailPage = () => {
                                 borderRadius='full'
                                 boxSize={'9rem'}
                                 src={
-                                    staff.avatar || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
+                                    customer.avatar || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
                                 }
                                 alt='avatar'
                                 bgColor='white'
@@ -84,14 +79,14 @@ const StaffProfileDetailPage = () => {
                             <FormControl id="fullName" flex={2} isRequired>
                                 <FormLabel pl={1}>Full Name</FormLabel>
                                 <Input
-                                    value={staff.fullName}
+                                    value={customer.fullName}
                                     readOnly
                                 />
                             </FormControl>
                             <FormControl id="gender" flex={1} isRequired>
                                 <FormLabel pl={1}>Gender</FormLabel>
                                 <Input
-                                    value={staff.gender}
+                                    value={customer.gender}
                                     readOnly
                                 />
                             </FormControl>
@@ -100,14 +95,14 @@ const StaffProfileDetailPage = () => {
                             <FormControl id="dob" flex={1} isRequired>
                                 <FormLabel pl={1}>Date of Birth</FormLabel>
                                 <Input
-                                    value={formatDate(staff.dob)}
+                                    value={formatDate(customer.dob)}
                                     readOnly
                                 />
                             </FormControl>
                             <FormControl id="phone" flex={1.5} isRequired>
                                 <FormLabel pl={1}>Phone Number</FormLabel>
                                 <Input
-                                    value={staff.phone}
+                                    value={customer.phone}
                                     readOnly
                                 />
                             </FormControl>
@@ -115,21 +110,14 @@ const StaffProfileDetailPage = () => {
                         <FormControl id="email" flex={1.7} isRequired>
                             <FormLabel pl={1}>Email</FormLabel>
                             <Input
-                                value={staff.email}
+                                value={customer.email}
                                 readOnly
                             />
                         </FormControl>
                         <FormControl id="address" flex={2} isRequired>
                             <FormLabel pl={1}>Address</FormLabel>
                             <Input
-                                value={staff.address}
-                                readOnly
-                            />
-                        </FormControl>
-                        <FormControl id="branch" flex={1} isRequired>
-                            <FormLabel pl={1}>Branch</FormLabel>
-                            <Input
-                                value={`${staff.clinicBranchName} (${staff.clinicBranchCity})`}
+                                value={customer.address}
                                 readOnly
                             />
                         </FormControl>
@@ -144,4 +132,4 @@ const StaffProfileDetailPage = () => {
     )
 }
 
-export default StaffProfileDetailPage
+export default CustomerProfileDetailPage

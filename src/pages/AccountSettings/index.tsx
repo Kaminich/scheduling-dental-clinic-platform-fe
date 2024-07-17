@@ -1,5 +1,5 @@
 import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Menu, MenuButton, MenuItem, MenuList, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
-import { FaChevronRight, FaEye, FaSliders, FaTrashCan, FaUserCheck, FaUserDoctor, FaUserNurse, FaUserXmark } from "react-icons/fa6";
+import { FaChevronRight, FaSliders, FaTrashCan, FaUserCheck, FaUserDoctor, FaUserNurse, FaUserXmark } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { changeTabTitle } from "../../utils/changeTabTitle";
@@ -125,7 +125,7 @@ const AccountSettingsPage = () => {
                 onCloseLoading();
             }
         } else if (type === 'owner') {
-            const api = new ApiClient<any>(`/accounts/owner/activate-deactivate`);
+            const api = new ApiClient<any>(`/owners/status`);
             try {
                 const response = await api.updateWithId(id);
                 if (response.success) {
@@ -161,7 +161,7 @@ const AccountSettingsPage = () => {
                 onCloseLoading();
             }
         } else if (type === 'customer') {
-            const api = new ApiClient<any>(`/accounts/customer/activate-deactivate`);
+            const api = new ApiClient<any>(`/customers/status`);
             try {
                 const response = await api.updateWithId(id);
                 if (response.success) {
@@ -277,7 +277,7 @@ const AccountSettingsPage = () => {
                 onCloseLoading();
             }
         } else if (type === 'owner') {
-            const api = new ApiClient<any>(`/accounts/owner/activate-deactivate`);
+            const api = new ApiClient<any>(`/owners/status`);
             try {
                 const response = await api.updateWithId(id);
                 if (response.success) {
@@ -313,7 +313,7 @@ const AccountSettingsPage = () => {
                 onCloseLoading();
             }
         } else if (type === 'customer') {
-            const api = new ApiClient<any>(`/accounts/customer/activate-deactivate`);
+            const api = new ApiClient<any>(`/customers/status`);
             try {
                 const response = await api.updateWithId(id);
                 if (response.success) {
@@ -467,18 +467,6 @@ const AccountSettingsPage = () => {
                                                                 gap={4}
                                                                 borderColor={'gainsboro'}
                                                             >
-                                                                <Button
-                                                                    borderRadius='full'
-                                                                    px={3}
-                                                                    colorScheme="blue"
-                                                                    variant='ghost'
-                                                                >
-                                                                    <Tooltip label='Show user information'>
-                                                                        <span>
-                                                                            <FaEye />
-                                                                        </span>
-                                                                    </Tooltip>
-                                                                </Button>
                                                                 {account.status === Status.ACTIVE && (
                                                                     <Button
                                                                         borderRadius='full'
@@ -576,18 +564,6 @@ const AccountSettingsPage = () => {
                                                                 gap={4}
                                                                 borderColor={'gainsboro'}
                                                             >
-                                                                <Button
-                                                                    borderRadius='full'
-                                                                    px={3}
-                                                                    colorScheme="blue"
-                                                                    variant='ghost'
-                                                                >
-                                                                    <Tooltip label='Show user information'>
-                                                                        <span>
-                                                                            <FaEye />
-                                                                        </span>
-                                                                    </Tooltip>
-                                                                </Button>
                                                                 {account.status === Status.ACTIVE && (
                                                                     <Button
                                                                         borderRadius='full'
@@ -703,18 +679,6 @@ const AccountSettingsPage = () => {
                                                                         gap={4}
                                                                         borderColor={'gainsboro'}
                                                                     >
-                                                                        <Button
-                                                                            borderRadius='full'
-                                                                            px={3}
-                                                                            colorScheme="blue"
-                                                                            variant='ghost'
-                                                                        >
-                                                                            <Tooltip label='Show user information'>
-                                                                                <span>
-                                                                                    <FaEye />
-                                                                                </span>
-                                                                            </Tooltip>
-                                                                        </Button>
                                                                         {account.status === Status.ACTIVE && (
                                                                             <Button
                                                                                 borderRadius='full'
@@ -758,7 +722,7 @@ const AccountSettingsPage = () => {
                                                                         textAlign='center'
                                                                         borderColor={'gainsboro'}
                                                                         cursor={'pointer'}
-                                                                        onClick={() => navigate(``)}
+                                                                        onClick={() => navigate(`owner/${account.id}`)}
                                                                     >
                                                                         <FaChevronRight />
                                                                     </Td>
@@ -772,18 +736,6 @@ const AccountSettingsPage = () => {
                                                                         gap={4}
                                                                         borderColor={'gainsboro'}
                                                                     >
-                                                                        <Button
-                                                                            borderRadius='full'
-                                                                            px={3}
-                                                                            colorScheme="blue"
-                                                                            variant='ghost'
-                                                                        >
-                                                                            <Tooltip label='Show user information'>
-                                                                                <span>
-                                                                                    <FaEye />
-                                                                                </span>
-                                                                            </Tooltip>
-                                                                        </Button>
                                                                         {account.status === Status.ACTIVE && (
                                                                             <Button
                                                                                 borderRadius='full'
@@ -827,7 +779,7 @@ const AccountSettingsPage = () => {
                                                                         textAlign='center'
                                                                         borderColor={'gainsboro'}
                                                                         cursor={'pointer'}
-                                                                        onClick={() => navigate(``)}
+                                                                        onClick={() => navigate(`customer/${account.id}`)}
                                                                     >
                                                                         <FaChevronRight />
                                                                     </Td>
@@ -841,18 +793,6 @@ const AccountSettingsPage = () => {
                                                                         gap={4}
                                                                         borderColor={'gainsboro'}
                                                                     >
-                                                                        <Button
-                                                                            borderRadius='full'
-                                                                            px={3}
-                                                                            colorScheme="blue"
-                                                                            variant='ghost'
-                                                                        >
-                                                                            <Tooltip label='Show user information'>
-                                                                                <span>
-                                                                                    <FaEye />
-                                                                                </span>
-                                                                            </Tooltip>
-                                                                        </Button>
                                                                         {account.status === Status.ACTIVE && (
                                                                             <Button
                                                                                 borderRadius='full'
@@ -910,18 +850,6 @@ const AccountSettingsPage = () => {
                                                                         gap={4}
                                                                         borderColor={'gainsboro'}
                                                                     >
-                                                                        <Button
-                                                                            borderRadius='full'
-                                                                            px={3}
-                                                                            colorScheme="blue"
-                                                                            variant='ghost'
-                                                                        >
-                                                                            <Tooltip label='Show user information'>
-                                                                                <span>
-                                                                                    <FaEye />
-                                                                                </span>
-                                                                            </Tooltip>
-                                                                        </Button>
                                                                         {account.status === Status.ACTIVE && (
                                                                             <Button
                                                                                 borderRadius='full'
@@ -983,8 +911,6 @@ const AccountSettingsPage = () => {
                                                                     </Td>
                                                                     <Td
                                                                         borderColor={'gainsboro'}
-                                                                        cursor={'pointer'}
-                                                                        onClick={() => navigate(`staff/${account.id}`)}
                                                                     >
                                                                         -
                                                                     </Td>

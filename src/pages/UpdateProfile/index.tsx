@@ -83,7 +83,6 @@ const UpdateProfilePage = () => {
                     formDataImage
                 );
                 imageUrl = response.data.secure_url;
-                console.log("Cloudinary image URL:", imageUrl);
             } catch (error) {
                 console.error(error);
             }

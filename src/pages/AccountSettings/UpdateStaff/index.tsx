@@ -38,7 +38,6 @@ const UpdateStaffPage = () => {
         try {
             const api = new ApiClient<ApiResponse<StaffDetailResponse>>('/staff');
             const response = await api.getDetail(id);
-            console.log(response);
             if (response.success) {
                 setStaff(response.data);
             } else {
@@ -102,7 +101,6 @@ const UpdateStaffPage = () => {
                     formDataImage
                 );
                 avatarUrl = response.data.secure_url;
-                console.log("Cloudinary image URL:", avatarUrl);
             } catch (error) {
                 console.error(error);
             }

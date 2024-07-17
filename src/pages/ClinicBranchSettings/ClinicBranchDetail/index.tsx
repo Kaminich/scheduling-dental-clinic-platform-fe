@@ -20,7 +20,6 @@ const ClinicBranchDetailPage = () => {
         try {
             const api = new ApiClient<ApiResponse<BranchDetailResponse>>('/branch');
             const response = await api.getDetail(id);
-            console.log(response);
             if (response.success) {
                 setBranch(response.data);
             } else {

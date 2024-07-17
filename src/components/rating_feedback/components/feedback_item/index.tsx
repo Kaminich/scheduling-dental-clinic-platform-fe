@@ -44,10 +44,10 @@ const FeedbackItem = ({ feedback }: Prop) => {
                 </HStack>
             )}
             <HStack gap={4}>
-                <Avatar size={'md'} name={feedback.customerFullName} src={feedback.avatar} />
+                <Avatar size={'md'} src={feedback.customerAvatar || 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'} />
                 <Stack gap={0}>
                     <Text fontWeight={'medium'}>{feedback.customerFullName}</Text>
-                    <Text fontSize={16} color={'blue'}>{feedback.branchName} ({feedback.city})</Text>
+                    <Text fontSize={16} color={'blue'}>{feedback.branchName} ({feedback.branchCity})</Text>
                 </Stack>
             </HStack>
             <Rate disabled allowHalf defaultValue={feedback.rating} style={{ fontSize: '15px' }} />

@@ -20,7 +20,6 @@ const ServiceDetailPage = () => {
         try {
             const api = new ApiClient<ApiResponse<ServiceViewDetailsResponse>>('/service');
             const response = await api.getDetail(id);
-            console.log(response);
             if (response.success) {
                 setService(response.data);
             } else {

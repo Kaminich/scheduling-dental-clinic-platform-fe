@@ -4,6 +4,6 @@ export default interface SendFeedbackResponse {
     rating: number;
     customerFullName: string;
     branchName: string;
-    avatar: string;
-    city: string;
+    customerAvatar: string;
+    branchCity: string;
 }

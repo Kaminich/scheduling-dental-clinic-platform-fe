@@ -121,7 +121,6 @@ const UpdateDentalDetailPage = () => {
                     formDataImage
                 );
                 logoUrl = response.data.secure_url;
-                console.log("Cloudinary image URL:", logoUrl);
             } catch (error) {
                 console.error(error);
             }
@@ -138,7 +137,6 @@ const UpdateDentalDetailPage = () => {
                     formDataImage
                 );
                 clinicImageUrl = response.data.secure_url;
-                console.log("Cloudinary image URL:", clinicImageUrl);
             } catch (error) {
                 console.error(error);
             }
@@ -203,7 +201,6 @@ const UpdateDentalDetailPage = () => {
 
         try {
             const response = await api.update(data);
-            console.log(response);
 
             if (response.success) {
                 toast({
@@ -226,8 +223,6 @@ const UpdateDentalDetailPage = () => {
                 });
             }
         } catch (error: any) {
-            console.log(error);
-
             toast({
                 title: "Error",
                 description: error.response?.data?.message || "An error occurred",
@@ -354,9 +349,6 @@ const UpdateDentalDetailPage = () => {
             </Td>
         </Tr>
     );
-
-    console.log(workingHours);
-
 
     return (
         <>

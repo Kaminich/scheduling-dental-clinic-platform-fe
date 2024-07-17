@@ -28,8 +28,8 @@ const ReportDetailModal = ({ isOpen, onClose, report }: Props) => {
                         </HStack>
                         <HStack>
                             <Text>Reason(s):</Text>
-                            {report.reportReason.map((reason) => (
-                                <Text>{reason}</Text>
+                            {report.reportReason.map((reason, index) => (
+                                <Text key={index}>{reason}</Text>
                             ))}
                         </HStack>
                         <HStack>

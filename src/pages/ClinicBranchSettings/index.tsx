@@ -95,8 +95,6 @@ const ClinicBranchSettingsPage = () => {
                     });
                 }
             } catch (error: any) {
-                console.log(error);
-
                 toast({
                     title: "Error",
                     description: error.response?.data?.message || "An error occurred",
@@ -120,9 +118,6 @@ const ClinicBranchSettingsPage = () => {
             setBranches(branchData);
         }
     }, [branchData]);
-
-    console.log(branches);
-
 
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>

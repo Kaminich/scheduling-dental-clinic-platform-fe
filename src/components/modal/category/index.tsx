@@ -97,7 +97,6 @@ const CategoryModal = ({ isOpen, onClose, id, type, refetch }: Props) => {
                     formDataImage
                 );
                 imageUrl = response.data.secure_url;
-                console.log("Cloudinary image URL:", imageUrl);
             } catch (error) {
                 console.error(error);
             }
@@ -350,7 +349,7 @@ const CategoryModal = ({ isOpen, onClose, id, type, refetch }: Props) => {
                                     <Text>Category Services:</Text>
                                     <UnorderedList pl={4}>
                                         {category.services.map((service) => (
-                                            <ListItem>{service.serviceName}</ListItem>
+                                            <ListItem key={service.id}>{service.serviceName}</ListItem>
                                         ))}
                                     </UnorderedList>
                                 </>

@@ -1,7 +1,7 @@
 import { Button, Card, CardBody, CardHeader, FormControl, FormLabel, Heading, HStack, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useDisclosure } from "@chakra-ui/react"
 import { Color, Shadow } from "../../styles/styles"
 import { useEffect, useState } from "react";
-import { FaCalendarXmark, FaEye, FaPenToSquare } from "react-icons/fa6";
+import { FaCalendarXmark, FaEye, FaPenToSquare, FaStar } from "react-icons/fa6";
 import { changeTabTitle } from "../../utils/changeTabTitle";
 import FeedbackFormModal from "../../components/modal/feedback_form";
 import AppointmentDetailModal from "../../components/modal/appointment_detail";
@@ -11,6 +11,7 @@ import { formatDateMonth } from "../../utils/formatDateMonth";
 import Loading from "../../components/loading";
 import AppointmentUpdateModal from "../../components/modal/appointment_update";
 import AppointmentCancelModal from "../../components/modal/appointment_cancel";
+import { formatDateTime } from "../../utils/formatDateTime";
 
 const AppointmentPage = () => {
     const [id, setId] = useState<number>(0);
@@ -204,7 +205,7 @@ const AppointmentPage = () => {
                                                     <CardBody>
                                                         <Stack gap={0}>
                                                             <Text>Appointment ID: {appointment.appointmentId}</Text>
-                                                            <Text fontSize={16}>Appointment Date: {appointment.createdDate}</Text>
+                                                            <Text fontSize={16}>Appointment Date: {formatDateTime(appointment.createdDate)}</Text>
                                                         </Stack>
                                                         <HStack justify={'flex-end'} gap={5}>
                                                             <Button colorScheme="green" gap={2} onClick={() => {
@@ -217,7 +218,7 @@ const AppointmentPage = () => {
                                                                 setId(appointment.appointmentId);
                                                                 onOpenFeedback();
                                                             }}>
-                                                                Give Rating and Feedback
+                                                                <FaStar /> Give Rating and Feedback
                                                             </Button>
                                                         </HStack>
                                                     </CardBody>

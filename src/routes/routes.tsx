@@ -53,6 +53,8 @@ import UpdateDentalDetailPage from "../pages/UpdateDentalDetail";
 import UpdateBlogPage from "../pages/BlogSettings/UpdateBlog";
 import ForgotPasswordPage from "../pages/ForgotPassword";
 import PrivateRoute from "./PrivateRoute";
+import CustomerProfileDetailPage from "../pages/AccountSettings/CustomerProfileDetail";
+import OwnerProfileDetailPage from "../pages/AccountSettings/OwnerProfileDetail";
 
 const routes = [
     {
@@ -103,7 +105,7 @@ const routes = [
                 element: <PrivateRoute roleAuth="Owner" element={<UpdateDentalDetailPage />} />
             },
             {
-                path: "administrator/blogs/appprove-blog/:blogId",
+                path: "administrator/blogs/approve-blog/:blogId",
                 element: <PrivateRoute roleAuth="Admin" element={<BlogDetailPage />} />
             },
             {
@@ -122,14 +124,10 @@ const routes = [
                 path: "administrator/accounts/create-staff",
                 element: <PrivateRoute roleAuth="Owner" element={<CreateStaffPage />} />
             },
-            {
-                path: "administrator/accounts/dentist/:id",
-                element: <PrivateRoute roleAuth="Owner" element={<DentistProfileDetailPage />} />
-            },
-            {
-                path: "administrator/accounts/staff/:id",
-                element: <PrivateRoute roleAuth="Owner" element={<StaffProfileDetailPage />} />
-            },
+            { path: "administrator/accounts/dentist/:id", element: <DentistProfileDetailPage /> },
+            { path: "administrator/accounts/staff/:id", element: <StaffProfileDetailPage /> },
+            { path: "administrator/accounts/customer/:id", element: <CustomerProfileDetailPage /> },
+            { path: "administrator/accounts/owner/:id", element: <OwnerProfileDetailPage /> },
             {
                 path: "administrator/accounts/dentist/:id/update",
                 element: <PrivateRoute roleAuth="Owner" element={<UpdateDentistPage />} />

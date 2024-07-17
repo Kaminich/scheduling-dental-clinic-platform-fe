@@ -35,7 +35,6 @@ const ApproveDentistPage = () => {
                     isApproved: approve
                 }
             });
-            console.log(response);
             if (response.success) {
                 toast({
                     title: "Success",
@@ -57,7 +56,6 @@ const ApproveDentistPage = () => {
                 });
             }
         } catch (error: any) {
-            console.log(error);
             toast({
                 title: "Error",
                 description: error.response?.data?.message || "An error occurred",
@@ -80,8 +78,6 @@ const ApproveDentistPage = () => {
             setDentists(data.content);
         }
     }, [data]);
-
-    console.log(dentists);
 
     return (
         <Stack w={'full'} align='center' mx='auto' my={5} gap={10}>
@@ -127,7 +123,7 @@ const ApproveDentistPage = () => {
                                         {filteredDentists.length !== 0 ? (
                                             <>
                                                 {filteredDentists.map((dentist) => (
-                                                    <Tr _hover={{ bg: 'gray.100' }}>
+                                                    <Tr _hover={{ bg: 'gray.100' }} key={dentist.dentistId}>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{dentist.dentistId}</Td>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{dentist.fullName}</Td>
                                                         <Td textAlign='center' borderColor={'gainsboro'}>{dentist.clinicName}</Td>

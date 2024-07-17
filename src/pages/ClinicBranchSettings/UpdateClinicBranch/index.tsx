@@ -27,7 +27,6 @@ const UpdateClinicBranchPage = () => {
         try {
             const api = new ApiClient<ApiResponse<BranchDetailResponse>>('/branch');
             const response = await api.getDetail(id);
-            console.log(response);
             if (response.success) {
                 setBranch(response.data);
             } else {
@@ -78,7 +77,6 @@ const UpdateClinicBranchPage = () => {
 
         try {
             const response = await api.update(data);
-            console.log(response);
 
             if (response.success) {
                 toast({

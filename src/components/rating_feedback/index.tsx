@@ -1,11 +1,11 @@
 import { Card, Container, Divider, Flex, HStack, Progress, Stack, Text } from "@chakra-ui/react"
-import { Rate } from "antd"
 import FeedbackItem from "./components/feedback_item";
 import { Color, Shadow } from "../../styles/styles";
 import { useEffect, useState } from "react";
 import SummaryFeedbackResponse, { initialSummaryFeedbackResponse } from "../../types/SummaryFeedbackResponse";
 import useFeedbacks from "../../hooks/useFeedbacks";
 import Loading from "../loading";
+import { Rate } from "antd";
 
 interface Prop {
     clinicId: number;
@@ -51,7 +51,7 @@ const RatingAndFeedback = ({ clinicId }: Prop) => {
                             </Stack>
                             <Stack flex={1} align={'center'}>
                                 <Text fontSize={56} fontWeight={600}>{ratingFeedback.averageRating}</Text>
-                                <Rate disabled allowHalf defaultValue={ratingFeedback.averageRating} />
+                                <Rate defaultValue={ratingFeedback.averageRating} allowHalf disabled />
                                 <Text>{ratingFeedback.totalFeedback} Feedbacks</Text>
                             </Stack>
                         </HStack>
