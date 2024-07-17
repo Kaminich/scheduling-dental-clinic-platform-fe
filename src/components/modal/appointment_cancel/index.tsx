@@ -13,7 +13,7 @@ interface Props {
 
 const AppointmentCancelModal = ({ isOpen, onClose, id, refetch }: Props) => {
     const [reason, setReason] = useState<string>('');
-    const api = new ApiClient<any>('appointment');
+    const api = new ApiClient<any>('appointment/cancel');
     const toast = useToast();
 
     const handleCancel = async () => {
