@@ -242,6 +242,14 @@ const DentalClinicSettingsPage = () => {
                                                 </Tag>
                                             </HStack>
                                         )}
+                                        {clinic.status === 'APPROVED' && (
+                                            <HStack>
+                                                <Text>Status:</Text>
+                                                <Tag colorScheme="cyan">
+                                                    <TagLabel>APPROVED</TagLabel>
+                                                </Tag>
+                                            </HStack>
+                                        )}
                                     </Stack>
                                 </HStack>
                             </CardBody>

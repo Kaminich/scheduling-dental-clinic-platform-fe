@@ -201,56 +201,82 @@ const ClinicBranchSettingsPage = () => {
                                                         >
                                                             {formatDateTime(branch.modifiedDate)}
                                                         </Td>
-                                                        <Td
-                                                            textAlign='center'
-                                                            borderColor={'gainsboro'}
-                                                        >
-                                                            <Tag
-                                                                colorScheme={
-                                                                    branch.status === 'ACTIVE'
-                                                                        ? 'green'
-                                                                        : 'red'
-                                                                }
-                                                            >
-                                                                <TagLabel>
-                                                                    {branch.status}
-                                                                </TagLabel>
-                                                            </Tag>
-                                                        </Td>
-                                                        <Td
-                                                            textAlign='center'
-                                                            borderColor={'gainsboro'}
-                                                            p={1}
-                                                        >
-                                                            <Button
-                                                                borderRadius='full'
-                                                                px={3}
-                                                                colorScheme={
-                                                                    branch.status === Status.ACTIVE
-                                                                        ? 'red'
-                                                                        : 'green'
-                                                                }
-                                                                variant='ghost'
-                                                                onClick={() => {
-                                                                    setId(branch.branchId);
-                                                                    setStatus(branch.status)
-                                                                    onOpenChange();
-                                                                }}
-                                                            >
-                                                                <Tooltip
-                                                                    label=
-                                                                    {
-                                                                        branch.status === Status.ACTIVE
-                                                                            ? 'Deactivate branch'
-                                                                            : 'Activate branch'
-                                                                    }
+                                                        {branch.status !== Status.APPROVED ? (
+                                                            <>
+                                                                <Td
+                                                                    textAlign='center'
+                                                                    borderColor={'gainsboro'}
                                                                 >
-                                                                    <span>
-                                                                        <FaArrowRightArrowLeft />
-                                                                    </span>
-                                                                </Tooltip>
-                                                            </Button>
-                                                        </Td>
+                                                                    <Tag
+                                                                        colorScheme={
+                                                                            branch.status === 'ACTIVE'
+                                                                                ? 'green'
+                                                                                : 'red'
+                                                                        }
+                                                                    >
+                                                                        <TagLabel>
+                                                                            {branch.status}
+                                                                        </TagLabel>
+                                                                    </Tag>
+                                                                </Td>
+                                                                <Td
+                                                                    textAlign='center'
+                                                                    borderColor={'gainsboro'}
+                                                                    p={1}
+                                                                >
+                                                                    <Button
+                                                                        borderRadius='full'
+                                                                        px={3}
+                                                                        colorScheme={
+                                                                            branch.status === Status.ACTIVE
+                                                                                ? 'red'
+                                                                                : 'green'
+                                                                        }
+                                                                        variant='ghost'
+                                                                        onClick={() => {
+                                                                            setId(branch.branchId);
+                                                                            setStatus(branch.status)
+                                                                            onOpenChange();
+                                                                        }}
+                                                                    >
+                                                                        <Tooltip
+                                                                            label=
+                                                                            {
+                                                                                branch.status === Status.ACTIVE
+                                                                                    ? 'Deactivate branch'
+                                                                                    : 'Activate branch'
+                                                                            }
+                                                                        >
+                                                                            <span>
+                                                                                <FaArrowRightArrowLeft />
+                                                                            </span>
+                                                                        </Tooltip>
+                                                                    </Button>
+                                                                </Td>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Td
+                                                                    textAlign='center'
+                                                                    borderColor={'gainsboro'}
+                                                                >
+                                                                    <Tag
+                                                                        colorScheme={'cyan'}
+                                                                    >
+                                                                        <TagLabel>
+                                                                            {branch.status}
+                                                                        </TagLabel>
+                                                                    </Tag>
+                                                                </Td>
+                                                                <Td
+                                                                    textAlign='center'
+                                                                    borderColor={'gainsboro'}
+                                                                    p={1}
+                                                                >
+                                                                    -
+                                                                </Td>
+                                                            </>
+                                                        )}
                                                         <Td
                                                             textAlign='center'
                                                             borderColor={'gainsboro'}
