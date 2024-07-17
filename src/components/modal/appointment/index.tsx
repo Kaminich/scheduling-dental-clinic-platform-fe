@@ -168,7 +168,7 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
     }, [branchData]);
 
     useEffect(() => {
-        if (clinicBranchId && date) {
+        if ((clinicBranchId || dentistData?.branchId) && date) {
             getAvailableSlot();
         }
     }, [clinicBranchId, date]);

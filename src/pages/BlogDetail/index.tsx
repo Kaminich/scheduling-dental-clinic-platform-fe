@@ -5,11 +5,11 @@ import { changeTabTitle } from "../../utils/changeTabTitle";
 import { useNavigate, useParams } from "react-router";
 import BlogDetailResponse, { initialBlogDetailResponse } from "../../types/BlogDetailResponse";
 import ApiClient from "../../services/apiClient";
-import { formatDateTime } from "../../utils/formatDateTime";
 import { FaPenToSquare } from "react-icons/fa6";
 import useActiveBlogs from "../../hooks/useActiveBlogs";
 import BlogsItem from "../../components/blogs_item";
 import Loading from "../../components/loading";
+import { formatDate } from "../../utils/formatDate";
 
 const BlogDetailPage = () => {
     const { role } = useAuth();
@@ -27,7 +27,6 @@ const BlogDetailPage = () => {
         const api = new ApiClient<any>('/blog');
         try {
             const response = await api.getDetailUnauthen(parseInt(blogId || '0') || id);
-            console.log(response);
 
             if (response.success) {
                 setBlog(response.data);
@@ -74,7 +73,7 @@ const BlogDetailPage = () => {
                     <Stack>
                         <Heading fontWeight={600}>{blog.title}</Heading>
                         <Text fontSize={16}>By {blog.createdBy}</Text>
-                        <Text fontSize={16}>{formatDateTime(blog.publishDate)}</Text>
+                        <Text fontSize={16}>{formatDate(blog.publishDate)}</Text>
                     </Stack>
                     <Image
                         src={blog.thumbnail || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'}
