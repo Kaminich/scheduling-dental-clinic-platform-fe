@@ -206,7 +206,7 @@ const ClinicBranchSettingsPage = () => {
                                                             textAlign='center'
                                                             borderColor={'gainsboro'}
                                                         >
-                                                            {branch.isMain}
+                                                            {branch.main}
                                                         </Td>
                                                         {branch.status !== Status.APPROVED ? (
                                                             <>

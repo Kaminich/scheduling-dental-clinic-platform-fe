@@ -10,7 +10,7 @@ export default interface BranchSummaryResponse {
     status: Status;
     createdDate: string;
     modifiedDate: string;
-    isMain: boolean;
+    main: boolean;
 }
 
 export const initialBranchSummaryResponse: BranchSummaryResponse = {
@@ -23,5 +23,5 @@ export const initialBranchSummaryResponse: BranchSummaryResponse = {
     status: Status.INACTIVE,
     createdDate: '',
     modifiedDate: '',
-    isMain: false
+    main: false
 };
