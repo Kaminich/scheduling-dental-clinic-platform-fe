@@ -7,7 +7,6 @@ import { useNavigate } from "react-router";
 import { Color, Shadow } from "../../styles/styles";
 import { AddIcon } from "@chakra-ui/icons";
 import useUserProfile from "../../hooks/useUserProfile";
-import BranchDetailResponse from "../../types/BranchDetailResponse";
 import { formatDate } from "../../utils/formatDate";
 import Loading from "../../components/loading";
 import useBranchByClinicId from "../../hooks/useBranchByClinicId";
@@ -15,13 +14,14 @@ import ChangeStatusModal from "../../components/modal/change_status";
 import ApiClient from "../../services/apiClient";
 import { formatDateTime } from "../../utils/formatDateTime";
 import { Status } from "../../types/type.enum";
+import BranchSummaryResponse from "../../types/BranchSummaryResponse";
 
 const ClinicBranchSettingsPage = () => {
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
     const [id, setId] = useState<number>(0);
     const [status, setStatus] = useState<string>('');
-    const [branches, setBranches] = useState<BranchDetailResponse[]>([]);
+    const [branches, setBranches] = useState<BranchSummaryResponse[]>([]);
     const { data: userData } = useUserProfile();
     const { data: branchData, isLoading, refetch } = useBranchByClinicId({ clinicId: userData?.clinicId })
     const { isOpen: isOpenChange, onClose: onCloseChange, onOpen: onOpenChange } = useDisclosure();
