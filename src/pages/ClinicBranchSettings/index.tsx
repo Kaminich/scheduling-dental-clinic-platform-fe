@@ -159,6 +159,7 @@ const ClinicBranchSettingsPage = () => {
                                     <Th textAlign='center' borderColor={'gainsboro'}>City</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Create Date</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Modified Date</Th>
+                                    <Th textAlign='center' borderColor={'gainsboro'}>Main Branch</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Status</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}>Action</Th>
                                     <Th textAlign='center' borderColor={'gainsboro'}></Th>
@@ -200,6 +201,12 @@ const ClinicBranchSettingsPage = () => {
                                                             borderColor={'gainsboro'}
                                                         >
                                                             {formatDateTime(branch.modifiedDate)}
+                                                        </Td>
+                                                        <Td
+                                                            textAlign='center'
+                                                            borderColor={'gainsboro'}
+                                                        >
+                                                            {branch.isMain}
                                                         </Td>
                                                         {branch.status !== Status.APPROVED ? (
                                                             <>
@@ -290,7 +297,7 @@ const ClinicBranchSettingsPage = () => {
                                             </>
                                         ) : (
                                             <Tr>
-                                                <Td colSpan={8} textAlign="center">
+                                                <Td colSpan={9} textAlign="center">
                                                     No branch
                                                 </Td>
                                             </Tr>
@@ -298,7 +305,7 @@ const ClinicBranchSettingsPage = () => {
                                     </>
                                 ) : (
                                     <Tr>
-                                        <Td colSpan={8} textAlign="center">
+                                        <Td colSpan={9} textAlign="center">
                                             <Loading />
                                         </Td>
                                     </Tr>
