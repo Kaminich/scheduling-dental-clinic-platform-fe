@@ -43,7 +43,7 @@ const ReAppointmentModal = ({ isOpen, onClose, id, followUpDate }: Props) => {
         }
     }
 
-    const handleUpdateAppointment = async () => {
+    const handleReAppointment = async () => {
         setIsLoading(true);
         const api = new ApiClient<any>('/appointment');
         const data = {
@@ -57,11 +57,12 @@ const ReAppointmentModal = ({ isOpen, onClose, id, followUpDate }: Props) => {
             slotId,
             dentistId: appointment.dentist.dentistId,
             serviceId: appointment.service.id,
+            clinicBranchId: appointment.clinicBranch.branchId,
+            customerId: 0
         }
 
         try {
             const response = await api.create(data);
-            console.log(response);
             if (response.success) {
                 toast({
                     title: "Success",
@@ -142,7 +143,7 @@ const ReAppointmentModal = ({ isOpen, onClose, id, followUpDate }: Props) => {
                                         <FormControl id="dob" flex={1}>
                                             <FormLabel ml={1}>Date of Birth</FormLabel>
                                             <Input
-                                                value={appointment.customerAge}
+                                                value={appointment.dob}
                                                 readOnly
                                             />
                                         </FormControl>
@@ -245,7 +246,7 @@ const ReAppointmentModal = ({ isOpen, onClose, id, followUpDate }: Props) => {
                         </Stack>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={handleUpdateAppointment}>Confirm</Button>
+                        <Button colorScheme='blue' mr={3} onClick={handleReAppointment}>Confirm</Button>
                         <Button colorScheme='gray' mr={3} onClick={onClose}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
