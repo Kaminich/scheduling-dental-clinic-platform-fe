@@ -66,7 +66,7 @@ const DentalDetailModal = ({ isOpen, onClose, id }: Props) => {
                                 <Text>Website Url:</Text>
                                 <Text>{dentalDetail.websiteUrl || '-'}</Text>
                             </HStack>
-                            <HStack>
+                            <Stack>
                                 <Text>Dental Clinic Image:</Text>
                                 <Image
                                     border='1px solid gainsboro'
@@ -80,10 +80,10 @@ const DentalDetailModal = ({ isOpen, onClose, id }: Props) => {
                                     alt='logo'
                                     bgColor='white'
                                 />
-                            </HStack>
+                            </Stack>
                             <HStack>
                                 <Text>Dental Clinic Registration:</Text>
-                                <Link href={dentalDetail.clinicRegistration} color={'lightblue'} isExternal>Click here to view</Link>
+                                <Link href={dentalDetail.clinicRegistration} color={'blue'} isExternal>Click here to view</Link>
                             </HStack>
                         </Stack>
                         <Heading fontSize='xl'>Owner Information</Heading>
