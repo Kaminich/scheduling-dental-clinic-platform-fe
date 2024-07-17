@@ -4,12 +4,13 @@ import { changeTabTitle } from '../../../utils/changeTabTitle';
 import axios from 'axios';
 import ApiClient from '../../../services/apiClient';
 import LoadingModal from '../../../components/modal/loading';
-import { Border } from '../../../styles/styles';
+import { Border, modules } from '../../../styles/styles';
 import { FaCamera } from 'react-icons/fa6';
 import { useParams } from 'react-router';
 import useBlogDetail from '../../../hooks/useBlogDetail';
 import BlogDetailResponse, { initialBlogDetailResponse } from '../../../types/BlogDetailResponse';
 import { trimAll } from '../../../utils/trimAll';
+import ReactQuill from 'react-quill';
 
 const UpdateBlogPage = () => {
     const [title, setTitle] = useState<string>('');
@@ -136,7 +137,7 @@ const UpdateBlogPage = () => {
     }, [blog])
 
     return (
-        <Box p={8} w="4xl" mx="auto">
+        <Box p={8} w="6xl" mx="auto" mb={20}>
             <Stack spacing={4}>
                 <FormControl id="title" isRequired>
                     <FormLabel pl={1}>Title</FormLabel>
@@ -199,15 +200,13 @@ const UpdateBlogPage = () => {
                 </FormControl>
                 <FormControl id="content" isRequired>
                     <FormLabel pl={1}>Content</FormLabel>
-                    <Textarea
+                    <ReactQuill
+                        theme='snow'
                         value={content}
-                        placeholder="Enter the blog content"
-                        focusBorderColor='#E2E8F0'
-                        resize={'none'}
-                        maxH={32}
-                        minH={32}
-                        onChange={(e) => setContent(e.target.value)}
-                        required
+                        onChange={setContent}
+                        placeholder='Enter the blog content'
+                        modules={modules}
+                        className='content-input'
                     />
                 </FormControl>
                 <HStack

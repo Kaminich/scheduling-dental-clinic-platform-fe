@@ -128,3 +128,50 @@ p {
 .css-1e3qdf3 option:first-child {
   display: none !important;
 }
+
+.content-input {
+  height: 1000px;
+}
+
+.ql-size-8px {
+  font-size: 8px;
+}
+
+.ql-size-10px {
+  font-size: 10px;
+}
+
+.ql-size-12px {
+  font-size: 12px;
+}
+
+.ql-size-14px {
+  font-size: 14px;
+}
+
+.ql-size-16px {
+  font-size: 16px;
+}
+
+.ql-size-18px {
+  font-size: 18px;
+}
+
+.ql-size-24px {
+  font-size: 24px;
+}
+
+.ql-size-36px {
+  font-size: 36px;
+}
+
+.ql-size-48px {
+  font-size: 48px;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item::before {
+  content: attr(data-value) !important;
+  font-size: 14px;
+  color: black;
+}
