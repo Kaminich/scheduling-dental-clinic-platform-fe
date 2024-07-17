@@ -10,12 +10,13 @@ import useUserProfile from "../../../hooks/useUserProfile";
 import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
 import BranchDetailResponse from "../../../types/BranchDetailResponse";
 import LoadingModal from "../../../components/modal/loading";
+import { trimAll } from "../../../utils/trimAll";
 
 const CreateDentistPage = () => {
     const [fullName, setFullName] = useState<string>('');
     const [dob, setDob] = useState<string>('');
     const [gender, setGender] = useState<string>('');
-    const [phone, setPhone] = useState<string | number>('');
+    const [phone, setPhone] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [address, setAddress] = useState<string>('');
     const [description, setDescription] = useState<string>('');
@@ -32,15 +33,15 @@ const CreateDentistPage = () => {
 
     const areAllFieldsFilled = () => {
         return (
-            fullName !== '' &&
+            fullName.trim() !== '' &&
             dob !== '' &&
             gender !== '' &&
-            phone !== '' &&
-            email !== '' &&
-            address !== '' &&
-            description !== '' &&
-            specialty !== '' &&
-            experience !== '' &&
+            phone.trim() !== '' &&
+            email.trim() !== '' &&
+            address.trim() !== '' &&
+            description.trim() !== '' &&
+            specialty.trim() !== '' &&
+            experience.trim() !== '' &&
             avatar !== '' &&
             avatarData !== null &&
             branchId !== 0
@@ -64,7 +65,6 @@ const CreateDentistPage = () => {
 
     const handleAvatarChange = (e: any) => {
         const selectedFile = e.target.files[0];
-        console.log(selectedFile);
 
         if (selectedFile) {
             const reader = new FileReader();
@@ -100,15 +100,15 @@ const CreateDentistPage = () => {
         }
 
         const data = {
-            fullName,
-            email,
+            fullName: trimAll(fullName),
+            email: email.trim(),
             gender,
-            phone,
+            phone: phone.trim(),
             dob,
-            address,
-            description,
-            specialty,
-            experience,
+            address: trimAll(address),
+            description: description.trim(),
+            specialty: trimAll(specialty),
+            experience: experience.trim(),
             avatar: avatarUrl,
             branchId
         };

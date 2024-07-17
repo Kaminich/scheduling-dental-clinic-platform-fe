@@ -1,5 +1,5 @@
 import { Box, Button, FormControl, FormLabel, HStack, Heading, Image, Input, Stack, useDisclosure, useToast } from "@chakra-ui/react"
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import Logo from "../../components/logo";
 import { Link } from "react-router-dom";
 import ApiClient from "../../services/apiClient";
@@ -11,6 +11,7 @@ const ForgotPasswordPage = () => {
     const [email, setEmail] = useState<string>("");
     const toast = useToast();
     const { isOpen, onClose, onOpen } = useDisclosure();
+    const emailRef = useRef<HTMLInputElement>(null);
 
     const handleRecover = async (e: FormEvent) => {
         e.preventDefault();
@@ -50,7 +51,8 @@ const ForgotPasswordPage = () => {
     };
 
     useEffect(() => {
-        changeTabTitle('Recover Password');
+        changeTabTitle('Forgot Password');
+        emailRef.current?.focus();
     }, []);
 
     return (
@@ -69,6 +71,7 @@ const ForgotPasswordPage = () => {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            ref={emailRef}
                             placeholder="Email"
                         />
                     </FormControl>

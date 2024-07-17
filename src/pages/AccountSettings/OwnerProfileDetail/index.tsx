@@ -123,7 +123,7 @@ const OwnerProfileDetailPage = () => {
                         <FormControl id="clinic" flex={2} isRequired>
                             <FormLabel pl={1}>Dental Clinic</FormLabel>
                             <Input
-                                value={owner.address}
+                                value={owner.clinicName}
                                 readOnly
                             />
                         </FormControl>

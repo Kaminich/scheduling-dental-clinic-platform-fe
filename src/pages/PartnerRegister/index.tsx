@@ -7,6 +7,7 @@ import axios from "axios";
 import ApiClient from "../../services/apiClient";
 import LoadingModal from "../../components/modal/loading";
 import { VietnamCities } from "../../types/type.enum";
+import { trimAll } from "../../utils/trimAll";
 
 const PartnerRegisterPage = () => {
     const [clinicName, setClinicName] = useState<string>('');
@@ -114,24 +115,23 @@ const PartnerRegisterPage = () => {
 
         const api = new ApiClient<any>('/clinics/registration');
         const data = {
-            clinicName,
-            address,
+            clinicName: trimAll(clinicName),
+            address: trimAll(address),
             city,
-            clinicPhone,
+            clinicPhone: clinicPhone.trim(),
             clinicRegistration: fileUrl,
-            websiteUrl,
+            websiteUrl: websiteUrl.trim(),
             clinicImage: imageUrl,
             ownerInformation: {
-                fullName,
-                email,
-                phone
+                fullName: trimAll(fullName),
+                email: email.trim(),
+                phone: phone.trim()
             }
         }
 
         try {
             const response = await api.postUnauthen(data);
-            console.log(response);
-            if (response.data.success === true) {
+            if (response.success) {
                 toast({
                     title: "Success",
                     description: response.message,
@@ -281,7 +281,7 @@ const PartnerRegisterPage = () => {
                                         />
                                     </HStack>
                                 </FormControl>
-                                <FormControl id="clinicimage" flex={1}>
+                                <FormControl id="clinicimage" flex={1} isRequired>
                                     <FormLabel pl={1}>Clinic Image</FormLabel>
                                     <HStack justify="center" mt={4}>
                                         <Button
@@ -308,6 +308,7 @@ const PartnerRegisterPage = () => {
                                             accept="image/*"
                                             onChange={handleImageChange}
                                             display="none"
+                                            required
                                         />
                                     </HStack>
                                 </FormControl>
@@ -362,14 +363,15 @@ const PartnerRegisterPage = () => {
                                 mt={4}
                                 onClick={handleSendInfo}
                                 isDisabled={
-                                    clinicName === '' ||
-                                    clinicPhone === '' ||
-                                    address === '' ||
+                                    clinicName.trim() === '' ||
+                                    clinicPhone.trim() === '' ||
+                                    address.trim() === '' ||
                                     city === '' ||
                                     clinicRegistration === null ||
-                                    fullName === '' ||
-                                    phone === '' ||
-                                    email === ''
+                                    clinicImageData === null ||
+                                    fullName.trim() === '' ||
+                                    phone.trim() === '' ||
+                                    email.trim() === ''
                                 }
                             >
                                 Send information

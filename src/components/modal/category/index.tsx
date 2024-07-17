@@ -7,6 +7,7 @@ import CategoryViewResponse, { initialCategoryViewResponse } from "../../../type
 import axios from "axios";
 import Loading from "../../loading";
 import { QueryObserverResult } from "@tanstack/react-query";
+import { trimAll } from "../../../utils/trimAll";
 
 interface Props {
     isOpen: boolean;
@@ -28,7 +29,6 @@ const CategoryModal = ({ isOpen, onClose, id, type, refetch }: Props) => {
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
-        console.log(selectedFile);
 
         if (selectedFile) {
             const reader = new FileReader();
@@ -105,14 +105,13 @@ const CategoryModal = ({ isOpen, onClose, id, type, refetch }: Props) => {
         if (type === 'update' && id !== undefined) {
             const data = {
                 categoryId: id,
-                categoryName: categoryNameUpdate,
+                categoryName: trimAll(categoryNameUpdate),
                 categoryImage: imageUrl === '' ? categoryImageUpdate : imageUrl,
                 categoryStatus: category.status
             }
             try {
                 const api = new ApiClient<any>(`/category`);
                 const response = await api.update(data);
-                console.log(response);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -160,12 +159,11 @@ const CategoryModal = ({ isOpen, onClose, id, type, refetch }: Props) => {
             }
             const api = new ApiClient<any>(`/category`);
             const data = {
-                categoryName,
+                categoryName: trimAll(categoryName),
                 categoryImage: imageUrl,
             }
             try {
                 const response = await api.create(data);
-                console.log(response);
                 if (response.success) {
                     toast({
                         title: "Success",
@@ -364,10 +362,10 @@ const CategoryModal = ({ isOpen, onClose, id, type, refetch }: Props) => {
                                 onClick={handleClick}
                                 isDisabled={
                                     type === 'create' ?
-                                        categoryName === '' ||
+                                        categoryName.trim() === '' ||
                                         categoryImage === ''
                                         :
-                                        categoryNameUpdate === '' ||
+                                        categoryNameUpdate.trim() === '' ||
                                         categoryImageUpdate === ''
                                 }
                             >

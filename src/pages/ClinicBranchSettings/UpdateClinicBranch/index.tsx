@@ -9,6 +9,7 @@ import BranchDetailResponse, { initialBranchDetailResponse } from "../../../type
 import Loading from "../../../components/loading";
 import LoadingModal from "../../../components/modal/loading";
 import { VietnamCities } from "../../../types/type.enum";
+import { trimAll } from "../../../utils/trimAll";
 
 const UpdateClinicBranchPage = () => {
     const [branchName, setBranchName] = useState<string>('');
@@ -50,10 +51,10 @@ const UpdateClinicBranchPage = () => {
 
     const areAllFieldsFilled = () => {
         return (
-            branchName !== '' &&
+            branchName.trim() !== '' &&
             city !== '' &&
-            phone !== '' &&
-            address !== ''
+            phone.trim() !== '' &&
+            address.trim() !== ''
         );
     };
 
@@ -69,10 +70,10 @@ const UpdateClinicBranchPage = () => {
         onOpen();
         const data = {
             id: branch.branchId,
-            branchName,
+            branchName: trimAll(branchName),
             city,
-            phone,
-            address,
+            phone: phone.trim(),
+            address: trimAll(address),
         };
 
         try {

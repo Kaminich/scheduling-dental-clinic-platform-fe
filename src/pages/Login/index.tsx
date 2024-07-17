@@ -1,5 +1,5 @@
 import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Icon, Image, Input, InputGroup, InputRightElement, Stack, Text, useToast } from "@chakra-ui/react"
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Logo from "../../components/logo";
 import { Link, useNavigate } from "react-router-dom";
@@ -21,6 +21,7 @@ const LoginPage = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [showPass, setShowPass] = useState<boolean>(false);
+    const usernameRef = useRef<HTMLInputElement>(null);
     const toast = useToast();
     const navigate = useNavigate();
 
@@ -137,6 +138,7 @@ const LoginPage = () => {
 
     useEffect(() => {
         changeTabTitle('Login');
+        usernameRef.current?.focus();
     }, []);
 
     return (
@@ -159,6 +161,7 @@ const LoginPage = () => {
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                            ref={usernameRef}
                             placeholder="Username"
                         />
                     </FormControl>

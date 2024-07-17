@@ -1,4 +1,4 @@
-import { SimpleGrid, Stack } from "@chakra-ui/react"
+import { SimpleGrid, Stack, Text } from "@chakra-ui/react"
 import ServiceItem from "../../components/service_item"
 import { useEffect, useState } from "react";
 import { changeTabTitle } from "../../utils/changeTabTitle";
@@ -23,17 +23,25 @@ const ServicePage = () => {
     return (
         <>
             {!isLoading ? (
-                <SimpleGrid columns={4} spacingX={7} spacingY={8} w={'6xl'} m={'auto'} my={10}>
-                    {categories
-                        .filter((category) => category.status === true)
-                        .map((category) => (
-                            <ServiceItem
-                                key={category.id}
-                                categoryImage={category.categoryImage}
-                                categoryName={category.categoryName}
-                            />
-                        ))}
-                </SimpleGrid>
+                <>
+                    {categories.length !== 0 ? (
+                        <SimpleGrid columns={4} spacingX={7} spacingY={8} w={'6xl'} m={'auto'} my={10}>
+                            {categories
+                                .filter((category) => category.status === true)
+                                .map((category) => (
+                                    <ServiceItem
+                                        key={category.id}
+                                        categoryImage={category.categoryImage}
+                                        categoryName={category.categoryName}
+                                    />
+                                ))}
+                        </SimpleGrid>
+                    ) : (
+                        <Stack m={'auto'}>
+                            <Text>No service available</Text>
+                        </Stack>
+                    )}
+                </>
             ) : (
                 <Stack m={'auto'}>
                     <Loading />

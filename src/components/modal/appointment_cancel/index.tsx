@@ -19,7 +19,7 @@ const AppointmentCancelModal = ({ isOpen, onClose, id, refetch }: Props) => {
     const handleCancel = async () => {
         const data = {
             appointmentId: id,
-            cancelReason: reason
+            cancelReason: reason.trim()
         }
         try {
             const response = await api.create(data);
@@ -80,7 +80,7 @@ const AppointmentCancelModal = ({ isOpen, onClose, id, refetch }: Props) => {
                     </FormControl>
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme='red' mr={3} onClick={handleCancel}>
+                    <Button colorScheme='red' mr={3} isDisabled={reason.trim() === ''} onClick={handleCancel}>
                         Confirm
                     </Button>
                     <Button onClick={onClose}>Cancel</Button>

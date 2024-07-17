@@ -30,7 +30,7 @@ const DeleteModal = ({ isOpen, onClose, type, handleDeactivate }: Props) => {
                     <ModalHeader fontSize='xl'>Deactivate Dental Clinic</ModalHeader>
                 )}
                 {type === 'blog' && (
-                    <ModalHeader fontSize='xl'>Deactivate Blog</ModalHeader>
+                    <ModalHeader fontSize='xl'>Remove Blog</ModalHeader>
                 )}
                 <ModalCloseButton />
                 <ModalBody pt={6} pb='4rem' borderY={Border.tableBorder}>
@@ -44,12 +44,12 @@ const DeleteModal = ({ isOpen, onClose, type, handleDeactivate }: Props) => {
                         <Text fontSize='lg'>Are you sure you want to deactivate your dental clinic?</Text>
                     )}
                     {type === 'blog' && (
-                        <Text fontSize='lg'>Are you sure you want to deactivate this blog?</Text>
+                        <Text fontSize='lg'>Are you sure you want to remove this blog?</Text>
                     )}
                 </ModalBody>
                 <ModalFooter>
                     <Button colorScheme='red' mr={3} onClick={handleDeactivate}>
-                        Deactivate
+                        {type === 'blog' ? 'Remove' : 'Deactivate'}
                     </Button>
                     <Button onClick={onClose}>Cancel</Button>
                 </ModalFooter>

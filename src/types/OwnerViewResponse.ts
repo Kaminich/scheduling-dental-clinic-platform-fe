@@ -12,6 +12,7 @@ export interface OwnerViewResponse {
     avatar: string;
     status: Status;
     clinicId: number;
+    clinicName: string;
 }
 
 export const initialOwnerViewResponse: OwnerViewResponse = {
@@ -25,6 +26,7 @@ export const initialOwnerViewResponse: OwnerViewResponse = {
     gender: '',
     avatar: '',
     status: Status.INACTIVE,
-    clinicId: 0
+    clinicId: 0,
+    clinicName: ''
 };
 

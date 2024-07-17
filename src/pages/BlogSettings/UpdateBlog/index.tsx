@@ -1,17 +1,5 @@
 import { useState, FormEvent, useEffect } from 'react';
-import {
-    Box,
-    Button,
-    FormControl,
-    FormLabel,
-    Input,
-    Textarea,
-    Stack,
-    useToast,
-    useDisclosure,
-    HStack,
-    Image,
-} from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Input, Textarea, Stack, useToast, useDisclosure, HStack, Image } from '@chakra-ui/react';
 import { changeTabTitle } from '../../../utils/changeTabTitle';
 import axios from 'axios';
 import ApiClient from '../../../services/apiClient';
@@ -21,6 +9,7 @@ import { FaCamera } from 'react-icons/fa6';
 import { useParams } from 'react-router';
 import useBlogDetail from '../../../hooks/useBlogDetail';
 import BlogDetailResponse, { initialBlogDetailResponse } from '../../../types/BlogDetailResponse';
+import { trimAll } from '../../../utils/trimAll';
 
 const UpdateBlogPage = () => {
     const [title, setTitle] = useState<string>('');
@@ -36,9 +25,9 @@ const UpdateBlogPage = () => {
 
     const areAllFieldsFilled = () => {
         return (
-            content !== '' &&
-            title !== '' &&
-            summary !== '' &&
+            content.trim() !== '' &&
+            title.trim() !== '' &&
+            summary.trim() !== '' &&
             image !== ''
         );
     };
@@ -53,7 +42,6 @@ const UpdateBlogPage = () => {
 
     const handleImageChange = (e: any) => {
         const selectedFile = e.target.files[0];
-        console.log(selectedFile);
 
         if (selectedFile) {
             const reader = new FileReader();
@@ -90,10 +78,10 @@ const UpdateBlogPage = () => {
 
         const data = {
             id: blog.id,
-            content,
-            title,
+            content: content.trim(),
+            title: trimAll(title),
             thumbnail: imageUrl,
-            summary
+            summary: summary.trim()
         };
 
         try {
@@ -200,12 +188,12 @@ const UpdateBlogPage = () => {
                     <FormLabel pl={1}>Summary</FormLabel>
                     <Textarea
                         placeholder="Enter the blog summary"
-                        value={content}
+                        value={summary}
                         focusBorderColor='#E2E8F0'
                         resize={'none'}
                         maxH={32}
                         minH={32}
-                        onChange={(e) => setContent(e.target.value)}
+                        onChange={(e) => setSummary(e.target.value)}
                         required
                     />
                 </FormControl>

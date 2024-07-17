@@ -5,6 +5,7 @@ import ApiClient from "../../../services/apiClient";
 import { today } from "../appointment";
 import TreatmentOutcomeResponse, { initialTreatmentOutcomeResponse } from "../../../types/TreatmentOutcomeResponse";
 import useTreatmentOutcomeDetail from "../../../hooks/useTreatmentOutcomeDetail";
+import { trimAll } from "../../../utils/trimAll";
 
 interface Props {
     isOpen: boolean;
@@ -35,17 +36,16 @@ const UpdateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
         setIsLoading(true);
         const api = new ApiClient<any>('/treatment-outcomes');
         const data = {
-            diagnosis,
-            treatmentPlan,
-            prescription,
-            recommendations,
+            diagnosis: trimAll(diagnosis),
+            treatmentPlan: treatmentPlan.trim(),
+            prescription: prescription.trim(),
+            recommendations: recommendations.trim(),
             followUpDate,
             appointmentId: id
         }
 
         try {
             const response = await api.updateWithIdAndData(treatment.id, data);
-            console.log(response);
             if (response.success) {
                 toast({
                     title: "Success",

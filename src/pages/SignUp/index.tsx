@@ -1,5 +1,5 @@
-import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Icon, Image, Input, InputGroup, InputRightElement, Select, Stack, Text, useToast } from "@chakra-ui/react"
-import { FormEvent, useEffect, useState } from "react";
+import { AbsoluteCenter, Box, Button, Divider, FormControl, FormLabel, HStack, Heading, Icon, Image, Input, InputGroup, InputRightElement, Select, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react"
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Logo from "../../components/logo";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,6 +13,8 @@ import { jwtDecode } from "jwt-decode";
 import { formatRoleString } from "../../utils/formatRoleString";
 import { AxiosError } from "axios";
 import { useAuth } from "../../hooks/useAuth";
+import { trimAll } from "../../utils/trimAll";
+import LoadingModal from "../../components/modal/loading";
 
 interface DecodeJWTRole {
     role: string;
@@ -31,7 +33,9 @@ const SignUpPage = () => {
     const toast = useToast();
     const [showPass, setShowPass] = useState<boolean>(false);
     const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
+    const usernameRef = useRef<HTMLInputElement>(null);
     const { setIsAuthenticated, setRole } = useAuth();
+    const { isOpen: isOpenLoading, onClose: onCloseLoading, onOpen: onOpenLoading } = useDisclosure();
     const googleSignup = useGoogleLogin({
         onSuccess: (token) => {
             handleGoogleLogin(token.access_token);
@@ -97,11 +101,8 @@ const SignUpPage = () => {
 
     const navigate = useNavigate();
 
-    const api = new ApiClient<any>('/auth/register');
-
     const handleSignUp = async (e: FormEvent) => {
         e.preventDefault();
-
         if (password !== confirmPassword) {
             toast({
                 title: "Error",
@@ -113,16 +114,19 @@ const SignUpPage = () => {
             });
             return;
         }
+        onOpenLoading();
+
+        const api = new ApiClient<any>('/auth/register');
 
         const data = {
-            username,
-            fullName,
+            username: username.trim(),
+            fullName: trimAll(fullName),
             password,
             dob,
             gender,
-            phone,
-            email,
-            address
+            phone: phone.trim(),
+            email: email.trim(),
+            address: trimAll(address)
         };
 
         try {
@@ -156,11 +160,14 @@ const SignUpPage = () => {
                 position: 'top',
                 isClosable: true,
             });
+        } finally {
+            onCloseLoading();
         }
     };
 
     useEffect(() => {
         changeTabTitle('Sign Up');
+        usernameRef.current?.focus();
     }, []);
 
     return (
@@ -199,6 +206,7 @@ const SignUpPage = () => {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 placeholder="Username"
+                                ref={usernameRef}
                                 required
                             />
                         </FormControl>
@@ -343,6 +351,10 @@ const SignUpPage = () => {
                     </HStack>
                 </Stack>
             </Box>
+            <LoadingModal
+                isOpen={isOpenLoading}
+                onClose={onCloseLoading}
+            />
         </HStack>
     )
 }

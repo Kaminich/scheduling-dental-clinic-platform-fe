@@ -1,4 +1,4 @@
-import { SimpleGrid, Stack } from "@chakra-ui/react"
+import { SimpleGrid, Stack, Text } from "@chakra-ui/react"
 import DentalItem from "../../components/dental_item"
 import { useEffect, useState } from "react";
 import { changeTabTitle } from "../../utils/changeTabTitle";
@@ -23,19 +23,27 @@ const DentalPage = () => {
     return (
         <>
             {!isLoading ? (
-                <SimpleGrid
-                    columns={3}
-                    spacingX={4}
-                    spacingY={6}
-                    maxW={'6xl'}
-                    my={5}
-                    mx={'auto'}
-                    py={8}
-                >
-                    {clinics.map((clinic) => (
-                        <DentalItem key={clinic.clinicId} dentalData={clinic} />
-                    ))}
-                </SimpleGrid>
+                <>
+                    {clinics.length !== 0 ? (
+                        <SimpleGrid
+                            columns={3}
+                            spacingX={4}
+                            spacingY={6}
+                            maxW={'6xl'}
+                            my={5}
+                            mx={'auto'}
+                            py={8}
+                        >
+                            {clinics.map((clinic) => (
+                                <DentalItem key={clinic.clinicId} dentalData={clinic} />
+                            ))}
+                        </SimpleGrid>
+                    ) : (
+                        <Stack m={'auto'}>
+                            <Text>No clinic available</Text>
+                        </Stack>
+                    )}
+                </>
             ) : (
                 <Stack m={'auto'}>
                     <Loading />

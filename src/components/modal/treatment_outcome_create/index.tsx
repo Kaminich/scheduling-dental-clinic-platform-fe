@@ -5,6 +5,7 @@ import useAppointmentDetail from "../../../hooks/useAppoinmentDetail";
 import AppointmentViewDetailsResponse, { initialAppointmentViewDetailsResponse } from "../../../types/AppointmentViewDetailsResponse";
 import ApiClient from "../../../services/apiClient";
 import { today } from "../appointment";
+import { trimAll } from "../../../utils/trimAll";
 
 interface Props {
     isOpen: boolean;
@@ -27,17 +28,16 @@ const CreateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
         setIsLoading(true);
         const api = new ApiClient<any>('/appointment');
         const data = {
-            diagnosis: "",
-            treatmentPlan: "",
-            prescription: "",
-            recommendations: "",
-            followUpDate: "",
+            diagnosis: trimAll(diagnosis),
+            treatmentPlan: treatmentPlan.trim(),
+            prescription: prescription.trim(),
+            recommendations: recommendations.trim(),
+            followUpDate,
             appointmentId: appointment.appointmentId
         }
 
         try {
             const response = await api.create(data);
-            console.log(response);
             if (response.success) {
                 toast({
                     title: "Success",
@@ -168,10 +168,10 @@ const CreateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
                             onClick={handleCreateAppointment}
                             isDisabled={
                                 followUpDate === '' ||
-                                diagnosis === '' ||
-                                prescription === '' ||
-                                recommendations === '' ||
-                                treatmentPlan === ''
+                                diagnosis.trim() === '' ||
+                                prescription.trim() === '' ||
+                                recommendations.trim() === '' ||
+                                treatmentPlan.trim() === ''
                             }
                         >
                             Create
