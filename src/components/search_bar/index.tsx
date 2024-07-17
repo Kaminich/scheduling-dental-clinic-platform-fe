@@ -1,7 +1,9 @@
 import { Divider, Input, InputGroup, InputRightAddon, Select, Text } from "@chakra-ui/react"
+import { useState } from "react"
 import { FaSearch } from "react-icons/fa"
 
 const SearchBar = () => {
+    const [category, setCategory] = useState<string>('');
     return (
         <>
             <InputGroup
@@ -15,7 +17,7 @@ const SearchBar = () => {
                     px={5}
                     border={'none'}
                     focusBorderColor="white"
-                    placeholder="Search dental, symptom ..."
+                    placeholder="Search by category ..."
                 />
                 <InputRightAddon
                     bg={'white'}
@@ -38,12 +40,14 @@ const SearchBar = () => {
                         borderColor="white"
                         focusBorderColor="white"
                         cursor={'pointer'}
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
                         _hover={{ outline: 'none' }}
                     >
-                        <option value='option1'>Dental Clinic</option>
-                        <option value='option2'>Dentist</option>
-                        <option value='option3'>Service</option>
-                        <option value='option4'>Blog</option>
+                        <option value='DentalClinic'>Dental Clinic</option>
+                        <option value='Dentist'>Dentist</option>
+                        <option value='Service'>Service</option>
+                        <option value='Blog '>Blog</option>
                     </Select>
                 </InputRightAddon>
                 <InputRightAddon

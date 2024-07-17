@@ -338,9 +338,9 @@ const UpdateProfilePage = () => {
                                     fullName.trim() === '' ||
                                     gender === '' ||
                                     dob === '' ||
-                                    phone.trim() === '' ||
+                                    phone === '' ||
                                     email.trim() === '' ||
-                                    address.trim() === '' ||
+                                    address === '' ||
                                     avatar === ''
                                 }
                                 onClick={handleUpdateProfile}

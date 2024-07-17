@@ -96,7 +96,7 @@ const UpdateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
             isOpen={isOpen}
             onClose={onClose}
             isCentered
-            size={'5xl'}
+            size={'xl'}
             closeOnEsc={isLoading ? false : true}
             closeOnOverlayClick={isLoading ? false : true}
         >
@@ -105,7 +105,7 @@ const UpdateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
                 <ModalContent>
                     <ModalHeader textAlign={'center'}>Update Treatment Outcome</ModalHeader>
                     <ModalCloseButton borderRadius={'full'} />
-                    <ModalBody maxH={'xl'} overflowY={'auto'} mx={5}>
+                    <ModalBody maxH={'lg'} overflowY={'auto'} mx={5}>
                         <Stack gap={4}>
                             <HStack gap={10} align={'flex-start'}>
                                 <Stack flex={1} gap={2}>

@@ -97,9 +97,9 @@ const AboutPage = () => {
                         F-Dental always aims for the best values ​​for users as well as creating an easier, closer connection between users and today's leading reputable system of clinics and dentists. Therefore, if you are looking to contribute content, advertise or connect online with clinics, doctors, dental product manufacturers or distributors, you can contact us immediately at the address The following.
                     </Text>
                     <UnorderedList>
-                        <ListItem>Address: </ListItem>
-                        <ListItem>Phone number: </ListItem>
-                        <ListItem>Email: </ListItem>
+                        <ListItem>Address: Lưu Hữu Phước, Đông Hoà, Dĩ An, Bình Dương</ListItem>
+                        <ListItem>Phone number: 0312345678</ListItem>
+                        <ListItem>Email: fdental@gmail.com</ListItem>
                         <ListItem>Website: </ListItem>
                     </UnorderedList>
                 </Stack>

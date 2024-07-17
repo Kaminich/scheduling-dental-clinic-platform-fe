@@ -57,7 +57,7 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
         try {
             const response = await api.getAuthen({
                 params: {
-                    clinicBranchId,
+                    clinicBranchId: dentistData ? dentistData?.branchId : clinicBranchId,
                     date
                 }
             });
@@ -361,18 +361,31 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                                         />
                                                     </Tooltip>
                                                 ) : (
-                                                    <Select
-                                                        name="slot"
-                                                        value={slotId}
-                                                        onChange={(e) => setSlotId(parseInt(e.target.value))}
-                                                        placeholder={'Select slot'}
-                                                    >
-                                                        {slot.slots.map((slot) => (
-                                                            <option key={slot.slotId} value={slot.slotId}>
-                                                                {slot.startTime} - {slot.endTime}
-                                                            </option>
-                                                        ))}
-                                                    </Select>
+                                                    <>
+                                                        {slot.slots.length !== 0 ? (
+                                                            <Select
+                                                                name="slot"
+                                                                value={slotId}
+                                                                onChange={(e) => setSlotId(parseInt(e.target.value))}
+                                                                placeholder={'Select slot'}
+                                                            >
+                                                                {slot.slots.map((slot) => (
+                                                                    <option key={slot.slotId} value={slot.slotId}>
+                                                                        {slot.startTime} - {slot.endTime}
+                                                                    </option>
+                                                                ))}
+                                                            </Select>
+                                                        ) : (
+                                                            <Select
+                                                                name="service"
+                                                                placeholder={'Select service'}
+                                                            >
+                                                                <option disabled>
+                                                                    No slot available
+                                                                </option>
+                                                            </Select>
+                                                        )}
+                                                    </>
                                                 )}
                                             </FormControl>
                                         </HStack>

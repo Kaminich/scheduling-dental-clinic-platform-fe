@@ -9,6 +9,7 @@ export default interface BlogDetailResponse {
     publishDate: string;
     status: Status;
     createdBy: string;
+    publisherName: string;
     createdDate: string;
     modifiedBy: string;
     modifiedDate: string;
@@ -24,6 +25,7 @@ export const initialBlogDetailResponse: BlogDetailResponse = {
     publishDate: '',
     status: Status.INACTIVE,
     createdBy: '',
+    publisherName: '',
     createdDate: '',
     modifiedBy: '',
     modifiedDate: '',

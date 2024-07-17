@@ -59,6 +59,9 @@ const BlogDetailPage = () => {
         }
     }, [decodedName]);
 
+    console.log(blog.content);
+
+
     return (
         <>
             {!isLoading ? (
@@ -70,7 +73,7 @@ const BlogDetailPage = () => {
                     )}
                     <Stack>
                         <Heading fontWeight={600}>{blog.title}</Heading>
-                        <Text fontSize={16}>By {blog.createdBy}</Text>
+                        <Text fontSize={16}>By {blog.publisherName}</Text>
                         <Text fontSize={16}>{formatDate(blog.publishDate)}</Text>
                     </Stack>
                     <Image
@@ -80,7 +83,7 @@ const BlogDetailPage = () => {
                         h={'50vh'}
                         w={'full'}
                     />
-                    <Text>{blog.content}</Text>
+                    <div dangerouslySetInnerHTML={{ __html: blog.content }} />
                     {role !== 'Staff' && role !== 'Admin' && role !== 'Owner' && (
                         <Stack>
                             <Heading

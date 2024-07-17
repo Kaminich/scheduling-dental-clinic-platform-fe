@@ -73,12 +73,12 @@ const ProfilePage = () => {
                         <Divider my={4} />
                         <HStack gap={5}>
                             <Text minW={36}>Date of Birth: </Text>
-                            <Text color={'gray'}>{formatDate(userData.dob)}</Text>
+                            <Text color={'gray'}>{userData.dob ? formatDate(userData.dob) : '-'}</Text>
                         </HStack>
                         <Divider my={4} />
                         <HStack gap={5}>
                             <Text minW={36}>Phone Number: </Text>
-                            <Text color={'gray'}>{userData.phone}</Text>
+                            <Text color={'gray'}>{userData.phone || '-'}</Text>
                         </HStack>
                         <Divider my={4} />
                         <HStack gap={5}>
@@ -88,7 +88,7 @@ const ProfilePage = () => {
                         <Divider my={4} />
                         <HStack gap={5}>
                             <Text minW={36}>Address: </Text>
-                            <Text color={'gray'}>{userData.address}</Text>
+                            <Text color={'gray'}>{userData.address || '-'}</Text>
                         </HStack>
                     </CardBody>
                 </Card>

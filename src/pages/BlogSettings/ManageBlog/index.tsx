@@ -1,4 +1,4 @@
-import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Text, Th, Thead, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
+import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { FaChevronRight, FaSliders, FaTrashCan } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
@@ -180,29 +180,24 @@ const ManageBlogPage = () => {
                                                             gap={4}
                                                             borderColor={'gainsboro'}
                                                         >
-                                                            {blog.status === Status.ACTIVE && (
-                                                                <Button
-                                                                    borderRadius='full'
-                                                                    px={3}
-                                                                    colorScheme="red"
-                                                                    variant='ghost'
-                                                                    onClick={() => {
-                                                                        setId(blog.id);
-                                                                        onOpenDeactivate();
-                                                                    }}
+                                                            <Button
+                                                                borderRadius='full'
+                                                                px={3}
+                                                                colorScheme="red"
+                                                                variant='ghost'
+                                                                onClick={() => {
+                                                                    setId(blog.id);
+                                                                    onOpenDeactivate();
+                                                                }}
+                                                            >
+                                                                <Tooltip
+                                                                    label={'Remove blog'}
                                                                 >
-                                                                    <Tooltip
-                                                                        label={'Remove blog'}
-                                                                    >
-                                                                        <span>
-                                                                            <FaTrashCan />
-                                                                        </span>
-                                                                    </Tooltip>
-                                                                </Button>
-                                                            )}
-                                                            {blog.status === Status.PENDING && (
-                                                                <Text>-</Text>
-                                                            )}
+                                                                    <span>
+                                                                        <FaTrashCan />
+                                                                    </span>
+                                                                </Tooltip>
+                                                            </Button>
                                                         </Td>
                                                         <Td
                                                             textAlign='center'

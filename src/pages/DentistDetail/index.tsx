@@ -64,7 +64,7 @@ const DentistDetailPage = () => {
 
     useEffect(() => {
         changeTabTitle(decodedName);
-    }, []);
+    }, [name]);
 
     useEffect(() => {
         if (data?.content) {
