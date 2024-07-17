@@ -23,13 +23,13 @@ export enum Shift {
 }
 
 export enum ReportReason {
-    SPAM = 'Spam',
-    INAPPROPRIATE_CONTENT = 'Inappropriate content',
-    ABUSIVE_BEHAVIOR = 'Abusive behavior',
-    FALSE_INFORMATION = 'False information',
-    HARASSMENT = 'Harassment',
-    DISCRIMINATION = 'Discrimination',
-    VIOLATION_OF_TERMS = 'Violation of term'
+    SPAM = 'SPAM',
+    INAPPROPRIATE_CONTENT = 'INAPPROPRIATE CONTENT',
+    ABUSIVE_BEHAVIOR = 'ABUSIVE BEHAVIOR',
+    FALSE_INFORMATION = 'FALSE INFORMATION',
+    HARASSMENT = 'HARASSMENT',
+    DISCRIMINATION = 'DISCRIMINATION',
+    VIOLATION_OF_TERMS = 'VIOLATION OF TERMS'
 }
 
 export enum AppointmentStatus {

@@ -352,7 +352,7 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                             </FormControl>
                                             <FormControl id="slot" flex={1}>
                                                 <FormLabel ml={1}>Slot</FormLabel>
-                                                {(!clinicBranchId || date === '') && dentistData === undefined ? (
+                                                {((!clinicBranchId || date === '') && dentistData === undefined) || (dentistData && date === '') ? (
                                                     <Tooltip label={'Select date and clinic branch to choose'}>
                                                         <Select
                                                             placeholder={'Select slot'}
@@ -377,8 +377,8 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                                                             </Select>
                                                         ) : (
                                                             <Select
-                                                                name="service"
-                                                                placeholder={'Select service'}
+                                                                name="slot"
+                                                                placeholder={'Select slot'}
                                                             >
                                                                 <option disabled>
                                                                     No slot available

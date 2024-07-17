@@ -283,18 +283,29 @@ const AppointmentUpdateModal = ({ isOpen, onClose, id, refetch }: Props) => {
                                         </FormControl>
                                         <FormControl id="slot" flex={1}>
                                             <FormLabel ml={1}>Slot</FormLabel>
-                                            <Select
-                                                name="slot"
-                                                value={slotId}
-                                                onChange={(e) => setSlotId(parseInt(e.target.value))}
-                                                placeholder={'Select slot'}
-                                            >
-                                                {slot.slots.map((slot) => (
-                                                    <option key={slot.slotId} value={slot.slotId}>
-                                                        {slot.startTime} - {slot.endTime}
+                                            {slot.slots.length !== 0 ? (
+                                                <Select
+                                                    name="slot"
+                                                    value={slotId}
+                                                    onChange={(e) => setSlotId(parseInt(e.target.value))}
+                                                    placeholder={'Select slot'}
+                                                >
+                                                    {slot.slots.map((slot) => (
+                                                        <option key={slot.slotId} value={slot.slotId}>
+                                                            {slot.startTime} - {slot.endTime}
+                                                        </option>
+                                                    ))}
+                                                </Select>
+                                            ) : (
+                                                <Select
+                                                    name="slot"
+                                                    placeholder={'Select slot'}
+                                                >
+                                                    <option disabled>
+                                                        No slot available
                                                     </option>
-                                                ))}
-                                            </Select>
+                                                </Select>
+                                            )}
                                         </FormControl>
                                     </HStack>
                                     <FormControl id="dentist" flex={1.5}>
