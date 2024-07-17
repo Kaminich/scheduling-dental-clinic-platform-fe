@@ -26,7 +26,7 @@ const CreateTreatmentOutcomeModal = ({ isOpen, onClose, id }: Props) => {
 
     const handleCreateAppointment = async () => {
         setIsLoading(true);
-        const api = new ApiClient<any>('/appointment');
+        const api = new ApiClient<any>('/treatment-outcomes');
         const data = {
             diagnosis: trimAll(diagnosis),
             treatmentPlan: treatmentPlan.trim(),

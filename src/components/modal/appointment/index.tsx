@@ -121,6 +121,10 @@ const AppointmentModal = ({ isOpen, onClose, clinicId, clinicName, dentistData }
                     position: 'top',
                     isClosable: true,
                 })
+                setSlotId(0);
+                setClinicBranchId(0);
+                setDentistId(0);
+                setServiceId(0);
             } else {
                 toast({
                     title: "Error",
