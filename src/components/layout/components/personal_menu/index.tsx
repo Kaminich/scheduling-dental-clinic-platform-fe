@@ -85,39 +85,41 @@ const PersonalMenu = () => {
                                 </>
                             )}
                         </Card>
-                        <Button
-                            maxW={'95%'}
-                            borderRadius={10}
-                            p={3}
-                            py={8}
-                            mx={2}
-                            fontSize={17}
-                            fontWeight={600}
-                            justifyContent={'space-between'}
-                            variant={'ghost'}
-                            onClick={() => setSubMenu(true)}
-                        >
-                            <Flex align={'center'} >
-                                <Button
-                                    px={3}
-                                    borderRadius={'full'}
-                                    mr={3}
-                                    bg={'#dedede'}
-                                    _hover={{ bg: '#dedede' }}
-                                >
-                                    <FaGear />
-                                </Button>
-                                Settings
-                            </Flex>
+                        {data?.role !== 'ADMIN' && (
                             <Button
-                                mr={-3}
-                                colorScheme="grey"
+                                maxW={'95%'}
+                                borderRadius={10}
+                                p={3}
+                                py={8}
+                                mx={2}
+                                fontSize={17}
+                                fontWeight={600}
+                                justifyContent={'space-between'}
                                 variant={'ghost'}
-                                _hover={{ bg: 'none' }}
+                                onClick={() => setSubMenu(true)}
                             >
-                                <FaChevronRight />
+                                <Flex align={'center'} >
+                                    <Button
+                                        px={3}
+                                        borderRadius={'full'}
+                                        mr={3}
+                                        bg={'#dedede'}
+                                        _hover={{ bg: '#dedede' }}
+                                    >
+                                        <FaGear />
+                                    </Button>
+                                    Settings
+                                </Flex>
+                                <Button
+                                    mr={-3}
+                                    colorScheme="grey"
+                                    variant={'ghost'}
+                                    _hover={{ bg: 'none' }}
+                                >
+                                    <FaChevronRight />
+                                </Button>
                             </Button>
-                        </Button>
+                        )}
                         {data?.role === 'CUSTOMER' && (
                             <>
                                 <MenuItem
@@ -253,6 +255,7 @@ const PersonalMenu = () => {
                     </Stack>
                 ) : (
                     <Stack gap={0}>
+
                         <Flex align={'center'} w={'full'} mt={2} mb={4}>
                             <Button
                                 px={3}
