@@ -143,7 +143,7 @@ const ManageBlogPage = () => {
                                                         <Td textAlign="center" borderColor={'gainsboro'}>{blog.clinicName}</Td>
                                                         <Td textAlign='center' borderColor={'gainsboro'}>{blog.title}</Td>
                                                         <Td textAlign='center' borderColor={'gainsboro'}>{formatDate(blog.createdDate)}</Td>
-                                                        <Td textAlign='center' borderColor={'gainsboro'}>{formatDateTime(blog.modifiedDate)}</Td>
+                                                        <Td textAlign='center' borderColor={'gainsboro'}>{blog.modifiedDate ? formatDateTime(blog.modifiedDate) : '-'}</Td>
                                                         <Td textAlign="center" borderColor={'gainsboro'}>
                                                             {blog.status === Status.ACTIVE && (
                                                                 <Tag colorScheme="green">
