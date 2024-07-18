@@ -10,6 +10,7 @@ import { FaPenToSquare } from "react-icons/fa6";
 import Loading from "../../../components/loading";
 import { useAuth } from "../../../hooks/useAuth";
 import NotFoundPage from "../../NotFound";
+import { Status } from "../../../types/type.enum";
 
 const DentistProfileDetailPage = () => {
     const [dentist, setDentist] = useState<DentistDetailResponse>(initialDentistDetailResponse);
@@ -61,7 +62,7 @@ const DentistProfileDetailPage = () => {
         <>
             {!isLoading ? (
                 <Stack w={'6xl'} m={'auto'}>
-                    {role === 'Owner' && (
+                    {(role === 'Owner' && dentist.status !== Status.PENDING) && (
                         <HStack pos={'fixed'} right={20} mt={-4}>
                             <Button leftIcon={<FaPenToSquare />} colorScheme="blue" onClick={() => navigate('update')}>Edit</Button>
                         </HStack>
