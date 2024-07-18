@@ -1,10 +1,8 @@
 import { Box, Button, HStack, Text } from "@chakra-ui/react";
 import Logo from "../../../logo";
 import { Link, useNavigate } from "react-router-dom";
-import Notification from "../notification";
 import PersonalMenu from "../personal_menu";
 import { useAuth } from "../../../../hooks/useAuth";
-import MessageMenu from "../message_menu";
 
 const Navbar = () => {
     const navigate = useNavigate();

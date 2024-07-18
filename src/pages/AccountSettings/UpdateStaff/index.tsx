@@ -13,6 +13,7 @@ import useUserProfile from "../../../hooks/useUserProfile";
 import useBranchByClinicId from "../../../hooks/useBranchByClinicId";
 import BranchDetailResponse from "../../../types/BranchDetailResponse";
 import LoadingModal from "../../../components/modal/loading";
+import { trimAll } from "../../../utils/trimAll";
 
 const UpdateStaffPage = () => {
     const [fullName, setFullName] = useState<string>('');
@@ -107,12 +108,12 @@ const UpdateStaffPage = () => {
 
         const data = {
             id: parseInt(param.id || '0'),
-            fullName,
+            fullName: trimAll(fullName),
             dob,
             gender,
-            phone,
-            email,
-            address,
+            phone: phone.trim(),
+            email: email.trim(),
+            address: trimAll(address),
             avatar: avatarUrl === '' ? avatar : avatarUrl,
             clinicBranchId
         };

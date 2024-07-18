@@ -1,10 +1,7 @@
 import { Card, HStack, Stack, Text } from "@chakra-ui/react"
 import { Color, Shadow } from "../../../../styles/styles"
-import BlogsItem from "../../../../components/blogs_item"
 import WorkingHours from "../working_hours"
 import DentalDetailBranch from "../branch"
-import { Pagination } from "antd"
-import { useState } from "react"
 import ClinicDetailResponse from "../../../../types/ClinicDetailResponse"
 
 interface Prop {
@@ -12,8 +9,6 @@ interface Prop {
 }
 
 const DentalAbout = ({ clinic }: Prop) => {
-    const [page, setPage] = useState<number>(0);
-
     return (
         <HStack align={'flex-start'} gap={10}>
             <Stack flex={2} gap={8}>

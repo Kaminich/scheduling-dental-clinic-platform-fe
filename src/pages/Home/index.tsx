@@ -47,9 +47,11 @@ const HomePage = () => {
                     <Card maxW='sm' bgColor={Color.blue_100}>
                         <CardBody>
                             <Image
-                                src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-                                alt='Green double couch with wooden legs'
+                                src='https://res.cloudinary.com/dy1t2fqsc/image/upload/v1721275775/4fd7966486f0db87e58a36a081619a62_yxsqtr.jpg'
+                                alt='Many member branches'
                                 borderRadius='lg'
+                                h={175}
+                                w={'full'}
                             />
                             <Stack mt='6' spacing='3'>
                                 <Heading size='md' textAlign={'center'} minH={78}>Many member branches</Heading>
@@ -62,9 +64,11 @@ const HomePage = () => {
                     <Card maxW='sm' bgColor={Color.blue_100}>
                         <CardBody>
                             <Image
-                                src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-                                alt='Green double couch with wooden legs'
+                                src='https://res.cloudinary.com/dy1t2fqsc/image/upload/v1721275776/5495572_xmpcck.jpg'
+                                alt='Make an appointment with your dental clinic or specialist'
                                 borderRadius='lg'
+                                h={175}
+                                w={'full'}
                             />
                             <Stack mt='6' spacing='3'>
                                 <Heading size='md' textAlign={'center'} minH={78}>Make an appointment with your dental clinic or specialist</Heading>
@@ -77,9 +81,11 @@ const HomePage = () => {
                     <Card maxW='sm' bgColor={Color.blue_100}>
                         <CardBody>
                             <Image
-                                src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-                                alt='Green double couch with wooden legs'
+                                src='https://res.cloudinary.com/dy1t2fqsc/image/upload/v1721275776/dentist-avatar-3d-icon-3d-model-ca27cc7953_geqskw.jpg'
+                                alt='Easily search for the service you want'
                                 borderRadius='lg'
+                                h={175}
+                                w={'full'}
                             />
                             <Stack mt='6' spacing='3'>
                                 <Heading size='md' textAlign={'center'} minH={78}>Easily search for the service you want</Heading>
@@ -92,9 +98,11 @@ const HomePage = () => {
                     <Card maxW='sm' bgColor={Color.blue_100}>
                         <CardBody>
                             <Image
-                                src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-                                alt='Green double couch with wooden legs'
+                                src='https://res.cloudinary.com/dy1t2fqsc/image/upload/v1721275775/71r9thcxXjL._AC_UF894_1000_QL80__afbyia.jpg'
+                                alt='Connect your clinic through our website'
                                 borderRadius='lg'
+                                h={175}
+                                w={'full'}
                             />
                             <Stack mt='6' spacing='3'>
                                 <Heading size='md' textAlign={'center'} minH={78}>Connect your clinic through our website</Heading>
