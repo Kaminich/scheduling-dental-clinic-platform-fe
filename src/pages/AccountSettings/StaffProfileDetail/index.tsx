@@ -10,6 +10,7 @@ import { FaPenToSquare } from "react-icons/fa6";
 import Loading from "../../../components/loading";
 import { useAuth } from "../../../hooks/useAuth";
 import NotFoundPage from "../../NotFound";
+import { Status } from "../../../types/type.enum";
 
 const StaffProfileDetailPage = () => {
     const [staff, setStaff] = useState<StaffDetailResponse>(initialStaffDetailResponse);
@@ -61,7 +62,7 @@ const StaffProfileDetailPage = () => {
         <>
             {!isLoading ? (
                 <Stack w={'2xl'} m={'auto'}>
-                    {role === 'Owner' && (
+                    {(role === 'Owner' && staff.status !== Status.PENDING) && (
                         <HStack pos={'fixed'} top={128} right={20} mt={-4}>
                             <Button leftIcon={<FaPenToSquare />} colorScheme="blue" onClick={() => navigate('update')}>Edit</Button>
                         </HStack>

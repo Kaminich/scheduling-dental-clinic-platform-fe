@@ -1,15 +1,41 @@
 import { Divider, Input, InputGroup, InputRightAddon, Select, Text } from "@chakra-ui/react"
 import { useState } from "react"
 import { FaSearch } from "react-icons/fa"
+import ApiClient from "../../services/apiClient";
+import { useNavigate } from "react-router";
 
 const SearchBar = () => {
     const [category, setCategory] = useState<string>('');
+    const [keyword, setKeyword] = useState<string>('');
+    const navigate = useNavigate();
+
+    const handleSearch = async () => {
+        //     const api = new ApiClient<any>('/clinic/search');
+        //     try {
+        //         const response = await api.getUnauthen({
+        //             params: {
+        //                 filter: category,
+        //                 searchValue: keyword
+        //             }
+        //         })
+        //         if (response.success) {
+
+        //         }
+        //     } catch (error) {
+
+        //     }
+    }
     return (
         <>
             <InputGroup
                 border={'solid #f1f1f1'}
                 p={1}
                 borderRadius={10}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        navigate('result')
+                    }
+                }}
             >
                 <Input
                     type={'text'}
@@ -59,6 +85,7 @@ const SearchBar = () => {
                     ml={5}
                     mr={1}
                     borderRadius={10}
+                    onClick={() => navigate('search')}
                 >
                     <Text mr={2} fontWeight={500} color={'white'}>Search</Text>
                     <FaSearch color="white" />
