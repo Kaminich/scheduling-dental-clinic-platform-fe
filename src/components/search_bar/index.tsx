@@ -1,29 +1,35 @@
-import { Divider, Input, InputGroup, InputRightAddon, Select, Text } from "@chakra-ui/react"
+import { Divider, Input, InputGroup, InputRightAddon, Select, Text, useToast } from "@chakra-ui/react"
 import { useState } from "react"
 import { FaSearch } from "react-icons/fa"
-import ApiClient from "../../services/apiClient";
 import { useNavigate } from "react-router";
 
 const SearchBar = () => {
     const [category, setCategory] = useState<string>('');
     const [keyword, setKeyword] = useState<string>('');
     const navigate = useNavigate();
+    const toast = useToast();
 
-    const handleSearch = async () => {
-        //     const api = new ApiClient<any>('/clinic/search');
-        //     try {
-        //         const response = await api.getUnauthen({
-        //             params: {
-        //                 filter: category,
-        //                 searchValue: keyword
-        //             }
-        //         })
-        //         if (response.success) {
-
-        //         }
-        //     } catch (error) {
-
-        //     }
+    const handleSearch = () => {
+        if (category === '' || keyword.trim() === '') {
+            toast({
+                title: "Warning",
+                description: 'Please enter keyword and choose category to search',
+                status: "warning",
+                duration: 2500,
+                position: 'top',
+                isClosable: true,
+            });
+            return;
+        }
+        if (category === 'DentalClinic') {
+            navigate(`/dentals?category=${category}&keyword=${keyword}`);
+        } else if (category === 'Dentist') {
+            navigate(`/dentists?category=${category}&keyword=${keyword}`);
+        } else if (category === 'Service') {
+            navigate(`/services?category=${category}&keyword=${keyword}`);
+        } else if (category === 'Blog') {
+            navigate(`/blogs?category=${category}&keyword=${keyword}`);
+        }
     }
     return (
         <>
@@ -33,7 +39,7 @@ const SearchBar = () => {
                 borderRadius={10}
                 onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
-                        navigate('result')
+                        handleSearch();
                     }
                 }}
             >
@@ -44,6 +50,8 @@ const SearchBar = () => {
                     border={'none'}
                     focusBorderColor="white"
                     placeholder="Search by category ..."
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
                 />
                 <InputRightAddon
                     bg={'white'}
@@ -73,7 +81,7 @@ const SearchBar = () => {
                         <option value='DentalClinic'>Dental Clinic</option>
                         <option value='Dentist'>Dentist</option>
                         <option value='Service'>Service</option>
-                        <option value='Blog '>Blog</option>
+                        <option value='Blog'>Blog</option>
                     </Select>
                 </InputRightAddon>
                 <InputRightAddon
@@ -85,7 +93,7 @@ const SearchBar = () => {
                     ml={5}
                     mr={1}
                     borderRadius={10}
-                    onClick={() => navigate('search')}
+                    onClick={handleSearch}
                 >
                     <Text mr={2} fontWeight={500} color={'white'}>Search</Text>
                     <FaSearch color="white" />
