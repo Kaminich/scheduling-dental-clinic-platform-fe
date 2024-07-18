@@ -1,6 +1,5 @@
 import { Flex, Text, Button, Avatar, Stack, Box, Textarea, HStack, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
 import { FaArrowDown, FaPaperPlane } from 'react-icons/fa6';
 import { Border, Color, Shadow } from '../../styles/styles';
 import { BsSearch } from 'react-icons/bs';
@@ -54,7 +53,7 @@ const MessagePage = () => {
     const [showScrollButton, setShowScrollButton] = useState<boolean>(false);
     const chatBoxRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const ref = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState<string>('');
     const [unreadConversations, setUnreadConversations] = useState<{ [key: string]: boolean }>({});

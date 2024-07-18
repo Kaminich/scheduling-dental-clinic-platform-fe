@@ -27,15 +27,3 @@ interface ServiceViewDetailsResponse {
     serviceType: string;
     status: Status;
 }
-
-const initialServiceViewDetailsResponse: ServiceViewDetailsResponse = {
-    id: 0,
-    serviceName: "",
-    description: "",
-    unitOfPrice: "",
-    minimumPrice: 0,
-    maximumPrice: 0,
-    duration: 0,
-    serviceType: "",
-    status: Status.INACTIVE
-};

@@ -174,8 +174,8 @@ const SignUpPage = () => {
         <HStack maxW={'full'} minH={'100vh'}>
             <HStack flex={1} h={'full'}>
                 <Image
-                    src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-                    alt='Green double couch with wooden legs'
+                    src='https://res.cloudinary.com/dy1t2fqsc/image/upload/v1721275776/5517235_gsdqwe.jpg'
+                    alt='Sign up'
                     h={'100vh'}
                     w={'auto'}
                 />

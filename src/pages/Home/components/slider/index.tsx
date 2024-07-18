@@ -9,11 +9,11 @@ const Slider = () => {
             speed={500}
             swipe={true}
             pauseOnHover={false}
-            style={{ height: '70vh', padding: '0' }}>
+            style={{ height: '75vh', padding: '0' }}>
             <Image
                 alt={"Slider Image"}
                 objectFit={"cover"}
-                h={'70vh'}
+                h={'75vh'}
                 borderRadius={5}
                 p={0}
                 src={
@@ -22,12 +22,23 @@ const Slider = () => {
             />
             <Image
                 alt={"Slider Image"}
-                objectFit={"cover"}
-                h={'70vh'}
+                objectFit={"fill"}
+                h={'75vh'}
                 borderRadius={5}
                 p={0}
                 src={
-                    "https://baovietdental.com.vn/wp-content/uploads/2021/05/hinh2.jpg"
+                    "https://res.cloudinary.com/dy1t2fqsc/image/upload/v1721275777/dental_clinic_interior_design-scaled_m9aloo.jpg"
+                }
+            />
+            <Image
+                alt={"Slider Image"}
+                objectFit={"contain"}
+                h={'75vh'}
+                borderRadius={5}
+                p={0}
+                bg={'#a3dde8'}
+                src={
+                    "https://res.cloudinary.com/dy1t2fqsc/image/upload/v1721275829/asian-female-casual-t-shirt-posing_h0ihzf.jpg"
                 }
             />
         </Carousel >

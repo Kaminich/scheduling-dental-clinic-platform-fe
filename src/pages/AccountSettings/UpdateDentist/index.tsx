@@ -116,14 +116,17 @@ const UpdateDentistPage = () => {
         const data = {
             id: parseInt(param.id || '0'),
             fullName: trimAll(fullName),
+            username: dentist.username,
             email: email.trim(),
             gender,
+            phone: phone.trim(),
             dob,
             address: trimAll(address),
             description: description.trim(),
             specialty: trimAll(specialty),
             experience: experience.trim(),
             avatar: avatarUrl === '' ? avatar : avatarUrl,
+            status: dentist.status,
             branchId
         };
 
