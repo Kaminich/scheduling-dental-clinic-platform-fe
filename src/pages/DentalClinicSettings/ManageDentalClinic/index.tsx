@@ -281,13 +281,13 @@ const ManageDentalClinicPage = () => {
             <DeleteModal
                 isOpen={isOpenDeactivate}
                 onClose={onCloseDeactivate}
-                type={'clinic'}
+                type={'clinics'}
                 handleDeactivate={handleDeactivate}
             />
             <ActivateModal
                 isOpen={isOpenActivate}
                 onClose={onCloseActivate}
-                type={'clinic'}
+                type={'clinics'}
                 handleActivate={handleActivate}
             />
         </Stack>
