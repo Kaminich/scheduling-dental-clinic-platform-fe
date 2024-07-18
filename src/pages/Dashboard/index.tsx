@@ -240,9 +240,9 @@ const Dashboard = () => {
                                             <Tooltip />
                                             <Legend iconSize={20} />
                                             <Bar dataKey="Customers" fill="#8884d8" />
-                                            <Bar dataKey="Dentists" fill="#8884d8" />
-                                            <Bar dataKey="Staffs" fill="#8884d8" />
-                                            <Bar dataKey="Owners" fill="#8884d8" />
+                                            <Bar dataKey="Dentists" fill="green" />
+                                            <Bar dataKey="Staffs" fill="blue" />
+                                            <Bar dataKey="Owners" fill="teal" />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </CardBody>
@@ -315,8 +315,8 @@ const Dashboard = () => {
                                             <YAxis />
                                             <Tooltip />
                                             <Legend iconSize={20} />
-                                            <Bar dataKey="Dentists" fill="#8884d8" />
-                                            <Bar dataKey="Staffs" fill="#82ca9d" />
+                                            <Bar dataKey="Dentists" fill="green" />
+                                            <Bar dataKey="Staffs" fill="blue" />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </CardBody>
