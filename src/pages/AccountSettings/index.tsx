@@ -1,5 +1,5 @@
 import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Menu, MenuButton, MenuItem, MenuList, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
-import { FaChevronRight, FaSliders, FaTrashCan, FaUserCheck, FaUserDoctor, FaUserNurse, FaUserXmark } from "react-icons/fa6";
+import { FaChevronRight, FaTrashCan, FaUserCheck, FaUserDoctor, FaUserNurse, FaUserXmark } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { changeTabTitle } from "../../utils/changeTabTitle";
@@ -411,7 +411,7 @@ const AccountSettingsPage = () => {
                                     </MenuList>
                                 </Menu>
                             )}
-                            <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
+                            {/* <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button> */}
                         </HStack>
                     </CardHeader>
                     <Divider borderColor={'gainsboro'} />

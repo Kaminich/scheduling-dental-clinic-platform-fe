@@ -1,5 +1,5 @@
 import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
-import { FaChevronRight, FaSliders, FaTrashCan } from "react-icons/fa6";
+import { FaChevronRight, FaTrashCan } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { changeTabTitle } from "../../../utils/changeTabTitle";
@@ -111,10 +111,10 @@ const ManageBlogPage = () => {
                 <Card shadow={Shadow.cardShadow} bg={Color.blue_100}>
                     <CardHeader py={3}>
                         <HStack w={'full'} justify={'flex-end'} gap={5}>
-                            {role !== 'Admin' && (
+                            {role === 'Staff' && (
                                 <Button leftIcon={<AddIcon />} colorScheme="green" onClick={() => navigate('create')}>Create</Button>
                             )}
-                            <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
+                            {/* <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button> */}
                         </HStack>
                     </CardHeader>
                     <Divider borderColor={'gainsboro'} />

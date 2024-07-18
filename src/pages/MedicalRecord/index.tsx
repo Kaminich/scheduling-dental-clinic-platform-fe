@@ -6,7 +6,7 @@ import useUserProfile from "../../hooks/useUserProfile";
 import useCustomerMedicalRecord from "../../hooks/useCustomerMedicalRecord";
 import TreatmentOutcomeResponse from "../../types/TreatmentOutcomeResponse";
 import { formatDate } from "../../utils/formatDate";
-import { FaCalendarDays, FaEye, FaSliders } from "react-icons/fa6";
+import { FaCalendarDays, FaEye } from "react-icons/fa6";
 import ReAppointmentModal from "../../components/modal/re_appointment";
 import Loading from "../../components/loading";
 import TreatmentOutcomeDetailModal from "../../components/modal/treatment_outcome_detail";
@@ -57,7 +57,7 @@ const MedicalRecordPage = () => {
                 <Card shadow={Shadow.cardShadow} bg={Color.blue_100}>
                     <CardHeader py={3}>
                         <HStack w={'full'} justify={'flex-end'} gap={5}>
-                            <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
+                            {/* <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button> */}
                         </HStack>
                     </CardHeader>
                     <Divider borderColor={'gainsboro'} />
