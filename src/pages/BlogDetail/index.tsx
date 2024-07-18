@@ -74,10 +74,10 @@ const BlogDetailPage = () => {
                     <Stack>
                         <Heading fontWeight={600}>{blog.title}</Heading>
                         <Text fontSize={16}>By {blog.publisherName}</Text>
-                        <Text fontSize={16}>{formatDate(blog.publishDate)}</Text>
+                        <Text fontSize={16}>{blog.publishDate ? formatDate(blog.publishDate) : '-'}</Text>
                     </Stack>
                     <Image
-                        src={blog.thumbnail || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'}
+                        src={blog.thumbnail || 'https://i.pinimg.com/736x/08/1a/ed/081aed2e7ddc029f940021ddb22145fc.jpg'}
                         alt={blog.title}
                         borderRadius='lg'
                         h={'50vh'}

@@ -1,5 +1,5 @@
 import { Button, Card, CardHeader, Divider, HStack, Input, InputGroup, InputLeftElement, Stack, Table, TableContainer, Tag, TagLabel, Tbody, Td, Th, Thead, Tooltip, Tr, useDisclosure, useToast } from "@chakra-ui/react";
-import { FaCheck, FaEye, FaSliders, FaX } from "react-icons/fa6";
+import { FaCheck, FaEye, FaX } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { Color, Shadow } from "../../../styles/styles";
@@ -99,7 +99,7 @@ const ApproveDentistPage = () => {
                 <Card shadow={Shadow.cardShadow} bg={Color.blue_100}>
                     <CardHeader py={3}>
                         <HStack w={'full'} justify={'flex-end'} gap={5}>
-                            <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button>
+                            {/* <Button leftIcon={<FaSliders />} colorScheme="blue">Filter</Button> */}
                         </HStack>
                     </CardHeader>
                     <Divider borderColor={'gainsboro'} />
