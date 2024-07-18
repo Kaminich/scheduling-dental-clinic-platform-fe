@@ -359,7 +359,7 @@ const UpdateDentalDetailPage = () => {
                             borderRadius={10}
                             p={0}
                             src={
-                                clinicImage || "https://benhviencuadong.vn/wp-content/uploads/2022/08/kham-nha-khoa-3.jpg"
+                                clinicImage || "https://i.pinimg.com/736x/08/1a/ed/081aed2e7ddc029f940021ddb22145fc.jpg"
                             }
                         />
                         <FormLabel
